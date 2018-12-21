@@ -31,7 +31,7 @@ knitr::opts_chunk$set(
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. 
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
 
 ---
 ## Theme Xaringan
@@ -44,7 +44,7 @@ devtools::install_github("yihui/xaringan")
 ---
 ## Setup for your presentation
 
-```{r setup, echo = T}
+```{r setup2, echo = T}
 knitr::opts_chunk$set(
   comment = "#",
   collapse = TRUE,
@@ -224,11 +224,11 @@ background-size: contain
 ---
 # Images
 
-This image is centered and scaled to 60% of its real size, using: 
+This image is centered and scaled to 60% of its real size, using:
 
 `.center[ ![:scale 60%](url link to zebra image) ]`
 
-or 
+or
 
 `.center[ ![:scale 60%](path/to/image/folder) ]`
 
@@ -277,9 +277,9 @@ plot(pressure)
 ## Code chunk options
 
 - `echo`
-  - `echo = TRUE` (default) to include R source code in the output file. 
-  - `echo = FALSE` to prevent printing of the R source code. 
-  - `echo = c(2:3)` or `-1` to include only line 2 and 3 from the R source code. 
+  - `echo = TRUE` (default) to include R source code in the output file.
+  - `echo = FALSE` to prevent printing of the R source code.
+  - `echo = c(2:3)` or `-1` to include only line 2 and 3 from the R source code.
 - `eval`  
   - `eval = TRUE` (default) to evaluate the code chunk.
   - `eval = FALSE` to prevent evaluating the code chunk.
@@ -304,7 +304,7 @@ par(mfrow=c(1,2), mar = c(4,4,0,1))
 plot(pressure)
 plot(cars)
 ```
- 
+
 ---
 ## Including Plots
 
@@ -325,7 +325,7 @@ To include the rubicube in the challenge slide, you just need to type `![:cube](
 ## Math Expressions
 
 You can write $\LaTeX$ math expressions inside a pair of dollar signs, e.g. `$\alpha+\beta$` renders $\alpha+\beta$.
- 
+
 You can use the display style with a pair of double dollar signs `$$` :
 
 $$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$

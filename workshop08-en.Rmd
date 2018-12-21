@@ -1,0 +1,352 @@
+---
+title: "Workshop 8: Title"
+subtitle: "QCBS R Workshop Series"
+author: "Québec Centre for Biodiversity Science"
+output:
+  xaringan::moon_reader:
+    includes:
+      in_header: qcbsR-header.html
+    lib_dir: assets
+    seal: true
+    css: ["default", "qcbsR.css", "qcbsR-fonts.css"]
+    nature:
+      beforeInit: "qcbsR-macros.js"
+      highlightLines: true
+---
+
+
+```{r setup, echo = F}
+knitr::opts_chunk$set(
+  comment = "#",
+  collapse = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.width=6, fig.height=6,
+  fig.align = 'center'
+)
+```
+
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. 
+
+---
+## Theme Xaringan
+
+Install the **xaringan** package from Github:
+
+```{r, eval = F}
+devtools::install_github("yihui/xaringan")
+```
+---
+## Setup for your presentation
+
+```{r setup, echo = T}
+knitr::opts_chunk$set(
+  comment = "#",
+  collapse = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.width=5, fig.height=5,
+  fig.align = 'center'
+)
+```
+
+```{r, echo = T}
+options(repos=structure(c(CRAN="http://cran.r-project.org")))
+```
+
+---
+class: inverse, center, middle
+
+# Section slide
+
+## with a nice subtitle
+
+---
+
+# Headers (level 1)
+
+## Header 2
+
+### Header 3
+
+#### Header 4
+
+##### Header 5
+
+###### Header 6
+
+Change slide using 3 dashes `---` (no space after the dashes)
+
+---
+## Modifying text
+
+#### Text size
+
+- normal size ( $\LaTeX$-friendly terms)
+- `.huge[huge]` &nbsp; .huge[huge]
+- `.large[large]` &nbsp; .large[large]
+- `.small[small]` &nbsp; .small[small]
+- `.tiny[tiny]` &nbsp; .small[tiny]
+- `*italic*` &nbsp; *italic*
+- `**bold**` &nbsp; **bold**
+
+
+---
+## Modifying text
+
+#### Special class
+
+- `.alert[alert]` .alert[alert]
+- `.comment[comment]` .comment[comment]
+
+#### Use remarkjs's macros
+
+- `![:scale 40%](path/to/img.png)` to scale an image
+- `![:faic](arrow-right)` &nbsp; ![:faic](arrow-right)
+- `![:faic](arrow-left)` &nbsp; ![:faic](arrow-left)
+- See [FontAwesome cheatsheet](https://fontawesome.com/v4.7.0/cheatsheet/)
+
+---
+## Subsection Slide with bullet points
+
+* a picture
+* says more
+* than a thousand words
+
+or
+
+- a picture
+- says more
+- than a thousand words
+
+---
+## Vertical Slide with bullet points
+
+- Level 1 item
+  * Level 2 item
+  * Level 2 item
+- Level 1 item
+
+
+---
+## Subsection Slide with ordered items
+
+1. item 1
+1. item 2
+
+or
+
+1. item 1
+2. item 2
+
+---
+## Vertical Slide with incremental bullets
+
+The easiest way to build incremental slides is...
+--
+to use two dashes `--` to separate content on a slide.
+
+--
+
+You can divide a slide in _any way you want_.
+
+--
+
+- Bullet 1
+
+--
+
+- Bullet 2
+
+--
+
+- Bullet 3
+
+---
+## Vertical Slide with Two Columns
+
+.pull-left[
+- You can place 2 figures on a slide
+- Or 2 columns of text
+- Using `.pull-left[]` for the first column
+]
+
+
+.pull-right[
+- You can place 2 figures on a slide
+- Or 2 columns of text
+- Using `.pull-right[]` for the second column
+]
+
+---
+## Table
+
+Colons can be used to align columns.
+
+<br>
+
+| Tables        | Are           | Cool          |
+| ------------- |:-------------:| -------------:|
+| right-aligned | centered      | right-aligned |
+| stuff         | stuff         | 123           |
+| stuff         | stuff         | 456           |
+
+---
+
+## Text alignment
+
+.left[
+`.left[Left-aligned text]`
+]
+
+.center[
+`.center[Centered text]`
+]
+
+.right[
+`.right[Right-aligned text]`
+]
+
+---
+class: inverse, center, middle
+
+background-image: url(https://tailandfur.com//wp-content/uploads/2014/09/beautiful-and-cute-animals-wallpaper-9.jpg)
+background-size: contain
+
+# Include images
+
+
+---
+# Images
+
+This image is centered and scaled to 60% of its real size, using: 
+
+`.center[ ![:scale 60%](url link to zebra image) ]`
+
+or 
+
+`.center[ ![:scale 60%](path/to/image/folder) ]`
+
+.center[
+![:scale 60%](https://tailandfur.com//wp-content/uploads/2014/09/beautiful-and-cute-animals-wallpaper-59.jpg)
+]
+
+---
+## Images and text
+
+.pull-left2[
+Here I used `.pull-left2[]` and `.pull-right2[]` to create a 2 column slide, where the left column is larger than the right column.
+]
+
+.pull-right2[
+Beautiful picture
+
+![](https://tailandfur.com//wp-content/uploads/2014/09/beautiful-and-cute-animals-wallpaper-57.jpg)
+]
+
+---
+class: inverse, center, middle
+
+# Use R!
+
+## Few examples
+
+---
+## Code chunk
+
+You can embed an R code chunk like this:
+
+```{r}
+summary(cars)
+```
+
+---
+## Including Plots
+
+```{r}
+plot(pressure)
+```
+
+
+---
+## Code chunk options
+
+- `echo`
+  - `echo = TRUE` (default) to include R source code in the output file. 
+  - `echo = FALSE` to prevent printing of the R source code. 
+  - `echo = c(2:3)` or `-1` to include only line 2 and 3 from the R source code. 
+- `eval`  
+  - `eval = TRUE` (default) to evaluate the code chunk.
+  - `eval = FALSE` to prevent evaluating the code chunk.
+  - `eval = c(2:3)` or `-1` to evaluate only line 2 and 3 from the R code.
+
+
+
+---
+## Code chunk options
+
+- `fig.width`, `fig.height` to define width and height of the resulting plots
+- `fig.align` to align the resulting plots
+
+.alert[See more `knitr` options [here](https://yihui.name/knitr/options/)]
+
+---
+## Including Plots
+
+With `echo = TRUE`:
+```{r, echo=T, fig.width=7, fig.height=3.5}
+par(mfrow=c(1,2), mar = c(4,4,0,1))
+plot(pressure)
+plot(cars)
+```
+ 
+---
+## Including Plots
+
+With `echo = -1`:
+```{r, echo=-1, fig.width=7, fig.height=3.5}
+par(mfrow=c(1,2), mar = c(4,4,0,1))
+plot(pressure)
+plot(cars)
+```
+
+---
+## Challenge slide! ![:cube]()
+
+To include the rubicube in the challenge slide, you just need to type `![:cube]()` next to the slide title!
+
+
+---
+## Math Expressions
+
+You can write $\LaTeX$ math expressions inside a pair of dollar signs, e.g. `$\alpha+\beta$` renders $\alpha+\beta$.
+ 
+You can use the display style with a pair of double dollar signs `$$` :
+
+$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
+
+
+---
+class: inverse, center, middle
+
+# Keyboard shortcuts
+
+---
+## Keyboard shortcuts
+
+To see these shortcuts during a presentation, press **h** or **?**
+
+.center[![:scale 75%](images/shortcuts.png)]
+
+
+---
+class: inverse, center, bottom
+
+# Thank you for attending this workshop!
+
+![:scale 50%](images/QCBS_logo.png)

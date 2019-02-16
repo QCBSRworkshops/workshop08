@@ -65,7 +65,7 @@ library(itsadug)
 
 ---
 class: inverse, center, middle
-# 1. The linear model 
+# 1. The linear model
 
 ## ...and where if fails
 
@@ -79,7 +79,7 @@ Regression is the workhorse of statistics. It allows us to model a response vari
 As we saw in the [linear models workshop](http://qcbs.ca/wiki/r_workshop4), regression makes 4 major assumptions:
 
 1. Normally distributed error
-2. Homogeneity of the variance 
+2. Homogeneity of the variance
 3. Indenpendance of the errors
 4. The response is linear : $y = β_0 + β_1x$
 
@@ -128,8 +128,8 @@ n <- 250
 x <- runif(n,0,5)
 y_model <- 3*x/(1+2*x)
 y_obs <- rnorm(n,y_model,0.1)
-data_plot <- qplot(x, y_obs) + 
-  geom_line(aes(y=y_model)) + 
+data_plot <- qplot(x, y_obs) +
+  geom_line(aes(y=y_model)) +
   theme_bw()
 data_plot
 ```
@@ -143,7 +143,7 @@ n <- 250
 x <- runif(n,0,5)
 y_model <- 3*x/(1+2*x)
 y_obs <- rnorm(n,y_model,0.1)
-data_plot <- qplot(x, y_obs) + 
+data_plot <- qplot(x, y_obs) +
   geom_line(aes(y=y_model)) +
   theme_bw()
 data_plot
@@ -153,7 +153,7 @@ data_plot
 ---
 ## GAM
 
-Trying to fit these data as a linear regression model, we would violate the assumptions listed above. 
+Trying to fit these data as a linear regression model, we would violate the assumptions listed above.
 
 ```{r, echo = F}
 linear_model <- gam(y_obs ~ x)
@@ -170,12 +170,12 @@ In GAM, the relationship between the response variable and the predictors is:
 
 $$y = \alpha + s(x_1) + s(x_2) + ... + \epsilon$$
 
-One big advantage of using GAM over a manual specification of the model is that the optimal shape, i.e. the degree of smoothness of `s(x)`, is determined automatically using a generalized cross-validation 
+One big advantage of using GAM over a manual specification of the model is that the optimal shape, i.e. the degree of smoothness of `s(x)`, is determined automatically using a generalized cross-validation
 
 ---
 ## GAM
 
-Let's try to fit the data using a smooth function with the function `mgcv::gam()` 
+Let's try to fit the data using a smooth function with the function `mgcv::gam()`
 
 
 ```{r, eval = F}
@@ -214,7 +214,7 @@ data_plot
 The `mgcv` package also includes a default plot to look at the smooths:
 
 ```{r}
-plot(gam_model) 
+plot(gam_model)
 ```
 
 
@@ -245,7 +245,7 @@ y_test_obs <- rnorm(n, y_test_fit, 0.2)
 
 1. Fit a linear and smoothed GAM model to the relation between `x_test` and `y_test_obs`.
 2. Determine if linearity is justified for this data.
-3. What is the estimated degrees of freedom of the smoothed term? 
+3. What is the estimated degrees of freedom of the smoothed term?
 
 
 <!-- we didn't talk about edf before... -->
@@ -264,7 +264,7 @@ anova(linear_model_test, nested_gam_model_test, test="Chisq")
 ## Challenge 1 - Solution ![:cube]()
 
 ```{r}
-qplot(x_test, y_test_obs) + 
+qplot(x_test, y_test_obs) +
   geom_line(aes(y = y_test_fit)) +
   theme_bw()
 ```
@@ -293,7 +293,7 @@ For this section, we will use simulated data generated using `mgcv::gamSim()`.
 ```{r}
 # ?gamSim
 gam_data <-  gamSim(eg = 5)
-head(gam_data) 
+head(gam_data)
 ```
 
 We will try to model the response `y` using the predictors `x0` to `x3`.
@@ -311,7 +311,7 @@ basic_summary$p.table
 basic_summary$s.table
 ```
 
-.comment[The `p.table` provides the significance table for each linear term 
+.comment[The `p.table` provides the significance table for each linear term
 
 The `s.table` provides the significance table for each smoothed term.
 ]
@@ -323,20 +323,20 @@ The `s.table` provides the significance table for each smoothed term.
 basic_summary$s.table
 ```
 
-The `edf` shown in the `s.table` is the estimated degrees of freedom – essentially, a larger edf value implies more complex wiggly splines. 
+The `edf` shown in the `s.table` is the estimated degrees of freedom – essentially, a larger edf value implies more complex wiggly splines.
 
 - A value close to 1 tend to be close to a linear term.
 
 - A high value (8–10 or higher) means that the spline is highly non-linear.
 
-> In our basic model the edf of smooth function s(x1) is ~2, which suggests a non-linear curve. 
+> In our basic model the edf of smooth function s(x1) is ~2, which suggests a non-linear curve.
 
 ---
 ## Note on estimated degrees of freedom
 
 The edf in GAM is different from the degrees of freedom in a linear regression.
 
-In linear regression, the *model* degrees of freedom is equivalent to the number of non-redundant free parameters, p, in the model (and the *residual* degrees of freedom are given by n-p). 
+In linear regression, the *model* degrees of freedom is equivalent to the number of non-redundant free parameters, p, in the model (and the *residual* degrees of freedom are given by n-p).
 
 We will revisit the edf later in this workshop.
 
@@ -408,7 +408,7 @@ anova(basic_model, two_term_model, two_smooth_model, test = "Chisq")
 
 <br>
 
-1. Create 2 new models, with `x3` as a linear and smoothed term. 
+1. Create 2 new models, with `x3` as a linear and smoothed term.
 2. Determine if `x3` is an important term to include using plots, coefficient tables and the anova function.
 
 ---
@@ -440,7 +440,7 @@ plot(three_smooth_model, page = 1)
 three_smooth_summary$s.table
 
 # edf = 1 therefore term is linear.
- 
+
 anova(two_smooth_model, three_term_model, test = "Chisq")
 
 # term x3 is not significant, it should be dropped!
@@ -487,7 +487,7 @@ plot(factor_interact, page = 1)
 We can also visualise our model in 3D using `vis.gam`, where `theta` is the degree rotation on the x-y plane
 
 ```{r,fig.width=6, fig.height=6}
-vis.gam(factor_interact, view = c("x2","x0"), theta = 40, n.grid = 500, border = NA) 
+vis.gam(factor_interact, view = c("x2","x0"), theta = 40, n.grid = 500, border = NA)
 ```
 
 ---
@@ -504,7 +504,7 @@ From the plots, we saw that the shape of the smooth terms were comparable among 
 ---
 ## GAM with interaction terms
 
-Finally we'll look at the interactions between 2 smoothed terms, `x1` and `x2`. 
+Finally we'll look at the interactions between 2 smoothed terms, `x1` and `x2`.
 
 ```{r}
 smooth_interact <- gam(y~x0 + s(x1, x2), data = gam_data)
@@ -523,7 +523,7 @@ plot(smooth_interact, page = 1, scheme = 3)
 ## GAM with interaction terms
 
 ```{r, fig.width=8, fig.height=8}
-vis.gam(smooth_interact, view = c("x1", "x2"), theta=40, n.grid = 500, border = NA) 
+vis.gam(smooth_interact, view = c("x1", "x2"), theta=40, n.grid = 500, border = NA)
 # similar to plot(smooth_interact, page = 1, scheme = 1)
 ```
 
@@ -570,39 +570,39 @@ To model a non-linear smooth variable or surface, 3 different smooth functions a
 
 The smooth functions have several parameters that can be set to change their behavior. The most often-used parameters are :
 
-`k` ![:faic](arrow-right) number of ‘knots’ 
+`k` ![:faic](arrow-right) number of ‘knots’
   - determines the upper bound of the number of base functions used to build the curve.
   - constrains the wigglyness of a smooth.
   - the number of base functions is reflected in the edf value.
   - the default k for `s()` is ~9, and for `te()` and `ti()` is 5 per dimension.
   - k should be < the number of unique data points.
- 
+
 ---
 ## Parameters of smooth functions
 
-The smooth functions have several parameters that can be set to change their behavior. The most often-used parameters are : 
+The smooth functions have several parameters that can be set to change their behavior. The most often-used parameters are :
 
-`d` ![:faic](arrow-right) specifies that predictors in the interaction are on the same scale or dimension (only used in `te()` and `ti()`). 
+`d` ![:faic](arrow-right) specifies that predictors in the interaction are on the same scale or dimension (only used in `te()` and `ti()`).
   - For example, in `te(Time, width, height, d=c(1,2))`, indicates that `width` and `height` are one the same scale, but not `Time`.
 
-`bs` ![:faic](arrow-right) specifies the type of underlying base functions. 
-  - the default for `s()` is `tp` (thin plate regression spline) and for `te()` and `ti()` is `cr` (cubic regression spline). 
+`bs` ![:faic](arrow-right) specifies the type of underlying base functions.
+  - the default for `s()` is `tp` (thin plate regression spline) and for `te()` and `ti()` is `cr` (cubic regression spline).
 
 <!--last 2 slides were a copy-paste from this websites: http://www.sfs.uni-tuebingen.de/~jvanrij/Tutorial/GAMM.html. However, as I'm not a specialist of GAM, I let them asis, but we should modify them or at least site the website-->
 
 ---
 ## Example smooth for cyclical data
 
-Cyclical data is a good example where changing tha basis is useful: you want the predictor to match at the ends. 
+Cyclical data is a good example where changing tha basis is useful: you want the predictor to match at the ends.
 
-Let's use a time series of climate data, with monthly measurements, and see if there's a temporal trend in yearly temperature. 
+Let's use a time series of climate data, with monthly measurements, and see if there's a temporal trend in yearly temperature.
 
 ```{r, eval = F}
 data(nottem) # Nottingham temperature time series
 n_years <- length(nottem)/12
 nottem_month <- rep(1:12, times = n_years)
 nottem_year <- rep(1920:(1920 + n_years - 1), each = 12)
-qplot(nottem_month, nottem, colour = factor(nottem_year), geom = "line") + 
+qplot(nottem_month, nottem, colour = factor(nottem_year), geom = "line") +
   theme_bw()
 ```
 
@@ -610,18 +610,18 @@ qplot(nottem_month, nottem, colour = factor(nottem_year), geom = "line") +
 ## Example smooth for cyclical data
 
 ```{r, echo = F, fig.height=8, fig.width=12}
-data(nottem) 
+data(nottem)
 n_years <- length(nottem)/12
 nottem_month <- rep(1:12, times = n_years)
 nottem_year <- rep(1920:(1920 + n_years - 1), each = 12)
-qplot(nottem_month, nottem, colour = factor(nottem_year), geom = "line") + 
+qplot(nottem_month, nottem, colour = factor(nottem_year), geom = "line") +
   theme_bw()
 ```
 
 ---
 ## Example smooth for cyclical data
 
-We can model both the cyclic change of temperature across months and the non-linear trend through years, using a cyclical cubic spline, or `cc`, for the month variable and a regular smooth for the year variable. 
+We can model both the cyclic change of temperature across months and the non-linear trend through years, using a cyclical cubic spline, or `cc`, for the month variable and a regular smooth for the year variable.
 
 ```{r, fig.height=4, fig.width=8}
 year_gam <- gam(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"))
@@ -635,7 +635,7 @@ summary(year_gam)$s.table
 plot(year_gam, page = 1, scale = 0)
 ```
 
-There is about 1-1.5 degree rise in temperature over the period, but within a given year there is about 20 degrees variation in temperature, on average. The actual data vary around these values and that is the unexplained variance. 
+There is about 1-1.5 degree rise in temperature over the period, but within a given year there is about 20 degrees variation in temperature, on average. The actual data vary around these values and that is the unexplained variance.
 
 ---
 class: inverse, center, middle
@@ -651,7 +651,7 @@ Let's now take a look on how to use GAMs when the response variable does not fol
 We will use an example dataset where a binomial distribution is needed; the response variable represents the number of successes vs failures over the course of an experiment.
 
 ```{r}
-gam_data3 <- read.csv("Scripts_and_data/other_dist.csv")
+gam_data3 <- read.csv("data/other_dist.csv")
 str(gam_data3)
 ```
 
@@ -662,10 +662,10 @@ str(gam_data3)
 
 ```{r, fig.height=5, fig.width=5}
 plot(range(gam_data3$x1), c(0,1), type = "n",
-     main = "Probability of successes over time", 
+     main = "Probability of successes over time",
      ylab = "Probability", xlab = "x1 (time)")
 abline(h = 0.5)
- 
+
 avg <- aggregate(prop ~ x1, data=gam_data3, mean)
 lines(avg$x1, avg$prop, col = "orange", lwd = 2)
 ```
@@ -717,7 +717,7 @@ prop_summary$s.table
 
 .comment[What does the smooth term indicate?]
 
-This represents how the log odds of successes vs failures changes over time (x1). 
+This represents how the log odds of successes vs failures changes over time (x1).
 
 --
 
@@ -733,8 +733,8 @@ plot(prop_model)
 
 There are different ways this relationship can be represented graphically:
 
-- **partial effects** are the isolated effects of one particular predictor or interaction. If you visualize your GAM model with `plot()`, you get the partial effects. 
-- **summed effects** are the predicted response measures for a given value or level of predictors. If you visualize your GAM model with `itsadug::plot_smooth()`, you get the summed effects. 
+- **partial effects** are the isolated effects of one particular predictor or interaction. If you visualize your GAM model with `plot()`, you get the partial effects.
+- **summed effects** are the predicted response measures for a given value or level of predictors. If you visualize your GAM model with `itsadug::plot_smooth()`, you get the summed effects.
 
 
 ---
@@ -746,7 +746,7 @@ What do these plots tell us about successes vs failures?
 par(mfrow=c(1,2), mar = c(4,4,0,0))
 plot(prop_model, select=1, scale=0, shade=TRUE)
 abline(h=0)
- 
+
 out <- plot_smooth(prop_model, view="x1",main="", print.summary=F)
 diff <- find_difference(out$fv$fit, out$fv$CI, xVals=out$fv$x1)
 addInterval(0, lowVals = diff$start, highVals = diff$end, col='red', lwd=2)
@@ -762,7 +762,7 @@ text(mean(c(diff$start, diff$end)), 2.1, "successes > failures", col = 'red', fo
 Over time the log odds increases, so over time successes increase and failures decrease.]
 
 .pull-right[
-**Fitted values, summed effect, intercept included** 
+**Fitted values, summed effect, intercept included**
 
 Equal amounts of successes and failures up to x1=400.
 ]
@@ -820,14 +820,14 @@ pacf(resid(year_gam), lag.max = 36, main = "pACF")
 
 .comment[ACF (and pACF) provide the cross correlation (and partial correlation) of a time series with itself at different time lags, and are used to identify after how many time steps observations start to be independent.]
 
-The ACF plot of our model residuals suggests a significant lag of 1, and perhaps a lag of 2. Therefore, a low-order AR model is likely needed. 
+The ACF plot of our model residuals suggests a significant lag of 1, and perhaps a lag of 2. Therefore, a low-order AR model is likely needed.
 
 ---
 ## Model with correlated errors
 
 We can test for autocorrelation by adding AR structures to the model: AR(1) (correlation at 1 time step) and AR(2) (correlation at 2 time steps).
 
-```{r} 
+```{r}
 year_gam <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"))
 year_gam_AR1 <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"),
                      correlation = corARMA(form = ~ 1|nottem_year, p = 1))
@@ -869,7 +869,7 @@ str(gam_data2)
 par(mar=c(4,4,1,1))
 gamm_intercept <- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2)
 summary(gamm_intercept)$s.table
-plot(gamm_intercept, select = 2) 
+plot(gamm_intercept, select = 2)
 ```
 
 ---
@@ -880,10 +880,10 @@ We can plot the summed effects for the `x0` without random effects, and then plo
 ```{r, eval = F}
 par(mfrow = c(1,2), cex = 1.1)
 
-plot_smooth(gamm_intercept, view = "x0", rm.ranef = T, 
+plot_smooth(gamm_intercept, view = "x0", rm.ranef = T,
             main = "intercept + s(x1)")
 
-plot_smooth(gamm_intercept, view = "x0", cond = list(fac="1"), 
+plot_smooth(gamm_intercept, view = "x0", cond = list(fac="1"),
             main = "... + s(fac)", col = 'orange', ylim = c(8,21))
 
 plot_smooth(gamm_intercept, view = "x0", cond = list(fac = "2"), add = T, col = 'red')
@@ -900,9 +900,9 @@ plot_smooth(gamm_intercept, view="x0", cond = list(fac = "4"), add = T, col = 't
 
 ```{r, echo = F, fig.width=12, fig.height=6}
 par(mfrow = c(1,2), cex = 1.1, mar=c(4,4,1,1))
-plot_smooth(gamm_intercept, view = "x0", rm.ranef = T, 
+plot_smooth(gamm_intercept, view = "x0", rm.ranef = T,
             main = "intercept + s(x1)", print.summary=F)
-plot_smooth(gamm_intercept, view = "x0", cond = list(fac="1"), 
+plot_smooth(gamm_intercept, view = "x0", cond = list(fac="1"),
             main = "... + s(fac)", col = 'orange', ylim = c(8,21), print.summary=F)
 plot_smooth(gamm_intercept, view = "x0", cond = list(fac = "2"), add = T, col = 'red', print.summary=F)
 plot_smooth(gamm_intercept, view="x0", cond = list(fac = "3"), add = T, col = 'purple', print.summary=F)
@@ -932,7 +932,7 @@ par(mfrow = c(1,2), cex = 1.1)
 
 plot_smooth(gamm_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)")
 
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "1"), 
+plot_smooth(gamm_slope, view = "x0", cond = list(fac = "1"),
             main = "... + s(fac)", col = 'orange', ylim = c(7,22))
 
 plot_smooth(gamm_slope, view = "x0", cond = list(fac = "2"), add = T, col = 'red')
@@ -951,9 +951,9 @@ plot_smooth(gamm_slope, view = "x0", cond = list(fac = "4"), add = T, col = 'tur
 par(mfrow = c(1,2), cex = 1.1, mar=c(4,4,1,1))
 plot_smooth(gamm_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)",
             print.summary=F)
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "1"), 
+plot_smooth(gamm_slope, view = "x0", cond = list(fac = "1"),
             main = "... + s(fac)", col = 'orange', ylim = c(7,22), print.summary=F)
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "2"), add = T, col = 'red', 
+plot_smooth(gamm_slope, view = "x0", cond = list(fac = "2"), add = T, col = 'red',
             print.summary=F)
 plot_smooth(gamm_slope, view = "x0", cond = list(fac = "3"), add = T, col = 'purple',
             print.summary=F)
@@ -965,7 +965,7 @@ plot_smooth(gamm_slope, view = "x0", cond = list(fac = "4"), add = T, col = 'tur
 ## GAMM with a random intercept and slope
 
 ```{r}
-gamm_int_slope <- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"), 
+gamm_int_slope <- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
                       data = gam_data2)
 
 summary(gamm_int_slope)$s.table
@@ -979,7 +979,7 @@ par(mfrow = c(1,2), cex = 1.1)
 
 plot_smooth(gamm_int_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)")
 
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "1"), 
+plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "1"),
             main="... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(7,22))
 
 plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "2"), add = T, col='red')
@@ -999,9 +999,9 @@ par(mfrow = c(1,2), cex = 1.1, mar=c(4,4,1,1))
 plot_smooth(gamm_int_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)", print.summary=F)
 plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "1"), print.summary=F,
             main="... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(7,22))
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "2"), add = T, 
+plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "2"), add = T,
             col='red',print.summary=F)
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "3"), add = T, 
+plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "3"), add = T,
             col = 'purple', print.summary=F)
 plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "4"), add = T,
             col = 'turquoise', print.summary=F)
@@ -1013,7 +1013,7 @@ plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "4"), add = T,
 Note that the random slope is static in this case:
 
 ```{r}
-plot(gamm_int_slope, select = 3) 
+plot(gamm_int_slope, select = 3)
 ```
 
 ---
@@ -1032,7 +1032,7 @@ Here, if the random slope varied along `x0`, we would see different curves for e
 
 ```{r, echo = -1, fig.height=5.5, fig.width=5.5}
 par(mar=c(4,4,.5,.5), lwd = 2)
-plot(gamm_smooth, select = 1) 
+plot(gamm_smooth, select = 1)
 ```
 
 ---
@@ -1043,7 +1043,7 @@ par(mfrow = c(1,2), cex = 1.1)
 
 plot_smooth(gamm_smooth, view = "x0", rm.ranef = T, main = "intercept + s(x0)")
 
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "1"), 
+plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "1"),
             main="... + s(x0, fac)", col = 'orange', ylim = c(7,22))
 
 plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "2"), add = T, col='red')
@@ -1063,9 +1063,9 @@ par(mfrow = c(1,2), cex = 1.1, mar=c(4,4,1,1))
 plot_smooth(gamm_smooth, view = "x0", rm.ranef = T, main = "intercept + s(x0)", print.summary=F)
 plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "1"), print.summary=F,
             main="... + s(x0, fac)", col = 'orange', ylim = c(7,22))
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "2"), add = T, 
+plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "2"), add = T,
             col='red',print.summary=F)
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "3"), add = T, 
+plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "3"), add = T,
             col = 'purple', print.summary=F)
 plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "4"), add = T,
             col = 'turquoise', print.summary=F)
@@ -1080,7 +1080,7 @@ All of the mixed models from this section can be compared using `anova()` to det
 
 ```{r}
 anova(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth, test = "Chisq")
-``` 
+```
 
 ---
 class: inverse, center, middle
@@ -1143,7 +1143,7 @@ Here's a representation of a smooth function using a rank 5 cubic spline basis w
 ![:scale 40%](images/cubic_spline5.jpg)
 ]
 
-Here, the knots are evenly spaced through the range of observed x values. However, the choice of the degree of model smoothness is controlled by the the number of knots, which was arbitrary. 
+Here, the knots are evenly spaced through the range of observed x values. However, the choice of the degree of model smoothness is controlled by the the number of knots, which was arbitrary.
 
 .comment[Is there a better way to select the knot locations?]
 
@@ -1160,12 +1160,12 @@ it can be fit by minimizing:
 
 $$||y - XB||^{2} + \lambda \int_0^1[f^{''}(x)]^2dx$$
 
-As $\lambda$ goes to infty, the model becomes linear. 
+As $\lambda$ goes to infty, the model becomes linear.
 
 ---
 ## Controlling the degree of smoothing with penalized regression splines
 
-If $\lambda$ is too high then the data will be over smoothed, and if it is too low then the data will be under smoothed. 
+If $\lambda$ is too high then the data will be over smoothed, and if it is too low then the data will be under smoothed.
 
 Ideally, it would be good to choose $\lambda$ so that the predicted $\hat{f}$ is as close as possible to $f$. A suitable criterion might be to choose $\lambda$ to minimize:
 
@@ -1180,7 +1180,7 @@ Since $f$ is unknown, $M$ is estimated using a generalized cross validation tech
 ![:scale 70%](images/smooth_sel.png)
 ]
 
-1. fits many of the data poorly and does no better with the missing point. 
+1. fits many of the data poorly and does no better with the missing point.
 
 --
 

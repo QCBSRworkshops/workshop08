@@ -1,0 +1,4 @@
+cran_pkgs:
+    - tidyverse
+    - mgcv
+    - itsadug

@@ -834,11 +834,14 @@ pacf(resid(year_gam), lag.max = 36, main = "pACF")
 Nous pouvons tester l'autocorrélation en ajoutant des structures AR au modèle : AR(1) (corrélation avec un intervalle de temps décalé) ou un AR(2) (corrélation à 2 intervalles de temps décalés)
 
 ```{r}
+
 year_gam <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"))
 year_gam_AR1 <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"),
-                     correlation = corARMA(form = ~ 1|nottem_year, p = 1))
+                     correlation = corARMA(form = ~ 1|nottem_year, p = 1),
+                   data = data.frame(nottem, nottem_year, nottem_month))
 year_gam_AR2 <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"),
-                     correlation = corARMA(form = ~ 1|nottem_year, p = 2))
+                     correlation = corARMA(form = ~ 1|nottem_year, p = 2),
+                   data = data.frame(nottem, nottem_year, nottem_month))
 anova(year_gam$lme, year_gam_AR1$lme, year_gam_AR2$lme)
 ```
 

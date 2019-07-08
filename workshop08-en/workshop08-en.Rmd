@@ -831,9 +831,11 @@ We can test for autocorrelation by adding AR structures to the model: AR(1) (cor
 ```{r}
 year_gam <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"))
 year_gam_AR1 <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"),
-                     correlation = corARMA(form = ~ 1|nottem_year, p = 1))
+                     correlation = corARMA(form = ~ 1|nottem_year, p = 1),
+                   data = data.frame(nottem, nottem_year, nottem_month))
 year_gam_AR2 <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"),
-                     correlation = corARMA(form = ~ 1|nottem_year, p = 2))
+                     correlation = corARMA(form = ~ 1|nottem_year, p = 2),
+                   data = data.frame(nottem, nottem_year, nottem_month))
 anova(year_gam$lme, year_gam_AR1$lme, year_gam_AR2$lme)
 ```
 

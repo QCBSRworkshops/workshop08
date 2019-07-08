@@ -1,0 +1,32 @@
+language: r
+pandoc_version: 2.2.1
+dist: trusty
+sudo: required
+
+branches:
+  only:
+    - dev
+    - master
+
+cache:
+  packages: yes
+  directories:
+    - $HOME/bin
+
+script:
+  - Rscript --no-init-file -e "qcbsRworkshops::build_workshops()"
+
+before_deploy:
+  - mkdir public
+  - cp README.md public
+  - cp -r workshop* public/
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GH_TOKEN
+  keep_history: true
+  target_branch: master
+  local_dir: public
+  on:
+    branch: dev

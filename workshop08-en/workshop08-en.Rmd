@@ -49,7 +49,7 @@ library(itsadug)
 8. GAM behind the scene
 
 ---
-## Learning objectives
+# Learning objectives
 
 1. Use the mgcv package to fit non-linear relationships,
 2. Understand the output of a GAM to help you understand your data,
@@ -59,7 +59,7 @@ library(itsadug)
 6. Account for dependence in data (autocorrelation, hierarchical structure) using GAMMs.
 
 ---
-## Prerequisites
+# Prerequisites
 
 > Some experience in R (enough to be able to run a script and examine data and R objects)
 > a basic knowledge of regression (you should know what we mean by linear regression and ANOVA).
@@ -71,7 +71,7 @@ class: inverse, center, middle
 ## ...and where if fails
 
 ---
-## Linear regression
+# Linear regression
 
 Regression is the workhorse of statistics. It allows us to model a response variable as a function of predictors plus error.
 
@@ -85,7 +85,7 @@ As we saw in the [linear models workshop](http://qcbs.ca/wiki/r_workshop4), regr
 4. The response is linear : $y = β_0 + β_1x$
 
 ---
-## Linear regression
+# Linear regression
 
 There's only one way for the linear model to be right:
 
@@ -95,7 +95,7 @@ There's only one way for the linear model to be right:
 
 
 ---
-## Linear regression
+# Linear regression
 
 And yet so many ways for it to fail:
 
@@ -104,11 +104,11 @@ And yet so many ways for it to fail:
 ]
 
 ---
-## Linear regression
+# Linear regression
 
 **What's the problem and do we fix it?**
 
-A **linear model** tries to fit the best **straight line** that passes through the data, so it doesn't work well for all datasets.  
+A **linear model** tries to fit the best **straight line** that passes through the data, so it doesn't work well for all datasets.
 
 In contrast, a **GAM** can capture complexe relationships by fitting a **non-linear smooth function** through the data, while controlling how wiggly the smooth can get (more on this later).
 
@@ -118,7 +118,7 @@ class: inverse, center, middle
 ## 2. Introduction to GAM
 
 ---
-## Generalized Additive Models (GAM)
+# Generalized Additive Models (GAM)
 
 Let's look at an example. First, we'll generate some data, and plot it.
 
@@ -136,7 +136,7 @@ data_plot
 ```
 
 ---
-## GAM
+# GAM
 
 ```{r, eval = T, echo = F}
 set.seed(10)
@@ -152,7 +152,7 @@ data_plot
 
 
 ---
-## GAM
+# GAM
 
 Trying to fit these data as a linear regression model, we would violate the assumptions listed above.
 
@@ -165,7 +165,7 @@ data_plot
 ```
 
 ---
-## GAM
+# GAM
 
 In GAM, the relationship between the response variable and the predictors is:
 
@@ -174,7 +174,7 @@ $$y = \alpha + s(x_1) + s(x_2) + ... + \epsilon$$
 One big advantage of using GAM over a manual specification of the model is that the optimal shape, i.e. the degree of smoothness of `s(x)`, is determined automatically using a generalized cross-validation
 
 ---
-## GAM
+# GAM
 
 Let's try to fit the data using a smooth function with the function `mgcv::gam()`
 
@@ -184,13 +184,13 @@ library(mgcv)
 gam_model <- gam(y_obs ~ s(x))
 summary(gam_model)
 
-data_plot <- data_plot +  
+data_plot <- data_plot +
      geom_line(colour = "blue", size = 1.2, aes(y = fitted(gam_model)))
 data_plot
 ```
 
 ---
-## GAM
+# GAM
 
 ```{r, echo = F}
 gam_model <- gam(y_obs ~ s(x))
@@ -198,10 +198,10 @@ summary(gam_model)
 ```
 
 ---
-## GAM
+# GAM
 
 ```{r, echo = F}
-data_plot <- data_plot +  
+data_plot <- data_plot +
      geom_line(colour = "blue", size = 1.2, aes(y = fitted(gam_model)))
 data_plot
 ```
@@ -210,7 +210,7 @@ data_plot
 
 
 ---
-## GAM
+# GAM
 
 The `mgcv` package also includes a default plot to look at the smooths:
 
@@ -220,7 +220,7 @@ plot(gam_model)
 
 
 ---
-## Test for linearity using GAM
+# Test for linearity using GAM
 
 We can use `gam()` and `anova()` to test whether an assumption of linearity is justified. To do so, we must simply set our smoothed model so that it is nested in our linear model.
 
@@ -233,7 +233,7 @@ anova(linear_model, nested_gam_model, test = "Chisq")
 .comment[Note that the model `y_obs~s(x)` gives exactly the same results as `y_obs~s(x)+x`. We used the s(x)+x to illustrate the nestedness of the model, but the +x can be omitted.]
 
 ---
-## Challenge 1 ![:cube]()
+# Challenge 1 ![:cube]()
 
 We will now try this comparison test with some new simulated data, just to get a handle on it.
 
@@ -252,7 +252,7 @@ y_test_obs <- rnorm(n, y_test_fit, 0.2)
 <!-- we didn't talk about edf before... -->
 
 ---
-## Challenge 1 - Solution ![:cube]()
+# Challenge 1 - Solution ![:cube]()
 
 ```{r}
 linear_model_test <- gam(y_test_obs ~ x_test)
@@ -262,7 +262,7 @@ anova(linear_model_test, nested_gam_model_test, test="Chisq")
 ```
 
 ---
-## Challenge 1 - Solution ![:cube]()
+# Challenge 1 - Solution ![:cube]()
 
 ```{r}
 qplot(x_test, y_test_obs) +
@@ -271,7 +271,7 @@ qplot(x_test, y_test_obs) +
 ```
 
 ---
-## Challenge 1 - Solution ![:cube]()
+# Challenge 1 - Solution ![:cube]()
 
 ```{r}
 nested_gam_model_test
@@ -285,7 +285,7 @@ class: inverse, center, middle
 ## 3. Multiple smooth terms
 
 ---
-## GAM with multiple variables
+# GAM with multiple variables
 
 GAMs make it easy to include both smooth and linear terms, multiple smoothed terms, and smoothed interactions.
 
@@ -300,7 +300,7 @@ head(gam_data)
 We will try to model the response `y` using the predictors `x0` to `x3`.
 
 ---
-## GAM with multiple variables
+# GAM with multiple variables
 
 Let's start with a basic model, with one smoothed term (x1) and one categorical predictor (x0, which has 4 levels).
 
@@ -318,7 +318,7 @@ The `s.table` provides the significance table for each smoothed term.
 ]
 
 ---
-## Note on estimated degrees of freedom
+# Note on estimated degrees of freedom
 
 ```{r}
 basic_summary$s.table
@@ -333,7 +333,7 @@ The `edf` shown in the `s.table` is the estimated degrees of freedom – essenti
 > In our basic model the edf of smooth function s(x1) is ~2, which suggests a non-linear curve.
 
 ---
-## Note on estimated degrees of freedom
+# Note on estimated degrees of freedom
 
 The edf in GAM is different from the degrees of freedom in a linear regression.
 
@@ -342,14 +342,14 @@ In linear regression, the *model* degrees of freedom is equivalent to the number
 We will revisit the edf later in this workshop.
 
 ---
-## GAM with multiple variables
+# GAM with multiple variables
 
 ```{r}
 plot(basic_model)
 ```
 
 ---
-## GAM with multiple variables
+# GAM with multiple variables
 
 We can add a second term, `x2`, but specify a linear relationship with `y`
 
@@ -362,7 +362,7 @@ two_term_summary$s.table
 ```
 
 ---
-## GAM with multiple variables
+# GAM with multiple variables
 
 We can add a second term, `x2`, but specify a linear relationship with `y`
 
@@ -372,7 +372,7 @@ plot(two_term_model)
 
 
 ---
-## GAM with multiple variables
+# GAM with multiple variables
 
 We can also explore whether the relationship between `y` and `x2` is non-linear
 
@@ -385,7 +385,7 @@ two_smooth_summary$s.table
 ```
 
 ---
-## GAM with multiple variables
+# GAM with multiple variables
 
 We can also explore whether the relationship between `y` and `x2` is non-linear
 
@@ -394,7 +394,7 @@ plot(two_smooth_model, page = 1)
 ```
 
 ---
-## GAM with multiple variables
+# GAM with multiple variables
 
 As before, we can perform an ANOVA to test if the smoothed term is necessary
 
@@ -405,7 +405,7 @@ anova(basic_model, two_term_model, two_smooth_model, test = "Chisq")
 .alert[The best fit model is the model with both smooth terms for `x1` and `x2`]
 
 ---
-## Challenge 2 ![:cube]()
+# Challenge 2 ![:cube]()
 
 <br>
 
@@ -413,7 +413,7 @@ anova(basic_model, two_term_model, two_smooth_model, test = "Chisq")
 2. Determine if `x3` is an important term to include using plots, coefficient tables and the anova function.
 
 ---
-## Challenge 2 - Solution ![:cube]()
+# Challenge 2 - Solution ![:cube]()
 
 <br>
 ```{r}
@@ -423,7 +423,7 @@ three_smooth_summary <- summary(three_smooth_model)
 ```
 
 ---
-## Challenge 2 - Solution ![:cube]()
+# Challenge 2 - Solution ![:cube]()
 
 ```{r, eval = F}
 plot(three_smooth_model, page = 1)
@@ -435,7 +435,7 @@ plot(three_smooth_model, page = 1)
 ```
 
 ---
-## Challenge 2 - Solution ![:cube]()
+# Challenge 2 - Solution ![:cube]()
 
 ```{r}
 three_smooth_summary$s.table
@@ -454,7 +454,7 @@ class: inverse, center, middle
 ## 4. Interactions
 
 ---
-## GAM with interaction terms
+# GAM with interaction terms
 
 There are 2 ways to include interactions between variables:
 
@@ -465,7 +465,7 @@ There are 2 ways to include interactions between variables:
   - When `x2` is a factor, the factor needs to be added as a main effect in the model
 
 ---
-## GAM with interaction terms
+# GAM with interaction terms
 
 We will examine interaction effect using our categorical variable `x0` and ask whether the non-linear smoother `s(x2)` varies across different levels of `x0`.
 
@@ -476,14 +476,14 @@ summary(factor_interact)$s.table
 ```
 
 ---
-## GAM with interaction terms
+# GAM with interaction terms
 
 ```{r, fig.width=8}
 plot(factor_interact, page = 1)
 ```
 
 ---
-## GAM with interaction terms
+# GAM with interaction terms
 
 We can also visualise our model in 3D using `vis.gam`, where `theta` is the degree rotation on the x-y plane
 
@@ -492,7 +492,7 @@ vis.gam(factor_interact, view = c("x2","x0"), theta = 40, n.grid = 500, border =
 ```
 
 ---
-## GAM with interaction terms
+# GAM with interaction terms
 
 Let's perform a model comparison using ANOVA to determine if the interaction term is necessary
 
@@ -503,7 +503,7 @@ anova(two_smooth_model, factor_interact, test = "Chisq")
 From the plots, we saw that the shape of the smooth terms were comparable among the 4 levels of `x0`. The anova test confirms this as well (p > 0.05).
 
 ---
-## GAM with interaction terms
+# GAM with interaction terms
 
 Finally we'll look at the interactions between 2 smoothed terms, `x1` and `x2`.
 
@@ -513,7 +513,7 @@ summary(smooth_interact)$s.table
 ```
 
 ---
-## GAM with interaction terms
+# GAM with interaction terms
 
 ```{r, fig.width=7, fig.height=7}
 plot(smooth_interact, page = 1, scheme = 3)
@@ -521,7 +521,7 @@ plot(smooth_interact, page = 1, scheme = 3)
 
 
 ---
-## GAM with interaction terms
+# GAM with interaction terms
 
 ```{r, fig.width=8, fig.height=8}
 vis.gam(smooth_interact, view = c("x1", "x2"), theta=40, n.grid = 500, border = NA)
@@ -531,7 +531,7 @@ vis.gam(smooth_interact, view = c("x1", "x2"), theta=40, n.grid = 500, border = 
 
 
 ---
-## GAM with interaction terms
+# GAM with interaction terms
 
 ```{r}
 anova(two_smooth_model, smooth_interact, test = "Chisq")
@@ -545,7 +545,7 @@ class: inverse, center, middle
 ## 5. Changing basis
 
 ---
-## Expanding on the basic GAM
+# Expanding on the basic GAM
 
 It is possible to expand further on the basic GAM model with:
 
@@ -556,7 +556,7 @@ It is possible to expand further on the basic GAM model with:
 We will now go over this 3 expansions.
 
 ---
-## Other smooth functions
+# Other smooth functions
 
 To model a non-linear smooth variable or surface, 3 different smooth functions are available:
 
@@ -567,7 +567,7 @@ To model a non-linear smooth variable or surface, 3 different smooth functions a
 `ti()` ![:faic](arrow-right) for modeling 2- or n-dimensional interaction surfaces that do not include the main effects.
 
 ---
-## Parameters of smooth functions
+# Parameters of smooth functions
 
 The smooth functions have several parameters that can be set to change their behavior. The most often-used parameters are :
 
@@ -579,7 +579,7 @@ The smooth functions have several parameters that can be set to change their beh
   - k should be < the number of unique data points.
 
 ---
-## Parameters of smooth functions
+# Parameters of smooth functions
 
 The smooth functions have several parameters that can be set to change their behavior. The most often-used parameters are :
 
@@ -592,7 +592,7 @@ The smooth functions have several parameters that can be set to change their beh
 <!--last 2 slides were a copy-paste from this websites: http://www.sfs.uni-tuebingen.de/~jvanrij/Tutorial/GAMM.html. However, as I'm not a specialist of GAM, I let them asis, but we should modify them or at least site the website-->
 
 ---
-## Example smooth for cyclical data
+# Example smooth for cyclical data
 
 Cyclical data is a good example where changing tha basis is useful: you want the predictor to match at the ends.
 
@@ -608,7 +608,7 @@ qplot(nottem_month, nottem, colour = factor(nottem_year), geom = "line") +
 ```
 
 ---
-## Example smooth for cyclical data
+# Example smooth for cyclical data
 
 ```{r, echo = F, fig.height=8, fig.width=12}
 data(nottem)
@@ -620,7 +620,7 @@ qplot(nottem_month, nottem, colour = factor(nottem_year), geom = "line") +
 ```
 
 ---
-## Example smooth for cyclical data
+# Example smooth for cyclical data
 
 We can model both the cyclic change of temperature across months and the non-linear trend through years, using a cyclical cubic spline, or `cc`, for the month variable and a regular smooth for the year variable.
 
@@ -630,7 +630,7 @@ summary(year_gam)$s.table
 ```
 
 ---
-## Example smooth for cyclical data
+# Example smooth for cyclical data
 
 ```{r, fig.height=5, fig.width=8}
 plot(year_gam, page = 1, scale = 0)
@@ -645,7 +645,7 @@ class: inverse, center, middle
 
 
 ---
-## GAM using other distributions
+# GAM using other distributions
 
 Let's now take a look on how to use GAMs when the response variable does not follow a normal distributions and is either count or proportion data (e.g., Gamma, binomial, Poisson, negative binomial).
 
@@ -659,7 +659,7 @@ str(gam_data3)
 <!-- should change the name of the variables in the csv files, to make them meaningful-->
 
 ---
-## GAM using other distributions
+# GAM using other distributions
 
 ```{r, fig.height=5, fig.width=5}
 plot(range(gam_data3$x1), c(0,1), type = "n",
@@ -672,7 +672,7 @@ lines(avg$x1, avg$prop, col = "orange", lwd = 2)
 ```
 
 ---
-## GAM using other distributions
+# GAM using other distributions
 
 We will test if this trend is linear or not using a logistic GAM (we use a binomial family distribution given that our response is proportion data).
 
@@ -690,7 +690,7 @@ prop_summary$s.table
 What does the smooth term indicate?]
 
 ---
-## GAM using other distributions
+# GAM using other distributions
 
 ```{r, echo = F}
 prop_summary$p.table
@@ -710,7 +710,7 @@ Recall that the model uses the count data to calculate the logit, which is the l
 > Here, the estimated intercept coefficient is positive, which means that there are more successes than failures overall.
 
 ---
-## GAM using other distributions
+# GAM using other distributions
 
 ```{r, echo = F}
 prop_summary$s.table
@@ -730,7 +730,7 @@ plot(prop_model)
 ```
 
 ---
-## Visualizing the trend over time
+# Visualizing the trend over time
 
 There are different ways this relationship can be represented graphically:
 
@@ -739,7 +739,7 @@ There are different ways this relationship can be represented graphically:
 
 
 ---
-## Visualizing the trend over time
+# Visualizing the trend over time
 
 What do these plots tell us about successes vs failures?
 
@@ -770,7 +770,7 @@ Equal amounts of successes and failures up to x1=400.
 
 <!-- this code should be shown but it is not well explained...-->
 ---
-## Visualizing the trend over time
+# Visualizing the trend over time
 
 Lastly, to help interpret the results, we could transform the summed effects back to proportions with the function `itsadug::plot_smooth()`:
 
@@ -792,7 +792,7 @@ class: inverse, center, middle
 # 7. Quick intro to GAMM
 
 ---
-## Dealing with non-independence
+# Dealing with non-independence
 
 When observations are not independent, GAMs can be used to either incorporate:
 
@@ -800,7 +800,7 @@ When observations are not independent, GAMs can be used to either incorporate:
 - random effects that model independence among observations from the same site.
 
 ---
-## Model with correlated errors
+# Model with correlated errors
 
 Let's have a look at a model with temporal autocorrelation in the residuals. We will revisit the Nottingham temperature model and test for correlated errors using the (partial) autocorrelation function.
 
@@ -811,7 +811,7 @@ pacf(resid(year_gam), lag.max = 36, main = "pACF")
 ```
 
 ---
-## Model with correlated errors
+# Model with correlated errors
 
 ```{r, echo = F, fig.width=9, fig.height=4.5}
 par(mfrow = c(1,2))
@@ -824,7 +824,7 @@ pacf(resid(year_gam), lag.max = 36, main = "pACF")
 The ACF plot of our model residuals suggests a significant lag of 1, and perhaps a lag of 2. Therefore, a low-order AR model is likely needed.
 
 ---
-## Model with correlated errors
+# Model with correlated errors
 
 We can test for autocorrelation by adding AR structures to the model: AR(1) (correlation at 1 time step) and AR(2) (correlation at 2 time steps).
 
@@ -842,7 +842,7 @@ anova(year_gam$lme, year_gam_AR1$lme, year_gam_AR2$lme)
 .comment[AR(1) provides a significant increase in fit over the naive model (LRT = 10.69, p = 0.0011), but little improvement with AR(2) (LRT = 1.62, p = 0.203).]
 
 ---
-## Mixed modelling
+# Mixed modelling
 
 As we saw in the section changing basis, `bs` specifies the type of underlying base function. For random intercepts and linear random slopes we use `bs = "re"`, but for random smooths we use `bs = "fs"`.
 
@@ -855,7 +855,7 @@ As we saw in the section changing basis, `bs` specifies the type of underlying b
 - **random smooths** adjust the trend of a numeric predictor in a nonlinear way: `s(x0, fac, bs="fs", m=1)`, where the argument m=1 sets a heavier penalty for the smooth moving away from 0, causing shrinkage to the mean.
 
 ---
-## GAMM with a random intercept
+# GAMM with a random intercept
 
 As before, we will use the `gamSim()` function to generate a dataset, here with a random effect, then run a model with a random intercept using `fac` as the random factor.
 
@@ -866,7 +866,7 @@ str(gam_data2)
 
 
 ---
-## GAMM with a random intercept
+# GAMM with a random intercept
 
 ```{r, fig.height=5, fig.width=5.5, echo = -1}
 par(mar=c(4,4,1,1))
@@ -876,7 +876,7 @@ plot(gamm_intercept, select = 2)
 ```
 
 ---
-## GAMM with a random intercept
+# GAMM with a random intercept
 
 We can plot the summed effects for the `x0` without random effects, and then plot the predictions of all 4 levels of the random `fac` effect:
 
@@ -897,7 +897,7 @@ plot_smooth(gamm_intercept, view="x0", cond = list(fac = "4"), add = T, col = 't
 ```
 
 ---
-## GAMM with a random intercept
+# GAMM with a random intercept
 
 <br>
 
@@ -918,7 +918,7 @@ plot_smooth(gamm_intercept, view="x0", cond = list(fac = "4"), add = T, col = 't
 
 
 ---
-## GAMM with a random slope
+# GAMM with a random slope
 
 ```{r}
 gamm_slope <- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2)
@@ -928,7 +928,7 @@ summary(gamm_slope)$s.table
 
 
 ---
-## GAMM with a random slope
+# GAMM with a random slope
 
 ```{r, eval = F}
 par(mfrow = c(1,2), cex = 1.1)
@@ -946,7 +946,7 @@ plot_smooth(gamm_slope, view = "x0", cond = list(fac = "4"), add = T, col = 'tur
 ```
 
 ---
-## GAMM with a random slope
+# GAMM with a random slope
 
 <br>
 
@@ -965,7 +965,7 @@ plot_smooth(gamm_slope, view = "x0", cond = list(fac = "4"), add = T, col = 'tur
 ```
 
 ---
-## GAMM with a random intercept and slope
+# GAMM with a random intercept and slope
 
 ```{r}
 gamm_int_slope <- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
@@ -975,7 +975,7 @@ summary(gamm_int_slope)$s.table
 ```
 
 ---
-## GAMM with a random intercept and slope
+# GAMM with a random intercept and slope
 
 ```{r, eval = F}
 par(mfrow = c(1,2), cex = 1.1)
@@ -993,7 +993,7 @@ plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "4"), add = T, col = 
 ```
 
 ---
-## GAMM with a random intercept and slope
+# GAMM with a random intercept and slope
 
 <br>
 
@@ -1011,7 +1011,7 @@ plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "4"), add = T,
 ```
 
 ---
-## GAMM with a random intercept and slope
+# GAMM with a random intercept and slope
 
 Note that the random slope is static in this case:
 
@@ -1020,7 +1020,7 @@ plot(gamm_int_slope, select = 3)
 ```
 
 ---
-## GAMM with a random smooth
+# GAMM with a random smooth
 
 ```{r}
 gamm_smooth <- gam(y ~ s(x0, fac, bs = "fs", m = 1), data = gam_data2)
@@ -1029,7 +1029,7 @@ summary(gamm_smooth)$s.table
 ```
 
 ---
-## GAMM with a random smooth
+# GAMM with a random smooth
 
 Here, if the random slope varied along `x0`, we would see different curves for each level:
 
@@ -1039,7 +1039,7 @@ plot(gamm_smooth, select = 1)
 ```
 
 ---
-## GAMM with a random smooth
+# GAMM with a random smooth
 
 ```{r, eval = F}
 par(mfrow = c(1,2), cex = 1.1)
@@ -1057,7 +1057,7 @@ plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "4"), add = T, col = 'tu
 ```
 
 ---
-## GAMM with a random smooth
+# GAMM with a random smooth
 
 <br>
 
@@ -1077,7 +1077,7 @@ plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "4"), add = T,
 .comment[Here, if the random slope varied along `x0`, we would see different curves for each level.]
 
 ---
-## GAMM
+# GAMM
 
 All of the mixed models from this section can be compared using `anova()` to determine the best fit model
 
@@ -1092,7 +1092,7 @@ class: inverse, center, middle
 
 
 ---
-## A closer look at GAM
+# A closer look at GAM
 
 We will now take a few minutes to look at what GAMs are doing behind the scenes. Lets first consider a model containing one smooth function of one covariate, $x_i$:
 
@@ -1102,7 +1102,7 @@ To estimate the smooth function $f$, we need to represented the above equation i
 
 $$f(x) = \sum_{i=1}^q b_i(x) \times β_i$$
 ---
-## Example: a polynomial basis
+# Example: a polynomial basis
 
 Suppose that $f$ is believed to be a 4th order polynomial, so that the space of polynomials of order 4 and below contains $f$. A basis for this space would then be:
 
@@ -1116,7 +1116,7 @@ and the full model now becomes:
 
 $$y_i = β_1 + x_iβ_2 +  x^2_iβ_3 + x^3_iβ_4(x) + x^4_iβ_5 + ε_i$$
 ---
-## Example: a polynomial basis
+# Example: a polynomial basis
 
 
 The basis functions are each multiplied by a real valued parameter, $β_i$, and are then summed to give the <font color="orange">final curve $f(x)$</font>.
@@ -1129,7 +1129,7 @@ The basis functions are each multiplied by a real valued parameter, $β_i$, and 
 By varying the $β_i$ we can vary the form of $f(x)$ to produce any polynomial function of order 4 or lower.
 
 ---
-## Example: a cubic spline basis
+# Example: a cubic spline basis
 
 A cubic spline is a curve constructed from sections of a cubic polynomial joined together so that they are continuous in value. Each section of cubic has different coefficients.
 
@@ -1138,7 +1138,7 @@ A cubic spline is a curve constructed from sections of a cubic polynomial joined
 ]
 
 ---
-## Example: a cubic spline basis
+# Example: a cubic spline basis
 
 Here's a representation of a smooth function using a rank 5 cubic spline basis with knot locations at increments of 0.2:
 
@@ -1151,7 +1151,7 @@ Here, the knots are evenly spaced through the range of observed x values. Howeve
 .comment[Is there a better way to select the knot locations?]
 
 ---
-## Controlling the degree of smoothing with penalized regression splines
+# Controlling the degree of smoothing with penalized regression splines
 
 Instead of controlling smoothness by altering the number of knots, we keep that fixed to size a little larger than reasonably necessary, and control the model’s smoothness by adding a “wiggleness” penalty.
 
@@ -1166,7 +1166,7 @@ $$||y - XB||^{2} + \lambda \int_0^1[f^{''}(x)]^2dx$$
 As $\lambda$ goes to infty, the model becomes linear.
 
 ---
-## Controlling the degree of smoothing with penalized regression splines
+# Controlling the degree of smoothing with penalized regression splines
 
 If $\lambda$ is too high then the data will be over smoothed, and if it is too low then the data will be under smoothed.
 
@@ -1177,7 +1177,7 @@ $$M = 1/n \times \sum_{i=1}^n (\hat{f_i} - f_i)^2$$
 Since $f$ is unknown, $M$ is estimated using a generalized cross validation technique that leaves out each datum from the data in turn and considers the average ability of models fitted to the remaining data to predict the left out datum.
 
 ---
-## Principle behind cross validation
+# Principle behind cross validation
 
 .center[
 ![:scale 70%](images/smooth_sel.png)
@@ -1196,7 +1196,7 @@ Since $f$ is unknown, $M$ is estimated using a generalized cross validation tech
 
 
 ---
-## Principle behind cross validation
+# Principle behind cross validation
 
 .center[
 ![](images/gcv.png)
@@ -1204,7 +1204,7 @@ Since $f$ is unknown, $M$ is estimated using a generalized cross validation tech
 
 
 ---
-## Brief note on estimated degrees of freedom (edf)
+# Brief note on estimated degrees of freedom (edf)
 
 How many degrees of freedom does a fitted GAM have?
 
@@ -1215,7 +1215,7 @@ Because the number of free parameters in GAMs is difficult to define, the edf ar
 For example, if the arbitrarily large number of knots is k = 10, then k-1 sets the upper limit on the edf associated with a smooth term. This number then decreases as the penalty $\lambda$ increases until the best fit penalty is found by cross-validation.
 
 ---
-## Ressources
+# Ressources
 
 There's a great deal more out there on GAM… this was just the very surface.
 

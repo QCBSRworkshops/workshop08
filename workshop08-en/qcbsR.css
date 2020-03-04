@@ -1,83 +1,135 @@
-.remark-code-line-highlighted {
-  background-color: #ffdd55;
+html {
+  margin: 0px;
+  padding: 0px;
 }
 
 .remark-slide-content {
-  border-right: 5px solid #303940;
-  border-left: 5px solid #303940;
-  padding: .2em;
-  margin: .15em;
-  font-size: 24px;
-  color: #32454f;
+  padding: 0px;
+  color: #062c45;
 }
+
+
+.remark-slide-content p {
+  font-size: 1.4rem;
+  padding: .4rem 1rem .4rem 1.4rem;
+  margin: .1rem;
+}
+
+.maintitle {
+  font-family: 'Roboto Slab';
+  font-weight: normal;
+}
+
+.remark-code-line {
+  font-size: 1.1rem;
+  line-height: 1.34;
+}
+
+.hljs {
+  padding: .8rem 1rem .8rem 1rem !important;
+  background-color: #f3f3f3 !important;
+}
+
+.remark-code .remark-code-line {
+  padding-left: 1rem !important;
+}
+
+.remark-inline-code {
+  background-color: #f3f3f3;
+  border-radius: 5px;
+  border: 1px solid #aaa;
+  padding: 1px !important;
+  font-size: 80%;
+}
+
+.remark-code-line-highlighted {
+  background-color: #fcd3f2;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+pre {
+  margin: .4rem 0rem;
+}
+
+hr {
+  color:  #fcd3f2;
+  width: 80%
+}
+
+.remark-slide-content h1 {
+  font-weight: 500;
+  padding: .4em .4rem .8rem 1.2rem;
+  margin: 0rem;
+  margin-bottom: .8rem;
+  font-size: 2.4rem;
+  background-color: #062c45;
+  color: #f3f3f3;
+}
+.remark-slide-content h2 {
+  font-weight: 500;
+  padding: .6em .4rem .8rem 1.2rem;
+  margin: 0rem;
+  margin-bottom: .8rem;
+  font-size: 2.4rem;
+}
+.remark-slide-content h3 {
+  font-weight: 500;
+  padding: .6rem .4rem .6rem 1.4rem;
+  margin: .2rem;
+  font-size: 2.2rem;
+}
+.remark-slide-content h4 {
+  font-weight: 400;
+  padding: .6rem .4rem .6rem 1.4rem;
+  margin: .2rem;
+  font-size: 2rem;
+}
+.remark-slide-content h5 {
+  font-weight: 400;
+  padding: .5rem .4rem .5rem 1.6rem;
+  margin: .2rem;
+  font-size: 1.8rem;
+}
+.remark-slide-content h6 {
+  font-weight: 400;
+  padding: .4rem .4rem .4rem 1.6rem;
+  margin: .2rem;
+  font-size: 1.7rem;
+}
+
+
 
 .remark-slide-number {
   font-size: 12pt;
   margin-bottom: -11.6px;
   margin-right: 10px;
-  color: #374559;
+  color: #062c45;
   opacity: 0.6; /* default: 0.5 */
+  font-weight: 400;
 }
 
 
-.remark-slide-content p, .remark-slide-content ul, .remark-slide-content ol {
-  margin: .2em 1em;
+.remark-slide-content li {
+  margin: .4rem  2rem;
+  padding-left: .2rem;
 }
 
- /* Header */
-.remark-slide-content h1 {
-  font-size: 48px;
-  border-bottom: 3px solid;
-  margin: 0em .5em;
+.remark-slide-content ul, .remark-slide-content ol {
+  margin: .4rem .1rem;
+  padding-left: .4rem;
 }
 
-.remark-slide-content h2 {
-  font-size: 46px;
-  margin: 0em .5em;
-}
-
-.remark-slide-content h3 {
-  font-size: 42px;
-  margin: 0em .6em;
-}
-
-.remark-slide-content h4 {
-  font-size: 36px;
-  margin: 0em .7em;
-}
-
-.remark-slide-content h5 {
-  font-size: 32px;
-  margin: 0em .8em;
-}
-
-
-.remark-slide-content h6 {
-  font-size: 28px;
-  margin: 0em .9em;
-}
 
 /* Code */
 a, a > code {
-  color: #3fb3b2;
-  font-weight: bold;
-  text-decoration: none;
+  color: #309493;
+  font-weight: 400;
 }
 
-.remark-code {
-    color: #303940;
-    background-color: #f3f3f3;
-    font-size: 85%;
-}
-
-.remark-inline-code {
-    color: #303940;
-    background-color: #f3f3f3;
-    font-size: 90%;
-}
-
-.remark-code-line, p {
-  margin: .2em .2em;
+a {
+  text-decoration: underline;
 }
 
 /* MathJax */
@@ -86,21 +138,24 @@ a, a > code {
 
 /* special text */
 .alert {
-  color: #c7254e;
+  color: #c11534;
   font-weight: bold;
 }
 
 .comment {
-  color: #645193;
+  color: #666;
+  font-style: italic;
 }
 
 
 .huge {
-  font-size: 2em;
+  font-size: 1.5em;
+  font-weight: 400;
 }
 
 .large {
-  font-size: 1.5em;
+  font-size: 1.2em;
+  font-weight: 400;
 }
 
 .small {
@@ -109,6 +164,7 @@ a, a > code {
 
 .tiny {
   font-size: .6em;
+  font-weight: 200;
 }
 
 .footnote {
@@ -117,6 +173,21 @@ a, a > code {
   padding-right: 4em;
   font-size: 60%;
 }
+
+/* help style */
+
+.remark-help-content h1 {
+    color: #fff;
+}
+
+.remark-help {
+    color: #fff;
+}
+
+.remark-help tr:nth-child(even) {
+  background-color: #999;
+}
+
 
 /* Column */
 
@@ -138,6 +209,10 @@ a, a > code {
   width: 27%;
 }
 
+.pull-right2, .pull-right2 p {
+  padding-left: 0rem ;
+}
+
 /* Blockquote */
 .remark-slide-content blockquote {
   font-size: 1em;
@@ -150,12 +225,13 @@ a, a > code {
 .inverse {
   border-left: 5px solid #f3f3f3;
   border-right: 5px solid #f3f3f3;
-  background-color: #32454f;
+  background-color: #062c45;
   color: #f3f3f3;
 }
 
 .inverse h1, .inverse h2, .inverse h3 {
   color: #f3f3f3;
+  background-color: transparent;
 }
 
 
@@ -190,7 +266,7 @@ table, td, th {
 /* for title page with logo and QCBS background  */
 .maintitle {
   font-size: 3em;
-  color: #334853;
+  color: #062c45;
   text-align: center;
 }
 
@@ -198,7 +274,6 @@ table, td, th {
   background-image: url(https://qcbs.ca/wp-content/uploads/2010/05/QCBS_widescreen_background_white-01.png);
   background-size: cover;
 }
-
 
 .title-slide:before{
   position: absolute;
@@ -211,16 +286,3 @@ table, td, th {
 
 
 
-/* help style */
-
-.remark-help-content h1 {
-    color: #fff;
-}
-
-.remark-help {
-    color: #fff;
-}
-
-.remark-help tr:nth-child(even) {
-  background-color: #999;
-}

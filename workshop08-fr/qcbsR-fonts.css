@@ -1,24 +1,17 @@
 /* Code font */
-@import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic');
+@import url('https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.206/distr/fira_code.css');
+@import url('https://fonts.googleapis.com/css?family=Roboto+Slab&display=swap');
 /* Title code */
-@import url('https://fonts.googleapis.com/css?family=Anton|Bevan|Black+Han+Sans|Luckiest+Guy|Bowlby+One|Lalezar');
 /* Body */
-@import url('https://fonts.googleapis.com/css?family=Arya');
-
+/* Fira Sans */
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans:200,200i 300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap');
 
 body {
-  font-family: 'Arya';
-}
-
-h1 {
-  font-family: 'Lalezar', cursive;
-  font-weight: 400;
-}
-
-.maintitle {
-  font-family: 'Lalezar', cursive;
+  font-family: 'Fira Sans', sans-serif;
+  font-weight: 300;
+  line-height: 1.2;
 }
 
 .remark-code, .remark-inline-code {
-    font-family: 'Ubuntu Mono';
+    font-family: "Fira Code", monospace;
 }

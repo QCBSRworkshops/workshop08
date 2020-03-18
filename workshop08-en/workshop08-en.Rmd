@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
   warning = FALSE,
   message = FALSE,
   cache = TRUE,
-  fig.width=6, fig.height=6,
+  fig.width = 6, fig.height = 6,
   fig.retina = 3,
   fig.align = 'center'
 )
@@ -33,7 +33,7 @@ class: inverse, center, middle
 
 ```{R install_pkgs, echo = FALSE, results = "asis"}
 cat(
-  qcbsRworkshops::first_slides(8, c('dplyr', 'tidyr', 'magrittr'), lang = "fr")
+  qcbsRworkshops::first_slides(8, c('ggplot2', 'itsadug', 'mgcv'))
 )
 ```
 
@@ -160,6 +160,7 @@ data_plot
 Trying to fit these data as a linear regression model, we would violate the assumptions listed above.
 
 ```{r, echo = FALSE}
+library(mgcv)
 linear_model <- gam(y_obs ~ x)
 model_summary <- summary(linear_model)
 data_plot <- data_plot +
@@ -432,7 +433,7 @@ three_smooth_summary <- summary(three_smooth_model)
 plot(three_smooth_model, page = 1)
 ```
 
-```{r, fig.width=8, fig.height=7, echo = FALSE}
+```{r, fig.width = 8, fig.height = 7, echo = FALSE}
 par(mar=c(3.8,3.8,.2,.2))
 plot(three_smooth_model, page = 1)
 ```
@@ -481,7 +482,7 @@ summary(factor_interact)$s.table
 ---
 # GAM with interaction terms
 
-```{r, fig.width=8}
+```{r, fig.width = 8}
 plot(factor_interact, page = 1)
 ```
 
@@ -597,7 +598,7 @@ The smooth functions have several parameters that can be set to change their beh
 ---
 # Example smooth for cyclical data
 
-Cyclical data is a good example where changing tha basis is useful: you want the predictor to match at the ends.
+Cyclical data is a good example where changing basis is useful: you want the predictor to match at the ends.
 
 Let's use a time series of climate data, with monthly measurements, and see if there's a temporal trend in yearly temperature.
 
@@ -613,7 +614,7 @@ qplot(nottem_month, nottem, colour = factor(nottem_year), geom = "line") +
 ---
 # Example smooth for cyclical data
 
-```{r, echo = F, fig.height=8, fig.width=12}
+```{r, echo = FALSE, fig.height=8, fig.width=12}
 data(nottem)
 n_years <- length(nottem)/12
 nottem_month <- rep(1:12, times = n_years)
@@ -635,7 +636,7 @@ summary(year_gam)$s.table
 ---
 # Example smooth for cyclical data
 
-```{r, fig.height=5, fig.width=8}
+```{r, fig.height = 5, fig.width = 8}
 plot(year_gam, page = 1, scale = 0)
 ```
 
@@ -808,7 +809,7 @@ When observations are not independent, GAMs can be used to either incorporate:
 
 Let's have a look at a model with temporal autocorrelation in the residuals. We will revisit the Nottingham temperature model and test for correlated errors using the (partial) autocorrelation function.
 
-```{r, eval = F, fig.width=9, fig.height=4.5}
+```{r, eval = FALSE, fig.width=9, fig.height=4.5}
 par(mfrow = c(1,2))
 acf(resid(year_gam), lag.max = 36, main = "ACF")
 pacf(resid(year_gam), lag.max = 36, main = "pACF")
@@ -937,7 +938,7 @@ summary(gamm_slope)$s.table
 ```{r, eval = FALSE}
 par(mfrow = c(1,2), cex = 1.1)
 
-plot_smooth(gamm_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)")
+plot_smooth(gamm_slope, view = "x0", rm.ranef = TRUE, main = "intercept + s(x0)")
 
 plot_smooth(gamm_slope, view = "x0", cond = list(fac = "1"),
             main = "... + s(fac)", col = 'orange', ylim = c(7,22))

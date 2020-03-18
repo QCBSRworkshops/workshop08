@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
   warning = FALSE,
   message = FALSE,
   cache = TRUE,
-  fig.width=6, fig.height=6,
+  fig.width = 6, fig.height = 6,
   fig.retina = 3,
   fig.align = 'center'
 )
@@ -34,7 +34,8 @@ class: inverse, center, middle
 
 ```{R install_pkgs, echo = FALSE, results = "asis"}
 cat(
-  qcbsRworkshops::first_slides(8, c('dplyr', 'tidyr', 'magrittr'), lang = "fr")
+  qcbsRworkshops::first_slides(8, c('ggplot2', 'itsadug', 'mgcv'),
+    lang = "fr")
 )
 ```
 
@@ -129,7 +130,7 @@ class: inverse, center, middle
 
 Examinons un exemple! Premièrement, nous allons générer des données et les représenter graphiquement.
 
-```{r, eval = FALSE, echo = T}
+```{r, eval = FALSE, echo = TRUE}
 library(ggplot2)
 set.seed(10)
 n <- 250
@@ -165,6 +166,7 @@ data_plot
 Si nous modélisions cette relation par une régression linéaire, les résultats ne respecteraient pas les suppositions énumérées ci-dessus.
 
 ```{r, echo = FALSE}
+library(mgcv)
 linear_model <- gam(y_obs ~ x)
 model_summary <- summary(linear_model)
 data_plot <- data_plot +

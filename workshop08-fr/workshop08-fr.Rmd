@@ -26,16 +26,20 @@ knitr::opts_chunk$set(
   fig.retina = 3,
   fig.align = 'center'
 )
+options(repos=structure(c(CRAN="http://cran.r-project.org")))
 ```
 
-```{r, include = FALSE}
-if (!require(ggplot2)) install.packages("ggplot2")
-library(ggplot2)
-if (!require(mgcv)) install.packages("mgcv")
-library(mgcv)
-if (!require(itsadug)) install.packages("itsadug")
-library(itsadug)
+
+class: inverse, center, middle
+
+```{R install_pkgs, echo = FALSE, results = "asis"}
+cat(
+  qcbsRworkshops::first_slides(8, c('dplyr', 'tidyr', 'magrittr'), lang = "fr")
+)
 ```
+
+---
+
 
 # Aperçu
 
@@ -68,6 +72,8 @@ library(itsadug)
 ---
 class: inverse, center, middle
 # 1. Le modèle linéaire
+
+<hr>
 
 ## ...et où il échoue
 
@@ -123,8 +129,8 @@ class: inverse, center, middle
 
 Examinons un exemple! Premièrement, nous allons générer des données et les représenter graphiquement.
 
-```{r, eval = F, echo = T}
-require(ggplot2)
+```{r, eval = FALSE, echo = T}
+library(ggplot2)
 set.seed(10)
 n <- 250
 x <- runif(n,0,5)
@@ -139,7 +145,8 @@ data_plot
 ---
 # GAM
 
-```{r, eval = T, echo = F}
+```{r, eval = TRUE, echo = FALSE}
+library(ggplot2)
 set.seed(10)
 n <- 250
 x <- runif(n,0,5)
@@ -157,7 +164,7 @@ data_plot
 
 Si nous modélisions cette relation par une régression linéaire, les résultats ne respecteraient pas les suppositions énumérées ci-dessus.
 
-```{r, echo = F}
+```{r, echo = FALSE}
 linear_model <- gam(y_obs ~ x)
 model_summary <- summary(linear_model)
 data_plot <- data_plot +
@@ -170,16 +177,16 @@ data_plot
 
 Dans un GAM, la relation entre la variable réponse et le prédicteur est :
 
-$$y = \alpha + s(x_1) + s(x_2) + ... + \epsilon$$
+$$y = \alpha + s(x_1) + s(x_2) + ... + \varepsilon$$
 
-Un des grands avantages d'utiliser un GAM est que la forme optimale de la non-linéarité, i.e le degré de lissage de `s(x)`, est contrôlée en utilisant une régression pénalisée qui est déterminée automatiquement à l'aide d'une méthode de validation croisée généralisée.
+Un des grands avantages d'utiliser un GAM est que la forme optimale de la non-linéarité, i.e. le degré de lissage de `s(x)`, est contrôlée en utilisant une régression pénalisée qui est déterminée automatiquement à l'aide d'une méthode de validation croisée généralisée.
 
 ---
 # GAM
 
 Essayons de modéliser les données à l'aide d'une fonction de lissage avec la fonction `mgcv::gam()`
 
-```{r, eval = F}
+```{r, eval = FALSE}
 library(mgcv)
 gam_model <- gam(y_obs ~ s(x))
 summary(gam_model)
@@ -192,7 +199,7 @@ data_plot
 ---
 # GAM
 
-```{r, echo = F}
+```{r, echo = FALSE}
 gam_model <- gam(y_obs ~ s(x))
 summary(gam_model)
 ```
@@ -200,7 +207,7 @@ summary(gam_model)
 ---
 # GAM
 
-```{r, echo = F}
+```{r, echo = FALSE}
 data_plot <- data_plot +
      geom_line(colour = "blue", size = 1.2, aes(y = fitted(gam_model)))
 data_plot
@@ -433,11 +440,11 @@ three_smooth_summary <- summary(three_smooth_model)
 ---
 # Défi 2 - Solution ![:cube]()
 
-```{r, eval = F}
+```{r, eval = FALSE}
 plot(three_smooth_model, page = 1)
 ```
 
-```{r, fig.width=8, fig.height=7, echo = F}
+```{r, fig.width=8, fig.height=7, echo = FALSE}
 par(mar=c(3.8,3.8,.2,.2))
 plot(three_smooth_model, page = 1)
 ```
@@ -462,7 +469,7 @@ class: inverse, center, middle
 ## 4. Intéractions
 
 ---
-# GAM avec des termes d'intéraction
+# GAM avec des termes d'interaction
 
 Il y a deux façons de modéliser une interaction entre deux variables :
 
@@ -473,9 +480,9 @@ Il y a deux façons de modéliser une interaction entre deux variables :
   - Quand `x2` est qualitative, le facteur doit être ajouté comme effet principal dans le modèle
 
 ---
-# GAM avec des termes d'intéraction
+# GAM avec des termes d'interaction
 
-Nous allons examiner l'effet de l'interaction en utilisant notre variable qualitative `x0` et examiner si la non-linérité de `s(x2)` varie selon les différents niveaux de `x0`.
+Nous allons examiner l'effet de l'interaction en utilisant notre variable qualitative `x0` et examiner si la non-linéarité de `s(x2)` varie selon les différents niveaux de `x0`.
 
 ```{r}
 factor_interact <- gam(y ~ x0 + s(x1) + s(x2, by = x0), data = gam_data)
@@ -484,14 +491,14 @@ summary(factor_interact)$s.table
 ```
 
 ---
-# GAM avec des termes d'intéraction
+# GAM avec des termes d'interaction
 
 ```{r, fig.width=8}
 plot(factor_interact, page = 1)
 ```
 
 ---
-# GAM avec des termes d'intéraction
+# GAM avec des termes d'interaction
 
 Nous pouvons aussi visualiser notre modèle en 3D avec `vis.gam`, où `theta` est le degré de rotation de notre plan x-y
 
@@ -500,9 +507,9 @@ vis.gam(factor_interact, view = c("x2","x0"), theta = 40, n.grid = 500, border =
 ```
 
 ---
-# GAM avec des termes d'intéraction
+# GAM avec des termes d'interaction
 
-Faisons une comparaison de modèle avec ANOVA pour déterminer si le terme d'intéraction est nécessaire
+Faisons une comparaison de modèle avec ANOVA pour déterminer si le terme d'interaction est nécessaire
 
 ```{r}
 anova(two_smooth_model, factor_interact, test = "Chisq")
@@ -511,9 +518,9 @@ anova(two_smooth_model, factor_interact, test = "Chisq")
 À partir des graphiques, on voit que les formes des termes non-linéaires sont comparables parmi les 4 niveaux de `x0`. L'anova confirme cela aussi (p > 0.05).
 
 ---
-# GAM avec des termes d'intéraction
+# GAM avec des termes d'interaction
 
-Finalement, nous regardons les intéractions entre 2 termes non linéaires, `x1` et `x2`.
+Finalement, nous regardons les interactions entre 2 termes non linéaires, `x1` et `x2`.
 
 ```{r}
 smooth_interact <- gam(y~x0 + s(x1, x2), data = gam_data)
@@ -521,7 +528,7 @@ summary(smooth_interact)$s.table
 ```
 
 ---
-# GAM avec des termes d'intéraction
+# GAM avec des termes d'interaction
 
 ```{r, fig.width=7, fig.height=7}
 plot(smooth_interact, page = 1, scheme = 3)
@@ -529,7 +536,7 @@ plot(smooth_interact, page = 1, scheme = 3)
 
 
 ---
-# GAM avec des termes d'intéraction
+# GAM avec des termes d'interaction
 
 ```{r, fig.width=8, fig.height=8}
 vis.gam(smooth_interact, view = c("x1", "x2"), theta=40, n.grid = 500, border = NA)
@@ -537,7 +544,7 @@ vis.gam(smooth_interact, view = c("x1", "x2"), theta=40, n.grid = 500, border = 
 ```
 
 ---
-# GAM avec des termes d'intéraction
+# GAM avec des termes d'interaction
 
 ```{r}
 anova(two_smooth_model, smooth_interact, test = "Chisq")
@@ -568,9 +575,9 @@ Pour modéliser une surface lisse ou non-linéaire, nous pouvons utiliser trois 
 
 `s()` ![:faic](arrow-right) pour modéliser un terme lisse 1-dimensionnel, ou pour modéliser une intéraction entre des variables mesurées sur la *même échelle*
 
-`te()` ![:faic](arrow-right)  pour modéliser une surface d'intéraction 2- ou n-dimensionnel entre des variables qui *ne sont pas sur la même échelle*. Comprend les effets principaux.
+`te()` ![:faic](arrow-right)  pour modéliser une surface d'interaction 2- ou n-dimensionnel entre des variables qui *ne sont pas sur la même échelle*. Comprend les effets principaux.
 
-`ti()` ![:faic](arrow-right) pour modéliser une surface d'intéraction 2- ou n-dimensionnel *qui ne comprend pas les effets principaux*.
+`ti()` ![:faic](arrow-right) pour modéliser une surface d'interaction 2- ou n-dimensionnel *qui ne comprend pas les effets principaux*.
 
 ---
 # Paramètres des fonctions lisses
@@ -605,7 +612,7 @@ Les données cycliques sont un bon exemple où changer la base est utile : vous 
 
 Nous allons utiliser une série temporelle de données climatiques, divisées en mesures mensuelles, afin de déterminer s'il y a une tendance de température annuelle.
 
-```{r, eval = F}
+```{r, eval = FALSE}
 data(nottem) # Nottingham temperature time series
 n_years <- length(nottem)/12
 nottem_month <- rep(1:12, times = n_years)
@@ -697,7 +704,7 @@ Qu'est ce que le terme de lissage indique?]
 ---
 # GAM avec d'autres distributions
 
-```{r, echo = F}
+```{r, echo = FALSE}
 prop_summary$p.table
 ```
 
@@ -718,7 +725,7 @@ prop_summary$p.table
 ---
 # GAM avec d'autres distributions
 
-```{r, echo = F}
+```{r, echo = FALSE}
 prop_summary$s.table
 ```
 
@@ -730,7 +737,7 @@ Cela représente comment le ratio de succès vs échecs change sur l'échelle de
 
 > Puisque l'edf > 1, la proportion des succès augmente plus rapidement avec $x1$
 
-```{r, fig.height=3.5, fig.width=4, echo = F}
+```{r, fig.height=3.5, fig.width=4, echo = FALSE}
 par(mar = c(4,4,0,0))
 plot(prop_model)
 ```
@@ -749,7 +756,8 @@ Il y a différente façon de représenter cette relation graphiquement :
 
 Que nous disent ces graphes sur les succès et échecs?
 
-```{r, echo = F, fig.height=4.5, fig.width=9}
+```{r, echo = FALSE, fig.height = 4.5, fig.width = 9}
+library(itsadug)
 par(mfrow=c(1,2), mar = c(4,4,0,0))
 plot(prop_model, select=1, scale=0, shade=TRUE)
 abline(h=0)
@@ -888,7 +896,7 @@ plot(gamm_intercept, select = 2)
 
 Nous allons premièrement tracer l'effet combiné de `x0` (sans les niveaux de l'effet aléatoire) et ensuite une courbe pour les 4 niveaux de `fac` :
 
-```{r, eval = F}
+```{r, eval = FALSE}
 par(mfrow = c(1,2), cex = 1.1)
 
 plot_smooth(gamm_intercept, view = "x0", rm.ranef = T,
@@ -938,7 +946,7 @@ summary(gamm_slope)$s.table
 ---
 # GAMM avec une pente aléatoire
 
-```{r, eval = F}
+```{r, eval = FALSE}
 par(mfrow = c(1,2), cex = 1.1)
 
 plot_smooth(gamm_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)")
@@ -985,7 +993,7 @@ summary(gamm_int_slope)$s.table
 ---
 # GAMM avec un intercepte et une pente aléatoire
 
-```{r, eval = F}
+```{r, eval = FALSE}
 par(mfrow = c(1,2), cex = 1.1)
 
 plot_smooth(gamm_int_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)")
@@ -1049,7 +1057,7 @@ plot(gamm_smooth, select = 1)
 ---
 # GAMM avec une surface lisse aléatoire
 
-```{r, eval = F}
+```{r, eval = FALSE}
 par(mfrow = c(1,2), cex = 1.1)
 
 plot_smooth(gamm_smooth, view = "x0", rm.ranef = T, main = "intercept + s(x0)")
@@ -1223,11 +1231,17 @@ Par exemple, si le nombre de noeuds est arbitrairement réglé à k = 10, k-1 d�
 ---
 # Ressources
 
-Il existe beaucoup d'information sur les GAMs…
+Il existe beaucoup d'information sur les GAMs.
 
 Simon Wood, l'auteur de la librairie `mgcv`, a un [site](http://people.bath.ac.uk/sw283/mgcv/) très utile avec des conférences et des notes introductives sur la façon d'utiliser les GAMs.
 
 Il a aussi écrit un livre, *Generalized Additive Models: An Introduction with R*, que nous avons utilisé comme référence pour cet atelier.
+
+.center[[![:scale 28%](https://images.tandf.co.uk/common/jackets/amazon/978149872/9781498728331.jpg)](https://www.crcpress.com/Generalized-Additive-Models-An-Introduction-with-R-Second-Edition/Wood/p/book/9781498728331)]
+
+
+---
+# Ressources
 
 Le matériel de cet atelier a également été obtenu à partir des blogs et des tutoriels suivants :
 
@@ -1237,6 +1251,8 @@ Le matériel de cet atelier a également été obtenu à partir des blogs et des
 
 - [Advanced Analysis of Time series data](http://www.sfs.uni-tuebingen.de/~jvanrij/LSA2015/AnswersLab2.html)
 
+- Noam Ross a crée un tutorial [GAMs in R](https://noamross.github.io/gams-in-r-course/) (voir aussi [ce preprint](https://peerj.com/preprints/27320/))
+
 Enfin, les pages d'aide, disponibles via `?gam` dans R sont une excellente ressource.
 
 ---
@@ -1244,4 +1260,7 @@ class: inverse, center, bottom
 
 # Merci pour votre participation à cet atelier!
 
-![:scale 50%](images/QCBS_logo.png)
+<hr>
+<br>
+
+![:scale 50%](images/qcbs_logo.png)

@@ -15,7 +15,7 @@ output:
 ---
 
 
-```{r setup, echo = F}
+```{r setup, echo = FALSE}
 knitr::opts_chunk$set(
   comment = "#",
   collapse = TRUE,
@@ -26,16 +26,18 @@ knitr::opts_chunk$set(
   fig.retina = 3,
   fig.align = 'center'
 )
+options(repos=structure(c(CRAN="http://cran.r-project.org")))
 ```
 
-```{r, include = FALSE}
-if (!require(ggplot2)) install.packages("ggplot2")
-library(ggplot2)
-if (!require(mgcv)) install.packages("mgcv")
-library(mgcv)
-if (!require(itsadug)) install.packages("itsadug")
-library(itsadug)
+class: inverse, center, middle
+
+```{R install_pkgs, echo = FALSE, results = "asis"}
+cat(
+  qcbsRworkshops::first_slides(8, c('dplyr', 'tidyr', 'magrittr'), lang = "fr")
+)
 ```
+
+---
 
 ## Workshop overview
 
@@ -122,8 +124,8 @@ class: inverse, center, middle
 
 Let's look at an example. First, we'll generate some data, and plot it.
 
-```{r, eval = F, echo = T}
-require(ggplot2)
+```{r, eval = FALSE, echo = TRUE}
+library(ggplot2)
 set.seed(10)
 n <- 250
 x <- runif(n,0,5)
@@ -138,7 +140,8 @@ data_plot
 ---
 # GAM
 
-```{r, eval = T, echo = F}
+```{r, eval = TRUE, echo = FALSE}
+library(ggplot2)
 set.seed(10)
 n <- 250
 x <- runif(n,0,5)
@@ -156,7 +159,7 @@ data_plot
 
 Trying to fit these data as a linear regression model, we would violate the assumptions listed above.
 
-```{r, echo = F}
+```{r, echo = FALSE}
 linear_model <- gam(y_obs ~ x)
 model_summary <- summary(linear_model)
 data_plot <- data_plot +
@@ -179,7 +182,7 @@ One big advantage of using GAM over a manual specification of the model is that 
 Let's try to fit the data using a smooth function with the function `mgcv::gam()`
 
 
-```{r, eval = F}
+```{r, eval = FALSE}
 library(mgcv)
 gam_model <- gam(y_obs ~ s(x))
 summary(gam_model)
@@ -192,7 +195,7 @@ data_plot
 ---
 # GAM
 
-```{r, echo = F}
+```{r, echo = FALSE}
 gam_model <- gam(y_obs ~ s(x))
 summary(gam_model)
 ```
@@ -200,7 +203,7 @@ summary(gam_model)
 ---
 # GAM
 
-```{r, echo = F}
+```{r, echo = FALSE}
 data_plot <- data_plot +
      geom_line(colour = "blue", size = 1.2, aes(y = fitted(gam_model)))
 data_plot
@@ -425,11 +428,11 @@ three_smooth_summary <- summary(three_smooth_model)
 ---
 # Challenge 2 - Solution ![:cube]()
 
-```{r, eval = F}
+```{r, eval = FALSE}
 plot(three_smooth_model, page = 1)
 ```
 
-```{r, fig.width=8, fig.height=7, echo = F}
+```{r, fig.width=8, fig.height=7, echo = FALSE}
 par(mar=c(3.8,3.8,.2,.2))
 plot(three_smooth_model, page = 1)
 ```
@@ -598,7 +601,7 @@ Cyclical data is a good example where changing tha basis is useful: you want the
 
 Let's use a time series of climate data, with monthly measurements, and see if there's a temporal trend in yearly temperature.
 
-```{r, eval = F}
+```{r, eval = FALSE}
 data(nottem) # Nottingham temperature time series
 n_years <- length(nottem)/12
 nottem_month <- rep(1:12, times = n_years)
@@ -692,7 +695,7 @@ What does the smooth term indicate?]
 ---
 # GAM using other distributions
 
-```{r, echo = F}
+```{r, echo = FALSE}
 prop_summary$p.table
 ```
 
@@ -712,7 +715,7 @@ Recall that the model uses the count data to calculate the logit, which is the l
 ---
 # GAM using other distributions
 
-```{r, echo = F}
+```{r, echo = FALSE}
 prop_summary$s.table
 ```
 
@@ -724,7 +727,7 @@ This represents how the log odds of successes vs failures changes over time (x1)
 
 > As the edf > 1, the proportion of successes increases faster over time
 
-```{r, fig.height=4.3, fig.width=4.3, echo = F}
+```{r, fig.height=4.3, fig.width=4.3, echo = FALSE}
 par(mar = c(4,4,0,0))
 plot(prop_model)
 ```
@@ -743,7 +746,8 @@ There are different ways this relationship can be represented graphically:
 
 What do these plots tell us about successes vs failures?
 
-```{r, echo = F, fig.height=4.5, fig.width=9}
+```{r, echo = FALSE, fig.height=4.5, fig.width=9}
+library(itsadug)
 par(mfrow=c(1,2), mar = c(4,4,0,0))
 plot(prop_model, select=1, scale=0, shade=TRUE)
 abline(h=0)
@@ -880,7 +884,7 @@ plot(gamm_intercept, select = 2)
 
 We can plot the summed effects for the `x0` without random effects, and then plot the predictions of all 4 levels of the random `fac` effect:
 
-```{r, eval = F}
+```{r, eval = FALSE}
 par(mfrow = c(1,2), cex = 1.1)
 
 plot_smooth(gamm_intercept, view = "x0", rm.ranef = T,
@@ -930,7 +934,7 @@ summary(gamm_slope)$s.table
 ---
 # GAMM with a random slope
 
-```{r, eval = F}
+```{r, eval = FALSE}
 par(mfrow = c(1,2), cex = 1.1)
 
 plot_smooth(gamm_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)")
@@ -977,7 +981,7 @@ summary(gamm_int_slope)$s.table
 ---
 # GAMM with a random intercept and slope
 
-```{r, eval = F}
+```{r, eval = FALSE}
 par(mfrow = c(1,2), cex = 1.1)
 
 plot_smooth(gamm_int_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)")
@@ -1041,7 +1045,7 @@ plot(gamm_smooth, select = 1)
 ---
 # GAMM with a random smooth
 
-```{r, eval = F}
+```{r, eval = FALSE}
 par(mfrow = c(1,2), cex = 1.1)
 
 plot_smooth(gamm_smooth, view = "x0", rm.ranef = T, main = "intercept + s(x0)")
@@ -1221,7 +1225,6 @@ There's a great deal more out there on GAM… this was just the very surface.
 
 Simon Wood, the author of the `mgcv` package has a very useful [website](http://people.bath.ac.uk/sw283/mgcv/) with introductory talks and notes on how to use GAM.
 
-
 He's also written a book, Generalized Additive Models: An Introduction with R, which we used as reference for this workshop.
 
 Material from this workshop were also obtained from the following fantastic blogs and tutorials:
@@ -1241,4 +1244,4 @@ class: inverse, center, bottom
 
 # Thank you for attending this workshop!
 
-![:scale 50%](images/QCBS_logo.png)
+![:scale 50%](images/qcbs_logo.png)

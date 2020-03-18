@@ -9,12 +9,17 @@ The content of this workshop has been peer-reviewed by several QCBS members. If 
 Cette série de 10 ateliers guide les participants à travers les étapes requises afin de maîtriser le logiciel R pour une grande variété d’analyses statistiques pertinentes en recherche en biologie et en écologie. Ces ateliers en libre accès ont été créés par des membres du CSBQ à la fois pour les membres du CSBQ et pour la grande communauté d’utilisateurs de R.
 
 Le contenu de cet atelier a été révisé par plusieurs membres du CSBQ. Si vous souhaitez y apporter des modifications, veuillez SVP contacter les coordonnateurs actuels de la série, listés [ici](https://wiki.qcbs.ca/r)
-ou ouvrez un pull request (voir les instructions https://qcbsrworkshops.github.io/guidelines.html).)
+ou ouvrez un pull request (voir les instructions https://qcbsrworkshops.github.io/guidelines.html).
+
+
 
 # Workshop 8: Generalized additive models
-[![Build Status](https://img.shields.io/travis/QCBSRworkshops/workshop08/dev?style=for-the-badge)](https://travis-ci.org/QCBSRworkshops/workshop08)
-[![](https://img.shields.io/static/v1?style=for-the-badge&label=Presentation&message=Workshop%208&color=blue)](https://qcbsrworkshops.github.io/workshop08/workshop08-en/workshop08-en.html)
-[![](https://img.shields.io/static/v1?style=for-the-badge&label=Wiki&message=Workshop%208&color=violet)](https://wiki.qcbs.ca/r_workshop8)
+[![Build Status](https://img.shields.io/travis/QCBSRworkshops/workshop08/dev?style=flat-square&logo=travis)](https://travis-ci.org/QCBSRworkshops/workshop08)
+[![badge](https://img.shields.io/static/v1?style=flat-square&label=repo&message=dev&color=6f42c1&logo=github)](https://github.com/QCBSRworkshops/workshop08)
+[![badge](https://img.shields.io/static/v1?style=flat-square&label=wiki&message=08&logo=wikipedia)](https://wiki.qcbs.ca/r_workshop8)
+[![badge](https://img.shields.io/static/v1?style=flat-square&label=Slides&message=08&color=red&logo=html5)](https://qcbsrworkshops.github.io/workshop08/workshop08-en/workshop08-en.html)
+[![badge](https://img.shields.io/static/v1?style=flat-square&label=Slides&message=08&color=red&logo=adobe-acrobat-reader)](https://qcbsrworkshops.github.io/workshop08/workshop08-en/workshop08-en.pdf)
+[![badge](https://img.shields.io/static/v1?style=flat-square&label=script&message=08&color=2a50b8&logo=r)](https://qcbsrworkshops.github.io/workshop08/workshop08-en/workshop08-en.R)
 
 The goal of this workshop will be to first examine what is a non-linear model,
 and how Generalized Additive Models (GAM) allow us to handle non-linear
@@ -25,9 +30,12 @@ Lastly, we will briefly touch upon what GAM are doing behind the scenes.
 
 
 # Atelier 8 : Modèles additifs généralisés
-[![Build Status](https://img.shields.io/travis/QCBSRworkshops/workshop08/dev?style=for-the-badge)](https://travis-ci.org/QCBSRworkshops/workshop08)
-[![](https://img.shields.io/static/v1?style=for-the-badge&label=Présentation&message=Atelier%208&color=blue)](https://qcbsrworkshops.github.io/workshop08/workshop08-fr/workshop08-fr.html)
-[![](https://img.shields.io/static/v1?style=for-the-badge&label=Wiki&message=Atelier%208&color=violet)](https://wiki.qcbs.ca/r_atelier8)
+[![Build Status](https://img.shields.io/travis/QCBSRworkshops/workshop08/dev?style=flat-square&logo=travis)](https://travis-ci.org/QCBSRworkshops/workshop08)
+[![badge](https://img.shields.io/static/v1?style=flat-square&label=repo&message=dev&color=6f42c1&logo=github)](https://github.com/QCBSRworkshops/workshop08)
+[![badge](https://img.shields.io/static/v1?style=flat-square&label=wiki&message=08&logo=wikipedia)](https://wiki.qcbs.ca/r_atelier8)
+[![badge](https://img.shields.io/static/v1?style=flat-square&label=Diapos&message=08&color=red&logo=html5)](https://qcbsrworkshops.github.io/workshop08/workshop08-fr/workshop08-fr.html)
+[![badge](https://img.shields.io/static/v1?style=flat-square&label=Diapos&message=08&color=red&logo=adobe-acrobat-reader)](https://qcbsrworkshops.github.io/workshop08/workshop08-fr/workshop08-fr.pdf)
+[![badge](https://img.shields.io/static/v1?style=flat-square&label=script&message=08&color=2a50b8&logo=r)](https://qcbsrworkshops.github.io/workshop08/workshop08-fr/workshop08-fr.R)
 
 L'objectif de cet atelier sera d'examiner ce qu'est un modèle non-linéaire et
 comment les modèles additifs généralisés (GAM) nous permettent de modéliser les

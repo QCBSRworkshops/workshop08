@@ -25,6 +25,31 @@ class: center, middle, inverse, title-slide
 
 
 
+class: inverse, center, middle
+
+# À propos de cet atelier
+[![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=repo&amp;message=dev&amp;color=6f42c1&amp;logo=github)](https://github.com/QCBSRworkshops/workshop08)
+[![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=wiki&amp;message=08&amp;logo=wikipedia)](https://wiki.qcbs.ca/r_atelier8)
+[![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=Diapos&amp;message=08&amp;color=red&amp;logo=html5)](https://qcbsrworkshops.github.io/workshop08/workshop08-fr/workshop08-fr.html)
+[![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=Diapos&amp;message=08&amp;color=red&amp;logo=adobe-acrobat-reader)](https://qcbsrworkshops.github.io/workshop08/workshop08-fr/workshop08-fr.pdf)
+[![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=script&amp;message=08&amp;color=2a50b8&amp;logo=r)](https://qcbsrworkshops.github.io/workshop08/workshop08-fr/workshop08-fr.R)
+
+---
+
+# Packages requis
+
+* [ggplot2](https://cran.r-project.org/package=ggplot2)
+* [itsadug](https://cran.r-project.org/package=itsadug)
+* [mgcv](https://cran.r-project.org/package=mgcv)
+
+&lt;br&gt;
+
+```R
+install.packages(c('ggplot2', 'itsadug', 'mgcv'))
+```
+
+---
+
 
 # Aperçu
 
@@ -57,6 +82,8 @@ class: center, middle, inverse, title-slide
 ---
 class: inverse, center, middle
 # 1. Le modèle linéaire
+
+&lt;hr&gt;
 
 ## ...et où il échoue
 
@@ -114,7 +141,7 @@ Examinons un exemple! Premièrement, nous allons générer des données et les r
 
 
 ```r
-require(ggplot2)
+library(ggplot2)
 set.seed(10)
 n &lt;- 250
 x &lt;- runif(n,0,5)
@@ -129,7 +156,7 @@ data_plot
 ---
 # GAM
 
-&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-3-1.png" width="432" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-2-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -137,16 +164,16 @@ data_plot
 
 Si nous modélisions cette relation par une régression linéaire, les résultats ne respecteraient pas les suppositions énumérées ci-dessus.
 
-&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-4-1.png" width="432" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-3-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAM
 
 Dans un GAM, la relation entre la variable réponse et le prédicteur est :
 
-`$$y = \alpha + s(x_1) + s(x_2) + ... + \epsilon$$`
+`$$y = \alpha + s(x_1) + s(x_2) + ... + \varepsilon$$`
 
-Un des grands avantages d'utiliser un GAM est que la forme optimale de la non-linéarité, i.e le degré de lissage de `s(x)`, est contrôlée en utilisant une régression pénalisée qui est déterminée automatiquement à l'aide d'une méthode de validation croisée généralisée.
+Un des grands avantages d'utiliser un GAM est que la forme optimale de la non-linéarité, i.e. le degré de lissage de `s(x)`, est contrôlée en utilisant une régression pénalisée qui est déterminée automatiquement à l'aide d'une méthode de validation croisée généralisée.
 
 ---
 # GAM
@@ -195,7 +222,7 @@ data_plot
 ---
 # GAM
 
-&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-7-1.png" width="432" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-6-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 .comment[Note: contrairement à un coefficient fixe `\(β\)`, la fonction de lissage peut changer tout au long du gradient `\(x\)`]
 
@@ -210,7 +237,7 @@ La librairie `mgcv` comprend également une fonction plot qui, par défaut, nous
 plot(gam_model)
 ```
 
-&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-8-1.png" width="396" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-7-1.png" width="396" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -305,7 +332,7 @@ qplot(x_test, y_test_obs) +
   theme_bw()
 ```
 
-&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-13-1.png" width="432" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-12-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 ---
 # Défi 1 - Solution ![:cube]()
@@ -417,7 +444,7 @@ Nous reviendrons plus tard sur le concept d'edf.
 plot(basic_model)
 ```
 
-&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-18-1.png" width="432" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-17-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAM à plusieurs variables
@@ -451,7 +478,7 @@ Nous pouvons ajouter un second terme, `x2`, mais spécifier une relation linéai
 plot(two_term_model)
 ```
 
-&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-20-1.png" width="396" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-19-1.png" width="396" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -486,7 +513,7 @@ Nous pouvons aussi explorer si la relation entre `y` et `x2` est non-linéaire
 plot(two_smooth_model, page = 1)
 ```
 
-&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-22-1.png" width="720" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-21-1.png" width="720" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAM à plusieurs variables
@@ -538,7 +565,7 @@ three_smooth_summary &lt;- summary(three_smooth_model)
 plot(three_smooth_model, page = 1)
 ```
 
-&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-26-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-25-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 ---
 # Défi 2 - Solution ![:cube]()
@@ -572,7 +599,7 @@ class: inverse, center, middle
 ## 4. Intéractions
 
 ---
-# GAM avec des termes d'intéraction
+# GAM avec des termes d'interaction
 
 Il y a deux façons de modéliser une interaction entre deux variables :
 
@@ -583,9 +610,9 @@ Il y a deux façons de modéliser une interaction entre deux variables :
   - Quand `x2` est qualitative, le facteur doit être ajouté comme effet principal dans le modèle
 
 ---
-# GAM avec des termes d'intéraction
+# GAM avec des termes d'interaction
 
-Nous allons examiner l'effet de l'interaction en utilisant notre variable qualitative `x0` et examiner si la non-linérité de `s(x2)` varie selon les différents niveaux de `x0`.
+Nous allons examiner l'effet de l'interaction en utilisant notre variable qualitative `x0` et examiner si la non-linéarité de `s(x2)` varie selon les différents niveaux de `x0`.
 
 
 ```r
@@ -601,17 +628,17 @@ summary(factor_interact)$s.table
 ```
 
 ---
-# GAM avec des termes d'intéraction
+# GAM avec des termes d'interaction
 
 
 ```r
 plot(factor_interact, page = 1)
 ```
 
-&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-29-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-28-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 ---
-# GAM avec des termes d'intéraction
+# GAM avec des termes d'interaction
 
 Nous pouvons aussi visualiser notre modèle en 3D avec `vis.gam`, où `theta` est le degré de rotation de notre plan x-y
 
@@ -620,12 +647,12 @@ Nous pouvons aussi visualiser notre modèle en 3D avec `vis.gam`, où `theta` es
 vis.gam(factor_interact, view = c("x2","x0"), theta = 40, n.grid = 500, border = NA)
 ```
 
-&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-30-1.png" width="396" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-29-1.png" width="396" style="display: block; margin: auto;" /&gt;
 
 ---
-# GAM avec des termes d'intéraction
+# GAM avec des termes d'interaction
 
-Faisons une comparaison de modèle avec ANOVA pour déterminer si le terme d'intéraction est nécessaire
+Faisons une comparaison de modèle avec ANOVA pour déterminer si le terme d'interaction est nécessaire
 
 
 ```r
@@ -642,9 +669,9 @@ anova(two_smooth_model, factor_interact, test = "Chisq")
 À partir des graphiques, on voit que les formes des termes non-linéaires sont comparables parmi les 4 niveaux de `x0`. L'anova confirme cela aussi (p &gt; 0.05).
 
 ---
-# GAM avec des termes d'intéraction
+# GAM avec des termes d'interaction
 
-Finalement, nous regardons les intéractions entre 2 termes non linéaires, `x1` et `x2`.
+Finalement, nous regardons les interactions entre 2 termes non linéaires, `x1` et `x2`.
 
 
 ```r
@@ -655,32 +682,32 @@ summary(smooth_interact)$s.table
 ```
 
 ---
-# GAM avec des termes d'intéraction
+# GAM avec des termes d'interaction
 
 
 ```r
 plot(smooth_interact, page = 1, scheme = 3)
 ```
 
-&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-33-1.png" width="504" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-32-1.png" width="504" style="display: block; margin: auto;" /&gt;
 
 
 ---
-# GAM avec des termes d'intéraction
+# GAM avec des termes d'interaction
 
 
 ```r
 vis.gam(smooth_interact, view = c("x1", "x2"), theta=40, n.grid = 500, border = NA)
 ```
 
-&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-34-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-33-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 ```r
 # similaire à plot(smooth_interact, page = 1, scheme = 1)
 ```
 
 ---
-# GAM avec des termes d'intéraction
+# GAM avec des termes d'interaction
 
 
 ```r
@@ -721,9 +748,9 @@ Pour modéliser une surface lisse ou non-linéaire, nous pouvons utiliser trois 
 
 `s()` ![:faic](arrow-right) pour modéliser un terme lisse 1-dimensionnel, ou pour modéliser une intéraction entre des variables mesurées sur la *même échelle*
 
-`te()` ![:faic](arrow-right)  pour modéliser une surface d'intéraction 2- ou n-dimensionnel entre des variables qui *ne sont pas sur la même échelle*. Comprend les effets principaux.
+`te()` ![:faic](arrow-right)  pour modéliser une surface d'interaction 2- ou n-dimensionnel entre des variables qui *ne sont pas sur la même échelle*. Comprend les effets principaux.
 
-`ti()` ![:faic](arrow-right) pour modéliser une surface d'intéraction 2- ou n-dimensionnel *qui ne comprend pas les effets principaux*.
+`ti()` ![:faic](arrow-right) pour modéliser une surface d'interaction 2- ou n-dimensionnel *qui ne comprend pas les effets principaux*.
 
 ---
 # Paramètres des fonctions lisses
@@ -771,7 +798,7 @@ qplot(nottem_month, nottem, colour = factor(nottem_year), geom = "line") +
 ---
 # Exemple avec des données cycliques
 
-&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-37-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-36-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 ---
 # Exemple avec des données cycliques
@@ -795,7 +822,7 @@ summary(year_gam)$s.table
 plot(year_gam, page = 1, scale = 0)
 ```
 
-&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-39-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-38-1.png" width="576" style="display: block; margin: auto;" /&gt;
 Il y a une hausse d'environ 1-1.5 degrés au cours de la série, mais au cours d'une année, il y a une variation d'environ 20 degrés. Les données réelles varient autour de ces valeurs prédites et ceci représente donc la variance inexpliquée.
 
 ---
@@ -837,7 +864,7 @@ avg &lt;- aggregate(prop ~ x1, data=gam_data3, mean)
 lines(avg$x1, avg$prop, col = "orange", lwd = 2)
 ```
 
-&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-41-1.png" width="288" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-40-1.png" width="288" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAM avec d'autres distributions
@@ -902,7 +929,7 @@ Cela représente comment le ratio de succès vs échecs change sur l'échelle de
 
 &gt; Puisque l'edf &gt; 1, la proportion des succès augmente plus rapidement avec `\(x1\)`
 
-&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-45-1.png" width="288" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-44-1.png" width="288" style="display: block; margin: auto;" /&gt;
 
 ---
 # Visualiser la tendance au fil du temps
@@ -918,7 +945,7 @@ Il y a différente façon de représenter cette relation graphiquement :
 
 Que nous disent ces graphes sur les succès et échecs?
 
-&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-46-1.png" width="648" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-45-1.png" width="648" style="display: block; margin: auto;" /&gt;
 
 
 
@@ -981,7 +1008,7 @@ pacf(resid(year_gam), lag.max = 36, main = "pACF")
 ---
 # Modèle avec erreurs autocorrélées
 
-&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-48-1.png" width="612" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-47-1.png" width="612" style="display: block; margin: auto;" /&gt;
 
 .comment[ACF (et pACF) donne la corrélation croisée (et la corrélation partielle) d'une série temporelle avec elle-même à différent décalage de temps, et sont utilisés pour identifier combien d'intervalle de temps sont nécessaires pour que les observations commencent à être indépendantes.]
 
@@ -1063,7 +1090,7 @@ summary(gamm_intercept)$s.table
 plot(gamm_intercept, select = 2)
 ```
 
-&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-51-1.png" width="396" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-50-1.png" width="396" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM avec un intercepte aléatoire
@@ -1092,7 +1119,7 @@ plot_smooth(gamm_intercept, view="x0", cond = list(fac = "4"), add = T, col = 't
 
 &lt;br&gt;
 
-&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-53-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-52-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 .pull-right[
 &amp;nbsp; &lt;font color="orange"&gt;fac1&lt;/font&gt; &amp;nbsp; &lt;font color="red"&gt;fac2&lt;/font&gt; &amp;nbsp; &lt;font color="purple"&gt;fac3&lt;/font&gt; &amp;nbsp; &lt;font color="turquoise"&gt;fac4&lt;/font&gt;
@@ -1137,7 +1164,7 @@ plot_smooth(gamm_slope, view = "x0", cond = list(fac = "4"), add = T, col = 'tur
 
 &lt;br&gt;
 
-&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-56-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-55-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM avec un intercepte et une pente aléatoire
@@ -1178,7 +1205,7 @@ plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "4"), add = T, col = 
 
 &lt;br&gt;
 
-&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-59-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-58-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM avec un intercepte et une pente aléatoire
@@ -1190,7 +1217,7 @@ Notez que la pente aléatoire est statique dans ce cas :
 plot(gamm_int_slope, select = 3)
 ```
 
-&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-60-1.png" width="360" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-59-1.png" width="360" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM avec une surface lisse aléatoire
@@ -1214,7 +1241,7 @@ Ici, si les pentes aléatoires variaient selon `x0`, nous aurons des courbes var
 plot(gamm_smooth, select = 1)
 ```
 
-&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-62-1.png" width="360" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-61-1.png" width="360" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM avec une surface lisse aléatoire
@@ -1240,7 +1267,7 @@ plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "4"), add = T, col = 'tu
 
 &lt;br&gt;
 
-&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-64-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-fr_files/figure-html/unnamed-chunk-63-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 .comment[Ici, si la pente aléatoire varie selon `x0`, nous aurons des courbes variables pour chaque niveau.]
 
@@ -1397,11 +1424,17 @@ Par exemple, si le nombre de noeuds est arbitrairement réglé à k = 10, k-1 d�
 ---
 # Ressources
 
-Il existe beaucoup d'information sur les GAMs…
+Il existe beaucoup d'information sur les GAMs.
 
 Simon Wood, l'auteur de la librairie `mgcv`, a un [site](http://people.bath.ac.uk/sw283/mgcv/) très utile avec des conférences et des notes introductives sur la façon d'utiliser les GAMs.
 
 Il a aussi écrit un livre, *Generalized Additive Models: An Introduction with R*, que nous avons utilisé comme référence pour cet atelier.
+
+.center[[![:scale 28%](https://images.tandf.co.uk/common/jackets/amazon/978149872/9781498728331.jpg)](https://www.crcpress.com/Generalized-Additive-Models-An-Introduction-with-R-Second-Edition/Wood/p/book/9781498728331)]
+
+
+---
+# Ressources
 
 Le matériel de cet atelier a également été obtenu à partir des blogs et des tutoriels suivants :
 
@@ -1411,6 +1444,8 @@ Le matériel de cet atelier a également été obtenu à partir des blogs et des
 
 - [Advanced Analysis of Time series data](http://www.sfs.uni-tuebingen.de/~jvanrij/LSA2015/AnswersLab2.html)
 
+- Noam Ross a crée un tutorial [GAMs in R](https://noamross.github.io/gams-in-r-course/) (voir aussi [ce preprint](https://peerj.com/preprints/27320/))
+
 Enfin, les pages d'aide, disponibles via `?gam` dans R sont une excellente ressource.
 
 ---
@@ -1418,7 +1453,10 @@ class: inverse, center, bottom
 
 # Merci pour votre participation à cet atelier!
 
-![:scale 50%](images/QCBS_logo.png)
+&lt;hr&gt;
+&lt;br&gt;
+
+![:scale 50%](images/qcbs_logo.png)
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
@@ -1464,9 +1502,35 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
     deleted = true;
   });
-})();</script>
-
-<script>
+})();
+(function() {
+  "use strict"
+  /* Replace <script> tags in slides area to make them executable
+   *
+   * Runs after post-processing of markdown source into slides and replaces only
+   * <script>s on the last slide of continued slides using the .has-continuation
+   * class added by xaringan. Finally, any <script>s in the slides area that
+   * aren't executed are commented out.
+   */
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container:not(.has-continuation) script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+  var scriptsNotExecuted = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container.has-continuation script'
+  );
+  if (!scriptsNotExecuted.length) return;
+  for (var i = 0; i < scriptsNotExecuted.length; i++) {
+    var comment = document.createComment(scriptsNotExecuted[i].outerHTML)
+    scriptsNotExecuted[i].parentElement.replaceChild(comment, scriptsNotExecuted[i])
+  }
+})();
 (function() {
   var links = document.getElementsByTagName('a');
   for (var i = 0; i < links.length; i++) {
@@ -1474,8 +1538,7 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
       links[i].target = '_blank';
     }
   }
-})();
-</script>
+})();</script>
 
 <script>
 slideshow._releaseMath = function(el) {

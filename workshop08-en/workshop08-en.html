@@ -24,7 +24,30 @@ class: center, middle, inverse, title-slide
 
 
 
+class: inverse, center, middle
 
+# About this workshop
+[![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=repo&amp;message=dev&amp;color=6f42c1&amp;logo=github)](https://github.com/QCBSRworkshops/workshop08)
+[![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=wiki&amp;message=08&amp;logo=wikipedia)](https://wiki.qcbs.ca/r_workshop8)
+[![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=Slides&amp;message=08&amp;color=red&amp;logo=html5)](https://qcbsrworkshops.github.io/workshop08/workshop08-en/workshop08-en.html)
+[![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=Slides&amp;message=08&amp;color=red&amp;logo=adobe-acrobat-reader)](https://qcbsrworkshops.github.io/workshop08/workshop08-en/workshop08-en.pdf)
+[![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=script&amp;message=08&amp;color=2a50b8&amp;logo=r)](https://qcbsrworkshops.github.io/workshop08/workshop08-en/workshop08-en.R)
+
+---
+
+# Required packages
+
+* [ggplot2](https://cran.r-project.org/package=ggplot2)
+* [itsadug](https://cran.r-project.org/package=itsadug)
+* [mgcv](https://cran.r-project.org/package=mgcv)
+
+&lt;br&gt;
+
+```R
+install.packages(c('ggplot2', 'itsadug', 'mgcv'))
+```
+
+---
 
 ## Workshop overview
 
@@ -113,7 +136,7 @@ Let's look at an example. First, we'll generate some data, and plot it.
 
 
 ```r
-require(ggplot2)
+library(ggplot2)
 set.seed(10)
 n &lt;- 250
 x &lt;- runif(n,0,5)
@@ -128,7 +151,7 @@ data_plot
 ---
 # GAM
 
-&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-3-1.png" width="432" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-2-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -136,7 +159,7 @@ data_plot
 
 Trying to fit these data as a linear regression model, we would violate the assumptions listed above.
 
-&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-4-1.png" width="432" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-3-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAM
@@ -195,7 +218,7 @@ data_plot
 ---
 # GAM
 
-&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-7-1.png" width="432" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-6-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 .comment[Note: as opposed to one fixed coefficient, \beta in linear regression, the smooth function can continually change over the range of the predictor x]
 
@@ -210,7 +233,7 @@ The `mgcv` package also includes a default plot to look at the smooths:
 plot(gam_model)
 ```
 
-&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-8-1.png" width="432" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-7-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -286,7 +309,7 @@ qplot(x_test, y_test_obs) +
   theme_bw()
 ```
 
-&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-12-1.png" width="432" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-11-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 ---
 # Challenge 1 - Solution ![:cube]()
@@ -399,7 +422,7 @@ We will revisit the edf later in this workshop.
 plot(basic_model)
 ```
 
-&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-17-1.png" width="432" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-16-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAM with multiple variables
@@ -433,7 +456,7 @@ We can add a second term, `x2`, but specify a linear relationship with `y`
 plot(two_term_model)
 ```
 
-&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-19-1.png" width="432" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-18-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -468,7 +491,7 @@ We can also explore whether the relationship between `y` and `x2` is non-linear
 plot(two_smooth_model, page = 1)
 ```
 
-&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-21-1.png" width="720" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-20-1.png" width="720" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAM with multiple variables
@@ -520,7 +543,7 @@ three_smooth_summary &lt;- summary(three_smooth_model)
 plot(three_smooth_model, page = 1)
 ```
 
-&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-25-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-24-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 ---
 # Challenge 2 - Solution ![:cube]()
@@ -590,7 +613,7 @@ summary(factor_interact)$s.table
 plot(factor_interact, page = 1)
 ```
 
-&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-28-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-27-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAM with interaction terms
@@ -602,7 +625,7 @@ We can also visualise our model in 3D using `vis.gam`, where `theta` is the degr
 vis.gam(factor_interact, view = c("x2","x0"), theta = 40, n.grid = 500, border = NA)
 ```
 
-&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-29-1.png" width="432" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-28-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAM with interaction terms
@@ -644,7 +667,7 @@ summary(smooth_interact)$s.table
 plot(smooth_interact, page = 1, scheme = 3)
 ```
 
-&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-32-1.png" width="504" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-31-1.png" width="504" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -655,7 +678,7 @@ plot(smooth_interact, page = 1, scheme = 3)
 vis.gam(smooth_interact, view = c("x1", "x2"), theta=40, n.grid = 500, border = NA)
 ```
 
-&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-33-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-32-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 ```r
 # similar to plot(smooth_interact, page = 1, scheme = 1)
@@ -737,7 +760,7 @@ The smooth functions have several parameters that can be set to change their beh
 ---
 # Example smooth for cyclical data
 
-Cyclical data is a good example where changing tha basis is useful: you want the predictor to match at the ends.
+Cyclical data is a good example where changing basis is useful: you want the predictor to match at the ends.
 
 Let's use a time series of climate data, with monthly measurements, and see if there's a temporal trend in yearly temperature.
 
@@ -754,7 +777,7 @@ qplot(nottem_month, nottem, colour = factor(nottem_year), geom = "line") +
 ---
 # Example smooth for cyclical data
 
-&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-36-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-35-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 ---
 # Example smooth for cyclical data
@@ -778,7 +801,7 @@ summary(year_gam)$s.table
 plot(year_gam, page = 1, scale = 0)
 ```
 
-&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-38-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-37-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 There is about 1-1.5 degree rise in temperature over the period, but within a given year there is about 20 degrees variation in temperature, on average. The actual data vary around these values and that is the unexplained variance.
 
@@ -822,7 +845,7 @@ avg &lt;- aggregate(prop ~ x1, data=gam_data3, mean)
 lines(avg$x1, avg$prop, col = "orange", lwd = 2)
 ```
 
-&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-40-1.png" width="360" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-39-1.png" width="360" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAM using other distributions
@@ -886,7 +909,7 @@ This represents how the log odds of successes vs failures changes over time (x1)
 
 &gt; As the edf &gt; 1, the proportion of successes increases faster over time
 
-&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-44-1.png" width="309.6" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-43-1.png" width="309.6" style="display: block; margin: auto;" /&gt;
 
 ---
 # Visualizing the trend over time
@@ -902,7 +925,7 @@ There are different ways this relationship can be represented graphically:
 
 What do these plots tell us about successes vs failures?
 
-&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-45-1.png" width="648" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-44-1.png" width="648" style="display: block; margin: auto;" /&gt;
 
 
 
@@ -965,7 +988,7 @@ pacf(resid(year_gam), lag.max = 36, main = "pACF")
 ---
 # Model with correlated errors
 
-&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-47-1.png" width="648" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-46-1.png" width="648" style="display: block; margin: auto;" /&gt;
 
 .comment[ACF (and pACF) provide the cross correlation (and partial correlation) of a time series with itself at different time lags, and are used to identify after how many time steps observations start to be independent.]
 
@@ -1045,7 +1068,7 @@ summary(gamm_intercept)$s.table
 plot(gamm_intercept, select = 2)
 ```
 
-&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-50-1.png" width="396" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-49-1.png" width="396" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM with a random intercept
@@ -1074,7 +1097,7 @@ plot_smooth(gamm_intercept, view="x0", cond = list(fac = "4"), add = T, col = 't
 
 &lt;br&gt;
 
-&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-52-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-51-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 .pull-right[
 &amp;nbsp; &lt;font color="orange"&gt;fac1&lt;/font&gt; &amp;nbsp; &lt;font color="red"&gt;fac2&lt;/font&gt; &amp;nbsp; &lt;font color="purple"&gt;fac3&lt;/font&gt; &amp;nbsp; &lt;font color="turquoise"&gt;fac4&lt;/font&gt;
@@ -1102,7 +1125,7 @@ summary(gamm_slope)$s.table
 ```r
 par(mfrow = c(1,2), cex = 1.1)
 
-plot_smooth(gamm_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)")
+plot_smooth(gamm_slope, view = "x0", rm.ranef = TRUE, main = "intercept + s(x0)")
 
 plot_smooth(gamm_slope, view = "x0", cond = list(fac = "1"),
             main = "... + s(fac)", col = 'orange', ylim = c(7,22))
@@ -1119,7 +1142,7 @@ plot_smooth(gamm_slope, view = "x0", cond = list(fac = "4"), add = T, col = 'tur
 
 &lt;br&gt;
 
-&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-55-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-54-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM with a random intercept and slope
@@ -1160,7 +1183,7 @@ plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "4"), add = T, col = 
 
 &lt;br&gt;
 
-&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-58-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-57-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM with a random intercept and slope
@@ -1172,7 +1195,7 @@ Note that the random slope is static in this case:
 plot(gamm_int_slope, select = 3)
 ```
 
-&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-59-1.png" width="432" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-58-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM with a random smooth
@@ -1196,7 +1219,7 @@ Here, if the random slope varied along `x0`, we would see different curves for e
 plot(gamm_smooth, select = 1)
 ```
 
-&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-61-1.png" width="396" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-60-1.png" width="396" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM with a random smooth
@@ -1222,7 +1245,7 @@ plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "4"), add = T, col = 'tu
 
 &lt;br&gt;
 
-&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-63-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-en_files/figure-html/unnamed-chunk-62-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 .comment[Here, if the random slope varied along `x0`, we would see different curves for each level.]
 
@@ -1385,7 +1408,6 @@ There's a great deal more out there on GAM… this was just the very surface.
 
 Simon Wood, the author of the `mgcv` package has a very useful [website](http://people.bath.ac.uk/sw283/mgcv/) with introductory talks and notes on how to use GAM.
 
-
 He's also written a book, Generalized Additive Models: An Introduction with R, which we used as reference for this workshop.
 
 Material from this workshop were also obtained from the following fantastic blogs and tutorials:
@@ -1405,7 +1427,7 @@ class: inverse, center, bottom
 
 # Thank you for attending this workshop!
 
-![:scale 50%](images/QCBS_logo.png)
+![:scale 50%](images/qcbs_logo.png)
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
@@ -1451,9 +1473,35 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
     deleted = true;
   });
-})();</script>
-
-<script>
+})();
+(function() {
+  "use strict"
+  /* Replace <script> tags in slides area to make them executable
+   *
+   * Runs after post-processing of markdown source into slides and replaces only
+   * <script>s on the last slide of continued slides using the .has-continuation
+   * class added by xaringan. Finally, any <script>s in the slides area that
+   * aren't executed are commented out.
+   */
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container:not(.has-continuation) script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+  var scriptsNotExecuted = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container.has-continuation script'
+  );
+  if (!scriptsNotExecuted.length) return;
+  for (var i = 0; i < scriptsNotExecuted.length; i++) {
+    var comment = document.createComment(scriptsNotExecuted[i].outerHTML)
+    scriptsNotExecuted[i].parentElement.replaceChild(comment, scriptsNotExecuted[i])
+  }
+})();
 (function() {
   var links = document.getElementsByTagName('a');
   for (var i = 0; i < links.length; i++) {
@@ -1461,8 +1509,7 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
       links[i].target = '_blank';
     }
   }
-})();
-</script>
+})();</script>
 
 <script>
 slideshow._releaseMath = function(el) {

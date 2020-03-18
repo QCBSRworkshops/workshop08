@@ -10,8 +10,8 @@ html {
 
 
 .remark-slide-content p {
-  font-size: 1.4rem;
-  padding: .4rem 1rem .4rem 1.4rem;
+  font-size: 1.5rem;
+  padding: .4rem 1rem .4rem 1.2rem;
   margin: .1rem;
 }
 
@@ -22,24 +22,29 @@ html {
 
 .remark-code-line {
   font-size: 1.1rem;
-  line-height: 1.34;
+  line-height: 1.4;
 }
 
 .hljs {
-  padding: .8rem 1rem .8rem 1rem !important;
+  padding: .8rem !important;
   background-color: #f3f3f3 !important;
 }
 
 .remark-code .remark-code-line {
-  padding-left: 1rem !important;
+  padding-left: .6rem !important;
 }
 
 .remark-inline-code {
   background-color: #f3f3f3;
   border-radius: 5px;
-  border: 1px solid #aaa;
+  border: 1px solid #999;
   padding: 1px !important;
   font-size: 80%;
+}
+
+h1 .remark-inline-code {
+  background-color: #999;
+  border: 1px solid #f3f3f3;
 }
 
 .remark-code-line-highlighted {
@@ -104,7 +109,7 @@ hr {
 .remark-slide-number {
   font-size: 12pt;
   margin-bottom: -11.6px;
-  margin-right: 10px;
+  margin-right: 8px;
   color: #062c45;
   opacity: 0.6; /* default: 0.5 */
   font-weight: 400;
@@ -114,23 +119,29 @@ hr {
 .remark-slide-content li {
   margin: .4rem  2rem;
   padding-left: .2rem;
+  font-size: 1.5rem;
 }
 
 .remark-slide-content ul, .remark-slide-content ol {
   margin: .4rem .1rem;
   padding-left: .4rem;
+  font-size: 1.5rem;
 }
 
 
-/* Code */
-a, a > code {
+/* links */
+a {
   color: #309493;
   font-weight: 400;
 }
-
-a {
-  text-decoration: underline;
+a > code {
+  color: #309493;
 }
+a:hover {
+  font-weight: 700;
+  text-decoration-style: underline;
+}
+
 
 /* MathJax */
 .mjx-chtml{ font-size: 100% !important; }
@@ -149,17 +160,25 @@ a {
 
 
 .huge {
-  font-size: 1.5em;
+  font-size: 1.6em;
+  font-weight: 500;
+}
+
+.xlarge {
+  font-size: 1.25em;
   font-weight: 400;
 }
 
 .large {
-  font-size: 1.2em;
-  font-weight: 400;
+  font-size: 1.1em;
 }
 
 .small {
   font-size: .9em;
+}
+
+.xsmall {
+  font-size: .75em;
 }
 
 .tiny {
@@ -234,6 +253,15 @@ a {
   background-color: transparent;
 }
 
+.inverse h1 {
+  font-size: 2.8rem;
+}
+.inverse h2 {
+  font-size: 2.4rem;
+}
+.inverse h3 {
+  font-size: 2rem;
+}
 
 /* Table */
 
@@ -282,7 +310,3 @@ table, td, th {
   content: url(https://qcbs.ca/wp-content/uploads/2010/05/logo_small_grey-01.png);
   transform: scale(.25);
 }
-
-
-
-

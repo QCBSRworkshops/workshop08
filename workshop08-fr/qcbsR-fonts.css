@@ -12,6 +12,7 @@ body {
   line-height: 1.2;
 }
 
+/* To prevent ligatures within the assign operator */
 .remark-code, .remark-inline-code {
-    font-family: "Fira Code", monospace;
+    font-family: 'Fira Mono', 'Source Code Pro', monospace;
 }

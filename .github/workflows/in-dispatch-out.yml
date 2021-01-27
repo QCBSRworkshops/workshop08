@@ -1,0 +1,103 @@
+on:
+  repository_dispatch:
+    types: [ping_book, ping_presentation]
+
+name: receive-from-template-and-dispatch-to-workflows
+
+jobs:
+   dispatch-received:
+    name: Dispatch received from the template changes
+    runs-on: ubuntu-latest
+    steps:
+      - name: Event Information
+        run: |
+          echo "Event '${{ github.event.action }}' received from '${{ github.event.client_payload.repository }}'"
+ 
+   download-changes-and-push:
+     name: Download template structure and push changes
+     runs-on: ubuntu-latest
+     steps:
+       - name: Checkout repository
+         uses: actions/checkout@v2
+         with:
+           token: ${{ secrets.ACCESS_TOKEN }}
+       
+       - name: Download files from the presentation template repository
+         run: |
+           curl --header 'Authorization: token ${{ secrets.ACCESS_TOKEN }}' \
+                --header 'Accept: application/vnd.github.v3.raw' \
+                --location https://api.github.com/repos/QCBSRworkshops/templateWorkshops/contents/presentation-template/qcbsR-fonts.css \
+                --output pres-en/qcbsR-fonts.css
+                 
+           curl --header 'Authorization: token ${{ secrets.ACCESS_TOKEN }}' \
+                --header 'Accept: application/vnd.github.v3.raw' \
+                --location https://api.github.com/repos/QCBSRworkshops/templateWorkshops/contents/presentation-template/qcbsR.css \
+                --output pres-en/qcbsR.css
+                 
+           curl --header 'Authorization: token ${{ secrets.ACCESS_TOKEN }}' \
+                --header 'Accept: application/vnd.github.v3.raw' \
+                --location https://api.github.com/repos/QCBSRworkshops/templateWorkshops/contents/presentation-template/qcbsR-header.html \
+                --output pres-en/qcbsR-header.html
+                 
+           curl --header 'Authorization: token ${{ secrets.ACCESS_TOKEN }}' \
+                --header 'Accept: application/vnd.github.v3.raw' \
+                --location https://api.github.com/repos/QCBSRworkshops/templateWorkshops/contents/presentation-template/qcbsR-macros.js \
+                --output pres-en/qcbsR-macros.js
+
+           curl --header 'Authorization: token ${{ secrets.ACCESS_TOKEN }}' \
+                --header 'Accept: application/vnd.github.v3.raw' \
+                --location https://api.github.com/repos/QCBSRworkshops/templateWorkshops/contents/presentation-template/qcbsR-fonts.css \
+                --output pres-fr/qcbsR-fonts.css
+                 
+           curl --header 'Authorization: token ${{ secrets.ACCESS_TOKEN }}' \
+                --header 'Accept: application/vnd.github.v3.raw' \
+                --location https://api.github.com/repos/QCBSRworkshops/templateWorkshops/contents/presentation-template/qcbsR.css \
+                --output pres-fr/qcbsR.css
+                 
+           curl --header 'Authorization: token ${{ secrets.ACCESS_TOKEN }}' \
+                --header 'Accept: application/vnd.github.v3.raw' \
+                --location https://api.github.com/repos/QCBSRworkshops/templateWorkshops/contents/presentation-template/qcbsR-header.html \
+                --output pres-fr/qcbsR-header.html
+                 
+           curl --header 'Authorization: token ${{ secrets.ACCESS_TOKEN }}' \
+                --header 'Accept: application/vnd.github.v3.raw' \
+                --location https://api.github.com/repos/QCBSRworkshops/templateWorkshops/contents/presentation-template/qcbsR-macros.js \
+                --output pres-fr/qcbsR-macros.js
+
+       - name: List directories # May be removed soon
+         run: ls
+       
+       - name: Commit and push changes to the current repository
+         run: |
+          git config --global user.name 'pedrohbraga'
+          git config --global user.email 'pedrohbraga@users.noreply.github.com'
+          git add .
+          if [ -z "$(git status --porcelain)" ]; then
+          # Working directory clean
+             echo "No changes have been detected in the updated files."
+          else 
+             echo "Differences detected between old and updated files. Proceeding with commit."
+             git commit -m "Automated commit triggered from repository dispatch: updating template structure"
+             git push          
+          fi
+
+   dispatch-to-workflows:
+    name: Dispatch received from the template changes - Sending dispatch to workflows
+    needs: download-changes-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📚 PONG BOOK - Dispatch response from received PING BOOK by triggering workflows
+        if: github.event.action == 'ping_book'
+        run: |
+          curl -X POST https://api.github.com/repos/QCBSRworkshops/workshop06/dispatches \
+          -H 'Accept: application/vnd.github.everest-preview+json' \
+          -u ${{ secrets.ACCESS_TOKEN }} \
+          --data '{"event_type": "pong_book", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
+          
+      - name: 📺 PONG PRESENTATION - Dispatch response from received PING PRESENTATION by triggering workflows
+        if: github.event.action == 'ping_presentation'
+        run: |
+          curl -X POST https://api.github.com/repos/QCBSRworkshops/workshop06/dispatches \
+          -H 'Accept: application/vnd.github.everest-preview+json' \
+          -u ${{ secrets.ACCESS_TOKEN }} \
+          --data '{"event_type": "pong_presentation", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'          

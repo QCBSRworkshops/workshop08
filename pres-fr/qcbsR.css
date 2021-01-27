@@ -1,3 +1,16 @@
+/* DO NOT EDIT THE COMMENTS BELOW */
+/*                                                                           */
+/* This template has been obtained from QCBSRworkshops/templateWorkshops     */
+/*                                                                           */
+/* The current framework will always replace local copies with               */
+/* one available within the QCBSRworkshops/templateWorkshops repository.     */
+/* This means that one must never change local qcbsR-*.css files locally.    */
+/*                                                                           */
+/* If you would like to suggest changes to the template structure (e.g. css) */
+/* add an issue or a pull request to the template repository.                */
+/*                                                                           */
+/* END OF DO NOT EDIT COMMENTS */
+
 html {
   margin: 0px;
   padding: 0px;
@@ -232,6 +245,31 @@ a:hover {
   padding-left: 0rem ;
 }
 
+.pull-left3 {
+  float: left;
+  width: 57%;
+}
+.pull-right3 {
+  float: right;
+  width: 38%;
+}
+
+.pull-right3, .pull-right3 p {
+  padding-left: 0rem ;
+}
+
+.left-code {
+  color: #777;
+  width: 57%;
+  height: 92%;
+  float: left;
+}
+.right-plot {
+  width: 38%;
+  float: right;
+  padding-left: 1%;
+}
+
 /* Blockquote */
 .remark-slide-content blockquote {
   font-size: 1em;
@@ -288,8 +326,6 @@ table, td, th {
   margin: auto;
   width: 110%;
 }
-
-
 
 /* for title page with logo and QCBS background  */
 .maintitle {

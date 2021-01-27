@@ -89,7 +89,7 @@ jobs:
       - name: 📚 PONG BOOK - Dispatch response from received PING BOOK by triggering workflows
         if: github.event.action == 'ping_book'
         run: |
-          curl -X POST https://api.github.com/repos/QCBSRworkshops/workshop06/dispatches \
+          curl -X POST https://api.github.com/repos/QCBSRworkshops/workshop08/dispatches \
           -H 'Accept: application/vnd.github.everest-preview+json' \
           -u ${{ secrets.ACCESS_TOKEN }} \
           --data '{"event_type": "pong_book", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
@@ -97,7 +97,7 @@ jobs:
       - name: 📺 PONG PRESENTATION - Dispatch response from received PING PRESENTATION by triggering workflows
         if: github.event.action == 'ping_presentation'
         run: |
-          curl -X POST https://api.github.com/repos/QCBSRworkshops/workshop06/dispatches \
+          curl -X POST https://api.github.com/repos/QCBSRworkshops/workshop08/dispatches \
           -H 'Accept: application/vnd.github.everest-preview+json' \
           -u ${{ secrets.ACCESS_TOKEN }} \
           --data '{"event_type": "pong_presentation", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'          

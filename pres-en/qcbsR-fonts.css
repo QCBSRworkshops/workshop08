@@ -1,0 +1,38 @@
+/* DO NOT EDIT THE COMMENTS BELOW */
+/*                                                                           */
+/* This template has been obtained from QCBSRworkshops/templateWorkshops     */
+/*                                                                           */
+/* The current framework will always replace local copies with               */
+/* one available within the QCBSRworkshops/templateWorkshops repository.     */
+/* This means that one must never change local qcbsR-*.css files locally.    */
+/*                                                                           */
+/* If you would like to suggest changes to the template structure (e.g. css) */
+/* add an issue or a pull request to the template repository.                */
+/*                                                                           */
+/* END OF DO NOT EDIT COMMENTS */
+
+
+/* Code font */
+
+@import url('https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.206/distr/fira_code.css');
+@import url('https://fonts.googleapis.com/css?family=Roboto+Slab&display=swap');
+
+/* Title code */
+
+/* Body */
+
+/* Fira Sans */
+
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans:200,200i 300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap');
+
+body {
+  font-family: 'Fira Sans', sans-serif;
+  font-weight: 300;
+  line-height: 1.2;
+}
+
+/* To prevent ligatures within the assign operator */
+
+.remark-code, .remark-inline-code {
+    font-family: 'Fira Mono', 'Source Code Pro', monospace;
+}

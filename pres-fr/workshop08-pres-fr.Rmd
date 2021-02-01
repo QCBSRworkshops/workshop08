@@ -11,7 +11,8 @@ output:
     css: ["default", "qcbsR.css", "qcbsR-fonts.css"]
     nature:
       beforeInit: "qcbsR-macros.js"
-      highlightLines: false
+      highlightLines: true
+      highlightStyle: github
 ---
 
 
@@ -32,11 +33,40 @@ options(repos=structure(c(CRAN="http://cran.r-project.org")))
 
 class: inverse, center, middle
 
-```{R install_pkgs, echo = FALSE, results = "asis"}
-cat(
-  qcbsRworkshops::first_slides(8, c('ggplot2', 'itsadug', 'mgcv'),
-    lang = "fr")
-)
+```{r install_pkgs, message=FALSE, warning=FALSE, include=FALSE, results=0}
+# Standard procedure to check and install packages and their dependencies, if needed.
+
+list.of.packages <- c("ggplot2", "itsadug", "mgcv")
+
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+
+if(length(new.packages) > 0) {
+  install.packages(new.packages, dependencies = TRUE) 
+  print(paste0("The following package was installed:", new.packages)) 
+} else if(length(new.packages) == 0) {
+    print("All packages were already installed previously")
+  }
+```
+
+# À propos de cet atelier
+[![badge](https://img.shields.io/static/v1?style=for-the-badge&label=repo&message=dev&color=6f42c1&logo=github)](https://github.com/QCBSRworkshops/workshop08)
+[![badge](https://img.shields.io/static/v1?style=for-the-badge&label=wiki&message=08&logo=wikipedia)](https://wiki.qcbs.ca/r_atelier8)
+[![badge](https://img.shields.io/static/v1?style=for-the-badge&label=Diapos&message=08&color=red&logo=html5)](https://qcbsrworkshops.github.io/workshop08/workshop08-fr/workshop08-fr.html)
+[![badge](https://img.shields.io/static/v1?style=for-the-badge&label=Diapos&message=08&color=red&logo=adobe-acrobat-reader)](https://qcbsrworkshops.github.io/workshop08/workshop08-fr/workshop08-fr.pdf)
+[![badge](https://img.shields.io/static/v1?style=for-the-badge&label=script&message=08&color=2a50b8&logo=r)](https://qcbsrworkshops.github.io/workshop08/workshop08-fr/workshop08-fr.R)
+
+---
+
+# Packages requis
+
+* [ggplot2](https://cran.r-project.org/package=ggplot2)
+* [itsadug](https://cran.r-project.org/package=itsadug)
+* [mgcv](https://cran.r-project.org/package=mgcv)
+
+<br>
+
+```R
+install.packages(c('ggplot2', 'itsadug', 'mgcv'))
 ```
 
 ---

@@ -44,24 +44,24 @@ html {
 }
 
 .remark-code .remark-code-line {
-  padding-left: .6rem !important;
+  padding-left: .3rem !important;
 }
 
 .remark-inline-code {
-  background-color: #f3f3f3;
+  background-color: #f2f2f2;
   border-radius: 5px;
-  border: 1px solid #999;
-  padding: 1px !important;
+  border: 0.5px solid #e5e5e5;
+  padding: 1.5px !important;
   font-size: 80%;
 }
 
 h1 .remark-inline-code {
-  background-color: #999;
-  border: 1px solid #f3f3f3;
+  background-color: #004055;
+  border: 0.5px solid #00536e;
 }
 
 .remark-code-line-highlighted {
-  background-color: #fcd3f2;
+  background-color: #bfbfbf;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -117,8 +117,6 @@ hr {
   font-size: 1.7rem;
 }
 
-
-
 .remark-slide-number {
   font-size: 12pt;
   margin-bottom: -11.6px;
@@ -143,13 +141,16 @@ hr {
 
 
 /* links */
+
 a {
-  color: #309493;
+  color: #307494;
   font-weight: 400;
 }
+
 a > code {
-  color: #309493;
+  color: #307494;
 }
+
 a:hover {
   font-weight: 700;
   text-decoration-style: underline;
@@ -161,6 +162,7 @@ a:hover {
 
 
 /* special text */
+
 .alert {
   color: #c11534;
   font-weight: bold;
@@ -170,7 +172,6 @@ a:hover {
   color: #666;
   font-style: italic;
 }
-
 
 .huge {
   font-size: 1.6em;
@@ -229,7 +230,11 @@ a:hover {
 }
 .pull-right {
   float: right;
-  width: 47%;
+  width: 48%;
+}
+
+.pull-right, .pull-right p {
+  padding-left: 0rem ;
 }
 
 .pull-left2 {
@@ -238,7 +243,7 @@ a:hover {
 }
 .pull-right2 {
   float: right;
-  width: 27%;
+  width: 30%;
 }
 
 .pull-right2, .pull-right2 p {
@@ -251,7 +256,7 @@ a:hover {
 }
 .pull-right3 {
   float: right;
-  width: 38%;
+  width: 40%;
 }
 
 .pull-right3, .pull-right3 p {
@@ -264,13 +269,29 @@ a:hover {
   height: 92%;
   float: left;
 }
+
 .right-plot {
   width: 38%;
   float: right;
   padding-left: 1%;
 }
 
+.pull-left4 {
+  float: left;
+  width: 37%;
+}
+
+.pull-right4 {
+  float: right;
+  width: 60%;
+}
+
+.pull-right4, .pull-right4 p {
+  padding-left: 0rem ;
+}
+
 /* Blockquote */
+
 .remark-slide-content blockquote {
   font-size: 1em;
   padding-left: 1em;
@@ -327,6 +348,7 @@ table, td, th {
 }
 
 /* for title page with logo and QCBS background  */
+
 .maintitle {
   font-size: 3em;
   color: #062c45;

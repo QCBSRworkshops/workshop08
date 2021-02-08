@@ -60,9 +60,9 @@ html {
 
 .remark-inline-code {
   background-color: #f8f8f8;
-  border-radius: 5px;
+  border-radius: 3px;
   border: 0.5px solid #e5e5e5;
-  padding: 1.5px !important;
+  padding: 2.5px !important;
   font-size: 80%;
 }
 
@@ -261,8 +261,17 @@ a:hover {
 .inverse h2 {
   font-size: 2.4rem;
 }
+
 .inverse h3 {
   font-size: 2rem;
+}
+
+.inverse code {
+  overflow-x: auto;
+  padding: .4em;
+  background: rgba(53, 80, 111, 0.75);
+  border: 0.5px solid #25374c;
+  margin: 0 2px
 }
 
 /* Table */

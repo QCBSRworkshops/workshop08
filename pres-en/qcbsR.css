@@ -21,7 +21,6 @@ html {
   color: #062c45;
 }
 
-
 .remark-slide-content p {
   font-size: 1.5rem;
   padding: .4rem 1rem .4rem 1.2rem;
@@ -43,12 +42,24 @@ html {
   background-color: #f3f3f3 !important;
 }
 
-.remark-code .remark-code-line {
+.remark-code {
+  display: block;
+  overflow-x: auto;
+  padding: .4em;
+  background: #f8f8f8;
+  margin: 0 2px;
+}
+
+.remark-code {
+  padding-left: .5rem !important;
+}
+
+.remark-code-line {
   padding-left: .3rem !important;
 }
 
 .remark-inline-code {
-  background-color: #f2f2f2;
+  background-color: #f8f8f8;
   border-radius: 5px;
   border: 0.5px solid #e5e5e5;
   padding: 1.5px !important;
@@ -61,7 +72,7 @@ h1 .remark-inline-code {
 }
 
 .remark-code-line-highlighted {
-  background-color: #bfbfbf;
+  background-color: #dbc5d8;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -222,74 +233,6 @@ a:hover {
 }
 
 
-/* Column */
-
-.pull-left {
-  float: left;
-  width: 47%;
-}
-.pull-right {
-  float: right;
-  width: 48%;
-}
-
-.pull-right, .pull-right p {
-  padding-left: 0rem ;
-}
-
-.pull-left2 {
-  float: left;
-  width: 67%;
-}
-.pull-right2 {
-  float: right;
-  width: 30%;
-}
-
-.pull-right2, .pull-right2 p {
-  padding-left: 0rem ;
-}
-
-.pull-left3 {
-  float: left;
-  width: 57%;
-}
-.pull-right3 {
-  float: right;
-  width: 40%;
-}
-
-.pull-right3, .pull-right3 p {
-  padding-left: 0rem ;
-}
-
-.left-code {
-  color: #777;
-  width: 57%;
-  height: 92%;
-  float: left;
-}
-
-.right-plot {
-  width: 38%;
-  float: right;
-  padding-left: 1%;
-}
-
-.pull-left4 {
-  float: left;
-  width: 37%;
-}
-
-.pull-right4 {
-  float: right;
-  width: 60%;
-}
-
-.pull-right4, .pull-right4 p {
-  padding-left: 0rem ;
-}
-
 /* Blockquote */
 
 .remark-slide-content blockquote {
@@ -367,3 +310,77 @@ table, td, th {
   content: url(https://qcbs.ca/wp-content/uploads/2010/05/logo_small_grey-01.png);
   transform: scale(.25);
 }
+
+/* Column */
+
+.pull-left {
+  float: left;
+  width: 47%;
+}
+.pull-right {
+  float: right;
+  width: 48%;
+}
+
+.pull-right, .pull-right p {
+  padding-left: 0rem ;
+}
+
+.pull-left2 {
+  float: left;
+  width: 67%;
+}
+.pull-right2 {
+  float: right;
+  width: 30%;
+}
+
+.pull-right2, .pull-right2 p {
+  padding-left: 0rem ;
+}
+
+.pull-left3 {
+  float: left;
+  width: 57%;
+}
+.pull-right3 {
+  float: right;
+  width: 40%;
+}
+
+.pull-right3, .pull-right3 p {
+  padding-left: 0rem ;
+}
+
+.left-code {
+  color: #777;
+  width: 58%;
+  height: 92%;
+  float: left;
+}
+
+.right-plot {
+  width: 40%;
+  float: right;
+  padding-left: 0rem;
+}
+
+.left-code, .right-plot p {
+  padding-left: 0rem ;
+}
+
+
+.pull-left4 {
+  float: left;
+  width: 37%;
+}
+
+.pull-right4 {
+  float: right;
+  width: 60%;
+}
+
+.pull-right4, .pull-right4 p {
+  padding-left: 0rem ;
+}
+

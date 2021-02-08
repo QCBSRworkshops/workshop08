@@ -25,7 +25,7 @@ remark.macros.cube = function () {
 };
 
 // Font-awesome icons (version 4.7)
-remark.macros.faic = function (size = 2) {
+remark.macros.faic = function (size = 1.5) {
   var name = this;
   return '<i class="fa fa-'+ name + ' fa-'+ size + 'x" aria-hidden="true"></i>';
 };

@@ -12,7 +12,6 @@ output:
     nature:
       beforeInit: "qcbsR-macros.js"
       highlightLines: true
-      highlightStyle: github
 ---
 
 
@@ -27,7 +26,7 @@ knitr::opts_chunk$set(
   fig.retina = 3,
   fig.align = 'center'
 )
-options(repos=structure(c(CRAN="http://cran.r-project.org")))
+options(repos = structure(c(CRAN="http://cran.r-project.org")))
 ```
 
 class: inverse, center, middle
@@ -44,7 +43,10 @@ if(length(new.packages) > 0) {
   print(paste0("The following package was installed:", new.packages)) 
 } else if(length(new.packages) == 0) {
     print("All packages were already installed previously")
-  }
+}
+
+# Load all required libraries at once
+lapply(list.of.packages, require, character.only = TRUE, quietly = TRUE)
 ```
 
 # About this workshop

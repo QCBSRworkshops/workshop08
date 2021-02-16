@@ -14,9 +14,11 @@ master.zip
 **/_bookdown_files/
 **/libs/
 
-# qcbsR*
+# Exclusions for the templates
 !qcbsR-header.html
 !**/mathjax_header.html
+!**/assets
+!**/assets/**.html
 
 ## Apple OS generated files
 .DS_Store

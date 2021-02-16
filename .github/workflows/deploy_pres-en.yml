@@ -4,6 +4,8 @@ on:
        - main
      paths:
        - pres-en/**
+       - .github/workflows/deploy_pres-en.yml
+       
   repository_dispatch: 
     types: [pong_presentation]
   
@@ -39,6 +41,8 @@ jobs:
 
       - name: 💻 Setup R
         uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: 4.0.3
         
       - name: 💾 Cache R packages
         uses: actions/cache@v2 # Must be v2 so it accepts the GITHUB_REF from the repository_dispatch

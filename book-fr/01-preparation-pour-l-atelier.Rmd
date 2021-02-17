@@ -1,0 +1,39 @@
+# (PART\*) Analyses multivariées en `R` {-}
+
+# Objectifs d'apprentissage
+
+**Résumé:** Dans cet atelier, vous apprendrez les bases des analyses
+multivariées qui vous permettront de révéler les patrons de diversité
+dans vos données de communautés. Vous apprendrez d'abord comment
+choisir les mesures de distance et les transformations appropriées pour
+ensuite réaliser plusieurs types d'analyses multivariées: des
+groupements, des Analyses en Composantes Principales (PCA), des Analyses
+de Correspondance (CA), des Analyses en Coordonnées Principales (PCoA)
+et des Positionnements Multidimensionnels Non-Métriques (NMDS).
+
+# Préparez-vous pour cet atelier
+
+**Téléchargez le script R et les données pour cet atelier:**
+
+-   [script R](http://qcbs.ca/wiki/_media/multivar1_f.r)
+-   [DoubsEnv](http://qcbs.ca/wiki/_media/DoubsEnv.csv)
+-   [DoubsSpe](http://qcbs.ca/wiki/_media/DoubsSpe.csv)
+-   [Coldiss (fonction R)](http://qcbs.ca/wiki/_media/coldiss.R)
+
+**Télechargez les paquets R pour cet atelier:**
+
+-   [vegan](http://cran.r-project.org/web/packages/vegan/index.html)
+-   [gclus](http://cran.r-project.org/web/packages/gclus/index.html)
+-   [ape](http://cran.r-project.org/web/packages/ape/index.html)
+
+```{r, echo = TRUE, eval = FALSE}
+install.packages("vegan")
+install.packages("gclus")
+install.packages("ape")
+
+library(vegan)
+library(gclus)
+library(ape)
+
+source(file.choose()) #coldiss.R 
+```

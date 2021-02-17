@@ -1,0 +1,28 @@
+# (PART\*) L'Ordination sans contrainte {-}
+
+# Le significat de l'ordination "sans contrainte"
+
+Les analyses d'ordination sans contrainte permettent d'organiser des
+échantillons, des sites ou des espèces le long de gradients continus
+(ex. écologiques ou environnementaux). Les ordinations sans contrainte
+se différencient des analyses canoniques (voir plus loin dans cet
+atelier \"analyses canoniques\") par le fait que ces techniques ne
+tentent pas de définir une relation entre des variables dépendantes et
+indépendantes.
+
+L'ordination sans contrainte peut être utilisée pour: 
+
+- Évaluer les
+relations *au sein* d'un ensemble de variables (et non pas entre séries
+de variables). 
+
+- Trouver les éléments clés de variation au sein d'échantillons, de sites, d'espèces, etc. 
+
+- Réduire les dimensions
+d'un jeu de données multivariées sans perte importante d'informations.
+
+- Créer de nouvelles variables pour une utilisation dans des analyses
+ultérieures (comme la régression). Les composantes principales des axes
+d'ordination sont en effet des combinaisons linéaires des variables
+d'origine.
+[Source](http://www.umass.edu/landeco/teaching/multivariate/schedule/ordination1.pdf)

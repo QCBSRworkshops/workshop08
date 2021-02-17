@@ -1,0 +1,28 @@
+# Qu'est-ce que l'ordination?
+
+L'ordination est un ensemble de méthodes pour décrire des échantillons
+dans de multiples dimensions (Clarke et Warwick 2011). Les méthodes
+d'ordination sont donc très utiles pour simplifier et interpréter des
+données multivariées. Les écologistes parlent souvent de \"faire une
+PCA\" face à des données multidimensionnelles complexes et désordonnées.
+Programmer des méthodes d'ordination à partir de R est relativement
+simple. L'interprétation des analyses d'ordination peut par contre
+être plus difficile, surtout si vous n'êtes pas sûr des questions
+biologiques que vous souhaitez explorer avec la méthode d'ordination
+que vous utilisez. Un examen attentif des objectifs de ces méthodes et
+de leur cadre d'application est nécessaire pour obtenir de bons
+résultats !
+
+Lorsque vous utilisez une méthode d'ordination, un ensemble de
+variables est utilisé pour ordonner des échantillons (objets, sites,
+etc.) le long d'axes principaux représentant des combinaison de
+variables (Gotelli et Ellison 2004). L'ordination permet donc de
+réduire ou de simplifier les données en créant de nouveaux axes
+intégrant la majeure partie de la variation présentes dans les données.
+A titre d'exemple, un ensemble de données avec 24 variables peut être
+réduit à cinq composantes principales qui représentent les principaux
+gradients de variation entre les échantillons. Les méthodes
+d'ordination sans contrainte ne sont pas adaptées au test d'hypothèses
+biologiques, mais permettent l'analyse exploratoire des données. Voir
+([the Ordination Website](http://ordination.okstate.edu/)) pour un
+aperçu des différents méthodes (en Anglais).

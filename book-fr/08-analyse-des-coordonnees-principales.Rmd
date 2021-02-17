@@ -1,0 +1,90 @@
+#  Analyse en coordonnées principales
+
+La PCA, comme la CA, impose une préservation des distances entre objets:
+la distance euclidienne dans le cas de la PCA, et la distance de Chi2
+dans la CA. Si l'objectif est d'ordonner les objets sur la base d'une
+autre mesure de distance plus appropriée au problème, la PCoA constitue
+une technique de choix. Dans une PCA, les données sont pivotées de façon
+à ce que la première composante principale (correspondant à une
+combinaison linéaire des descripteurs) explique la plus forte proportion
+de variation possible; la contribution de chaque descripteur (espèces ou
+variables environnementales) à chaque composante principale peut alors
+être évaluée d'après son score. La PCoA est une seconde méthode
+d'ordination sans contrainte dans laquelle les points sont ajoutés les
+uns après les autres à l'espace d'ordination en utilisant la distance
+euclidienne *ou n'importe quelle mesure de distance (dissimilarité)
+métrique vous choisissez*. Un premier point est ainsi placé dans
+l'espèce d'ordination, puis un second point placé à la valeur de
+distance du premier, puis un troisième et ainsi de suite en ajoutant
+autant d'axes (de dimensions) que nécessaire. Il est parfois difficile
+de choisir entre effectuer une PCA ou une PCoA. La PCA permet toutefois
+de réduire des données multivariables en un faible nombre de dimensions
+tandis que la PCoA est utile pour visualiser les distances entre sites
+(ou objets). La PCoA est aussi particulièrement adaptées pour les jeux
+de données présentant plus de colonnes que de lignes. Par exemple, si
+des centaines d'espèces ont été observées dans un petit nombree de
+quadrats, une approche basée sur une PCoA utilisant la distance de
+Bray-Curtis (voir ci-dessous) peut être plus adaptée.
+
+PCoA avec DoubsSpe (transformé Hellinger):
+
+```{r, echo = TRUE, eval = FALSE}
+# En utilisant la fonction cmdscale()
+?cmdscale
+cmdscale(dist(spe.hel), k=(nrow(spe)-1), eig=TRUE)
+
+# En utilisant la fonction pcoa()
+?pcoa
+spe.h.pcoa<-pcoa(dist(spe.hel))
+
+# Extraction des résultats
+spe.h.pcoa 
+
+# Représentation graphique
+biplot.pcoa(spe .h.pcoa, spe.hel, dir.axis2=-1)
+```
+
+Les résultats de cette PCoA sont:
+
+![](images//pcoa_outputfr_1.png){width="800"}
+
+![](images//pcoa_outputfr_2.png){width="800"}
+
+Et le graphique:
+
+![](images//pcoa_spe.png){width="500"}
+
+Vous pouvez aussi exécuter cette PCoA avec une autre mesure de distance
+(ex. Bray-Curtis):
+
+```{r, echo = TRUE, eval = FALSE}
+spe.bray.pcoa<-pcoa(spe.db) # il s'agit de la matrice de distances de Bray-Curtis qu'on a générée plus tôt 
+spe.bray.pcoa
+biplot.pcoa(spe.bray.pcoa, spe.hel, dir.axis2=-1)
+# Le choix d'une mesure de distance est très important car ça influence les résultats! 
+```
+
+**Défi 5** Exécuter une PCoA sur les données d'abondance des *espèces
+d'acariens* transformées Hellinger (données mite). Quels sont les axes
+importants? Quels groupes de sites pouvez-vous identifier? Quelles
+espèces sont liées à chaque groupe de sites? Comment les résultats de
+cette PCoA se comparent-ils avec ceux de la PCA?
+
+**Défi 5 - Solution** 
+
+```{r, echo = TRUE, eval = FALSE}
+mite.spe.h.pcoa<-pcoa(dist(mite.spe.hel))
+mite.spe.h.pcoa
+windows()
+biplot.pcoa(mite.spe.h.pcoa, mite.spe.hel, dir.axis2=-1)
+```
+
+Représentation graphique:
+
+![](images//pcoa_mite.png){width="500"}
+
+Les espèces 16 et 31 sont plus éloignées des autres espèces en termes de
+distance, et donc leur distribution entre les sites est très différente
+de celle des autres espèces d'acariens. Les sites dont les étiquettes
+se chevauchent sont de bons exemples de sites à forte similarité en
+termes de communautés d'acariens. 

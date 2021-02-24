@@ -1,5 +1,5 @@
 --- 
-title: "Atelier 9 : Analyses multivariées en `R`"
+title: "Atelier 8 : Modèles additifs généralisés en `R`"
 subtitle: "Série d'ateliers R du CSBQ"
 author:
 - Développé et maintenu par les contributeurs et contributrices de la Série d'ateliers R du CSBQ^[La Série d'ateliers R du CSBQ fait partie du [Centre de la science de la biodiversité du Québec](https://www.qcbs.ca), et est maintenue par les coordonnateurs et les coordonnatrices de la série, et les membres étudiants diplômés, postdoctoraux et professionnels de la recherche. **Les contributeurs et contributrices de cet atelier sont accessibles[ici](lien)**].
@@ -10,8 +10,8 @@ bibliography: ["references.bib"]
 biblio-style: apalike
 link-citations: yes
 cover-image: assets/images/logo/csbq_logo_accueil.png
-github-repo: "qcbsRworkshops/workshop09"
-description: "Analyses multivariées en `R`"
+github-repo: "qcbsRworkshops/workshop08"
+description: "Modèles additifs généralisés en `R`"
 favicon: "assets/images/favicon.ico"
 always_allow_html: yes
 url: 'https\://github.com/qcbsRworkshops/'
@@ -28,7 +28,7 @@ La **Série d'ateliers R du CSBQ** est une série de 10 ateliers qui guide les p
 
 Le contenu de cet atelier a été revu par plusieurs membres du CSBQ. Si vous souhaitez suggérer des modifications, veuillez contacter les coordinateurs de la série actuelle, dont la liste figure sur la page principale de Github
 
-## Code of conduct
+## Code de conduit
 
 La Série d'ateliers R du CSBQ et le Symposium R du CSBQ sont des lieux dédiés à fournir un environnement accueillant et favorable à toutes les personnes, indépendamment de leurs origines ou de leur identité.
 

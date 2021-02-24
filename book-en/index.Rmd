@@ -1,5 +1,5 @@
 --- 
-title: "Workshop 9: Multivariate Analyses in `R`"
+title: "Workshop 8: Generalized additive models in `R`"
 subtitle: "QCBS R Workshop Series"
 author:
 - Developed and maintained by the contributors of the QCBS R Workshop Series^[The QCBS R Workshop Series is part of the [Québec Centre for Biodiversity Science](https://www.qcbs.ca), and is maintained by the series coordinators and graduent student, postdoctoral, and research professional members. **The contributors for this workshop can be accessed [here](link)**.]
@@ -10,8 +10,8 @@ bibliography: ["references.bib"]
 biblio-style: apalike
 link-citations: yes
 cover-image: assets/images/logo/csbq_logo_accueil.png
-github-repo: "qcbsRworkshops/workshop09"
-description: "Multivariate Analyses in `R`"
+github-repo: "qcbsRworkshops/workshop08"
+description: "Generalized additive models in `R`"
 favicon: "assets/images/favicon.ico"
 always_allow_html: yes
 url: 'https\://github.com/qcbsRworkshops/'

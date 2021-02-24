@@ -84,6 +84,7 @@ $$logit = log(\frac{N_{success}}{N_{failures}})$$
 than 1 and the logit has a positive value (e.g., log(2) = 0.69).
 - If successes have a smaller count than failures, the ratio is lower
 than 1 and the logit has a negative value (e.g., log(0.5) = -0.69).
+
 Thus, the intercept is the log odds ratio of successes to failures
 (logit), and indicates whether on average there are more successes than
 failures. Here, the estimated intercept coefficient is positive, which

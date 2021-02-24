@@ -4,7 +4,7 @@ What do we mean by the linear model? Regression is the workhorse of
 statistics. It allows us to model a response variable as a function of
 predictors plus error. Linear regression is what most people first
 encounter in statistics. As we saw in the [linear
-models](http://qcbs.ca/wiki/r_workshop4) workshop, regression makes four
+models](https://github.com/QCBSRworkshops/workshop04) workshop, regression makes four
 major assumptions:
 
 1.  normally distributed error

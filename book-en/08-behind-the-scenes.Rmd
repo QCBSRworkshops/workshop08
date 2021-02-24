@@ -108,7 +108,7 @@ How many degrees of freedom does a fitted GAM have?
 
 Instead of providing the output of the cross-validation in terms of
 *λ* (some tuning parameter modulating the fit's
-complexity), the GAM function in the `mgcv` package uses a term called
+complexity), the `gam()` function in the `mgcv` package uses a term called
 the effective degrees of freedom (edf) as a consistent way to quantify
 model complexity (that is, to justify our intuition that the degrees of
 freedom tracks model complexity). Because the number of free parameters

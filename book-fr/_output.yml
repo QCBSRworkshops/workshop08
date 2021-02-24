@@ -1,16 +1,20 @@
 bookdown::gitbook:
-  css: style.css
+  css: assets/qcbs-style.css
+  includes:
+    before_body: assets/qcbs-big-image.html
+    after_body: assets/qcbs-footer.html
+  highlight: tango
   config:
     toc:
+      collapse: section
       before: |
-        <li><a href="./">A Minimal Book Example</a></li>
+        <li class="toc-logo"><a href="./"><img src="assets/images/csbq_logo_gray_accueil.png"></a></li>
+        <link rel="icon" type="image/png" href="assets/images/favicon.ico"/>
       after: |
-        <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
-    download: ["pdf", "epub"]
-bookdown::pdf_book:
-  includes:
-    in_header: preamble.tex
-  latex_engine: xelatex
-  citation_package: natbib
-  keep_tex: yes
-bookdown::epub_book: default
+        <li><a href="https://github.com/qcbsRworkshops" target="blank">QCBS R Workshop Series</a></li>
+    download: ["rmd"]
+    sharing:
+      github: yes
+      facebook: no
+      twitter: yes
+      all: no

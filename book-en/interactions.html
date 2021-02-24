@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Workshop 8: Generalized additive models in R</title>
+  <title>Chapter 6 Interactions | Workshop 8: Generalized additive models in R</title>
   <meta name="description" content="Generalized additive models in R" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Workshop 8: Generalized additive models in R" />
+  <meta property="og:title" content="Chapter 6 Interactions | Workshop 8: Generalized additive models in R" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://github.com/qcbsRworkshops/" />
   <meta property="og:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="qcbsRworkshops/workshop08" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Workshop 8: Generalized additive models in R" />
+  <meta name="twitter:title" content="Chapter 6 Interactions | Workshop 8: Generalized additive models in R" />
   
   <meta name="twitter:description" content="Generalized additive models in R" />
   <meta name="twitter:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />
-
-<link rel="next" href="summary-and-learning-objectives.html"/>
+<link rel="prev" href="multiple-smooth-terms.html"/>
+<link rel="next" href="changing-the-basis.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -212,74 +212,56 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <div class="hero-image-container"> 
   <img class= "hero-image" src="assets/images/jean-philippe-delberghe-75xPHEQBmvA-unsplash_hero_image.jpg">
 </div>
-<div id="header">
-<h1 class="title">Workshop 8: Generalized additive models in <code>R</code></h1>
-<h2 class="subtitle"><em>QCBS R Workshop Series</em></h2>
-<p class="author"><em>Developed and maintained by the contributors of the QCBS R Workshop Series<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></em></p>
-<p class="date"><em>2021-02-24 04:29:44</em></p>
-</div>
-<div id="preface" class="section level1 unnumbered">
-<h1>Preface</h1>
-<p>The <strong>QCBS R Workshop Series</strong> is a series of 10 workshops that walks participants through the steps required to use R for a wide array of statistical analyses relevant to research in biology and ecology. These open-access workshops were created by members of the QCBS both for members of the QCBS and the larger community.</p>
-<p>The content of this workshop has been peer-reviewed by several QCBS members. If you would like to suggest modifications, please contact the current series coordinators, listed on the main Github page.</p>
-<div id="code-of-conduct" class="section level2">
-<h2><span class="header-section-number">0.1</span> Code of conduct</h2>
-<p>The QCBS R Workshop Series and the QCBS R Symposium are venues dedicated to providing a welcoming and supportive environment for all people, regardless of background or identity.</p>
-<p>Participants, presenters and organizers of the workshop series and other related activities accept this Code of Conduct when being present at any workshop-related activities.</p>
-<p>We do not tolerate behaviour that is disrespectful or that excludes, intimidates, or causes discomfort to others.</p>
-<p>We do not tolerate discrimination or harassment based on characteristics that include, but are not limited to, gender identity and expression, sexual orientation, disability, physical appearance, body size, citizenship, nationality, ethnic or social origin, pregnancy, familial status, genetic information, religion or belief (or lack thereof), membership of a national minority, property, age, education, socio-economic status, technical choices, and experience level.</p>
-<p>It applies to all spaces managed by or affiliated with the workshop, including, but not limited to, workshops, email lists, and online forums such as GitHub, Slack and Twitter.</p>
-<div id="expected-behaviour" class="section level3">
-<h3><span class="header-section-number">0.1.1</span> Expected behaviour</h3>
-<p>All participants are expected to show respect and courtesy to others. All interactions should be professional regardless of platform: either online or in-person. In order to foster a positive and professional learning environment we encourage the following kinds of behaviours in all workshop events and platforms:</p>
+<div id="interactions" class="section level1">
+<h1><span class="header-section-number">Chapter 6</span> Interactions</h1>
+<p>There are two ways to include interactions between variables:</p>
 <ul>
-<li>Use welcoming and inclusive language</li>
-<li>Be respectful of different viewpoints and experiences</li>
-<li>Gracefully accept constructive criticism</li>
-<li>Focus on what is best for the community</li>
-<li>Show courtesy and respect towards other community members</li>
+<li>if one variable is smoothed, and the other isn’t: using the <code>by</code>
+argument,</li>
+<li>fully smoothing both variables.</li>
 </ul>
-</div>
-<div id="unacceptable-behaviour" class="section level3">
-<h3><span class="header-section-number">0.1.2</span> Unacceptable behaviour</h3>
-<p>Examples of unacceptable behaviour by participants at any workshop event/platform include:</p>
-<ul>
-<li>written or verbal comments which have the effect of excluding people on the - basis of membership of any specific group;</li>
-<li>causing someone to fear for their safety, such as through stalking or intimidation;</li>
-<li>violent threats or language directed against another person;</li>
-<li>the display of sexual or violent images;</li>
-<li>unwelcome sexual attention;</li>
-<li>nonconsensual or unwelcome physical contact;</li>
-<li>insults or put-downs;</li>
-<li>sexist, racist, homophobic, transphobic, ableist, or exclusionary jokes;</li>
-<li>incitement to violence, suicide, or self-harm;</li>
-<li>continuing to initiate interaction (including photography or recording) with - someone after being asked to stop;</li>
-<li>publication of private communication without consent.</li>
-</ul>
-</div>
-</div>
-<div id="contributors" class="section level2">
-<h2><span class="header-section-number">0.2</span> Contributors</h2>
-<p>Originally developed by:</p>
-<p>Contributed with changes to the presentation:</p>
-<p>Contributed with changes to the written material:</p>
-<p>Contributed by reporting issues and suggesting modifications:</p>
-</div>
-<div id="contributing" class="section level2">
-<h2><span class="header-section-number">0.3</span> Contributing</h2>
-<p>Under construction.</p>
+<p>Where the <code>by</code> argument lets you have a smooth term vary between
+different levels of a factor. We will examine this using our categorical
+variable <code>x0</code> and ask whether the non-linear smoother <code>s(x2)</code> varies across
+different levels of <code>x0</code>. To determine whether smooth terms differ
+significantly among factor levels, we will use an ANOVA test on the
+interaction term.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="interactions.html#cb20-1"></a>categorical_interact &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>x0 <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x1) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x2, <span class="dt">by =</span> x0), </span>
+<span id="cb20-2"><a href="interactions.html#cb20-2"></a>    <span class="dt">data =</span> gam_data)</span>
+<span id="cb20-3"><a href="interactions.html#cb20-3"></a>categorical_interact_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(categorical_interact)</span>
+<span id="cb20-4"><a href="interactions.html#cb20-4"></a><span class="kw">print</span>(categorical_interact_summary<span class="op">$</span>s.table)</span>
+<span id="cb20-5"><a href="interactions.html#cb20-5"></a><span class="kw">plot</span>(categorical_interact, <span class="dt">page =</span> <span class="dv">1</span>)</span>
+<span id="cb20-6"><a href="interactions.html#cb20-6"></a><span class="co"># or alternatively: plot using vis.gam function, where theta</span></span>
+<span id="cb20-7"><a href="interactions.html#cb20-7"></a><span class="co"># is the degree rotation on the x-y plane</span></span>
+<span id="cb20-8"><a href="interactions.html#cb20-8"></a><span class="kw">vis.gam</span>(categorical_interact, <span class="dt">view =</span> <span class="kw">c</span>(<span class="st">&quot;x2&quot;</span>, <span class="st">&quot;x0&quot;</span>), <span class="dt">theta =</span> <span class="dv">40</span>, </span>
+<span id="cb20-9"><a href="interactions.html#cb20-9"></a>    <span class="dt">n.grid =</span> <span class="dv">500</span>, <span class="dt">border =</span> <span class="ot">NA</span>)</span>
+<span id="cb20-10"><a href="interactions.html#cb20-10"></a><span class="kw">anova</span>(two_smooth_model, categorical_interact, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<p><img src="images/graphic3.1b.png" width="350" /></p>
+<p>Visually, we see that the shape of smooth terms are comparable among the
+four levels of <code>x0</code>. The ANOVA test confirms this as well (Deviance =
+98.6, <em>p</em> = 0.2347).</p>
+<p>Finally we’ll look at the interactions two smooth terms, <code>x1</code> and <code>x2</code>.
+Here the <code>by</code> argument is dropped (both quantitative variables).</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="interactions.html#cb21-1"></a>smooth_interact &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>x0 <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x1, x2), <span class="dt">data =</span> gam_data)</span>
+<span id="cb21-2"><a href="interactions.html#cb21-2"></a>smooth_interact_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(smooth_interact)</span>
+<span id="cb21-3"><a href="interactions.html#cb21-3"></a><span class="kw">print</span>(smooth_interact_summary<span class="op">$</span>s.table)</span>
+<span id="cb21-4"><a href="interactions.html#cb21-4"></a><span class="kw">plot</span>(smooth_interact, <span class="dt">page =</span> <span class="dv">1</span>, <span class="dt">scheme =</span> <span class="dv">3</span>)</span>
+<span id="cb21-5"><a href="interactions.html#cb21-5"></a><span class="co"># plot(smooth_interact,page=1,scheme=1) will give a similar</span></span>
+<span id="cb21-6"><a href="interactions.html#cb21-6"></a><span class="co"># plot to the vis.gam()</span></span>
+<span id="cb21-7"><a href="interactions.html#cb21-7"></a><span class="kw">vis.gam</span>(smooth_interact, <span class="dt">view =</span> <span class="kw">c</span>(<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>), <span class="dt">theta =</span> <span class="dv">40</span>, <span class="dt">n.grid =</span> <span class="dv">500</span>, </span>
+<span id="cb21-8"><a href="interactions.html#cb21-8"></a>    <span class="dt">border =</span> <span class="ot">NA</span>)</span>
+<span id="cb21-9"><a href="interactions.html#cb21-9"></a><span class="kw">anova</span>(two_smooth_model, smooth_interact, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<p><img src="images/graphic3.2b.png" width="350" /></p>
+<p>The interaction between <code>s(x1)</code> and <code>s(x2)</code> is significant and the 2D plot
+nicely illustrates this non-linear interactions, where <code>y</code> is greatest at
+high values of <code>x1</code> but low to mid-values of <code>x2</code>. Try playing around with
+<code>theta</code> to rotate the figure around. If you plan to run a lot of these,
+delete the argument <code>n.grid=500</code> to make the plots run faster.</p>
 
 </div>
-</div>
 
 
 
-<div class="footnotes">
-<hr />
-<ol start="1">
-<li id="fn1"><p>The QCBS R Workshop Series is part of the <a href="https://www.qcbs.ca">Québec Centre for Biodiversity Science</a>, and is maintained by the series coordinators and graduent student, postdoctoral, and research professional members. <strong>The contributors for this workshop can be accessed <a href="link">here</a></strong>.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
-</ol>
-</div>
 <hr>
 <center> 
   <div class="footer">
@@ -291,8 +273,8 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-
-<a href="summary-and-learning-objectives.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="multiple-smooth-terms.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="changing-the-basis.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Workshop 8: Generalized additive models in R</title>
+  <title>Chapter 5 Multiple smooth terms | Workshop 8: Generalized additive models in R</title>
   <meta name="description" content="Generalized additive models in R" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Workshop 8: Generalized additive models in R" />
+  <meta property="og:title" content="Chapter 5 Multiple smooth terms | Workshop 8: Generalized additive models in R" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://github.com/qcbsRworkshops/" />
   <meta property="og:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="qcbsRworkshops/workshop08" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Workshop 8: Generalized additive models in R" />
+  <meta name="twitter:title" content="Chapter 5 Multiple smooth terms | Workshop 8: Generalized additive models in R" />
   
   <meta name="twitter:description" content="Generalized additive models in R" />
   <meta name="twitter:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />
-
-<link rel="next" href="summary-and-learning-objectives.html"/>
+<link rel="prev" href="introduction-to-gams.html"/>
+<link rel="next" href="interactions.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -212,73 +212,111 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <div class="hero-image-container"> 
   <img class= "hero-image" src="assets/images/jean-philippe-delberghe-75xPHEQBmvA-unsplash_hero_image.jpg">
 </div>
-<div id="header">
-<h1 class="title">Workshop 8: Generalized additive models in <code>R</code></h1>
-<h2 class="subtitle"><em>QCBS R Workshop Series</em></h2>
-<p class="author"><em>Developed and maintained by the contributors of the QCBS R Workshop Series<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></em></p>
-<p class="date"><em>2021-02-24 04:29:44</em></p>
-</div>
-<div id="preface" class="section level1 unnumbered">
-<h1>Preface</h1>
-<p>The <strong>QCBS R Workshop Series</strong> is a series of 10 workshops that walks participants through the steps required to use R for a wide array of statistical analyses relevant to research in biology and ecology. These open-access workshops were created by members of the QCBS both for members of the QCBS and the larger community.</p>
-<p>The content of this workshop has been peer-reviewed by several QCBS members. If you would like to suggest modifications, please contact the current series coordinators, listed on the main Github page.</p>
-<div id="code-of-conduct" class="section level2">
-<h2><span class="header-section-number">0.1</span> Code of conduct</h2>
-<p>The QCBS R Workshop Series and the QCBS R Symposium are venues dedicated to providing a welcoming and supportive environment for all people, regardless of background or identity.</p>
-<p>Participants, presenters and organizers of the workshop series and other related activities accept this Code of Conduct when being present at any workshop-related activities.</p>
-<p>We do not tolerate behaviour that is disrespectful or that excludes, intimidates, or causes discomfort to others.</p>
-<p>We do not tolerate discrimination or harassment based on characteristics that include, but are not limited to, gender identity and expression, sexual orientation, disability, physical appearance, body size, citizenship, nationality, ethnic or social origin, pregnancy, familial status, genetic information, religion or belief (or lack thereof), membership of a national minority, property, age, education, socio-economic status, technical choices, and experience level.</p>
-<p>It applies to all spaces managed by or affiliated with the workshop, including, but not limited to, workshops, email lists, and online forums such as GitHub, Slack and Twitter.</p>
-<div id="expected-behaviour" class="section level3">
-<h3><span class="header-section-number">0.1.1</span> Expected behaviour</h3>
-<p>All participants are expected to show respect and courtesy to others. All interactions should be professional regardless of platform: either online or in-person. In order to foster a positive and professional learning environment we encourage the following kinds of behaviours in all workshop events and platforms:</p>
-<ul>
-<li>Use welcoming and inclusive language</li>
-<li>Be respectful of different viewpoints and experiences</li>
-<li>Gracefully accept constructive criticism</li>
-<li>Focus on what is best for the community</li>
-<li>Show courtesy and respect towards other community members</li>
-</ul>
-</div>
-<div id="unacceptable-behaviour" class="section level3">
-<h3><span class="header-section-number">0.1.2</span> Unacceptable behaviour</h3>
-<p>Examples of unacceptable behaviour by participants at any workshop event/platform include:</p>
-<ul>
-<li>written or verbal comments which have the effect of excluding people on the - basis of membership of any specific group;</li>
-<li>causing someone to fear for their safety, such as through stalking or intimidation;</li>
-<li>violent threats or language directed against another person;</li>
-<li>the display of sexual or violent images;</li>
-<li>unwelcome sexual attention;</li>
-<li>nonconsensual or unwelcome physical contact;</li>
-<li>insults or put-downs;</li>
-<li>sexist, racist, homophobic, transphobic, ableist, or exclusionary jokes;</li>
-<li>incitement to violence, suicide, or self-harm;</li>
-<li>continuing to initiate interaction (including photography or recording) with - someone after being asked to stop;</li>
-<li>publication of private communication without consent.</li>
-</ul>
-</div>
-</div>
-<div id="contributors" class="section level2">
-<h2><span class="header-section-number">0.2</span> Contributors</h2>
-<p>Originally developed by:</p>
-<p>Contributed with changes to the presentation:</p>
-<p>Contributed with changes to the written material:</p>
-<p>Contributed by reporting issues and suggesting modifications:</p>
-</div>
-<div id="contributing" class="section level2">
-<h2><span class="header-section-number">0.3</span> Contributing</h2>
-<p>Under construction.</p>
+<div id="multiple-smooth-terms" class="section level1">
+<h1><span class="header-section-number">Chapter 5</span> Multiple smooth terms</h1>
+<p>GAMs make it easy to include both smooth and linear terms, multiple
+smoothed terms, and smoothed interactions. For this section, we’ll be
+using a dataset automatically generated by the <code>gamSim()</code> command of the
+<code>mgcv</code> package. For further details on what type of data you can
+simulate with this function, see <code>?gamSim</code>. For this section, we will
+use the example 5 (eg=5) of gamSim, which simulates an additive example
+plus a factor variable.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="multiple-smooth-terms.html#cb12-1"></a>gam_data =<span class="st"> </span><span class="kw">gamSim</span>(<span class="dt">eg =</span> <span class="dv">5</span>)</span>
+<span id="cb12-2"><a href="multiple-smooth-terms.html#cb12-2"></a><span class="kw">head</span>(gam_data)</span></code></pre></div>
+<p>We will now look at how we can predict <code>y</code> based on the other variables.
+Start with a basic model, with one smoothed term (<code>x1</code>) and one
+categorical predictor (<code>x0</code>, which has 4 levels).</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="multiple-smooth-terms.html#cb13-1"></a>basic_model =<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>x0 <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x1), <span class="dt">data =</span> gam_data)</span>
+<span id="cb13-2"><a href="multiple-smooth-terms.html#cb13-2"></a>basic_summary =<span class="st"> </span><span class="kw">summary</span>(basic_model)</span>
+<span id="cb13-3"><a href="multiple-smooth-terms.html#cb13-3"></a><span class="kw">print</span>(basic_summary<span class="op">$</span>p.table)</span>
+<span id="cb13-4"><a href="multiple-smooth-terms.html#cb13-4"></a><span class="kw">print</span>(basic_summary<span class="op">$</span>s.table)</span>
+<span id="cb13-5"><a href="multiple-smooth-terms.html#cb13-5"></a><span class="kw">plot</span>(basic_model)</span></code></pre></div>
+<p>Here, the <code>p.table</code> provides the significance table for each parametric
+term and the <code>s.table</code> is the significance table for smooths. Note that
+for the latter, the wiggleness of the smoothed term <code>s(x1)</code> is indicated
+by the edf parameter (effective degrees of freedom); the higher the edf,
+the more non-linear the smoothing spline. A high value (8–10 or higher)
+means that the curve is highly non-linear, whereas a smoother with 1
+effective degree of freedom is a straight line. In contrast, in linear
+regression the <em>model</em> degrees of freedom is equivalent to the number of
+non-redundant free parameters, <em>p</em>, in the model (and the <em>residual</em>
+degrees of freedom are given by <em>n-p</em>). We will revisit the edf later in
+this workshop.</p>
+<pre><code> print(basic_summary$p.table)
+             Estimate Std. Error   t value     Pr(&gt;|t|)
+ (Intercept) 8.550030  0.3655849 23.387258 1.717989e-76
+ x02         2.418682  0.5165515  4.682364 3.908046e-06
+ x03         4.486193  0.5156501  8.700072 9.124666e-17
+ x04         6.528518  0.5204234 12.544629 1.322632e-30
+ &gt; print(basic_summary$s.table)
+            edf   Ref.df        F      p-value
+ s(x1) 1.923913 2.406719 42.84268 1.076396e-19</code></pre>
+<p>In our basic model the edf of smooth function <code>s(x1)</code> is ~2, which
+suggests a non-linear curve. The plot of the model nicely illustrates
+the shape of this non-linear smoother:</p>
+<p><img src="images/graphic2.2.jpg" width="425" /></p>
+<p>We can add a second term, <code>x2</code>, but specify a linear relationship with y
+(that is, both linear and non-linear terms can be included in GAM). The
+new linear term, <code>x2</code>, will appear in the <code>p.table</code>, for which a
+regression coefficient estimate is indicated. In the <code>s.table</code>, we will
+once again find the non-linear smoother, s(x1), and its wiggleness
+parameter.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="multiple-smooth-terms.html#cb15-1"></a>two_term_model &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>x0 <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x1) <span class="op">+</span><span class="st"> </span>x2, <span class="dt">data =</span> gam_data)</span>
+<span id="cb15-2"><a href="multiple-smooth-terms.html#cb15-2"></a>two_term_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(two_term_model)</span>
+<span id="cb15-3"><a href="multiple-smooth-terms.html#cb15-3"></a><span class="kw">print</span>(two_term_summary<span class="op">$</span>p.table)</span>
+<span id="cb15-4"><a href="multiple-smooth-terms.html#cb15-4"></a><span class="kw">print</span>(two_term_summary<span class="op">$</span>s.table)</span></code></pre></div>
+<p>If we wish to explore whether the relationship between <code>y</code> and <code>x2</code> is
+non-linear, we can model <code>x2</code> as non-linear smooth term instead. As
+before, we can use an ANOVA to test if the smoothed term is necessary.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="multiple-smooth-terms.html#cb16-1"></a>two_smooth_model &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>x0 <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x1) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x2), <span class="dt">data =</span> gam_data)</span>
+<span id="cb16-2"><a href="multiple-smooth-terms.html#cb16-2"></a>two_smooth_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(two_smooth_model)</span>
+<span id="cb16-3"><a href="multiple-smooth-terms.html#cb16-3"></a><span class="kw">print</span>(two_smooth_summary<span class="op">$</span>p.table)</span>
+<span id="cb16-4"><a href="multiple-smooth-terms.html#cb16-4"></a><span class="kw">print</span>(two_smooth_summary<span class="op">$</span>s.table)</span>
+<span id="cb16-5"><a href="multiple-smooth-terms.html#cb16-5"></a><span class="kw">plot</span>(two_smooth_model, <span class="dt">page =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p><img src="images/graphic2.4.jpg" width="600" /></p>
+<p>When more than one covariable is included in the model, as above, the
+fitted response can be partitioned into the contributions of each
+variable as shown. Here we can appreciate the varying magnitude of the
+effect of each variable; where the y-axis represents the contribution
+(effect) of each covariate to the fitted response, centered on 0. If the
+confidence intervals had overlapped with zero for certain values of <em>x</em>
+(or throughout the entire range), this would imply a non-significant
+effect at those <em>x</em> values (or of <em>x</em> in entirety). When the contribution
+for an individual covariate changes along the range of x-axis, the
+change in that covariate is associated with a change in the response.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="multiple-smooth-terms.html#cb17-1"></a><span class="kw">anova</span>(basic_model, two_term_model, two_smooth_model, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<pre><code>  Analysis of Deviance Table
+  Model 1: y ~ x0 + s(x1)
+  Model 2: y ~ x0 + s(x1) + x2
+  Model 3: y ~ x0 + s(x1) + s(x2)
+    Resid. Df Resid. Dev      Df Deviance  Pr(&gt;Chi)    
+  1    394.08     5231.6                               
+  2    393.10     4051.3 0.97695   1180.2 &lt; 2.2e-16 ***
+  3    385.73     1839.5 7.37288   2211.8 &lt; 2.2e-16 ***
+  ---
+  Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</code></pre>
+<p>The best fit model is the model with both smooth terms for <code>x1</code> and <code>x2</code>.</p>
+<div id="challenge-2" class="section level2">
+<h2><span class="header-section-number">5.1</span> CHALLENGE 2</h2>
+<p>Create two new models, with <code>x3</code> as a linear and smoothed term. Use plots,
+coefficient tables and the anova function to determine if <code>x3</code> is an
+important term to include.</p>
+<div id="challenge-2-solution" class="section level3">
+<h3><span class="header-section-number">5.1.1</span> Challenge 2 solution</h3>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="multiple-smooth-terms.html#cb19-1"></a>three_term_model &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>x0 <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x1) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x2) <span class="op">+</span><span class="st"> </span>x3, <span class="dt">data =</span> gam_data)</span>
+<span id="cb19-2"><a href="multiple-smooth-terms.html#cb19-2"></a>three_smooth_model &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>x0 <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x1) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x2) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x3), <span class="dt">data =</span> gam_data)</span>
+<span id="cb19-3"><a href="multiple-smooth-terms.html#cb19-3"></a>three_smooth_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(three_smooth_model)</span>
+<span id="cb19-4"><a href="multiple-smooth-terms.html#cb19-4"></a></span>
+<span id="cb19-5"><a href="multiple-smooth-terms.html#cb19-5"></a><span class="kw">print</span>(three_smooth_summary<span class="op">$</span>p.table)</span>
+<span id="cb19-6"><a href="multiple-smooth-terms.html#cb19-6"></a><span class="kw">print</span>(three_smooth_summary<span class="op">$</span>s.table)</span>
+<span id="cb19-7"><a href="multiple-smooth-terms.html#cb19-7"></a><span class="kw">plot</span>(three_smooth_model, <span class="dt">page =</span> <span class="dv">1</span>)</span>
+<span id="cb19-8"><a href="multiple-smooth-terms.html#cb19-8"></a><span class="co"># edf = 1 therefore term is linear.</span></span>
+<span id="cb19-9"><a href="multiple-smooth-terms.html#cb19-9"></a></span>
+<span id="cb19-10"><a href="multiple-smooth-terms.html#cb19-10"></a><span class="kw">anova</span>(two_smooth_model, three_term_model, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span>
+<span id="cb19-11"><a href="multiple-smooth-terms.html#cb19-11"></a><span class="co"># term x3 is not significant</span></span></code></pre></div>
 
 </div>
 </div>
-
-
-
-<div class="footnotes">
-<hr />
-<ol start="1">
-<li id="fn1"><p>The QCBS R Workshop Series is part of the <a href="https://www.qcbs.ca">Québec Centre for Biodiversity Science</a>, and is maintained by the series coordinators and graduent student, postdoctoral, and research professional members. <strong>The contributors for this workshop can be accessed <a href="link">here</a></strong>.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
-</ol>
 </div>
 <hr>
 <center> 
@@ -291,8 +329,8 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-
-<a href="summary-and-learning-objectives.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="introduction-to-gams.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="interactions.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

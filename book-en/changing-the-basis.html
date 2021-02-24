@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Workshop 8: Generalized additive models in R</title>
+  <title>Chapter 7 Changing the Basis | Workshop 8: Generalized additive models in R</title>
   <meta name="description" content="Generalized additive models in R" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Workshop 8: Generalized additive models in R" />
+  <meta property="og:title" content="Chapter 7 Changing the Basis | Workshop 8: Generalized additive models in R" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://github.com/qcbsRworkshops/" />
   <meta property="og:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="qcbsRworkshops/workshop08" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Workshop 8: Generalized additive models in R" />
+  <meta name="twitter:title" content="Chapter 7 Changing the Basis | Workshop 8: Generalized additive models in R" />
   
   <meta name="twitter:description" content="Generalized additive models in R" />
   <meta name="twitter:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />
-
-<link rel="next" href="summary-and-learning-objectives.html"/>
+<link rel="prev" href="interactions.html"/>
+<link rel="next" href="other-distributions.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -212,73 +212,79 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <div class="hero-image-container"> 
   <img class= "hero-image" src="assets/images/jean-philippe-delberghe-75xPHEQBmvA-unsplash_hero_image.jpg">
 </div>
-<div id="header">
-<h1 class="title">Workshop 8: Generalized additive models in <code>R</code></h1>
-<h2 class="subtitle"><em>QCBS R Workshop Series</em></h2>
-<p class="author"><em>Developed and maintained by the contributors of the QCBS R Workshop Series<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></em></p>
-<p class="date"><em>2021-02-24 04:29:44</em></p>
-</div>
-<div id="preface" class="section level1 unnumbered">
-<h1>Preface</h1>
-<p>The <strong>QCBS R Workshop Series</strong> is a series of 10 workshops that walks participants through the steps required to use R for a wide array of statistical analyses relevant to research in biology and ecology. These open-access workshops were created by members of the QCBS both for members of the QCBS and the larger community.</p>
-<p>The content of this workshop has been peer-reviewed by several QCBS members. If you would like to suggest modifications, please contact the current series coordinators, listed on the main Github page.</p>
-<div id="code-of-conduct" class="section level2">
-<h2><span class="header-section-number">0.1</span> Code of conduct</h2>
-<p>The QCBS R Workshop Series and the QCBS R Symposium are venues dedicated to providing a welcoming and supportive environment for all people, regardless of background or identity.</p>
-<p>Participants, presenters and organizers of the workshop series and other related activities accept this Code of Conduct when being present at any workshop-related activities.</p>
-<p>We do not tolerate behaviour that is disrespectful or that excludes, intimidates, or causes discomfort to others.</p>
-<p>We do not tolerate discrimination or harassment based on characteristics that include, but are not limited to, gender identity and expression, sexual orientation, disability, physical appearance, body size, citizenship, nationality, ethnic or social origin, pregnancy, familial status, genetic information, religion or belief (or lack thereof), membership of a national minority, property, age, education, socio-economic status, technical choices, and experience level.</p>
-<p>It applies to all spaces managed by or affiliated with the workshop, including, but not limited to, workshops, email lists, and online forums such as GitHub, Slack and Twitter.</p>
-<div id="expected-behaviour" class="section level3">
-<h3><span class="header-section-number">0.1.1</span> Expected behaviour</h3>
-<p>All participants are expected to show respect and courtesy to others. All interactions should be professional regardless of platform: either online or in-person. In order to foster a positive and professional learning environment we encourage the following kinds of behaviours in all workshop events and platforms:</p>
+<div id="changing-the-basis" class="section level1">
+<h1><span class="header-section-number">Chapter 7</span> Changing the Basis</h1>
+<p>We won’t go too much further into this in this workshop, but you should
+know you can expand on the basic model we’ve looked at today with:</p>
 <ul>
-<li>Use welcoming and inclusive language</li>
-<li>Be respectful of different viewpoints and experiences</li>
-<li>Gracefully accept constructive criticism</li>
-<li>Focus on what is best for the community</li>
-<li>Show courtesy and respect towards other community members</li>
+<li>more complicated smooths, by changing the basis,</li>
+<li>other distributions: anything you can do with a GLM using the family
+argument,</li>
+<li>mixed effect models, using gamm or the gamm4 package.</li>
 </ul>
-</div>
-<div id="unacceptable-behaviour" class="section level3">
-<h3><span class="header-section-number">0.1.2</span> Unacceptable behaviour</h3>
-<p>Examples of unacceptable behaviour by participants at any workshop event/platform include:</p>
-<ul>
-<li>written or verbal comments which have the effect of excluding people on the - basis of membership of any specific group;</li>
-<li>causing someone to fear for their safety, such as through stalking or intimidation;</li>
-<li>violent threats or language directed against another person;</li>
-<li>the display of sexual or violent images;</li>
-<li>unwelcome sexual attention;</li>
-<li>nonconsensual or unwelcome physical contact;</li>
-<li>insults or put-downs;</li>
-<li>sexist, racist, homophobic, transphobic, ableist, or exclusionary jokes;</li>
-<li>incitement to violence, suicide, or self-harm;</li>
-<li>continuing to initiate interaction (including photography or recording) with - someone after being asked to stop;</li>
-<li>publication of private communication without consent.</li>
-</ul>
-</div>
-</div>
-<div id="contributors" class="section level2">
-<h2><span class="header-section-number">0.2</span> Contributors</h2>
-<p>Originally developed by:</p>
-<p>Contributed with changes to the presentation:</p>
-<p>Contributed with changes to the written material:</p>
-<p>Contributed by reporting issues and suggesting modifications:</p>
-</div>
-<div id="contributing" class="section level2">
-<h2><span class="header-section-number">0.3</span> Contributing</h2>
-<p>Under construction.</p>
+<p>We will first have a look at changing the basis, followed by a quick
+intro to using other distribution and GAMMs (Generalized Additive Mixed
+Models). Let’s look at one place where knowing how to change the basis
+can help: cyclical data. That is, data where you want the predictor to
+match at the ends. Imagine you have a time series of climate data,
+broken down by monthly measurement, and you want to see if there’s a
+time-trend in yearly temperature. We’ll use the Nottingham temperature
+time series for this:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="changing-the-basis.html#cb22-1"></a><span class="kw">data</span>(nottem)</span>
+<span id="cb22-2"><a href="changing-the-basis.html#cb22-2"></a>n_years &lt;-<span class="st"> </span><span class="kw">length</span>(nottem)<span class="op">/</span><span class="dv">12</span></span>
+<span id="cb22-3"><a href="changing-the-basis.html#cb22-3"></a>nottem_month &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">12</span>, <span class="dt">times =</span> n_years)</span>
+<span id="cb22-4"><a href="changing-the-basis.html#cb22-4"></a>nottem_year &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1920</span><span class="op">:</span>(<span class="dv">1920</span> <span class="op">+</span><span class="st"> </span>n_years <span class="op">-</span><span class="st"> </span><span class="dv">1</span>), <span class="dt">each =</span> <span class="dv">12</span>)</span>
+<span id="cb22-5"><a href="changing-the-basis.html#cb22-5"></a>nottem_plot &lt;-<span class="st"> </span><span class="kw">qplot</span>(nottem_month, nottem, <span class="dt">colour =</span> <span class="kw">factor</span>(nottem_year), </span>
+<span id="cb22-6"><a href="changing-the-basis.html#cb22-6"></a>    <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme_bw</span>()</span>
+<span id="cb22-7"><a href="changing-the-basis.html#cb22-7"></a><span class="kw">print</span>(nottem_plot)</span></code></pre></div>
+<p>Using the nottem data, we have created three new vectors; <code>n_years</code>
+corresponds to the number of years of data (20 years), <code>nottem_month</code> is
+a categorical variable coding for the 12 months of the year, for every
+year sampled (sequence 1 to 12 repeated 20 times), and <code>nottem_year</code> is
+a variable where the year corresponding to each month is provided.</p>
+<p>Monthly data from the years 1920 through to 1940:</p>
+<p><img src="images/graphic4.1.jpg" width="500" /></p>
+<p>To model this, we need to use what’s called a cyclical cubic spline, or
+<code>"cc"</code>, to model month effects as well as a term for year.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="changing-the-basis.html#cb23-1"></a>year_gam &lt;-<span class="st"> </span><span class="kw">gam</span>(nottem <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(nottem_year) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(nottem_month, <span class="dt">bs =</span> <span class="st">&quot;cc&quot;</span>))</span>
+<span id="cb23-2"><a href="changing-the-basis.html#cb23-2"></a><span class="kw">summary</span>(year_gam)<span class="op">$</span>s.table</span>
+<span id="cb23-3"><a href="changing-the-basis.html#cb23-3"></a><span class="kw">plot</span>(year_gam, <span class="dt">page =</span> <span class="dv">1</span>, <span class="dt">scale =</span> <span class="dv">0</span>)</span></code></pre></div>
+<p><img src="images/graphic4.2.jpg" width="700" /></p>
+<p>There is about 1-1.5 degree rise in temperature over the period, but
+within a given year there is about 20 degrees variation in temperature,
+on average. The actual data vary around these values and that is the
+unexplained variance. Here we can see one of the very interesting
+bonuses of using GAMs. We can either plot the response surface (fitted
+values) or the terms (contribution of each covariate) as shown here. You
+can imagine these as plots of the changing regression coefficients, and
+how their contribution (or effect size) varies over time. In the first
+plot, we see that positive contributions of temperature occurred
+post-1930.</p>
+<p>Over longer time scales, for example using paleolimnological data,
+others (<a href="http://www.aslo.info/lo/toc/vol_54/issue_6_part_2/2529.pdf">Simpson &amp; Anderson 2009; Fig.
+3c</a>) have
+used GAMs to plot the contribution (effect) of temperature on algal
+assemblages in lakes, to illustrate how significant contributions only
+occurred during two extreme cold events (that is, the contribution is
+significant when the confidence intervals do not overlap zero, at around
+300 and 100 B.C.). This allowed the authors to not only determine how
+much variance was explained by temperature over the last few centuries,
+but also pinpoint when in time this effect was significant. If of
+interest to you, the code to plot either the response surface
+(<code>type = "response"</code>) or the terms (<code>type = "terms"</code>) is given below.
+When terms is selected, you obtain the same figure as above.</p>
+<p>Contribution plot:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="changing-the-basis.html#cb24-1"></a>pred &lt;-<span class="st"> </span><span class="kw">predict</span>(year_gam, <span class="dt">type =</span> <span class="st">&quot;terms&quot;</span>, <span class="dt">se =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb24-2"><a href="changing-the-basis.html#cb24-2"></a>I &lt;-<span class="st"> </span><span class="kw">order</span>(nottem_year)</span>
+<span id="cb24-3"><a href="changing-the-basis.html#cb24-3"></a>plusCI &lt;-<span class="st"> </span><span class="kw">I</span>(pred<span class="op">$</span>fit[, <span class="dv">1</span>] <span class="op">+</span><span class="st"> </span><span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>pred<span class="op">$</span>se[, <span class="dv">1</span>])</span>
+<span id="cb24-4"><a href="changing-the-basis.html#cb24-4"></a>minusCI &lt;-<span class="st"> </span><span class="kw">I</span>(pred<span class="op">$</span>fit[, <span class="dv">1</span>] <span class="op">-</span><span class="st"> </span><span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>pred<span class="op">$</span>se[, <span class="dv">1</span>])</span>
+<span id="cb24-5"><a href="changing-the-basis.html#cb24-5"></a>xx &lt;-<span class="st"> </span><span class="kw">c</span>(nottem_year[I], <span class="kw">rev</span>(nottem_year[I]))</span>
+<span id="cb24-6"><a href="changing-the-basis.html#cb24-6"></a>yy &lt;-<span class="st"> </span><span class="kw">c</span>(plusCI[I], <span class="kw">rev</span>(minusCI[I]))</span>
+<span id="cb24-7"><a href="changing-the-basis.html#cb24-7"></a><span class="kw">plot</span>(xx, yy, <span class="dt">type =</span> <span class="st">&quot;n&quot;</span>, <span class="dt">cex.axis =</span> <span class="fl">1.2</span>)</span>
+<span id="cb24-8"><a href="changing-the-basis.html#cb24-8"></a><span class="kw">polygon</span>(xx, yy, <span class="dt">col =</span> <span class="st">&quot;light grey&quot;</span>, <span class="dt">border =</span> <span class="st">&quot;light grey&quot;</span>)</span>
+<span id="cb24-9"><a href="changing-the-basis.html#cb24-9"></a><span class="kw">lines</span>(nottem_year[I], pred<span class="op">$</span>fit[, <span class="dv">1</span>][I], <span class="dt">lty =</span> <span class="dv">1</span>)</span>
+<span id="cb24-10"><a href="changing-the-basis.html#cb24-10"></a><span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">0</span>)</span></code></pre></div>
 
-</div>
-</div>
-
-
-
-<div class="footnotes">
-<hr />
-<ol start="1">
-<li id="fn1"><p>The QCBS R Workshop Series is part of the <a href="https://www.qcbs.ca">Québec Centre for Biodiversity Science</a>, and is maintained by the series coordinators and graduent student, postdoctoral, and research professional members. <strong>The contributors for this workshop can be accessed <a href="link">here</a></strong>.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
-</ol>
 </div>
 <hr>
 <center> 
@@ -291,8 +297,8 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-
-<a href="summary-and-learning-objectives.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="interactions.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="other-distributions.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

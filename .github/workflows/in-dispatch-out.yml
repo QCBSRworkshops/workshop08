@@ -23,6 +23,7 @@ jobs:
            token: ${{ secrets.ACCESS_TOKEN }}
        
        - name: Download files from the presentation template repository
+         if: github.event.action == 'ping_presentation'
          run: |
            curl --header 'Authorization: token ${{ secrets.ACCESS_TOKEN }}' \
                 --header 'Accept: application/vnd.github.v3.raw' \
@@ -63,6 +64,70 @@ jobs:
                 --header 'Accept: application/vnd.github.v3.raw' \
                 --location https://api.github.com/repos/QCBSRworkshops/templateWorkshops/contents/presentation-template/qcbsR-macros.js \
                 --output pres-fr/qcbsR-macros.js
+
+       - name: Download files from the book template repository
+         if: github.event.action == 'ping_book'
+         run: |
+           curl --header 'Authorization: token ${{ secrets.ACCESS_TOKEN }}' \
+                --header 'Accept: application/vnd.github.v3.raw' \
+                --location https://api.github.com/repos/QCBSRworkshops/templateWorkshops/contents/book-template/assets/qcbs-style.css \
+                --output book-en/assets/qcbs-style.css
+                 
+           curl --header 'Authorization: token ${{ secrets.ACCESS_TOKEN }}' \
+                --header 'Accept: application/vnd.github.v3.raw' \
+                --location https://api.github.com/repos/QCBSRworkshops/templateWorkshops/contents/book-template/assets/qcbs-hideOutput.js \
+                --output book-en/assets/qcbs-hideOutput.js
+                 
+           curl --header 'Authorization: token ${{ secrets.ACCESS_TOKEN }}' \
+                --header 'Accept: application/vnd.github.v3.raw' \
+                --location https://api.github.com/repos/QCBSRworkshops/templateWorkshops/contents/book-template/assets/qcbs-header.html \
+                --output book-en/assets/qcbs-header.html
+                 
+           curl --header 'Authorization: token ${{ secrets.ACCESS_TOKEN }}' \
+                --header 'Accept: application/vnd.github.v3.raw' \
+                --location https://api.github.com/repos/QCBSRworkshops/templateWorkshops/contents/book-template/assets/qcbs-footer.html \
+                --output book-en/assets/qcbs-footer.html
+                
+           curl --header 'Authorization: token ${{ secrets.ACCESS_TOKEN }}' \
+                --header 'Accept: application/vnd.github.v3.raw' \
+                --location https://api.github.com/repos/QCBSRworkshops/templateWorkshops/contents/book-template/assets/qcbs-big-image.html \
+                --output book-en/assets/qcbs-big-image.html
+                
+           curl --header 'Authorization: token ${{ secrets.ACCESS_TOKEN }}' \
+                --header 'Accept: application/vnd.github.v3.raw' \
+                --location https://api.github.com/repos/QCBSRworkshops/templateWorkshops/contents/book-template/_output.yml \
+                --output book-en/_output.yml
+                
+           curl --header 'Authorization: token ${{ secrets.ACCESS_TOKEN }}' \
+                --header 'Accept: application/vnd.github.v3.raw' \
+                --location https://api.github.com/repos/QCBSRworkshops/templateWorkshops/contents/book-template/assets/qcbs-style.css \
+                --output book-fr/assets/qcbs-style.css
+                 
+           curl --header 'Authorization: token ${{ secrets.ACCESS_TOKEN }}' \
+                --header 'Accept: application/vnd.github.v3.raw' \
+                --location https://api.github.com/repos/QCBSRworkshops/templateWorkshops/contents/book-template/assets/qcbs-hideOutput.js \
+                --output book-fr/assets/qcbs-hideOutput.js
+                 
+           curl --header 'Authorization: token ${{ secrets.ACCESS_TOKEN }}' \
+                --header 'Accept: application/vnd.github.v3.raw' \
+                --location https://api.github.com/repos/QCBSRworkshops/templateWorkshops/contents/book-template/assets/qcbs-header.html \
+                --output book-fr/assets/qcbs-header.html
+                 
+           curl --header 'Authorization: token ${{ secrets.ACCESS_TOKEN }}' \
+                --header 'Accept: application/vnd.github.v3.raw' \
+                --location https://api.github.com/repos/QCBSRworkshops/templateWorkshops/contents/book-template/assets/qcbs-footer.html \
+                --output book-fr/assets/qcbs-footer.html
+                
+           curl --header 'Authorization: token ${{ secrets.ACCESS_TOKEN }}' \
+                --header 'Accept: application/vnd.github.v3.raw' \
+                --location https://api.github.com/repos/QCBSRworkshops/templateWorkshops/contents/book-template/assets/qcbs-big-image.html \
+                --output book-fr/assets/qcbs-big-image.html
+                
+           curl --header 'Authorization: token ${{ secrets.ACCESS_TOKEN }}' \
+                --header 'Accept: application/vnd.github.v3.raw' \
+                --location https://api.github.com/repos/QCBSRworkshops/templateWorkshops/contents/book-template/_output.yml \
+                --output book-fr/_output.yml
+
 
        - name: List directories # May be removed soon
          run: ls

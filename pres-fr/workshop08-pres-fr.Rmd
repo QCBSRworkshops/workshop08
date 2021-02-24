@@ -1,5 +1,5 @@
 ---
-title: "Workshop 8: Modèles additifs généralisés"
+title: "Atelier 8: Modèles additifs généralisés"
 subtitle: "Série d'ateliers R"
 author: "Centre de la Science de la Biodiversité du Québec"
 output:
@@ -160,40 +160,36 @@ class: inverse, center, middle
 Examinons un exemple! Nous allons utilsé le jeu de données `ISIT`.
 
 ```{r, eval = FALSE, echo = TRUE}
-isit <- read.csv("data/ISIT.csv",sep=';')
+isit <- read.csv("data/ISIT.csv", sep = ';')
 head(isit)
 ```
 
 Ce jeu de donnée comporte des mesures de bioluminescence en relation à la profondeur (*depth*), la station de rechercher et la saison (*Season*).
 
-```{r, eval = TRUE, echo = FALSE}
-isit <- read.csv("data/ISIT.csv",sep=';')
+```{r, eval = FALSE, echo = FALSE}
+isit <- read.csv("data/ISIT.csv", sep = ';')
 head(isit)
 ```
 
----
-# GAM
 Prenons que les données de la deuxième saison pour l'instant
 ```{r, echo = FALSE}
+isit <- read.csv("data/ISIT.csv", sep = ';')
 library(ggplot2)
+library(mgcv)
 ```
 
 ```{r, echo = TRUE}
-isit2 <- subset(isit,Season==2)
-data_plot<-ggplot(isit2, aes(y=Sources, x=SampleDepth))+geom_point()+theme_bw()
-data_plot
+isit2 <- subset(isit, Season==2)
+
 ```
 ---
 # GAM
 
 Si nous modélisions la mesure de bioluminescence selon la profondeur par une régression linéaire, les résultats ne respecteraient pas les suppositions énumérées ci-dessus.
-```{r, eval=TRUE,echo = FALSE}
-library(mgcv)
-linear_model <- gam(Sources ~ SampleDepth,data=isit2)
-model_summary <- summary(linear_model)
-data_plot <- data_plot +
-             geom_line(colour = "red", size = 1.2, 
-                       aes(y = fitted(linear_model)))
+```{r, eval=TRUE,echo = TRUE,fig.height=4.5}
+linear_model <- gam(Sources ~ SampleDepth, data = isit2)
+data_plot <- ggplot(isit2, aes(y = Sources, x = SampleDepth)) + geom_point() +
+             geom_line(colour = "red", size = 1.2, aes(y = fitted(linear_model))) + theme_bw()
 data_plot
 ```
 ---
@@ -263,26 +259,20 @@ Essayons de modéliser les données à l'aide d'une fonction de lissage avec la 
 
 
 ```{r, eval = FALSE,echo=TRUE}
-library(mgcv)
-gam_model <- gam(Sources ~ s(SampleDepth),data=isit2)
-summary(gam_model)
-
-data_plot <- data_plot +
-     geom_line(colour = "blue", size = 1.2, aes(y = fitted(gam_model)))
-data_plot
+gam_model <- gam(Sources ~ s(SampleDepth), data = isit2)
 ```
----
-# GAM
+--
+
 
 ```{r, eval=TRUE, echo = FALSE}
-gam_model <- gam(Sources ~ s(SampleDepth),data=isit2)
+gam_model <- gam(Sources ~ s(SampleDepth), data = isit2)
 summary(gam_model)
 ```
 
 ---
-# GAM
+#GAM
 
-```{r, eval=TRUE,echo = FALSE}
+```{r, eval=TRUE,echo = FALSE,fig.height=5.5}
 data_plot <- data_plot +
      geom_line(colour = "blue", size = 1.2, aes(y = fitted(gam_model)))
 data_plot
@@ -343,8 +333,8 @@ plot(gam_model)
 Nous pouvons utiliser les fonctions `gam()` et `AIC()` pour tester formellement si une hypothèse de linéarité est justifiée. Nous devons simplement le configurer de sorte que notre modèle non-linéaire soit emboîté dans notre modèle linéaire.
 
 ```{r}
-linear_model <- gam(Sources ~ SampleDepth,data=isit2) # fit a regular linear model using gam()
-nested_gam_model <- gam(Sources ~ s(SampleDepth) + SampleDepth,data=isit2)
+linear_model <- gam(Sources ~ SampleDepth, data = isit2) # fit a regular linear model using gam()
+nested_gam_model <- gam(Sources ~ s(SampleDepth) + SampleDepth ,data = isit2)
 AIC(linear_model, nested_gam_model)
 ```
 
@@ -374,7 +364,7 @@ nested_gam_model <- gam(y_obs ~ s(x) + x)
 anova(linear_model, nested_gam_model, test = "Chisq")
 ```
 
-.comment[Notez que le modèle `y_obs~s(x)` donne exactement les même résultats que `y_obs~s(x)+x`. Nous utilisons $s(x)+x$ pour illustrer l'imbrication du modèle, mais le $+x$ peut être omis.]
+.comment[Notez que le modèle `y_obs ~ s(x)` donne exactement les même résultats que `y_obs ~ s(x) + x`. Nous utilisons $s(x) + x$ pour illustrer l'imbrication du modèle, mais le $+ x$ peut être omis.]
 
 ---
 # Défi 1 ![:cube]()
@@ -382,7 +372,7 @@ anova(linear_model, nested_gam_model, test = "Chisq")
 Nous allons maintenant essayer cela avec les données du de la saison 1.
 
 ```{r}
-isit1 <- subset(isit,Season==1)
+isit1 <- subset(isit, Season==1)
 ```
 
 
@@ -396,8 +386,8 @@ isit1 <- subset(isit,Season==1)
 # Défi 1 - Solution ![:cube]()
 
 ```{r,eval=TRUE}
-linear_model_s1 <- gam(Sources ~ SampleDepth,data=isit1)
-gam_model_s1 <- gam(Sources ~ s(SampleDepth),data=isit1)
+linear_model_s1 <- gam(Sources ~ SampleDepth, data = isit1)
+gam_model_s1 <- gam(Sources ~ s(SampleDepth), data = isit1)
 
 ```
 
@@ -405,8 +395,8 @@ gam_model_s1 <- gam(Sources ~ s(SampleDepth),data=isit1)
 # Défi 1 - Solution ![:cube]()
 
 ```{r,echo=F}
-ggplot(isit1,aes(x=SampleDepth, y=Sources)) +
-         geom_point()+
+ggplot(isit1, aes(x = SampleDepth, y = Sources)) +
+         geom_point() +
          geom_line(colour = "red", size = 1.2,
                    aes(y = fitted(linear_model_s1))) +
          geom_line(colour = "blue", size = 1.2,
@@ -417,8 +407,8 @@ ggplot(isit1,aes(x=SampleDepth, y=Sources)) +
 # Défi 1 - Solution ![:cube]()
 
 ```{r}
-linear_model_s1 <- gam(Sources ~ SampleDepth,data=isit1)
-nested_gam_model_s1 <- gam(Sources ~ s(SampleDepth) + SampleDepth,data=isit1)
+linear_model_s1 <- gam(Sources ~ SampleDepth, data = isit1)
+nested_gam_model_s1 <- gam(Sources ~ s(SampleDepth) + SampleDepth,data = isit1)
 
 AIC(linear_model_s1, nested_gam_model_s1)
 ```
@@ -588,7 +578,7 @@ Nous reviendrons plus tard sur le concept d'edf.
 # GAM à plusieurs variables
 
 ```{r,fig.width=12}
-plot(basic_model,all.terms = TRUE,page=1)
+plot(basic_model, all.terms = TRUE,page = 1)
 ```
 ---
 # GAM à plusieurs variables
@@ -610,7 +600,7 @@ two_term_summary$s.table
 Nous pouvons ajouter un second terme, `RelativeDepth`, mais spécifier une relation linéaire avec `Sources`
 
 ```{r,fig.width=10,fig.height=6.5}
-plot(two_term_model,page=1,all.terms = T)
+plot(two_term_model, page=1, all.terms = T)
 ```
 ---
 # GAM à plusieurs variables
@@ -632,7 +622,7 @@ two_smooth_summary$s.table
 Nous pouvons aussi vérifier que la relation entre `Sources` et `RelativeDepth` est non-linéaire.
 
 ```{r, fig.width=10,fig.height=6.5}
-plot(two_smooth_model, page = 1,all.terms = T)
+plot(two_smooth_model, page = 1, all.terms = TRUE)
 ```
 
 ---
@@ -668,7 +658,7 @@ exclude:true
 Nous pouvons ajouter un second terme, `x2`, mais spécifier une relation linéaire avec `y`
 
 ```{r, fig.width=5.5, fig.height=5.5,eval=FALSE}
-plot(two_term_model,all.terms = T)
+plot(two_term_model, all.terms = TRUE)
 ```
 
 
@@ -693,7 +683,7 @@ exclude:true
 Nous pouvons aussi explorer si la relation entre `y` et `x2` est non-linéaire
 
 ```{r, fig.width=10,eval=FALSE}
-plot(two_smooth_model, page = 1,all.terms = T)
+plot(two_smooth_model, page = 1, all.terms = TRUE)
 ```
 
 ---
@@ -851,14 +841,13 @@ AIC(two_smooth_model, factor_interact)
 Finalement, nous regardons les interactions entre 2 termes non linéaires, `SampleDepth` et `RelativeDepth`.
 
 ```{r}
-smooth_interact <- gam(Sources~Season + s(SampleDepth, RelativeDepth), data = isit)
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), data = isit)
 summary(smooth_interact)$s.table
 ```
 
----
-# GAM avec des termes d'interaction
+--
 
-```{r, fig.width=7, fig.height=7}
+```{r, fig.width=7, fig.height=5.5,echo=FALSE}
 plot(smooth_interact, page = 1, scheme = 3)
 ```
 
@@ -1088,13 +1077,13 @@ Que nous disent ces graphes sur les succès et échecs?
 ```{r, echo = FALSE, fig.height = 4.5, fig.width = 9}
 library(itsadug)
 par(mfrow=c(1,2), mar = c(4,4,0,0))
-plot(prop_model, select=1, scale=0, shade=TRUE)
+plot(prop_model, select = 1, scale = 0, shade=TRUE)
 abline(h=0)
 
-out <- plot_smooth(prop_model, view="x1",main="", print.summary=F)
-diff <- find_difference(out$fv$fit, out$fv$CI, xVals=out$fv$x1)
-addInterval(0, lowVals = diff$start, highVals = diff$end, col='red', lwd=2)
-abline(v=c(diff$start, diff$end), lty=3, col='red')
+out <- plot_smooth(prop_model, view = "x1",main = "", print.summary = F)
+diff <- find_difference(out$fv$fit, out$fv$CI, xVals = out$fv$x1)
+addInterval(0, lowVals = diff$start, highVals = diff$end, col = 'red', lwd = 2)
+abline(v=c(diff$start, diff$end), lty = 3, col = 'red')
 text(mean(c(diff$start, diff$end)), 2.1, "succès > échecs", col = 'red', font = 2)
 ```
 
@@ -1195,9 +1184,9 @@ Comme nous l'avons vu dans la section précédente, `bs` spécifie la fonction d
 
 **3 types d'effets aléatoires différents** sont possibles lors de l'utilisation des GAMMs (où `fac` ![:faic](arrow-right) variable qualitative utilisée pour l'effet aléatoire; `x0` ![:faic](arrow-right) effet quantitatif fixe) :
 
-- **interceptes aléatoires** ajustent la hauteur des termes du modèle avec une valeur constante de pente : `s(fac, bs="re")`
-- **pentes aléatoires** ajustent la pente d'une variable explicative numérique : `s(fac, x0, bs="re")`
-- **surfaces lisses aléatoires** ajustent la tendance d'une prédiction numérique de façon non linéaire: `s(x0, fac, bs="fs", m=1)`, où l'argument $m = 1$ met une plus grande pénalité au lissage qui s'éloigne de 0, ce qui entraîne un retrait vers la moyenne.
+- **interceptes aléatoires** ajustent la hauteur des termes du modèle avec une valeur constante de pente : `s(fac, bs = "re")`
+- **pentes aléatoires** ajustent la pente d'une variable explicative numérique : `s(fac, x0, bs = "re")`
+- **surfaces lisses aléatoires** ajustent la tendance d'une prédiction numérique de façon non linéaire: `s(x0, fac, bs = "fs", m = 1)`, où l'argument $m = 1$ met une plus grande pénalité au lissage qui s'éloigne de 0, ce qui entraîne un retrait vers la moyenne.
 
 ---
 # GAMM avec un intercepte aléatoire
@@ -1247,14 +1236,14 @@ plot_smooth(gamm_intercept, view="x0", cond = list(fac = "4"), add = T, col = 't
 <br>
 
 ```{r, echo = F, fig.width=12, fig.height=6}
-par(mfrow = c(1,2), cex = 1.1, mar=c(4,4,1,1))
+par(mfrow = c(1,2), cex = 1.1, mar = c(4,4,1,1))
 plot_smooth(gamm_intercept, view = "x0", rm.ranef = T,
             main = "intercept + s(x1)", print.summary=F)
-plot_smooth(gamm_intercept, view = "x0", cond = list(fac="1"),
+plot_smooth(gamm_intercept, view = "x0", cond = list(fac = "1"),
             main = "... + s(fac)", col = 'orange', ylim = c(8,21), print.summary=F)
-plot_smooth(gamm_intercept, view = "x0", cond = list(fac = "2"), add = T, col = 'red', print.summary=F)
-plot_smooth(gamm_intercept, view="x0", cond = list(fac = "3"), add = T, col = 'purple', print.summary=F)
-plot_smooth(gamm_intercept, view="x0", cond = list(fac = "4"), add = T, col = 'turquoise', print.summary=F)
+plot_smooth(gamm_intercept, view = "x0", cond = list(fac = "2"), add = T, col = 'red', print.summary = F)
+plot_smooth(gamm_intercept, view = "x0", cond = list(fac = "3"), add = T, col = 'purple', print.summary = F)
+plot_smooth(gamm_intercept, view = "x0", cond = list(fac = "4"), add = T, col = 'turquoise', print.summary = F)
 ```
 
 .pull-right[
@@ -1296,17 +1285,17 @@ plot_smooth(gamm_slope, view = "x0", cond = list(fac = "4"), add = T, col = 'tur
 <br>
 
 ```{r, echo = F, fig.width=12, fig.height=6}
-par(mfrow = c(1,2), cex = 1.1, mar=c(4,4,1,1))
+par(mfrow = c(1,2), cex = 1.1, mar = c(4,4,1,1))
 plot_smooth(gamm_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)",
             print.summary=F)
 plot_smooth(gamm_slope, view = "x0", cond = list(fac = "1"),
             main = "... + s(fac)", col = 'orange', ylim = c(7,22), print.summary=F)
 plot_smooth(gamm_slope, view = "x0", cond = list(fac = "2"), add = T, col = 'red',
-            print.summary=F)
+            print.summary = F)
 plot_smooth(gamm_slope, view = "x0", cond = list(fac = "3"), add = T, col = 'purple',
-            print.summary=F)
+            print.summary = F)
 plot_smooth(gamm_slope, view = "x0", cond = list(fac = "4"), add = T, col = 'turquoise',
-            print.summary=F)
+            print.summary = F)
 ```
 
 ---
@@ -1343,16 +1332,16 @@ plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "4"), add = T, col = 
 <br>
 
 ```{r, echo = F, fig.width=12, fig.height=6}
-par(mfrow = c(1,2), cex = 1.1, mar=c(4,4,1,1))
-plot_smooth(gamm_int_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)", print.summary=F)
+par(mfrow = c(1,2), cex = 1.1, mar = c(4,4,1,1))
+plot_smooth(gamm_int_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)", print.summary = F)
 plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "1"), print.summary=F,
             main="... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(7,22))
 plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "2"), add = T,
-            col='red',print.summary=F)
+            col='red',print.summary = F)
 plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "3"), add = T,
-            col = 'purple', print.summary=F)
+            col = 'purple', print.summary = F)
 plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "4"), add = T,
-            col = 'turquoise', print.summary=F)
+            col = 'turquoise', print.summary = F)
 ```
 
 ---
@@ -1407,16 +1396,16 @@ plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "4"), add = T, col = 'tu
 <br>
 
 ```{r, echo = F, fig.width=12, fig.height=6}
-par(mfrow = c(1,2), cex = 1.1, mar=c(4,4,1,1))
+par(mfrow = c(1,2), cex = 1.1, mar = c(4,4,1,1))
 plot_smooth(gamm_smooth, view = "x0", rm.ranef = T, main = "intercept + s(x0)", print.summary=F)
 plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "1"), print.summary=F,
             main="... + s(x0, fac)", col = 'orange', ylim = c(7,22))
 plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "2"), add = T,
-            col='red',print.summary=F)
+            col='red',print.summary = F)
 plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "3"), add = T,
-            col = 'purple', print.summary=F)
+            col = 'purple', print.summary = F)
 plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "4"), add = T,
-            col = 'turquoise', print.summary=F)
+            col = 'turquoise', print.summary = F)
 ```
 
 .comment[Ici, si la pente aléatoire varie selon `x0`, nous aurons des courbes variables pour chaque niveau.]

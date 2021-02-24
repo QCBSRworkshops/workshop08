@@ -381,7 +381,7 @@ isit1 <- subset(isit, Season==1)
 3. Quels sont les degrés de libertés effectifs du terme non-linéaire ?
 
 
-<!-- nous n'Avons pas encore parler du edf -->
+<!-- nous n'Avons pas encore parler du **edf** -->
 ---
 # Défi 1 - Solution ![:cube]()
 
@@ -422,7 +422,7 @@ nested_gam_model_s1
 ```
 
 
-**Réponse** Oui la non-linéarité est justifiée. Les degrés de libertés effectifs (edf) sont >> 1 (on reviendra la dessus bientôt).
+**Réponse** Oui la non-linéarité est justifiée. Les degrés de libertés effectifs (**edf**) sont >> 1 (on reviendra la dessus bientôt).
 
 ---
 exclude:true
@@ -473,7 +473,7 @@ exclude:true
 nested_gam_model_test
 ```
 
-**Réponse** Oui la non-linéarité est justifiée. Les degrés de libertés effectifs (edf) sont >> 1 (on reviendra la dessus bientôt).
+**Réponse** Oui la non-linéarité est justifiée. Les degrés de libertés effectifs (**edf**) sont >> 1 (on reviendra la dessus bientôt).
 
 ---
 class: inverse, center, middle
@@ -557,22 +557,22 @@ Le tableau `s.table` nous donne les résultats du terme non linéaire.
 basic_summary$s.table
 ```
 
-Le paramètre `edf` indiqué dans le tableau `s.table` correspond au **degrés de liberté estimés** – essentiellement, plus la valeur de l'edf est élevée, plus la non-linéarité est forte.
+Le paramètre `edf` indiqué dans le tableau `s.table` correspond au **degrés de liberté estimés** – essentiellement, plus la valeur de l'**edf** est élevée, plus la non-linéarité est forte.
 
 - Une valeur proche de 1 se rapproche d'un terme linéaire.
 
 - Une valeur elevée (8–10 ou plus) signifie que la courbe est fortement non-linéaire.
 
-> Dans notre modèle de base, l'edf du terme non-linéaire `s(SampleDepth)` est ~9, ce qui suggère une courbe fortement non-linéaire.
+> Dans notre modèle de base, l'**edf** du terme non-linéaire `s(SampleDepth)` est ~9, ce qui suggère une courbe fortement non-linéaire.
 
 ---
 # Note sur les degrés de liberté estimés
 
-Les edf dans un GAM sont différents des degrés de liberté dans une régression linéaire.
+Les **edf** dans un GAM sont différents des degrés de liberté dans une régression linéaire.
 
 Dans la régression linéaire, les degrés de libertés du *modèle* sont équivalents au nombre de paramètres libres non redondants, p, dans le modèle (et les degrés de libertés *résiduels* sont égaux à $n-p$).
 
-Nous reviendrons plus tard sur le concept d'edf.
+Nous reviendrons plus tard sur le concept d'**edf**.
 
 ---
 # GAM à plusieurs variables
@@ -905,7 +905,7 @@ Les fonctions lisses ont beaucoup de paramètres qui pourraient changer leur com
 `k` ![:faic](arrow-right) nombre de ‘noeuds’
   - détermine la limite supérieure du nombre de fonctions de base utilisées pour construire la courbe.
   - contraint l'ondulation d'une fonction lisse.
-  - le nombre de fonctions de base est représenté par l'edf.
+  - le nombre de fonctions de base est représenté par l'**edf**.
   - par défaut, la limite supérieure de k pour `s()` est ~9, et de 5 pour chaque dimension de `te()` and `ti()`.
   - k devrait être < au nombre de données uniques.
 
@@ -1053,7 +1053,7 @@ Cela représente comment le ratio de succès vs échecs change sur l'échelle de
 
 --
 
-> Puisque l'edf > 1, la proportion des succès augmente plus rapidement avec $x1$
+> Puisque l'**edf** > 1, la proportion des succès augmente plus rapidement avec $x1$
 
 ```{r, fig.height=3.5, fig.width=4, echo = FALSE}
 par(mar = c(4,4,0,0))
@@ -1532,17 +1532,17 @@ $$M = 1/n \times \sum_{i=1}^n (\hat{f_i} - f_i)^2$$
 
 
 ---
-# Note supplémentaire sur les degrés de liberté effectifs (edf)
+# Note supplémentaire sur les degrés de liberté effectifs (**edf**)
 
 Combien de degrés de liberté a un GAM ?
 
-Au lieu de fournir la sortie de la validation croisée en termes de $\lambda$ (complexité de l'ajustement), la fonction GAM du paquet `mgvc` utilise un terme appelé les degrés de liberté effectifs (edf).
+Au lieu de fournir la sortie de la validation croisée en termes de $\lambda$ (complexité de l'ajustement), la fonction GAM du paquet `mgvc` utilise un terme appelé les degrés de liberté effectifs (**edf**).
 
 
 ---
-# Note supplémentaire sur les degrés de liberté effectifs (edf)
+# Note supplémentaire sur les degrés de liberté effectifs (**edf**)
 
-Parce que le nombre de paramètres libres des splines de lissage (tel que les GAMs) est souvent difficile à définir, les edf sont liés à $\lambda$, où l'effet de la pénalité est de réduire les degrés de libertés.
+Parce que le nombre de paramètres libres des splines de lissage (tel que les GAMs) est souvent difficile à définir, les **edf** sont liés à $\lambda$, où l'effet de la pénalité est de réduire les degrés de libertés.
 
 Par exemple, si le nombre de noeuds est arbitrairement réglé à k = 10, k-1 définit la limite supérieure des degrés de libertés associés à un terme de lissage. Ce nombre diminue alors que la pénalité $\lambda$ augmente jusqu'à ce que le meilleur modèle soit trouvé par validation croisée.
 

@@ -366,7 +366,7 @@ isit1 <- subset(isit, Season==1)
 3. What is the estimated degrees of freedom of the smoothed term?
 
 
-<!-- we didn't talk about edf before... -->
+<!-- we didn't talk about **edf** before... -->
 ---
 # Challenge 1 - Solution ![:cube]()
 
@@ -406,7 +406,7 @@ AIC(linear_model_s1, nested_gam_model_s1)
 nested_gam_model_s1
 ```
 
-**Answer** Yes non-linearity is justified. The estimated degrees of freedom (edf) are >> 1 (we'll get back to this soon).
+**Answer** Yes non-linearity is justified. The estimated degrees of freedom (**edf**) are >> 1 (we'll get back to this soon).
 
 ---
 exclude:true
@@ -426,7 +426,7 @@ y_test_obs <- rnorm(n, y_test_fit, 0.2)
 3. What is the estimated degrees of freedom of the smoothed term?
 
 
-<!-- we didn't talk about edf before... -->
+<!-- we didn't talk about **edf** before... -->
 
 ---
 exclude:true
@@ -457,7 +457,7 @@ exclude:true
 nested_gam_model_test
 ```
 
-**Answer** Yes non-linearity is justified. The estimated degrees of freedom (edf) are >> 1 (we'll get back to this soon).
+**Answer** Yes non-linearity is justified. The estimated degrees of freedom (**edf**) are >> 1 (we'll get back to this soon).
 
 ---
 class: inverse, center, middle
@@ -543,22 +543,22 @@ The `s.table` provides the significance table for each smoothed term.
 basic_summary$s.table
 ```
 
-The `edf` shown in the `s.table` is the estimated degrees of freedom – essentially, a larger edf value implies more complex wiggly splines.
+The `edf` shown in the `s.table` is the estimated degrees of freedom – essentially, a larger **edf** value implies more complex wiggly splines.
 
 - A value close to 1 tend to be close to a linear term.
 
 - A high value (8–10 or higher) means that the spline is highly non-linear.
 
-> In our basic model the edf of smooth function s(SampleDepth) is ~8, which suggests a highly non-linear curve.
+> In our basic model the **edf** of smooth function s(SampleDepth) is ~8, which suggests a highly non-linear curve.
 
 ---
 # Note on estimated degrees of freedom
 
-The edf in GAM is different from the degrees of freedom in a linear regression.
+The **edf** in GAM is different from the degrees of freedom in a linear regression.
 
 In linear regression, the *model* degrees of freedom is equivalent to the number of non-redundant free parameters, p, in the model (and the *residual* degrees of freedom are given by n-p).
 
-We will revisit the edf later in this workshop.
+We will revisit the **edf** later in this workshop.
 
 ---
 # GAM with multiple variables
@@ -952,7 +952,7 @@ The smooth functions have several parameters that can be set to change their beh
 `k` ![:faic](arrow-right) number of ‘knots’
   - determines the upper bound of the number of base functions used to build the curve.
   - constrains the wigglyness of a smooth.
-  - the number of base functions is reflected in the edf value.
+  - the number of base functions is reflected in the **edf** value.
   - the default k for `s()` is ~9, and for `te()` and `ti()` is 5 per dimension.
   - k should be < the number of unique data points.
 
@@ -1100,7 +1100,7 @@ This represents how the log odds of successes vs failures changes over time (x1)
 
 --
 
-> As the edf > 1, the proportion of successes increases faster over time
+> As the **edf** > 1, the proportion of successes increases faster over time
 
 ```{r, fig.height=4.3, fig.width=4.3, echo = FALSE}
 par(mar = c(4,4,0,0))
@@ -1583,15 +1583,15 @@ Since $f$ is unknown, $M$ is estimated using a generalized cross validation tech
 
 
 ---
-# Brief note on estimated degrees of freedom (edf)
+# Brief note on estimated degrees of freedom (**edf**)
 
 How many degrees of freedom does a fitted GAM have?
 
-Instead of providing the output of the cross-validation in terms of $\lambda$ (model complexity), the GAM function in the `mgcv` package uses a term called the estimated degrees of freedom (edf)
+Instead of providing the output of the cross-validation in terms of $\lambda$ (model complexity), the GAM function in the `mgcv` package uses a term called the estimated degrees of freedom (**edf**)
 
-Because the number of free parameters in GAMs is difficult to define, the edf are related to $\lambda$, such that the greater the penalty, the smaller the edf.
+Because the number of free parameters in GAMs is difficult to define, the **edf** are related to $\lambda$, such that the greater the penalty, the smaller the **edf**.
 
-For example, if the arbitrarily large number of knots is k = 10, then k-1 sets the upper limit on the edf associated with a smooth term. This number then decreases as the penalty $\lambda$ increases until the best fit penalty is found by cross-validation.
+For example, if the arbitrarily large number of knots is k = 10, then k-1 sets the upper limit on the **edf** associated with a smooth term. This number then decreases as the penalty $\lambda$ increases until the best fit penalty is found by cross-validation.
 
 ---
 # Ressources

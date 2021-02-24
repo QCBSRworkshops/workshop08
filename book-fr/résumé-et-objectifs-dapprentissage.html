@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapitre 11 References | Atelier 8 : Modèles additifs généralisés en R</title>
+  <title>Chapitre 1 Résumé et Objectifs d’apprentissage | Atelier 8 : Modèles additifs généralisés en R</title>
   <meta name="description" content="Modèles additifs généralisés en R" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapitre 11 References | Atelier 8 : Modèles additifs généralisés en R" />
+  <meta property="og:title" content="Chapitre 1 Résumé et Objectifs d’apprentissage | Atelier 8 : Modèles additifs généralisés en R" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://github.com/qcbsRworkshops/" />
   <meta property="og:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="qcbsRworkshops/workshop08" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapitre 11 References | Atelier 8 : Modèles additifs généralisés en R" />
+  <meta name="twitter:title" content="Chapitre 1 Résumé et Objectifs d’apprentissage | Atelier 8 : Modèles additifs généralisés en R" />
   
   <meta name="twitter:description" content="Modèles additifs généralisés en R" />
   <meta name="twitter:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />
-<link rel="prev" href="les-gams-en-coulisse.html"/>
-
+<link rel="prev" href="index.html"/>
+<link rel="next" href="préparez-vous-pour-cet-atelier.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -212,34 +212,37 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <div class="hero-image-container"> 
   <img class= "hero-image" src="assets/images/jean-philippe-delberghe-75xPHEQBmvA-unsplash_hero_image.jpg">
 </div>
-<div id="references" class="section level1">
-<h1><span class="header-section-number">Chapitre 11</span> References</h1>
-<p>Il existe beaucoup d’information sur les GAMs.</p>
-<p>Simon Wood, l’auteur de la librairie <code>mgcv</code>, a un site très utile avec
-des conférences et des notes introductives sur la façon d’utiliser les
-GAMs :</p>
-<ul>
-<li><a href="http://people.bath.ac.uk/sw283/mgcv/" class="uri">http://people.bath.ac.uk/sw283/mgcv/</a></li>
-</ul>
-<p>Il a aussi écrit un livre, <em>Generalized Additive Models: An Introduction
-with R</em>, que nous avons utilisé comme référence pour cet atelier.</p>
-<p>Le matériel de cet atelier a également été obtenu à partir des blogs et
-des tutoriels suivants :</p>
-<ul>
-<li><a href="http://www.fromthebottomoftheheap.net/blog/" class="uri">http://www.fromthebottomoftheheap.net/blog/</a></li>
-<li><a href="http://www.sfs.uni-tuebingen.de/~jvanrij/Tutorial/GAMM.html" class="uri">http://www.sfs.uni-tuebingen.de/~jvanrij/Tutorial/GAMM.html</a></li>
-<li><a href="http://www.sfs.uni-tuebingen.de/~jvanrij/LSA2015/AnswersLab2.html" class="uri">http://www.sfs.uni-tuebingen.de/~jvanrij/LSA2015/AnswersLab2.html</a></li>
-</ul>
-<p>Enfin, les pages d’aide, disponibles via <code>?gam</code> dans R sont une
-excellente ressource.</p>
-
+<div id="résumé-et-objectifs-dapprentissage" class="section level1">
+<h1><span class="header-section-number">Chapitre 1</span> Résumé et Objectifs d’apprentissage</h1>
+<div id="résumé" class="section level2">
+<h2><span class="header-section-number">1.1</span> Résumé</h2>
+<p>L’objectif de l’atelier d’aujourd’hui sera d’examiner
+ce que nous entendons par un modèle non-linéaire et comment les GAMs
+(modèles additifs généralisés) nous permettent de modéliser les
+relations non-linéaires. Nous examinerons également comment tracer et
+interpréter ces relations non-linéaires, comment ajouter des
+interactions, comment prendre en compte la non-indépendance des données
+(<em>e.g.</em> erreurs autocorrélées) et comment inclure des effets aléatoires
+en se basant sur les ateliers précédents. Enfin, nous allons brièvement
+aborder la mécanique derrière le fonctionnement des GAMs.</p>
 </div>
-
-
-
-
-
-
+<div id="objectifs-dapprentissage" class="section level2">
+<h2><span class="header-section-number">1.2</span> Objectifs d’apprentissage</h2>
+<ol style="list-style-type: decimal">
+<li>Utiliser la librairie <em>mgcv</em> pour modéliser les relations non
+linéaires</li>
+<li>Évaluer la sortie d’un GAM afin de mieux comprendre nos données</li>
+<li>Utiliser des tests pour déterminer si nos relations correspondent à
+des modèles non linéaires ou linéaires</li>
+<li>Ajouter des interactions non linéaires entre les variables
+explicatives</li>
+<li>Comprendre l’idée d’une fonction de base (<em>basis function</em>) et la
+raison pour laquelle ça rend les GAMs si puissants !</li>
+<li>Comment modéliser la dépendance dans les données (autocorrélation,
+structure hiérarchique) en utilisant les GAMMs</li>
+</ol>
+</div>
+</div>
 <hr>
 <center> 
   <div class="footer">
@@ -251,8 +254,8 @@ excellente ressource.</p>
           </div>
         </div>
       </div>
-<a href="les-gams-en-coulisse.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="préparez-vous-pour-cet-atelier.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapitre 11 References | Atelier 8 : Modèles additifs généralisés en R</title>
+  <title>Chapitre 10 Les GAMs en coulisse | Atelier 8 : Modèles additifs généralisés en R</title>
   <meta name="description" content="Modèles additifs généralisés en R" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapitre 11 References | Atelier 8 : Modèles additifs généralisés en R" />
+  <meta property="og:title" content="Chapitre 10 Les GAMs en coulisse | Atelier 8 : Modèles additifs généralisés en R" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://github.com/qcbsRworkshops/" />
   <meta property="og:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="qcbsRworkshops/workshop08" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapitre 11 References | Atelier 8 : Modèles additifs généralisés en R" />
+  <meta name="twitter:title" content="Chapitre 10 Les GAMs en coulisse | Atelier 8 : Modèles additifs généralisés en R" />
   
   <meta name="twitter:description" content="Modèles additifs généralisés en R" />
   <meta name="twitter:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />
-<link rel="prev" href="les-gams-en-coulisse.html"/>
-
+<link rel="prev" href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"/>
+<link rel="next" href="references.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -212,34 +212,110 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <div class="hero-image-container"> 
   <img class= "hero-image" src="assets/images/jean-philippe-delberghe-75xPHEQBmvA-unsplash_hero_image.jpg">
 </div>
-<div id="references" class="section level1">
-<h1><span class="header-section-number">Chapitre 11</span> References</h1>
-<p>Il existe beaucoup d’information sur les GAMs.</p>
-<p>Simon Wood, l’auteur de la librairie <code>mgcv</code>, a un site très utile avec
-des conférences et des notes introductives sur la façon d’utiliser les
-GAMs :</p>
-<ul>
-<li><a href="http://people.bath.ac.uk/sw283/mgcv/" class="uri">http://people.bath.ac.uk/sw283/mgcv/</a></li>
-</ul>
-<p>Il a aussi écrit un livre, <em>Generalized Additive Models: An Introduction
-with R</em>, que nous avons utilisé comme référence pour cet atelier.</p>
-<p>Le matériel de cet atelier a également été obtenu à partir des blogs et
-des tutoriels suivants :</p>
-<ul>
-<li><a href="http://www.fromthebottomoftheheap.net/blog/" class="uri">http://www.fromthebottomoftheheap.net/blog/</a></li>
-<li><a href="http://www.sfs.uni-tuebingen.de/~jvanrij/Tutorial/GAMM.html" class="uri">http://www.sfs.uni-tuebingen.de/~jvanrij/Tutorial/GAMM.html</a></li>
-<li><a href="http://www.sfs.uni-tuebingen.de/~jvanrij/LSA2015/AnswersLab2.html" class="uri">http://www.sfs.uni-tuebingen.de/~jvanrij/LSA2015/AnswersLab2.html</a></li>
-</ul>
-<p>Enfin, les pages d’aide, disponibles via <code>?gam</code> dans R sont une
-excellente ressource.</p>
+<div id="les-gams-en-coulisse" class="section level1">
+<h1><span class="header-section-number">Chapitre 10</span> Les GAMs en coulisse</h1>
+<p>Nous allons maintenant prendre quelques minutes pour regarder comment
+fonctionnent les GAMs. Commençons en considérant d’abord un modèle qui
+contient une fonction lisse d’une covariable, , <em>x<sub>i</sub></em> :</p>
+<p><span class="math display">\[y_i = f(x_i) + ε_i\]</span></p>
+<p>Pour estimer la fonction <em>f</em>, nous avons besoin de représenter
+l’équation ci-dessus de manière à ce qu’elle devienne un modèle
+linéaire. Cela peut être fait en choisissant une base, <em>b<sub>i</sub>(x)</em>,
+définissant l’espace des fonctions dont <em>f</em> est un élément:</p>
+<p><span class="math display">\[f(x) = \sum_{i=1}^{q}b_i(x)β_i\]</span></p>
+<div id="un-exemple-simple-une-base-polynomiale" class="section level2">
+<h2><span class="header-section-number">10.1</span> Un exemple simple : une base polynomiale</h2>
+<p>Supposons que <em>f</em> est considéré comme un polynôme d’ordre 4, de sorte
+que l’espace des polynômes d’ordre 4 et moins contiennent <em>f</em>. Une
+base de cet espace serait alors :</p>
+<p><span class="math display">\[b_1(x)=1, b_2(x)=x, b_3(x)=x^2, b_4(x)=x^3,
+b_5(x)=x^4\]</span></p>
+<p>et f(x) devient :</p>
+<p><span class="math display">\[f(x) = β_1 + x_iβ_2 + x^2_iβ_3 +
+x^3_iβ_4(x) + x^4_iβ_5\]</span></p>
+<p>et le modèle complet devient :</p>
+<p><span class="math display">\[y_i = β_1 + x_iβ_2 + x^2_iβ_3 +
+x^3_iβ_4(x) + x^4_iβ_5 + ε_i\]</span></p>
+<p>Chaque fonction de base est multipliée par un paramètre à valeur réelle,
+<em>β<sub>i</sub></em>, et est ensuite additionnée pour donner la courbe finale <strong>f(x)</strong>.</p>
+<p><img src="images/polynomial_basis_example.png" width="600" /></p>
+<p>En faisant varier le coefficient <em>β<sub>i</sub></em>, on peut faire varier la forme de
+<em>f(x)</em> pour produire une fonction polynomiale d’ordre 4 ou moins.</p>
+</div>
+<div id="un-autre-exemple-une-base-de-spline-cubique" class="section level2">
+<h2><span class="header-section-number">10.2</span> Un autre exemple : une base de spline cubique</h2>
+<p>Un spline cubique est une courbe construite à partir de sections d’un
+polynôme cubique reliées entre elles de sorte qu’elles sont continues
+en valeur. Chaque section du spline a des coefficients différents.</p>
+<p><img src="images/cubic_spline_fr.png" width="550" /></p>
+<p>Voici une représentation d’une fonction lisse utilisant une base de
+régression spline cubique de rang 5 avec des nœuds situés à incréments
+de 0,2:</p>
+<p><img src="images/graphic6.1.jpg" width="300" /></p>
+<p>Dans cet exemple, les nœuds sont espacés uniformément à travers la gamme
+des valeurs observées de x. Le choix du degré de finesse du modèle est
+pré-déterminé par le nombre de noeuds, qui était arbitraire. Y a-t-il
+une meilleure façon de sélectionner les emplacements des nœuds?</p>
+<div id="contrôler-le-degré-de-lissage-avec-des-splines-de-régression-pénalisés" class="section level3">
+<h3><span class="header-section-number">10.2.1</span> Contrôler le degré de lissage avec des splines de régression pénalisés</h3>
+<p>Au lieu de contrôler le lissage (non linéarité) en modifiant le nombre
+de nœuds, nous gardons celle-ci fixée à une taille un peu plus grande
+que raisonnablement nécessaire et on contrôle le lissage du modèle en
+ajoutant une pénalité sur le niveau de courbure.</p>
+<p>Donc, plutôt que d’ajuster le modèle en minimisant (comme avec la
+méthode des moindres carrés) :</p>
+<p><span class="math display">\[||y - XB||^2\]</span></p>
+<p>il peut être modélisé en minimisant :</p>
+<p><span class="math display">\[||y - XB||^2 + \lambda \int_0^1 [f&#39;&#39;(x)]^2 dx\]</span></p>
+<p>Quant <em>λ</em> tend vers <em>∞</em>, le modèle
+devient linéaire. Pour la sélection du meilleur paramètre de lissage,
+<em>λ</em>, on utilise une approche de validation croisée. Si
+<em>λ</em> est trop élevé, les données seront trop lissées et si
+elle est trop faible, les données ne seront pas assez lissées.
+Idéalement, il serait bon de choisir une valeur <em>λ</em> de
+sorte que le <em>f prédit</em> est aussi proche que possible du <em>f observé</em>. Un
+critère approprié pourrait être de choisir <em>λ</em> pour
+minimiser :</p>
+<p><span class="math display">\[M = \frac{1}{n} \sum_{i=1}^{n}(\hat{f_i} - f_i)^2\]</span></p>
+<p>Étant donné que <em>f</em> est inconnu, <em>M</em> est estimé en utilisant une technique
+de validation croisée généralisée qui laisse de côté, à chaque tour, une
+donnée et estime la capacité moyenne des modèles, construits sur les
+données restantes, de prédire la donnée qui a été mise de côté (pour
+plus de détails, consultez Wood 2006).</p>
+</div>
+</div>
+<div id="illustration-du-principe-de-validation-croisée" class="section level2">
+<h2><span class="header-section-number">10.3</span> Illustration du principe de validation croisée</h2>
+<p>Dans le premier panneau, la courbe correspond à un ajustement faible par
+rapport aux données et ne fait pas mieux avec le point manquant. Dans le
+troisième panneau, la courbe ajuste le bruit aussi bien que le signal et
+la variabilité supplémentaire induite l’amène à prédire la donnée
+manquante plutôt mal. Dans le deuxième panneau, cependant, nous voyons
+que l’ajustement de la courbe du signal sous-jacent est très bien, le
+lissage passe à travers le bruit et la donnée manquante est
+raisonnablement bien prédite.</p>
+<p><img src="images/gcv.png" width="600" /></p>
+</div>
+<div id="note-supplémentaire-sur-les-degrés-de-liberté-effectifs-edf" class="section level2">
+<h2><span class="header-section-number">10.4</span> Note supplémentaire sur les degrés de liberté effectifs (edf)</h2>
+<p>Combien de degrés de liberté a un GAM ?</p>
+<p>Au lieu de fournir la sortie de la validation croisée en termes de
+<em>λ</em> (un paramètre qui détermine la complexité de
+l’ajustement), la fonction <code>gam()</code> utilise un terme appelé les degrés
+de liberté effectifs (edf), de manière cohérente à quantifier la
+complexité du modèle (pour justifier notre intuition que les degrés de
+liberté offrent une manière cohérente de quantifier la complexité du
+modèle). Parce que le nombre de paramètres libres des splines de lissage
+(tel que les GAMs) est souvent difficile à définir, les edf sont liés à
+<em>λ</em>, où l’effet de la pénalité est de réduire les degrés
+de libertés. Donc, si le nombre de noeuds est arbitrairement réglé à <em>k =
+10</em>, <em>k-1</em> définit la limite supérieure des degrés de libertés associés à
+un terme de lissage. Ce nombre diminue alors que la pénalité lambda
+augmente jusqu’à ce que le meilleur modèle soit trouvé par validation
+croisée.</p>
 
 </div>
-
-
-
-
-
-
+</div>
 <hr>
 <center> 
   <div class="footer">
@@ -251,8 +327,8 @@ excellente ressource.</p>
           </div>
         </div>
       </div>
-<a href="les-gams-en-coulisse.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

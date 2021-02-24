@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapitre 11 References | Atelier 8 : Modèles additifs généralisés en R</title>
+  <title>Chapitre 5 Plusieurs termes non linéaires | Atelier 8 : Modèles additifs généralisés en R</title>
   <meta name="description" content="Modèles additifs généralisés en R" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapitre 11 References | Atelier 8 : Modèles additifs généralisés en R" />
+  <meta property="og:title" content="Chapitre 5 Plusieurs termes non linéaires | Atelier 8 : Modèles additifs généralisés en R" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://github.com/qcbsRworkshops/" />
   <meta property="og:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="qcbsRworkshops/workshop08" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapitre 11 References | Atelier 8 : Modèles additifs généralisés en R" />
+  <meta name="twitter:title" content="Chapitre 5 Plusieurs termes non linéaires | Atelier 8 : Modèles additifs généralisés en R" />
   
   <meta name="twitter:description" content="Modèles additifs généralisés en R" />
   <meta name="twitter:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />
-<link rel="prev" href="les-gams-en-coulisse.html"/>
-
+<link rel="prev" href="introduction-aux-gams.html"/>
+<link rel="next" href="interactions.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -212,34 +212,115 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <div class="hero-image-container"> 
   <img class= "hero-image" src="assets/images/jean-philippe-delberghe-75xPHEQBmvA-unsplash_hero_image.jpg">
 </div>
-<div id="references" class="section level1">
-<h1><span class="header-section-number">Chapitre 11</span> References</h1>
-<p>Il existe beaucoup d’information sur les GAMs.</p>
-<p>Simon Wood, l’auteur de la librairie <code>mgcv</code>, a un site très utile avec
-des conférences et des notes introductives sur la façon d’utiliser les
-GAMs :</p>
-<ul>
-<li><a href="http://people.bath.ac.uk/sw283/mgcv/" class="uri">http://people.bath.ac.uk/sw283/mgcv/</a></li>
-</ul>
-<p>Il a aussi écrit un livre, <em>Generalized Additive Models: An Introduction
-with R</em>, que nous avons utilisé comme référence pour cet atelier.</p>
-<p>Le matériel de cet atelier a également été obtenu à partir des blogs et
-des tutoriels suivants :</p>
-<ul>
-<li><a href="http://www.fromthebottomoftheheap.net/blog/" class="uri">http://www.fromthebottomoftheheap.net/blog/</a></li>
-<li><a href="http://www.sfs.uni-tuebingen.de/~jvanrij/Tutorial/GAMM.html" class="uri">http://www.sfs.uni-tuebingen.de/~jvanrij/Tutorial/GAMM.html</a></li>
-<li><a href="http://www.sfs.uni-tuebingen.de/~jvanrij/LSA2015/AnswersLab2.html" class="uri">http://www.sfs.uni-tuebingen.de/~jvanrij/LSA2015/AnswersLab2.html</a></li>
-</ul>
-<p>Enfin, les pages d’aide, disponibles via <code>?gam</code> dans R sont une
-excellente ressource.</p>
+<div id="plusieurs-termes-non-linéaires" class="section level1">
+<h1><span class="header-section-number">Chapitre 5</span> Plusieurs termes non linéaires</h1>
+<p>Avec les GAMs, il est facile d’ajouter des termes non linéaires et
+linéaires dans un seul modèle, plusieurs termes non linéaires ou même
+des interactions non linéaires. Dans cette section, nous allons utiliser
+un ensemble de données générées automatiquement par <code>mgcv</code>.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="plusieurs-termes-non-linéaires.html#cb12-1"></a>gam_data =<span class="st"> </span><span class="kw">gamSim</span>(<span class="dt">eg =</span> <span class="dv">5</span>)</span>
+<span id="cb12-2"><a href="plusieurs-termes-non-linéaires.html#cb12-2"></a><span class="kw">head</span>(gam_data)</span></code></pre></div>
+<p>Nous allons voir comment nous pouvons prédire la variable réponse <code>y</code> en
+fonction des autres variables. Commençons par un modèle de base
+comprenant un terme non linéaire (<code>x1</code>) et un facteur qualitatif (<code>X0</code> avec
+4 niveaux).</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="plusieurs-termes-non-linéaires.html#cb13-1"></a>basic_model =<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>x0 <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x1), <span class="dt">data =</span> gam_data)</span>
+<span id="cb13-2"><a href="plusieurs-termes-non-linéaires.html#cb13-2"></a>basic_summary =<span class="st"> </span><span class="kw">summary</span>(basic_model)</span>
+<span id="cb13-3"><a href="plusieurs-termes-non-linéaires.html#cb13-3"></a><span class="kw">print</span>(basic_summary<span class="op">$</span>p.table)</span>
+<span id="cb13-4"><a href="plusieurs-termes-non-linéaires.html#cb13-4"></a><span class="kw">print</span>(basic_summary<span class="op">$</span>s.table)</span>
+<span id="cb13-5"><a href="plusieurs-termes-non-linéaires.html#cb13-5"></a><span class="kw">plot</span>(basic_model)</span></code></pre></div>
+<p>Ici, la sortie de <code>p.table</code> fournit le tableau de résultats pour chaque
+terme paramétrique et le tableau <code>s.table</code> nous donne les résultats du
+terme non linéaire. Notez que pour le second tableau, la courbure du
+terme non linéaire <code>s(X1)</code> est indiquée par le paramètre edf (degrés de
+libertés effectifs); plus la valeur de l’edf est élevée, plus la
+non-linéarité est forte. Une valeur élevée (8-10 ou plus) signifie que
+la courbe est fortement non linéaire, alors qu’une courbe avec un edf
+égal à 1 est une ligne droite. En revanche, dans la régression linéaire,
+les degrés de libertés du <em>modèle</em> sont équivalents au nombre de
+paramètres libres non redondants <em>p</em> dans le modèle (et les degrés de
+libertés <em>résiduels</em> sont égaux à <em>n-p</em>). Nous reviendrons plus tard sur
+le concept d’edf.</p>
+<pre><code> print(basic_summary$p.table)
+             Estimate Std. Error   t value     Pr(&gt;|t|)
+ (Intercept) 8.550030  0.3655849 23.387258 1.717989e-76
+ x02         2.418682  0.5165515  4.682364 3.908046e-06
+ x03         4.486193  0.5156501  8.700072 9.124666e-17
+ x04         6.528518  0.5204234 12.544629 1.322632e-30
+ &gt; print(basic_summary$s.table)
+            edf   Ref.df        F      p-value
+ s(x1) 1.923913 2.406719 42.84268 1.076396e-19</code></pre>
+<p>Dans notre modèle de base, l’edf du terme non linéaire <code>s(x1)</code> est ~ 2,
+ce qui indique une courbe non linéaire. Le graphique du modèle illustre
+bien la forme de ce terme non linéaire :</p>
+<p><img src="images/graphic2.2.jpg" width="425" /></p>
+<p>Nous pouvons ajouter un second terme <code>x2</code>, mais spécifier une relation
+linéaire avec Y (<em>i.e.</em> les GAMs peuvent inclure à la fois des termes
+linéaires et non linéaires dans le même modèle). Ce nouveau terme
+linéaire <code>x2</code> sera présenté dans le tableau <code>p.table</code>, pour lequel une
+estimation du coefficient de régression sera indiquée. Dans le tableau
+<code>s.table</code>, nous retrouvons encore une fois le terme non linéaire <code>s(x1)</code>
+et son paramètre de courbure.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="plusieurs-termes-non-linéaires.html#cb15-1"></a>two_term_model &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>x0 <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x1) <span class="op">+</span><span class="st"> </span>x2, <span class="dt">data =</span> gam_data)</span>
+<span id="cb15-2"><a href="plusieurs-termes-non-linéaires.html#cb15-2"></a>two_term_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(two_term_model)</span>
+<span id="cb15-3"><a href="plusieurs-termes-non-linéaires.html#cb15-3"></a><span class="kw">print</span>(two_term_summary<span class="op">$</span>p.table)</span>
+<span id="cb15-4"><a href="plusieurs-termes-non-linéaires.html#cb15-4"></a><span class="kw">print</span>(two_term_summary<span class="op">$</span>s.table)</span></code></pre></div>
+<p>Pour évaluer si la relation entre <code>y</code> et <code>x2</code> est non linéaire, on peut
+modéliser <code>x2</code> avec une fonction non linéaire. Tel que vu auparavant, nous
+pouvons utiliser une ANOVA pour tester si le terme non linéaire est
+nécessaire.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="plusieurs-termes-non-linéaires.html#cb16-1"></a>two_smooth_model &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>x0 <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x1) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x2), <span class="dt">data =</span> gam_data)</span>
+<span id="cb16-2"><a href="plusieurs-termes-non-linéaires.html#cb16-2"></a>two_smooth_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(two_smooth_model)</span>
+<span id="cb16-3"><a href="plusieurs-termes-non-linéaires.html#cb16-3"></a><span class="kw">print</span>(two_smooth_summary<span class="op">$</span>p.table)</span>
+<span id="cb16-4"><a href="plusieurs-termes-non-linéaires.html#cb16-4"></a><span class="kw">print</span>(two_smooth_summary<span class="op">$</span>s.table)</span>
+<span id="cb16-5"><a href="plusieurs-termes-non-linéaires.html#cb16-5"></a><span class="kw">plot</span>(two_smooth_model, <span class="dt">page =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p><img src="images/graphic2.4.jpg" width="600" /></p>
+<p>Lorsqu’il y a plus d’une variable d’incluse dans le modèle, comme
+ci-dessus, la réponse ajustée peut-être partitionnée entre les
+contributions de chaque variable. Ici, nous pouvons évaluer l’effet de
+chaque variable où l’axe des ordonnées représente la contribution
+(effet) de chaque covariable à la réponse ajustée centrée sur 0. Si
+l’intervalle de confiance chevauche zéro pour certaines valeurs de <em>x</em>,
+cela indique que l’effet est non significatif. Lorsque la contribution
+varie selon l’axe <em>x</em>, un changement de cette variable cause un
+changement de la variable réponse.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="plusieurs-termes-non-linéaires.html#cb17-1"></a><span class="kw">anova</span>(basic_model, two_term_model, two_smooth_model, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<pre><code>  Analysis of Deviance Table
+  Model 1: y ~ x0 + s(x1)
+  Model 2: y ~ x0 + s(x1) + x2
+  Model 3: y ~ x0 + s(x1) + s(x2)
+    Resid. Df Resid. Dev      Df Deviance  Pr(&gt;Chi)    
+  1    394.08     5231.6                               
+  2    393.10     4051.3 0.97695   1180.2 &lt; 2.2e-16 ***
+  3    385.73     1839.5 7.37288   2211.8 &lt; 2.2e-16 ***
+  ---
+  Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</code></pre>
+<p>Le meilleur modèle est le modèle avec deux fonctions non linéaires pour
+<code>x1</code> et pour <code>x2</code>.</p>
+<div id="défi-2" class="section level2">
+<h2><span class="header-section-number">5.1</span> DÉFI 2</h2>
+<p>Créez deux nouveaux modèles avec la variable <code>x3</code> : un modèle avec <code>x3</code>
+comme paramètre linéaire et un autre modèle avec <code>x3</code> avec un paramètre
+non linéaire. Utilisez des graphiques, les tables des coefficients et la
+fonction <code>anova()</code> afin de déterminer s’il est nécessaire d’inclure <code>x3</code>
+dans le modèle.</p>
+<div id="réponse-au-défi-2" class="section level3">
+<h3><span class="header-section-number">5.1.1</span> Réponse au défi 2</h3>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="plusieurs-termes-non-linéaires.html#cb19-1"></a>three_term_model &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>x0 <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x1) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x2) <span class="op">+</span><span class="st"> </span>x3, <span class="dt">data =</span> gam_data)</span>
+<span id="cb19-2"><a href="plusieurs-termes-non-linéaires.html#cb19-2"></a>three_smooth_model &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>x0 <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x1) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x2) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x3), <span class="dt">data =</span> gam_data)</span>
+<span id="cb19-3"><a href="plusieurs-termes-non-linéaires.html#cb19-3"></a>three_smooth_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(three_smooth_model)</span>
+<span id="cb19-4"><a href="plusieurs-termes-non-linéaires.html#cb19-4"></a></span>
+<span id="cb19-5"><a href="plusieurs-termes-non-linéaires.html#cb19-5"></a><span class="kw">print</span>(three_smooth_summary<span class="op">$</span>p.table)</span>
+<span id="cb19-6"><a href="plusieurs-termes-non-linéaires.html#cb19-6"></a><span class="kw">print</span>(three_smooth_summary<span class="op">$</span>s.table)</span>
+<span id="cb19-7"><a href="plusieurs-termes-non-linéaires.html#cb19-7"></a><span class="kw">plot</span>(three_smooth_model, <span class="dt">page =</span> <span class="dv">1</span>)</span>
+<span id="cb19-8"><a href="plusieurs-termes-non-linéaires.html#cb19-8"></a><span class="co"># edf = 1 -&gt; le terme est donc linéaire.</span></span>
+<span id="cb19-9"><a href="plusieurs-termes-non-linéaires.html#cb19-9"></a></span>
+<span id="cb19-10"><a href="plusieurs-termes-non-linéaires.html#cb19-10"></a><span class="kw">anova</span>(two_smooth_model, three_term_model, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span>
+<span id="cb19-11"><a href="plusieurs-termes-non-linéaires.html#cb19-11"></a><span class="co"># le terme x3 n&#39;est pas significatif</span></span></code></pre></div>
 
 </div>
-
-
-
-
-
-
+</div>
+</div>
 <hr>
 <center> 
   <div class="footer">
@@ -251,8 +332,8 @@ excellente ressource.</p>
           </div>
         </div>
       </div>
-<a href="les-gams-en-coulisse.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="introduction-aux-gams.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="interactions.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

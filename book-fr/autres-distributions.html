@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapitre 11 References | Atelier 8 : Modèles additifs généralisés en R</title>
+  <title>Chapitre 8 Autres distributions | Atelier 8 : Modèles additifs généralisés en R</title>
   <meta name="description" content="Modèles additifs généralisés en R" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapitre 11 References | Atelier 8 : Modèles additifs généralisés en R" />
+  <meta property="og:title" content="Chapitre 8 Autres distributions | Atelier 8 : Modèles additifs généralisés en R" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://github.com/qcbsRworkshops/" />
   <meta property="og:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="qcbsRworkshops/workshop08" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapitre 11 References | Atelier 8 : Modèles additifs généralisés en R" />
+  <meta name="twitter:title" content="Chapitre 8 Autres distributions | Atelier 8 : Modèles additifs généralisés en R" />
   
   <meta name="twitter:description" content="Modèles additifs généralisés en R" />
   <meta name="twitter:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />
-<link rel="prev" href="les-gams-en-coulisse.html"/>
-
+<link rel="prev" href="changer-la-fonction-de-base.html"/>
+<link rel="next" href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -212,34 +212,141 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <div class="hero-image-container"> 
   <img class= "hero-image" src="assets/images/jean-philippe-delberghe-75xPHEQBmvA-unsplash_hero_image.jpg">
 </div>
-<div id="references" class="section level1">
-<h1><span class="header-section-number">Chapitre 11</span> References</h1>
-<p>Il existe beaucoup d’information sur les GAMs.</p>
-<p>Simon Wood, l’auteur de la librairie <code>mgcv</code>, a un site très utile avec
-des conférences et des notes introductives sur la façon d’utiliser les
-GAMs :</p>
+<div id="autres-distributions" class="section level1">
+<h1><span class="header-section-number">Chapitre 8</span> Autres distributions</h1>
+<p>Pour vous donner un bref aperçu de l’utilisation des GAMs lorsque la
+variable réponse ne suit pas une distribution normale ou que les données
+sont des abondances ou proportions (par exemple, distribution Gamma,
+binomiale, Poisson, binomiale négative), l’exemple qui suit utilise un
+ensemble de données où une répartition binomiale sera nécessaire, y
+compris une modélisation d’une relation non linéaire. La variable
+réponse représente le nombre de succès (l’événement a eu lieu) en
+fonction des défaillances au cours d’une expérience.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="autres-distributions.html#cb25-1"></a>gam_data3 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;other_dist.csv&quot;</span>)</span>
+<span id="cb25-2"><a href="autres-distributions.html#cb25-2"></a><span class="kw">summary</span>(gam_data3)</span>
+<span id="cb25-3"><a href="autres-distributions.html#cb25-3"></a><span class="kw">str</span>(gam_data3)</span></code></pre></div>
+<pre><code>&#39;data.frame&#39;: 514 obs. of  4 variables:
+ $ prop : num  1 1 1 1 0 1 1 1 1 1 ...
+ $ total: int  4 20 20 18 18 18 20 20 20 20 ...
+ $ x1   : int  550 650 750 850 950 650 750 850 950 550 ...
+ $ fac  : Factor w/ 4 levels &quot;f1&quot;,&quot;f2&quot;,&quot;f3&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+<p><code>prop</code> est la variable réponse, égal à la proportion de <em>succès /
+(succès + échecs)</em>. Notez qu’il existe de nombreux cas où la proportion
+est égal à 1 ou 0 qui indique que les résultats ont toujours été des
+succès ou des échecs, respectivement, à ce moment mesuré durant
+l’expérience.</p>
+<p><code>x1</code> est le temps écoulé depuis le début de l’expérience (variable
+explicative).</p>
+<p><code>total</code> représente le nombre de <em>succès + échecs</em> observé au moment <code>x1</code><sub>i</sub>
+de l’expérience.</p>
+<p><code>fac</code> est un facteur qui code pour l’essai 1 à 4 de l’expérience (nous
+n’utiliserons pas cette variable dans cette section).</p>
+<p>Commençons par la visualisation des données. Nous sommes intéressés par
+le nombre de succès par rapport aux échecs à mesure que <code>x1</code> augmente.
+Étant donné qu’il y a des mesures répétées pour la valeur de <code>x1</code> (essais
+1 à 4, avec nombreuses observations par essai), nous pouvons d’abord
+présenter la proportion de succès en moyenne par boîte de temps (<code>x1</code>):</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="autres-distributions.html#cb27-1"></a><span class="kw">emptyPlot</span>(<span class="kw">range</span>(gam_data3<span class="op">$</span>x1), <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="dt">h =</span> <span class="fl">0.5</span>, <span class="dt">main =</span> <span class="st">&quot;Probability of successes&quot;</span>, </span>
+<span id="cb27-2"><a href="autres-distributions.html#cb27-2"></a>    <span class="dt">ylab =</span> <span class="st">&quot;Probability&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;x1&quot;</span>)</span>
+<span id="cb27-3"><a href="autres-distributions.html#cb27-3"></a></span>
+<span id="cb27-4"><a href="autres-distributions.html#cb27-4"></a>avg &lt;-<span class="st"> </span><span class="kw">aggregate</span>(prop <span class="op">~</span><span class="st"> </span>x1, <span class="dt">data =</span> gam_data3, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb27-5"><a href="autres-distributions.html#cb27-5"></a><span class="kw">lines</span>(avg<span class="op">$</span>x1, avg<span class="op">$</span>prop, <span class="dt">col =</span> <span class="st">&quot;orange&quot;</span>, <span class="dt">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="images/graphic1_otherdist.jpg" width="450" /></p>
+<p>Notez comment la probabilité de succès augmente avec <code>x1</code>. D’après vous,
+est-ce que cette tendance est linéaire ou non linéaire? Nous allons
+tester cela en utilisant un GAM logistique (nous utilisons une
+distribution <code>binomiale</code> puisque la variable réponse représente des
+proportions).</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="autres-distributions.html#cb28-1"></a>prop_model &lt;-<span class="st"> </span><span class="kw">gam</span>(prop <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(x1), <span class="dt">data =</span> gam_data3, <span class="dt">weights =</span> total, </span>
+<span id="cb28-2"><a href="autres-distributions.html#cb28-2"></a>    <span class="dt">family =</span> <span class="st">&quot;binomial&quot;</span>)</span>
+<span id="cb28-3"><a href="autres-distributions.html#cb28-3"></a>prop_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(prop_model)</span>
+<span id="cb28-4"><a href="autres-distributions.html#cb28-4"></a><span class="kw">print</span>(prop_summary<span class="op">$</span>p.table)</span>
+<span id="cb28-5"><a href="autres-distributions.html#cb28-5"></a><span class="kw">print</span>(prop_summary<span class="op">$</span>s.table)</span>
+<span id="cb28-6"><a href="autres-distributions.html#cb28-6"></a></span>
+<span id="cb28-7"><a href="autres-distributions.html#cb28-7"></a><span class="kw">plot</span>(prop_model)</span></code></pre></div>
+<pre><code>             Estimate  Std. Error  z value   Pr(&gt;|z|)
+(Intercept)  1.173978  0.02709613  43.32641  0
+
+        edf       Ref.df    Chi.sq     p-value
+s(x1)   4.591542  5.615235  798.9407   2.027751e-164</code></pre>
+<p>Qu’est-ce que l’ordonnée représente dans ce modèle?</p>
 <ul>
-<li><a href="http://people.bath.ac.uk/sw283/mgcv/" class="uri">http://people.bath.ac.uk/sw283/mgcv/</a></li>
+<li>Rappel : le modèle utilise le nombre de succès vs échecs pour
+calculer le <em>logit</em>, qui est le logarithme du rapport entre les
+succès et échecs:</li>
 </ul>
-<p>Il a aussi écrit un livre, <em>Generalized Additive Models: An Introduction
-with R</em>, que nous avons utilisé comme référence pour cet atelier.</p>
-<p>Le matériel de cet atelier a également été obtenu à partir des blogs et
-des tutoriels suivants :</p>
+<p>$<span class="math inline">\(logit = log(\frac{N_{success}}{N_{failures}})\)</span>$</p>
 <ul>
-<li><a href="http://www.fromthebottomoftheheap.net/blog/" class="uri">http://www.fromthebottomoftheheap.net/blog/</a></li>
-<li><a href="http://www.sfs.uni-tuebingen.de/~jvanrij/Tutorial/GAMM.html" class="uri">http://www.sfs.uni-tuebingen.de/~jvanrij/Tutorial/GAMM.html</a></li>
-<li><a href="http://www.sfs.uni-tuebingen.de/~jvanrij/LSA2015/AnswersLab2.html" class="uri">http://www.sfs.uni-tuebingen.de/~jvanrij/LSA2015/AnswersLab2.html</a></li>
+<li><p>Si succès = échecs, le rapport est de 1 et le logit est 0 (log (1) =
+0).</p></li>
+<li><p>Si les succès ont un nombre plus grand que les échecs, le ratio est
+supérieur à 1 et le logit a une valeur positive (par exemple, log(2) =
+0,69).</p></li>
+<li><p>Si les succès ont un nombre plus petit que les échecs, le ratio est
+inférieur à 1 et le logit a une valeur négative (par exemple, log(0,5) =
+-0.69).</p></li>
 </ul>
-<p>Enfin, les pages d’aide, disponibles via <code>?gam</code> dans R sont une
-excellente ressource.</p>
+<p>Donc, l’ordonnée est le <em>logit</em>, et indique s’il y a en moyenne plus
+de succès que d’échecs. Ici, l’estimé est positif ce qui signifie,
+qu’en moyenne, il n’y a plus de succès que d’échecs.</p>
+<p>Qu’est-ce que le terme de lissage indique?</p>
+<ul>
+<li>Ceci représente la façon dont les chances de succès vs échecs
+changent sur l’échelle de <code>x1</code> (l’échelle du temps dans cet
+exemple). Donc, puisque l’<em>edf &gt; 1</em>, la proportion de succès
+augmente plus rapidement au fil du temps (si par exemple, la réponse
+représente le nombre d’individus de l’espèce A vs l’espèce B et
+que nous augmentons la concentration des nutriments au fil du temps,
+ces résultats indiqueront que l’espèce A est de plus en plus
+observée alors que les concentrations de nutriments approchent de
+l’optimum de cette espèce au cours de l’expérience).</li>
+</ul>
+<div id="visualiser-la-tendance-au-fil-du-temps" class="section level2">
+<h2><span class="header-section-number">8.1</span> Visualiser la tendance au fil du temps</h2>
+<p>Enfin, nous allons voir les différentes façons de représenter ces
+relations graphiquement.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="autres-distributions.html#cb30-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb30-2"><a href="autres-distributions.html#cb30-2"></a><span class="kw">plot</span>(prop_model, <span class="dt">select =</span> <span class="dv">1</span>, <span class="dt">scale =</span> <span class="dv">0</span>, <span class="dt">shade =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb30-3"><a href="autres-distributions.html#cb30-3"></a><span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">0</span>)</span>
+<span id="cb30-4"><a href="autres-distributions.html#cb30-4"></a></span>
+<span id="cb30-5"><a href="autres-distributions.html#cb30-5"></a><span class="kw">plot_smooth</span>(prop_model, <span class="dt">view =</span> <span class="st">&quot;x1&quot;</span>, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb30-6"><a href="autres-distributions.html#cb30-6"></a>(diff &lt;-<span class="st"> </span><span class="kw">find_difference</span>(out<span class="op">$</span>fv<span class="op">$</span>fit, out<span class="op">$</span>fv<span class="op">$</span>CI, <span class="dt">xVals =</span> out<span class="op">$</span>fv<span class="op">$</span>x1))</span>
+<span id="cb30-7"><a href="autres-distributions.html#cb30-7"></a><span class="kw">addInterval</span>(<span class="dv">0</span>, <span class="dt">lowVals =</span> diff<span class="op">$</span>start, <span class="dt">highVals =</span> diff<span class="op">$</span>end, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, </span>
+<span id="cb30-8"><a href="autres-distributions.html#cb30-8"></a>    <span class="dt">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb30-9"><a href="autres-distributions.html#cb30-9"></a><span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">c</span>(diff<span class="op">$</span>start, diff<span class="op">$</span>end), <span class="dt">lty =</span> <span class="dv">3</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb30-10"><a href="autres-distributions.html#cb30-10"></a><span class="kw">text</span>(<span class="kw">mean</span>(<span class="kw">c</span>(diff<span class="op">$</span>start, diff<span class="op">$</span>end)), <span class="fl">2.1</span>, <span class="st">&quot;sign. more </span><span class="ch">\n</span><span class="st"> success&quot;</span>, </span>
+<span id="cb30-11"><a href="autres-distributions.html#cb30-11"></a>    <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">font =</span> <span class="dv">3</span>)</span></code></pre></div>
+<p><img src="images/graphic2_otherdist.jpg" width="800" /></p>
+<p>Quels renseignements ces graphiques nous apportent-ils vis à vis les
+succès et échecs ?</p>
+<ul>
+<li>Graphique de gauche : contribution (ou effet partiel si nous
+avions plus qu’une variable explicative) au fil du temps. La valeur
+logit augmente, donc les succès augmentent et les échecs diminuent.</li>
+<li>Graphique de droite : valeurs ajustées, ordonnée incluse (somme
+des effets si nous avions plus d’une variable explicative dans le
+modèle). Nous voyons ici que la valeur logit est estimée près de
+zéro au début de l’expérience ; cela signifie qu’il y a des
+quantités égales de succès et d’échecs. Peu à peu, les succès
+augmentent et à environ <code>x1</code> = 400 il y a beaucoup plus de succès que
+d’échecs (l’effet est significativement différent de zéro). Nous
+avons également montré comment nous pouvons utiliser le graphique
+pour déterminer à quelle valeur de <code>x1</code> cela se produit.</li>
+</ul>
+<p>Enfin, pour nous aider à interpréter les résultats, nous pouvons
+re-transformer l’effet sur une échelle de proportions avec la fonction
+<code>plot_smooth</code> de la librairie <code>itsadug</code>:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="autres-distributions.html#cb31-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb31-2"><a href="autres-distributions.html#cb31-2"></a><span class="kw">plot_smooth</span>(prop_model, <span class="dt">view =</span> <span class="st">&quot;x1&quot;</span>, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">transform =</span> plogis, </span>
+<span id="cb31-3"><a href="autres-distributions.html#cb31-3"></a>    <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span>
+<span id="cb31-4"><a href="autres-distributions.html#cb31-4"></a><span class="kw">abline</span>(<span class="dt">h =</span> <span class="fl">0.5</span>, <span class="dt">v =</span> diff<span class="op">$</span>start, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="images/graphic3_otherdist.jpg" width="450" /></p>
+<p>Comme nous l’avons déjà vu avec le graphique précédent des valeurs
+logits, nous voyons qu’à approximativement <code>x1</code> = 400 la proportion de
+succès augmente de façon significative au-dessus de 0,5.</p>
 
 </div>
-
-
-
-
-
-
+</div>
 <hr>
 <center> 
   <div class="footer">
@@ -251,8 +358,8 @@ excellente ressource.</p>
           </div>
         </div>
       </div>
-<a href="les-gams-en-coulisse.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="changer-la-fonction-de-base.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

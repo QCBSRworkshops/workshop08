@@ -4,35 +4,34 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>A Minimal Book Example</title>
-  <meta name="description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
+  <title>Atelier 8 : Modèles additifs généralisés en R</title>
+  <meta name="description" content="Modèles additifs généralisés en R" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="A Minimal Book Example" />
+  <meta property="og:title" content="Atelier 8 : Modèles additifs généralisés en R" />
   <meta property="og:type" content="book" />
-  
-  
-  <meta property="og:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
-  
+  <meta property="og:url" content="https://github.com/qcbsRworkshops/" />
+  <meta property="og:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
+  <meta property="og:description" content="Modèles additifs généralisés en R" />
+  <meta name="github-repo" content="qcbsRworkshops/workshop08" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="A Minimal Book Example" />
+  <meta name="twitter:title" content="Atelier 8 : Modèles additifs généralisés en R" />
   
-  <meta name="twitter:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
-  
+  <meta name="twitter:description" content="Modèles additifs généralisés en R" />
+  <meta name="twitter:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
 
-<meta name="author" content="Yihui Xie" />
+<meta name="author" content="Développé et maintenu par les contributeurs et contributrices de la Série d’ateliers R du CSBQ." />
 
 
-<meta name="date" content="2021-02-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
-  
+  <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />
 
-<link rel="next" href="intro.html"/>
+<link rel="next" href="résumé-et-objectifs-dapprentissage.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -83,42 +82,41 @@ pre.numberSource code > span > a:first-child::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {   }
+  {  background-color: #f8f8f8; }
 @media screen {
 code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #c4a000; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #000000; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #000000; } /* Function */
 code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #000000; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
-<link rel="stylesheet" href="style.css" type="text/css" />
+<link rel="stylesheet" href="assets/qcbs-style.css" type="text/css" />
 </head>
 
 <body>
@@ -131,21 +129,57 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./">A Minimal Book Example</a></li>
+<li class="toc-logo"><a href="./"><img src="assets/images/csbq_logo_gray_accueil.png"></a></li>
+<link rel="icon" type="image/png" href="assets/images/favicon.ico"/>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Prerequisites</a></li>
-<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Introduction</a></li>
-<li class="chapter" data-level="3" data-path="literature.html"><a href="literature.html"><i class="fa fa-check"></i><b>3</b> Literature</a></li>
-<li class="chapter" data-level="4" data-path="methods.html"><a href="methods.html"><i class="fa fa-check"></i><b>4</b> Methods</a></li>
-<li class="chapter" data-level="5" data-path="applications.html"><a href="applications.html"><i class="fa fa-check"></i><b>5</b> Applications</a><ul>
-<li class="chapter" data-level="5.1" data-path="applications.html"><a href="applications.html#example-one"><i class="fa fa-check"></i><b>5.1</b> Example one</a></li>
-<li class="chapter" data-level="5.2" data-path="applications.html"><a href="applications.html#example-two"><i class="fa fa-check"></i><b>5.2</b> Example two</a></li>
+<li class="part"><span><b>Série d’ateliers R du CSBQ</b></span></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Préface</a><ul>
+<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#code-de-conduit"><i class="fa fa-check"></i><b>0.1</b> Code de conduit</a><ul>
+<li class="chapter" data-level="0.1.1" data-path="index.html"><a href="index.html#comportement-attendu"><i class="fa fa-check"></i><b>0.1.1</b> Comportement attendu</a></li>
+<li class="chapter" data-level="0.1.2" data-path="index.html"><a href="index.html#comportements-inacceptables"><i class="fa fa-check"></i><b>0.1.2</b> Comportements inacceptables</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="final-words.html"><a href="final-words.html"><i class="fa fa-check"></i><b>6</b> Final Words</a></li>
-<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#contributeurs-et-contributrices"><i class="fa fa-check"></i><b>0.2</b> Contributeurs et contributrices</a></li>
+<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#contribuez-à-la-série"><i class="fa fa-check"></i><b>0.3</b> Contribuez à la série!</a></li>
+</ul></li>
+<li class="part"><span><b>Modèles additifs généralisés en <code>R</code></b></span></li>
+<li class="chapter" data-level="1" data-path="résumé-et-objectifs-dapprentissage.html"><a href="résumé-et-objectifs-dapprentissage.html"><i class="fa fa-check"></i><b>1</b> Résumé et Objectifs d’apprentissage</a><ul>
+<li class="chapter" data-level="1.1" data-path="résumé-et-objectifs-dapprentissage.html"><a href="résumé-et-objectifs-dapprentissage.html#résumé"><i class="fa fa-check"></i><b>1.1</b> Résumé</a></li>
+<li class="chapter" data-level="1.2" data-path="résumé-et-objectifs-dapprentissage.html"><a href="résumé-et-objectifs-dapprentissage.html#objectifs-dapprentissage"><i class="fa fa-check"></i><b>1.2</b> Objectifs d’apprentissage</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="préparez-vous-pour-cet-atelier.html"><a href="préparez-vous-pour-cet-atelier.html"><i class="fa fa-check"></i><b>2</b> Préparez-vous pour cet atelier</a></li>
+<li class="chapter" data-level="3" data-path="le-modèle-linéaireet-où-il-échoue.html"><a href="le-modèle-linéaireet-où-il-échoue.html"><i class="fa fa-check"></i><b>3</b> Le modèle linéaire…et où il échoue</a></li>
+<li class="chapter" data-level="4" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html"><i class="fa fa-check"></i><b>4</b> Introduction aux GAMs</a><ul>
+<li class="chapter" data-level="4.1" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#défi-1"><i class="fa fa-check"></i><b>4.1</b> DÉFI 1</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#réponse-au-défi-1"><i class="fa fa-check"></i><b>4.1.1</b> Réponse au défi 1</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="plusieurs-termes-non-linéaires.html"><a href="plusieurs-termes-non-linéaires.html"><i class="fa fa-check"></i><b>5</b> Plusieurs termes non linéaires</a><ul>
+<li class="chapter" data-level="5.1" data-path="plusieurs-termes-non-linéaires.html"><a href="plusieurs-termes-non-linéaires.html#défi-2"><i class="fa fa-check"></i><b>5.1</b> DÉFI 2</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="plusieurs-termes-non-linéaires.html"><a href="plusieurs-termes-non-linéaires.html#réponse-au-défi-2"><i class="fa fa-check"></i><b>5.1.1</b> Réponse au défi 2</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="interactions.html"><a href="interactions.html"><i class="fa fa-check"></i><b>6</b> Interactions</a></li>
+<li class="part"><span><b>Concepts Avancés</b></span></li>
+<li class="chapter" data-level="7" data-path="changer-la-fonction-de-base.html"><a href="changer-la-fonction-de-base.html"><i class="fa fa-check"></i><b>7</b> Changer la fonction de base</a></li>
+<li class="chapter" data-level="8" data-path="autres-distributions.html"><a href="autres-distributions.html"><i class="fa fa-check"></i><b>8</b> Autres distributions</a><ul>
+<li class="chapter" data-level="8.1" data-path="autres-distributions.html"><a href="autres-distributions.html#visualiser-la-tendance-au-fil-du-temps"><i class="fa fa-check"></i><b>8.1</b> Visualiser la tendance au fil du temps</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><i class="fa fa-check"></i><b>9</b> Intro rapide aux modèles additifs généralisés à effets mixtes (GAMMs)</a><ul>
+<li class="chapter" data-level="9.1" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#la-non-indépendance-des-données"><i class="fa fa-check"></i><b>9.1</b> La non-indépendance des données</a></li>
+<li class="chapter" data-level="9.2" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#modélisation-avec-effets-mixtes"><i class="fa fa-check"></i><b>9.2</b> Modélisation avec effets mixtes</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="les-gams-en-coulisse.html"><a href="les-gams-en-coulisse.html"><i class="fa fa-check"></i><b>10</b> Les GAMs en coulisse</a><ul>
+<li class="chapter" data-level="10.1" data-path="les-gams-en-coulisse.html"><a href="les-gams-en-coulisse.html#un-exemple-simple-une-base-polynomiale"><i class="fa fa-check"></i><b>10.1</b> Un exemple simple : une base polynomiale</a></li>
+<li class="chapter" data-level="10.2" data-path="les-gams-en-coulisse.html"><a href="les-gams-en-coulisse.html#un-autre-exemple-une-base-de-spline-cubique"><i class="fa fa-check"></i><b>10.2</b> Un autre exemple : une base de spline cubique</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="les-gams-en-coulisse.html"><a href="les-gams-en-coulisse.html#contrôler-le-degré-de-lissage-avec-des-splines-de-régression-pénalisés"><i class="fa fa-check"></i><b>10.2.1</b> Contrôler le degré de lissage avec des splines de régression pénalisés</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="les-gams-en-coulisse.html"><a href="les-gams-en-coulisse.html#illustration-du-principe-de-validation-croisée"><i class="fa fa-check"></i><b>10.3</b> Illustration du principe de validation croisée</a></li>
+<li class="chapter" data-level="10.4" data-path="les-gams-en-coulisse.html"><a href="les-gams-en-coulisse.html#note-supplémentaire-sur-les-degrés-de-liberté-effectifs-edf"><i class="fa fa-check"></i><b>10.4</b> Note supplémentaire sur les degrés de liberté effectifs (edf)</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>11</b> References</a></li>
 <li class="divider"></li>
-<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+<li><a href="https://github.com/qcbsRworkshops" target="blank">QCBS R Workshop Series</a></li>
 
 </ul>
 
@@ -156,7 +190,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A Minimal Book Example</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Atelier 8 : Modèles additifs généralisés en <code>R</code></a>
           </h1>
         </div>
 
@@ -164,29 +198,102 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">A Minimal Book Example</h1>
-<p class="author"><em>Yihui Xie</em></p>
-<p class="date"><em>2021-02-16</em></p>
+<!------------------------ Hero Image Container --------------------------> 
+
+<head>
+  <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=10.0,initial-scale=1.0">
+  <script src="https://kit.fontawesome.com/6a26f47516.js"></script>
+  <script src="assets/qcbs-hideOutput.js"></script>
+  <link href="assets/qcbs-style.css" rel="stylesheet">
+</head>
+
+
+
+<div class="hero-image-container"> 
+  <img class= "hero-image" src="assets/images/jean-philippe-delberghe-75xPHEQBmvA-unsplash_hero_image.jpg">
 </div>
-<div id="prerequisites" class="section level1">
-<h1><span class="header-section-number">Chapter 1</span> Prerequisites</h1>
-<p>This is a <em>sample</em> book written in <strong>Markdown</strong>. You can use anything that Pandoc’s Markdown supports, e.g., a math equation <span class="math inline">\(a^2 + b^2 = c^2\)</span>.</p>
-<p>The <strong>bookdown</strong> package can be installed from CRAN or Github:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1"></a><span class="kw">install.packages</span>(<span class="st">&quot;bookdown&quot;</span>)</span>
-<span id="cb1-2"><a href="index.html#cb1-2"></a><span class="co"># or the development version</span></span>
-<span id="cb1-3"><a href="index.html#cb1-3"></a><span class="co"># devtools::install_github(&quot;rstudio/bookdown&quot;)</span></span></code></pre></div>
-<p>Remember each Rmd file contains one and only one chapter, and a chapter is defined by the first-level heading <code>#</code>.</p>
-<p>To compile this example to PDF, you need XeLaTeX. You are recommended to install TinyTeX (which includes XeLaTeX): <a href="https://yihui.org/tinytex/" class="uri">https://yihui.org/tinytex/</a>.</p>
+<div id="header">
+<h1 class="title">Atelier 8 : Modèles additifs généralisés en <code>R</code></h1>
+<h2 class="subtitle"><em>Série d’ateliers R du CSBQ</em></h2>
+<p class="author"><em>Développé et maintenu par les contributeurs et contributrices de la Série d’ateliers R du CSBQ<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</em></p>
+<p class="date"><em>2021-02-24 00:39:08</em></p>
+</div>
+<div id="préface" class="section level1 unnumbered">
+<h1>Préface</h1>
+<p>La <strong>Série d’ateliers R du CSBQ</strong> est une série de 10 ateliers qui guide les participants à travers les étapes nécessaires à l’utilisation de R pour un large éventail d’analyses statistiques pertinentes pour la recherche en biologie et en écologie. Ces ateliers en accès libre ont été créés par des membres du CSBQ, à la fois pour les membres du CSBQ et pour la communauté au sens large.</p>
+<p>Le contenu de cet atelier a été revu par plusieurs membres du CSBQ. Si vous souhaitez suggérer des modifications, veuillez contacter les coordinateurs de la série actuelle, dont la liste figure sur la page principale de Github</p>
+<div id="code-de-conduit" class="section level2">
+<h2><span class="header-section-number">0.1</span> Code de conduit</h2>
+<p>La Série d’ateliers R du CSBQ et le Symposium R du CSBQ sont des lieux dédiés à fournir un environnement accueillant et favorable à toutes les personnes, indépendamment de leurs origines ou de leur identité.</p>
+<p>Les participants, les présentateurs et les organisateurs de la série d’ateliers et d’autres activités connexes acceptent le présent code de conduite lorsqu’ils assistent à des activités liées aux ateliers.</p>
+<p>Nous ne tolérons pas les comportements irrespectueux ou qui excluent, intimident ou gênent les autres.</p>
+<p>Nous ne tolérons pas la discrimination ou le harcèlement fondés sur des caractéristiques telles que, mais sans s’y limiter, l’identité et l’expression du genre, l’orientation sexuelle, le handicap, l’apparence physique, la taille du corps, la citoyenneté, la nationalité, les origines ethniques ou sociales, la grossesse, le statut familial, les informations génétiques, la religion ou les convictions (ou l’absence de celles-ci), l’appartenance à une minorité nationale, la propriété, l’âge, l’éducation, le statut socio-économique, les choix techniques et le niveau d’expérience.</p>
+<p>Il s’applique à tous les espaces gérés par l’atelier ou affiliés à celui-ci, y compris, mais sans s’y limiter, les ateliers, les listes de diffusion et les forums en ligne tels que GitHub, Slack et Twitter.</p>
+<div id="comportement-attendu" class="section level3">
+<h3><span class="header-section-number">0.1.1</span> Comportement attendu</h3>
+<p>Tous les participants sont tenus de faire preuve de respect et de courtoisie envers les autres. Toutes les interactions doivent être professionnelles, quelle que soit la plateforme utilisée : en ligne ou en personne.</p>
+<p>Afin de favoriser un environnement d’apprentissage positif et professionnel, nous encourageons les types de comportements suivants dans tous les événements et plates-formes des ateliers :</p>
+<ul>
+<li>Utiliser un langage accueillant et inclusif ;</li>
+<li>Respecter les différents points de vue et expériences ;</li>
+<li>Accepter avec grâce les critiques constructives ;</li>
+<li>Se concentrer sur ce qui est le mieux pour la communauté ;</li>
+<li>Faire preuve de courtoisie et de respect envers les autres membres de la communauté.</li>
+</ul>
+</div>
+<div id="comportements-inacceptables" class="section level3">
+<h3><span class="header-section-number">0.1.2</span> Comportements inacceptables</h3>
+<p>Voici quelques exemples de comportements inacceptables de la part des participants à tout événement ou plateforme d’atelier :</p>
+<ul>
+<li>les commentaires écrits ou verbaux qui ont pour effet d’exclure des personnes sur la base de leur appartenance à un groupe spécifique ;</li>
+<li>faire craindre à quelqu’un pour sa sécurité, par exemple en le harcelant ou en l’intimidant ;</li>
+<li>des menaces ou des propos violents dirigés contre une autre personne ;</li>
+<li>l’affichage d’images sexuelles ou violentes ;</li>
+<li>l’attention sexuelle non désirée ;</li>
+<li>les contacts physiques non consensuels ou non désirés ;</li>
+<li>des insultes ou des rabais ;</li>
+<li>les blagues sexistes, racistes, homophobes, transphobes, incapables ou d’exclusion ;</li>
+<li>l’incitation à la violence, au suicide ou à l’automutilation ;</li>
+<li>la poursuite de l’interaction (y compris la photographie ou l’enregistrement) avec une personne après qu’on - lui a demandé d’arrêter ;</li>
+<li>la publication d’une communication privée sans consentement.</li>
+</ul>
+</div>
+</div>
+<div id="contributeurs-et-contributrices" class="section level2">
+<h2><span class="header-section-number">0.2</span> Contributeurs et contributrices</h2>
+<p>Développé à l’origine par :</p>
+<p>A contribué à modifier la présentation :</p>
+<p>Contribution avec des changements à la documentation écrite :</p>
+<p>Contribution en signalant des problèmes et en suggérant des modifications :</p>
+</div>
+<div id="contribuez-à-la-série" class="section level2">
+<h2><span class="header-section-number">0.3</span> Contribuez à la série!</h2>
+<p>En construction.</p>
 
 </div>
+</div>
+
+
+
+<div class="footnotes">
+<hr />
+<ol start="1">
+<li id="fn1"><p>La Série d’ateliers R du CSBQ fait partie du <a href="https://www.qcbs.ca">Centre de la science de la biodiversité du Québec</a>, et est maintenue par les coordonnateurs et les coordonnatrices de la série, et les membres étudiants diplômés, postdoctoraux et professionnels de la recherche. <strong>Les contributeurs et contributrices de cet atelier sont accessibles<a href="lien">ici</a></strong><a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+<hr>
+<center> 
+  <div class="footer">
+      All the content of the workshop series is under a <a href="https://creativecommons.org/licenses/by-nc/2.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+  </div>
+</center>
             </section>
 
           </div>
         </div>
       </div>
 
-<a href="intro.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="résumé-et-objectifs-dapprentissage.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -202,14 +309,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
-"github": false,
-"facebook": true,
+"github": true,
+"facebook": false,
 "twitter": true,
 "linkedin": false,
 "weibo": false,
 "instapaper": false,
 "vk": false,
-"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+"all": false
 },
 "fontsettings": {
 "theme": "white",
@@ -228,9 +335,9 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["book-fr.pdf", "book-fr.epub"],
+"download": null,
 "toc": {
-"collapse": "subsection"
+"collapse": "section"
 }
 });
 });

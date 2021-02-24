@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapitre 11 References | Atelier 8 : Modèles additifs généralisés en R</title>
+  <title>Chapitre 6 Interactions | Atelier 8 : Modèles additifs généralisés en R</title>
   <meta name="description" content="Modèles additifs généralisés en R" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapitre 11 References | Atelier 8 : Modèles additifs généralisés en R" />
+  <meta property="og:title" content="Chapitre 6 Interactions | Atelier 8 : Modèles additifs généralisés en R" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://github.com/qcbsRworkshops/" />
   <meta property="og:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="qcbsRworkshops/workshop08" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapitre 11 References | Atelier 8 : Modèles additifs généralisés en R" />
+  <meta name="twitter:title" content="Chapitre 6 Interactions | Atelier 8 : Modèles additifs généralisés en R" />
   
   <meta name="twitter:description" content="Modèles additifs généralisés en R" />
   <meta name="twitter:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />
-<link rel="prev" href="les-gams-en-coulisse.html"/>
-
+<link rel="prev" href="plusieurs-termes-non-linéaires.html"/>
+<link rel="next" href="changer-la-fonction-de-base.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -212,31 +212,57 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <div class="hero-image-container"> 
   <img class= "hero-image" src="assets/images/jean-philippe-delberghe-75xPHEQBmvA-unsplash_hero_image.jpg">
 </div>
-<div id="references" class="section level1">
-<h1><span class="header-section-number">Chapitre 11</span> References</h1>
-<p>Il existe beaucoup d’information sur les GAMs.</p>
-<p>Simon Wood, l’auteur de la librairie <code>mgcv</code>, a un site très utile avec
-des conférences et des notes introductives sur la façon d’utiliser les
-GAMs :</p>
+<div id="interactions" class="section level1">
+<h1><span class="header-section-number">Chapitre 6</span> Interactions</h1>
+<p>Il y a deux façons de modéliser une interaction entre deux variables:</p>
 <ul>
-<li><a href="http://people.bath.ac.uk/sw283/mgcv/" class="uri">http://people.bath.ac.uk/sw283/mgcv/</a></li>
+<li>si une variable est quantitative et l’autre est qualitative, on
+utilise l’argument <code>by</code> → <code>s(x, by=facteur)</code>,</li>
+<li>si les deux variables sont quantitatives, on inclut les deux termes
+sous une même fonction non linéaire → <code>s(x1, x2)</code>.</li>
 </ul>
-<p>Il a aussi écrit un livre, <em>Generalized Additive Models: An Introduction
-with R</em>, que nous avons utilisé comme référence pour cet atelier.</p>
-<p>Le matériel de cet atelier a également été obtenu à partir des blogs et
-des tutoriels suivants :</p>
-<ul>
-<li><a href="http://www.fromthebottomoftheheap.net/blog/" class="uri">http://www.fromthebottomoftheheap.net/blog/</a></li>
-<li><a href="http://www.sfs.uni-tuebingen.de/~jvanrij/Tutorial/GAMM.html" class="uri">http://www.sfs.uni-tuebingen.de/~jvanrij/Tutorial/GAMM.html</a></li>
-<li><a href="http://www.sfs.uni-tuebingen.de/~jvanrij/LSA2015/AnswersLab2.html" class="uri">http://www.sfs.uni-tuebingen.de/~jvanrij/LSA2015/AnswersLab2.html</a></li>
-</ul>
-<p>Enfin, les pages d’aide, disponibles via <code>?gam</code> dans R sont une
-excellente ressource.</p>
+<p>L’argument <code>by</code> permet de faire varier un terme non linéaire selon les
+différents niveaux d’un facteur. Nous allons examiner ceci en utilisant
+notre variable qualitative <code>x0</code> et examiner si la non-linérité de
+<code>s(x2)</code> varie selon les différents niveaux de <code>x0</code>. Pour déterminer si
+les courbes diffèrent significativement entre les niveaux du facteur,
+nous allons utiliser une ANOVA sur l’interaction.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="interactions.html#cb20-1"></a>categorical_interact &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>x0 <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x1) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x2, <span class="dt">by =</span> x0), </span>
+<span id="cb20-2"><a href="interactions.html#cb20-2"></a>    <span class="dt">data =</span> gam_data)</span>
+<span id="cb20-3"><a href="interactions.html#cb20-3"></a>categorical_interact_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(categorical_interact)</span>
+<span id="cb20-4"><a href="interactions.html#cb20-4"></a><span class="kw">print</span>(categorical_interact_summary<span class="op">$</span>s.table)</span>
+<span id="cb20-5"><a href="interactions.html#cb20-5"></a><span class="kw">plot</span>(categorical_interact, <span class="dt">page =</span> <span class="dv">1</span>)</span>
+<span id="cb20-6"><a href="interactions.html#cb20-6"></a><span class="co"># ou nous pouvons utiliser la fonction vis.gam où theta</span></span>
+<span id="cb20-7"><a href="interactions.html#cb20-7"></a><span class="co"># représente la rotation du plan x-y</span></span>
+<span id="cb20-8"><a href="interactions.html#cb20-8"></a><span class="kw">vis.gam</span>(categorical_interact, <span class="dt">view =</span> <span class="kw">c</span>(<span class="st">&quot;x2&quot;</span>, <span class="st">&quot;x0&quot;</span>), <span class="dt">theta =</span> <span class="dv">40</span>, </span>
+<span id="cb20-9"><a href="interactions.html#cb20-9"></a>    <span class="dt">n.grid =</span> <span class="dv">500</span>, <span class="dt">border =</span> <span class="ot">NA</span>)</span>
+<span id="cb20-10"><a href="interactions.html#cb20-10"></a><span class="kw">anova</span>(two_smooth_model, categorical_interact, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<p><img src="images/graphic3.1b.png" width="350" /></p>
+<p>Nous pouvons constater à partir du graphique que les formes des termes
+non linéaires sont comparables entre les quatre niveaux de <code>x0</code>.
+L’ANOVA le confirme également (déviance = 98,6, <em>p</em> = 0,2347).</p>
+<p>Ensuite, nous allons examiner l’interaction non linéaire entre deux
+termes quantitatifs, <code>x1</code> et <code>x2</code>. Cette fois-ci, l’argument <code>by</code> est
+supprimé.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="interactions.html#cb21-1"></a>smooth_interact &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>x0 <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x1, x2), <span class="dt">data =</span> gam_data)</span>
+<span id="cb21-2"><a href="interactions.html#cb21-2"></a>smooth_interact_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(smooth_interact)</span>
+<span id="cb21-3"><a href="interactions.html#cb21-3"></a><span class="kw">print</span>(smooth_interact_summary<span class="op">$</span>s.table)</span>
+<span id="cb21-4"><a href="interactions.html#cb21-4"></a><span class="kw">plot</span>(smooth_interact, <span class="dt">page =</span> <span class="dv">1</span>, <span class="dt">scheme =</span> <span class="dv">3</span>)</span>
+<span id="cb21-5"><a href="interactions.html#cb21-5"></a><span class="co"># plot(smooth_interact,page=1,scheme=1) donne un graphique</span></span>
+<span id="cb21-6"><a href="interactions.html#cb21-6"></a><span class="co"># comparable à vis.gam()</span></span>
+<span id="cb21-7"><a href="interactions.html#cb21-7"></a><span class="kw">vis.gam</span>(smooth_interact, <span class="dt">view =</span> <span class="kw">c</span>(<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>), <span class="dt">theta =</span> <span class="dv">40</span>, <span class="dt">n.grid =</span> <span class="dv">500</span>, </span>
+<span id="cb21-8"><a href="interactions.html#cb21-8"></a>    <span class="dt">border =</span> <span class="ot">NA</span>)</span>
+<span id="cb21-9"><a href="interactions.html#cb21-9"></a><span class="kw">anova</span>(two_smooth_model, smooth_interact, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<p><img src="images/graphic3.2b.png" width="350" /></p>
+<p>L’interaction entre <code>s(x1)</code> et <code>s(x2)</code> est significative et le
+graphique en deux dimensions illustre très bien cette interaction non
+linéaire. La relation entre y et x1 change en fonction de la valeur de
+<code>x2</code>. Vous pouvez changez la valeur de l’argument <code>theta</code> pour tourner
+l’axe du graphique. Si vous prévoyez exécuter un grand nombre de
+graphiques, supprimez l’argument <code>n.grid = 500</code>, car ceci fait appel à
+des calculs intensifs et ralentit R.</p>
 
 </div>
-
-
-
 
 
 
@@ -251,8 +277,8 @@ excellente ressource.</p>
           </div>
         </div>
       </div>
-<a href="les-gams-en-coulisse.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="plusieurs-termes-non-linéaires.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="changer-la-fonction-de-base.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

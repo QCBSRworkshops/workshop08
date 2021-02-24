@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapitre 11 References | Atelier 8 : Modèles additifs généralisés en R</title>
+  <title>Chapitre 3 Le modèle linéaire…et où il échoue | Atelier 8 : Modèles additifs généralisés en R</title>
   <meta name="description" content="Modèles additifs généralisés en R" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapitre 11 References | Atelier 8 : Modèles additifs généralisés en R" />
+  <meta property="og:title" content="Chapitre 3 Le modèle linéaire…et où il échoue | Atelier 8 : Modèles additifs généralisés en R" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://github.com/qcbsRworkshops/" />
   <meta property="og:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="qcbsRworkshops/workshop08" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapitre 11 References | Atelier 8 : Modèles additifs généralisés en R" />
+  <meta name="twitter:title" content="Chapitre 3 Le modèle linéaire…et où il échoue | Atelier 8 : Modèles additifs généralisés en R" />
   
   <meta name="twitter:description" content="Modèles additifs généralisés en R" />
   <meta name="twitter:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />
-<link rel="prev" href="les-gams-en-coulisse.html"/>
-
+<link rel="prev" href="préparez-vous-pour-cet-atelier.html"/>
+<link rel="next" href="introduction-aux-gams.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -212,34 +212,35 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <div class="hero-image-container"> 
   <img class= "hero-image" src="assets/images/jean-philippe-delberghe-75xPHEQBmvA-unsplash_hero_image.jpg">
 </div>
-<div id="references" class="section level1">
-<h1><span class="header-section-number">Chapitre 11</span> References</h1>
-<p>Il existe beaucoup d’information sur les GAMs.</p>
-<p>Simon Wood, l’auteur de la librairie <code>mgcv</code>, a un site très utile avec
-des conférences et des notes introductives sur la façon d’utiliser les
-GAMs :</p>
-<ul>
-<li><a href="http://people.bath.ac.uk/sw283/mgcv/" class="uri">http://people.bath.ac.uk/sw283/mgcv/</a></li>
-</ul>
-<p>Il a aussi écrit un livre, <em>Generalized Additive Models: An Introduction
-with R</em>, que nous avons utilisé comme référence pour cet atelier.</p>
-<p>Le matériel de cet atelier a également été obtenu à partir des blogs et
-des tutoriels suivants :</p>
-<ul>
-<li><a href="http://www.fromthebottomoftheheap.net/blog/" class="uri">http://www.fromthebottomoftheheap.net/blog/</a></li>
-<li><a href="http://www.sfs.uni-tuebingen.de/~jvanrij/Tutorial/GAMM.html" class="uri">http://www.sfs.uni-tuebingen.de/~jvanrij/Tutorial/GAMM.html</a></li>
-<li><a href="http://www.sfs.uni-tuebingen.de/~jvanrij/LSA2015/AnswersLab2.html" class="uri">http://www.sfs.uni-tuebingen.de/~jvanrij/LSA2015/AnswersLab2.html</a></li>
-</ul>
-<p>Enfin, les pages d’aide, disponibles via <code>?gam</code> dans R sont une
-excellente ressource.</p>
-
+<div id="le-modèle-linéaireet-où-il-échoue" class="section level1">
+<h1><span class="header-section-number">Chapitre 3</span> Le modèle linéaire…et où il échoue</h1>
+<p>Qu’est-ce qu’un modèle linéaire ? La régression linéaire est ce que la
+plupart des gens apprennent avant tout en statistiques et est parmi les
+méthodes les plus performantes. Elle nous permet de modéliser une
+variable réponse en fonction de facteurs prédictifs et d’une erreur
+résiduelle. Tel que vu dans l’atelier sur les <a href="https://github.com/QCBSRworkshops/workshop04">modèles
+linéaires</a>, la régression fait cependant
+quatre suppositions importantes :</p>
+<ol style="list-style-type: decimal">
+<li>l’erreur est distribuée normalement</li>
+<li>la variance des erreurs est constante</li>
+<li>chaque erreur est indépendante des autres (homoscédasticité)</li>
+<li>la réponse est linéaire: <em>y = β<sub>0</sub> + β<sub>1</sub>x</em></li>
+</ol>
+<p>Il n’y a qu’une façon pour qu’un modèle linéaire soit correctement
+appliqué :</p>
+<p><img src="images/graphic0.1.png" width="350" /></p>
+<p>et pourtant tant de façons pour qu’il ne le soit pas :</p>
+<p><img src="images/graphic0.2.png" /></p>
+<p>Alors, comment résoudre ce problème ? Nous devons premièrement savoir ce
+que le modèle de régression cherche à faire :</p>
+<pre><code> * ajuster une ligne qui passe au milieu des données,
+ * faire cela sans sur-ajuster les données, c&#39;est-à-dire en passant une ligne entre chaque point.</code></pre>
+<p>Les modèles linéaires le font en trouvant la meilleure ligne droite qui
+passe à travers les données. En revanche, les modèles additifs font cela
+en ajustant une courbe à travers les données, mais tout en contrôlant le
+degré de courbure de la ligne <em>(plus d’information sur cela plus bas)</em>.</p>
 </div>
-
-
-
-
-
-
 <hr>
 <center> 
   <div class="footer">
@@ -251,8 +252,8 @@ excellente ressource.</p>
           </div>
         </div>
       </div>
-<a href="les-gams-en-coulisse.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="préparez-vous-pour-cet-atelier.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="introduction-aux-gams.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

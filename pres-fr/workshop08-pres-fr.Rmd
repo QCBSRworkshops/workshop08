@@ -48,7 +48,7 @@ if(length(new.packages) > 0) {
   }
 ```
 
-# � propos de cet atelier
+# ? propos de cet atelier
 [![badge](https://img.shields.io/static/v1?style=for-the-badge&label=repo&message=dev&color=6f42c1&logo=github)](https://github.com/QCBSRworkshops/workshop08)
 [![badge](https://img.shields.io/static/v1?style=for-the-badge&label=wiki&message=08&logo=wikipedia)](https://wiki.qcbs.ca/r_atelier8)
 [![badge](https://img.shields.io/static/v1?style=for-the-badge&label=Diapos&message=08&color=red&logo=html5)](https://qcbsrworkshops.github.io/workshop08/workshop08-fr/workshop08-fr.html)
@@ -154,8 +154,50 @@ En revanche, les **GAM** font cela en ajustant une **fonction de lissage non-lin
 class: inverse, center, middle
 
 ## 2. Introduction aux GAMs
+---
+# Generalized Additive Models (GAM)
+
+Examinons un exemple! Nous allons utilsé le jeu de données `ISIT`.
+
+```{r, eval = FALSE, echo = TRUE}
+isit <- read.csv("data/ISIT.csv",sep=';')
+head(isit)
+```
+
+Ce jeu de donnée comporte des mesures de bioluminescence en relation � la profondeur (*depth*), la station de rechercher et la saison (*Season*).
+
+```{r, eval = TRUE, echo = FALSE}
+isit <- read.csv("data/ISIT.csv",sep=';')
+head(isit)
+```
 
 ---
+# GAM
+Prenons que les donn�es de la deuxi�me saison pour l'instant
+```{r, echo = TRUE}
+library(ggplot2)
+isit2 <- subset(isit,Season==2)
+
+data_plot<-ggplot(isit2, aes(y=Sources, x=SampleDepth)) +
+  geom_point() +
+  theme_bw()
+data_plot
+```
+---
+# GAM
+
+Si nous modélisions la prise en CO2 selon la Sources par une régression linéaire, les résultats ne respecteraient pas les suppositions énumérées ci-dessus.
+```{r, eval=TRUE,echo = FALSE}
+library(mgcv)
+linear_model <- gam(Sources ~ SampleDepth,data=isit2)
+model_summary <- summary(linear_model)
+data_plot <- data_plot +
+             geom_line(colour = "red", size = 1.2, 
+                       aes(y = fitted(linear_model)))
+data_plot
+```
+---
+exclude:true
 # Modèles Additifs Généralisés (GAMs)
 
 Examinons un exemple! Premièrement, nous allons générer des données et les représenter graphiquement.
@@ -174,9 +216,10 @@ data_plot
 ```
 
 ---
+exclude:true
 # GAM
 
-```{r, eval = TRUE, echo = FALSE}
+```{r, eval = FALSE, echo = FALSE}
 library(ggplot2)
 set.seed(10)
 n <- 250
@@ -191,11 +234,12 @@ data_plot
 
 
 ---
+exclude:true
 # GAM
 
 Si nous modélisions cette relation par une régression linéaire, les résultats ne respecteraient pas les suppositions énumérées ci-dessus.
 
-```{r, echo = FALSE}
+```{r,eval=FALSE,echo = FALSE}
 library(mgcv)
 linear_model <- gam(y_obs ~ x)
 model_summary <- summary(linear_model)
@@ -214,6 +258,40 @@ $$y = \alpha + s(x_1) + s(x_2) + ... + \varepsilon$$
 Un des grands avantages d'utiliser un GAM est que la forme optimale de la non-linéarité, i.e. le degré de lissage de `s(x)`, est contrôlée en utilisant une régression pénalisée qui est déterminée automatiquement à l'aide d'une méthode de validation croisée généralisée.
 
 ---
+#GAM
+Essayons de modéliser les données à l'aide d'une fonction de lissage avec la fonction `mgcv::gam()`
+
+
+```{r, eval = FALSE,echo=TRUE}
+library(mgcv)
+gam_model <- gam(Sources ~ s(SampleDepth),data=isit2)
+summary(gam_model)
+
+data_plot <- data_plot +
+     geom_line(colour = "blue", size = 1.2, aes(y = fitted(gam_model)))
+data_plot
+```
+---
+# GAM
+
+```{r, eval=TRUE, echo = FALSE}
+gam_model <- gam(Sources ~ s(SampleDepth),data=isit2)
+summary(gam_model)
+```
+
+---
+# GAM
+
+```{r, eval=TRUE,echo = FALSE}
+data_plot <- data_plot +
+     geom_line(colour = "blue", size = 1.2, aes(y = fitted(gam_model)))
+data_plot
+```
+
+.comment[Note: contrairement à un coefficient fixe $β$, la fonction de lissage peut changer tout au long du gradient $x$]
+
+---
+exclude:true
 # GAM
 
 Essayons de modéliser les données à l'aide d'une fonction de lissage avec la fonction `mgcv::gam()`
@@ -229,17 +307,19 @@ data_plot
 ```
 
 ---
+exclude:true
 # GAM
 
-```{r, echo = FALSE}
+```{r, echo = FALSE,eval=FALSE}
 gam_model <- gam(y_obs ~ s(x))
 summary(gam_model)
 ```
 
 ---
+exclude:true
 # GAM
 
-```{r, echo = FALSE}
+```{r, echo = FALSE,eval=FALSE}
 data_plot <- data_plot +
      geom_line(colour = "blue", size = 1.2, aes(y = fitted(gam_model)))
 data_plot
@@ -257,25 +337,41 @@ La librairie `mgcv` comprend également une fonction plot qui, par défaut, nous
 plot(gam_model)
 ```
 
-
 ---
-# Test de linéarité avec GAM
+# Test for linearity using GAM
 
 Nous pouvons utiliser les fonctions `gam()` et `anova()` pour tester formellement si une hypothèse de linéarité est justifiée. Nous devons simplement le configurer de sorte que notre modèle non-linéaire soit emboîté dans notre modèle linéaire.
 
 ```{r}
+linear_model <- gam(Sources ~ SampleDepth,data=isit2) # fit a regular linear model using gam()
+nested_gam_model <- gam(Sources ~ s(SampleDepth) + SampleDepth,data=isit2)
+AIC(linear_model, nested_gam_model)
+```
+
+**Le mod�le lin�aire � un AIC plus �lev�, donc l'hypothèse de linéarité n'est pas acceptée.**
+
+.comment[Noté que le modèle `y~s(x)` donne exactement le même résultat que `y~s(x)+x`. Nous avons utilisé s(x)+x pour illustrer l'emboîtement du modèle, mais +x peut être omis.]
+
+---
+exclude:true
+# Test de linéarité avec GAM
+
+Nous pouvons utiliser les fonctions `gam()` et `anova()` pour tester formellement si une hypothèse de linéarité est justifiée. Nous devons simplement le configurer de sorte que notre modèle non-linéaire soit emboîté dans notre modèle linéaire.
+
+```{r,eval=FALSE}
 linear_model <- gam(y_obs ~ x) # ajuster un modèle linéaire régulier avec gam()
 nested_gam_model <- gam(y_obs ~ s(x) + x)
-anova(linear_model, nested_gam_model, test = "Chisq")
+AIC(linear_model, nested_gam_model, test = "Chisq")
 ```
 
 ---
+exclude:true
 # Test de linéarité avec GAM
 
-```{r}
+```{r,eval=FALSE}
 linear_model <- gam(y_obs ~ x) # ajuster un modèle linéaire régulier avec gam()
 nested_gam_model <- gam(y_obs ~ s(x) + x)
-anova(linear_model, nested_gam_model, test = "Chisq")
+AIC(linear_model, nested_gam_model, test = "Chisq")
 ```
 
 .comment[Notez que le modèle `y_obs~s(x)` donne exactement les même résultats que `y_obs~s(x)+x`. Nous utilisons $s(x)+x$ pour illustrer l'imbrication du modèle, mais le $+x$ peut être omis.]
@@ -283,9 +379,68 @@ anova(linear_model, nested_gam_model, test = "Chisq")
 ---
 # Défi 1 ![:cube]()
 
-Nous allons maintenant essayer cela avec d'autres données générées aléatoirement.
+Nous allons maintenant essayer cela avec les données du Mississpi.
 
 ```{r}
+isit1 <- subset(isit,Season==1)
+```
+
+
+1. Ajustez un modèle linéaire et un GAM à la relation entre `Sources` et `SampleDepth`.
+2. Déterminez si l'hypothèse de linéarité est justifiée pour ces données.
+3. Quels sont les degrés de libertés effectifs du terme non-linéaire ?
+
+
+<!-- nous n'Avons pas encore parler du edf -->
+---
+# Défi 1 - Solution ![:cube]()
+
+```{r,eval=false}
+linear_model_s1 <- gam(Sources ~ SampleDepth,isit1)
+gam_model_s1 <- gam(Sources ~ s(SampleDepth),data=isit1)
+
+```
+
+---
+# Défi 1 - Solution ![:cube]()
+
+```{r,echo=F}
+ggplot(isit1,aes(x=SampleDepth, y=Sources)) +
+         geom_point()+
+         geom_line(colour = "red", size = 1.2,
+                   aes(y = fitted(linear_model_s1))) +
+         geom_line(colour = "blue", size = 1.2,
+                   aes(y = fitted(gam_model_s1))) +
+         theme_bw()
+```
+---
+# Défi 1 - Solution ![:cube]()
+
+```{r}
+linear_model_s1 <- gam(Sources ~ SampleDepth,data=isit1)
+nested_gam_model_s1 <- gam(Sources ~ s(SampleDepth) + SampleDepth,data=isit1)
+
+AIC(linear_model_s1, nested_gam_model_s1)
+```
+
+
+---
+# Défi 1 - Solution ![:cube]()
+
+```{r}
+nested_gam_model_s1
+```
+
+
+**Réponse** Oui la non-linéarité est justifiée. Les degrés de libertés effectifs (edf) sont >> 1 (on reviendra la dessus bientôt).
+
+---
+exclude:true
+# Défi 1 ![:cube]()
+
+Nous allons maintenant essayer cela avec d'autres données générées aléatoirement.
+
+```{r,eval=FALSE}
 n <- 250
 x_test <- runif(n, -5, 5)
 y_test_fit <- 4 * dnorm(x_test)
@@ -300,28 +455,31 @@ y_test_obs <- rnorm(n, y_test_fit, 0.2)
 <!-- nous n'avons pas parlé de degrés de liberté avant... -->
 
 ---
+exclude:true
 # Défi 1 - Solution ![:cube]()
 
-```{r}
+```{r,eval=FALSE}
 linear_model_test <- gam(y_test_obs ~ x_test)
 nested_gam_model_test <- gam(y_test_obs ~ s(x_test) + x_test)
 
-anova(linear_model_test, nested_gam_model_test, test="Chisq")
+AIC(linear_model_test, nested_gam_model_test, test="Chisq")
 ```
 
 ---
+exclude:true
 # Défi 1 - Solution ![:cube]()
 
-```{r}
+```{r,eval=FALSE}
 qplot(x_test, y_test_obs) +
   geom_line(aes(y = y_test_fit)) +
   theme_bw()
 ```
 
 ---
+exclude:true
 # Défi 1 - Solution ![:cube]()
 
-```{r}
+```{r,eval=FALSE}
 nested_gam_model_test
 ```
 
@@ -331,15 +489,48 @@ nested_gam_model_test
 class: inverse, center, middle
 
 ## 3. Plusieurs termes non linéaires
+---
+# GAM à plusieurs variables
+
+Avec les GAMs, il est facile d'ajouter des termes non linéaires et linéaires dans un seul modèle, plusieurs termes non linéaires ou même des interactions non linéaires.
+
+Dans cette section, nous allons utiliser les donn�es de `ISIT` de nouveau.
+
+```{r,eval=FALSE}
+isit
+head(isit)
+isit$Season <- as.factor(isit$Season)
+```
+
+Nous allons essayer de modéliser la réponse `Sources` avec les pr�dicteurs `Season` and `SampleDepth` simultan�ment.
 
 ---
+# GAM à plusieurs variables
+
+Commençons par un modèle de base comprenant un terme non linéaire (`SampleDepth`) et un facteur qualitatif (`Season` avec 2 niveaux).
+
+```{r}
+basic_model <- gam(Sources ~ Season + s(SampleDepth), data = isit)
+basic_summary <- summary(basic_model)
+basic_summary$p.table
+
+basic_summary$s.table
+```
+
+.comment[La sortie de `p.table` fournit le tableau de résultats pour chaque terme paramétrique
+
+Le tableau `s.table` nous donne les résultats du terme non linéaire.
+]
+
+---
+exclude:true
 # GAM à plusieurs variables
 
 Avec les GAMs, il est facile d'ajouter des termes non linéaires et linéaires dans un seul modèle, plusieurs termes non linéaires ou même des interactions non linéaires.
 
 Dans cette section, nous allons utiliser un ensemble de données générées automatiquement par `mgcv::gamSim()`.
 
-```{r}
+```{r,eval=FALSE}
 # ?gamSim
 gam_data <-  gamSim(eg = 5)
 head(gam_data)
@@ -348,11 +539,12 @@ head(gam_data)
 Nous allons essayer de modéliser la réponse `y` avec les prédicteurs `x0` à `x3`.
 
 ---
+exclude:true
 # GAM à plusieurs variables
 
 Commençons par un modèle de base comprenant un terme non linéaire (`x1`) et un facteur qualitatif (`x0` avec 4 niveaux).
 
-```{r}
+```{r,eval=FALSE}
 basic_model <- gam(y ~ x0 + s(x1), data = gam_data)
 basic_summary <- summary(basic_model)
 basic_summary$p.table
@@ -392,39 +584,15 @@ Nous reviendrons plus tard sur le concept d'edf.
 # GAM à plusieurs variables
 
 ```{r}
-plot(basic_model)
+plot(basic_model,all.terms = T,page=1)
 ```
-
 ---
 # GAM à plusieurs variables
 
-Nous pouvons ajouter un second terme, `x2`, mais spécifier une relation linéaire avec `y`
+Nous pouvons ajouter un second terme, `RelativeDepth`, mais spécifier une relation linéaire avec `Sources`
 
 ```{r}
-two_term_model <- gam(y ~ x0 + s(x1) + x2, data = gam_data)
-two_term_summary <- summary(two_term_model)
-two_term_summary$p.table
-
-two_term_summary$s.table
-```
-
----
-# GAM à plusieurs variables
-
-Nous pouvons ajouter un second terme, `x2`, mais spécifier une relation linéaire avec `y`
-
-```{r, fig.width=5.5, fig.height=5.5}
-plot(two_term_model)
-```
-
-
----
-# GAM à plusieurs variables
-
-Nous pouvons aussi explorer si la relation entre `y` et `x2` est non-linéaire
-
-```{r}
-two_smooth_model <- gam(y ~ x0 + s(x1) + s(x2), data = gam_data)
+two_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth), data = isit)
 two_smooth_summary <- summary(two_smooth_model)
 two_smooth_summary$p.table
 
@@ -434,36 +602,115 @@ two_smooth_summary$s.table
 ---
 # GAM à plusieurs variables
 
-Nous pouvons aussi explorer si la relation entre `y` et `x2` est non-linéaire
+
+Nous pouvons aussi v�rifier que la relation entre `Sources` et `RelativeDepth` est non-lin�aire.
 
 ```{r, fig.width=10}
-plot(two_smooth_model, page = 1)
+plot(two_smooth_model, page = 1,all.terms = T)
 ```
 
 ---
 # GAM à plusieurs variables
 
-Comme avant, nous pouvons faire une ANOVA pour tester si le terme non-linéaire est nécessaire
+
+Comme auparavant, nous pouvons utilisre un AIC pour tester si le lissage de la variable est n�cessaire.
 
 ```{r}
-anova(basic_model, two_term_model, two_smooth_model, test = "Chisq")
+AIC(basic_model, two_term_model, two_smooth_model)
 ```
 
-.alert[Le meilleur modèle est le modèle avec deux fonctions non linéaires pour `x1` et pour `x2`.]
+.alert[Le meilleur modèle est le modèle avec deux fonctions non linéaires.]
 
 ---
+exclude:true
+# GAM à plusieurs variables
+
+Nous pouvons ajouter un second terme, `x2`, mais spécifier une relation linéaire avec `y`
+
+```{r,eval=FALSE}
+two_term_model <- gam(y ~ x0 + s(x1) + x2, data = gam_data)
+two_term_summary <- summary(two_term_model)
+two_term_summary$p.table
+
+two_term_summary$s.table
+```
+
+---
+exclude:true
+# GAM à plusieurs variables
+
+Nous pouvons ajouter un second terme, `x2`, mais spécifier une relation linéaire avec `y`
+
+```{r, fig.width=5.5, fig.height=5.5,eval=FALSE}
+plot(two_term_model,all.terms = T)
+```
+
+
+---
+exclude:true
+# GAM à plusieurs variables
+
+Nous pouvons aussi explorer si la relation entre `y` et `x2` est non-linéaire
+
+```{r,eval=FALSE}
+two_smooth_model <- gam(y ~ x0 + s(x1) + s(x2), data = gam_data)
+two_smooth_summary <- summary(two_smooth_model)
+two_smooth_summary$p.table
+
+two_smooth_summary$s.table
+```
+
+---
+exclude:true
+# GAM à plusieurs variables
+
+Nous pouvons aussi explorer si la relation entre `y` et `x2` est non-linéaire
+
+```{r, fig.width=10,eval=FALSE}
+plot(two_smooth_model, page = 1,all.terms = T)
+```
+
+---
+exclude:true
+# GAM à plusieurs variables
+
+Comme avant, nous pouvons faire une AIC pour tester si le terme non-linéaire est nécessaire
+
+```{r,eval=FALSE}
+AIC(basic_model, two_term_model, two_smooth_model)
+```
+
+.alert[Le meilleur modèle est le modèle avec deux fonctions non linéaires.]
+---
+# D�fi 2 ![:cube]()
+
+<br>
+
+1. Créez deux nouveaux modèles avec la variable `Latitude` comme paramètre linéaire et non linéaire.
+2. Utilisez des graphiques, les tables des coefficients et la fonction `AIC()` afin de déterminer s'il est nécessaire d'inclure `Latitude` dans le modèle.
+
+---
+exclude:true
 # Défi 2 ![:cube]()
 
 <br>
 
 1. Créez deux nouveaux modèles avec la variable `x3` comme paramètre linéaire et non linéaire.
-2. Utilisez des graphiques, les tables des coefficients et la fonction `anova()` afin de déterminer s'il est nécessaire d'inclure `x3` dans le modèle.
-
+2. Utilisez des graphiques, les tables des coefficients et la fonction `AIC()` afin de déterminer s'il est nécessaire d'inclure `x3` dans le modèle.
 ---
+# Défi 2 - Solution ![:cube]()
+```{r}
+three_term_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth) + Latitude, data = isit)
+three_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth) + s(Latitude), data = isit)
+three_smooth_summary <- summary(three_smooth_model)
+three_smooth_summary
+```
+---
+exclude:true
 # Défi 2 - Solution ![:cube]()
 
 <br>
-```{r}
+```{r,eval=FALSE}
 three_term_model <- gam(y ~ x0 + s(x1) + s(x2) + x3, data = gam_data)
 three_smooth_model <- gam(y~x0 + s(x1) + s(x2) + s(x3), data = gam_data)
 three_smooth_summary <- summary(three_smooth_model)
@@ -473,12 +720,12 @@ three_smooth_summary <- summary(three_smooth_model)
 # Défi 2 - Solution ![:cube]()
 
 ```{r, eval = FALSE}
-plot(three_smooth_model, page = 1)
+plot(three_smooth_model, page = 1, all.terms = T)
 ```
 
 ```{r, fig.width=8, fig.height=7, echo = FALSE}
 par(mar=c(3.8,3.8,.2,.2))
-plot(three_smooth_model, page = 1)
+plot(three_smooth_model, page = 1,all.terms = T)
 ```
 
 ---
@@ -489,9 +736,8 @@ three_smooth_summary$s.table
 
 # edf = 1 donc le terme est linéaire.
 
-anova(two_smooth_model, three_term_model, test = "Chisq")
+AIC(two_smooth_model, three_term_model)
 
-# terme x3 non significatif, il doit être enlevé!
 ```
 
 
@@ -499,7 +745,6 @@ anova(two_smooth_model, three_term_model, test = "Chisq")
 class: inverse, center, middle
 
 ## 4. Intéractions
-
 ---
 # GAM avec des termes d'interaction
 
@@ -514,9 +759,21 @@ Il y a deux façons de modéliser une interaction entre deux variables :
 ---
 # GAM avec des termes d'interaction
 
-Nous allons examiner l'effet de l'interaction en utilisant notre variable qualitative `x0` et examiner si la non-linéarité de `s(x2)` varie selon les différents niveaux de `x0`.
+Nous allons examiner l'effet de l'interaction en utilisant notre variable qualitative `Season` et examiner si la non-linéarité de `s(SampleDepth)` varie selon les différents niveaux de `Season`.
 
 ```{r}
+factor_interact <- gam(Sources ~ Season + s(SampleDepth,by=Season) + s(RelativeDepth), data = isit)
+
+summary(factor_interact)$s.table
+```
+
+---
+exculde:true
+# GAM avec des termes d'interaction
+
+Nous allons examiner l'effet de l'interaction en utilisant notre variable qualitative `x0` et examiner si la non-linéarité de `s(x2)` varie selon les différents niveaux de `x0`.
+
+```{r,eval=FALSE}
 factor_interact <- gam(y ~ x0 + s(x1) + s(x2, by = x0), data = gam_data)
 
 summary(factor_interact)$s.table
@@ -530,32 +787,33 @@ plot(factor_interact, page = 1)
 ```
 
 ---
+exclude:true
 # GAM avec des termes d'interaction
 
 Nous pouvons aussi visualiser notre modèle en 3D avec `vis.gam`, où `theta` est le degré de rotation de notre plan x-y
 
 ```{r,fig.width=5.5, fig.height=5.5}
-vis.gam(factor_interact, view = c("x2","x0"), theta = 40, n.grid = 500, border = NA)
+vis.gam(factor_interact, view = c("SampleDepth","Season"), theta = 40, n.grid = 500, border = NA)
 ```
 
 ---
 # GAM avec des termes d'interaction
 
-Faisons une comparaison de modèle avec ANOVA pour déterminer si le terme d'interaction est nécessaire
+Faisons une comparaison de modèle avec AIC pour déterminer si le terme d'interaction est nécessaire
 
 ```{r}
-anova(two_smooth_model, factor_interact, test = "Chisq")
+AIC(two_smooth_model, factor_interact)
 ```
 
-À partir des graphiques, on voit que les formes des termes non-linéaires sont comparables parmi les 4 niveaux de `x0`. L'anova confirme cela aussi (p > 0.05).
+À partir des graphiques, on voit que les formes des termes non-linéaires sont comparables parmi les 4 niveaux de `x0`. L'AIC confirme cela aussi (p > 0.05).
 
 ---
 # GAM avec des termes d'interaction
 
-Finalement, nous regardons les interactions entre 2 termes non linéaires, `x1` et `x2`.
+Finalement, nous regardons les interactions entre 2 termes non linéaires, `SampleDepth` et `RelativeDepth`.
 
 ```{r}
-smooth_interact <- gam(y~x0 + s(x1, x2), data = gam_data)
+smooth_interact <- gam(Sources~Season + s(SampleDepth, RelativeDepth), data = isit)
 summary(smooth_interact)$s.table
 ```
 
@@ -568,9 +826,10 @@ plot(smooth_interact, page = 1, scheme = 3)
 
 
 ---
+exclude:true
 # GAM avec des termes d'interaction
 
-```{r, fig.width=8, fig.height=8}
+```{r, fig.width=8, fig.height=8,eval=FALSE}
 vis.gam(smooth_interact, view = c("x1", "x2"), theta=40, n.grid = 500, border = NA)
 # similaire à plot(smooth_interact, page = 1, scheme = 1)
 ```
@@ -579,10 +838,10 @@ vis.gam(smooth_interact, view = c("x1", "x2"), theta=40, n.grid = 500, border = 
 # GAM avec des termes d'interaction
 
 ```{r}
-anova(two_smooth_model, smooth_interact, test = "Chisq")
+AIC(two_smooth_model, smooth_interact)
 ```
 
-L'intéraction entre `s(x1)` et `s(x2)` est significative et le graphique en 2D illustre bien cette intéraction non-linéaire, où `y` est elevé pour de fortes valeurs de `x1` mais faible pour de petites à moyennes valeurs de `x2`.
+Le mod�le avec l'intéraction entre `s(SampleDepth)` et `s(RelativeDepth)` a une plus petite valeur d'AIC et le graphique en 2D illustre bien cette intéraction non-linéaire, où `Sources` est faible pour de fortes valeurs de `SampleDepth` mais �lev� pour de moyennes � hautes  valeurs de `RelativeDepth`.
 
 ---
 class: inverse, center, middle
@@ -883,7 +1142,7 @@ year_gam_AR1 <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"),
 year_gam_AR2 <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"),
                      correlation = corARMA(form = ~ 1|nottem_year, p = 2),
                    data = data.frame(nottem, nottem_year, nottem_month))
-anova(year_gam$lme, year_gam_AR1$lme, year_gam_AR2$lme)
+AIC(year_gam$lme, year_gam_AR1$lme, year_gam_AR2$lme)
 ```
 
 .comment[Le modèle avec la structure AR(1) prévoit une augmentation significative comparativement au premier modèle (LRT = 10,69, p = 0,0011), mais il y a très peu d'intérêt à considérer le modèle AR(2) (LRT = 1,62, b = 0,203).]
@@ -1127,10 +1386,10 @@ plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "4"), add = T,
 ---
 # GAMM
 
-Tous ces modèles mixtes peuvent être comparés en utilisant la fonction `anova()` pour trouver le meilleur modèle.
+Tous ces modèles mixtes peuvent être comparés en utilisant la fonction `AIC()` pour trouver le meilleur modèle.
 
 ```{r}
-anova(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth, test = "Chisq")
+AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth, test = "Chisq")
 ```
 
 ---

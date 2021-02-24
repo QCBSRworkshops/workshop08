@@ -71,7 +71,7 @@ install.packages(c('ggplot2', 'itsadug', 'mgcv'))
 ```
 ---
 
-## Workshop overview
+# Workshop overview
 
 1. The linear model... and where if fails
 2. Introduction to GAM
@@ -169,13 +169,14 @@ head(isit)
 
 ---
 # GAM
-For now let's focus on Season #2.
-```{r, eval=TRUE,echo = TRUE}
+For now, let's focus on Season 2.
+```{r, eval=TRUE,echo = FALSE}
 library(ggplot2)
+```
+
+```{r, eval=TRUE}
 isit2=subset(isit,Season==2)
-data_plot<-ggplot(isit2, aes(y=Sources, x=SampleDepth)) +
-  geom_point() +
-  theme_bw()
+data_plot<-ggplot(isit2, aes(y=Sources, x=SampleDepth)) +geom_point()+theme_bw()
 data_plot
 ```
 ---
@@ -250,7 +251,7 @@ In GAM, the relationship between the response variable and the predictors is:
 
 $$y = \alpha + s(x_1) + s(x_2) + ... + \epsilon$$
 
-One big advantage of using GAM over a manual specification of the model is that the optimal shape, i.e. the degree of smoothness of `s(x)`, is determined automatically using a generalized cross-validation
+One big advantage of using GAM over a manual specification of the model is that the optimal shape, i.e. **the degree of smoothness** of `s(x)`, is determined automatically using a generalized cross-validation
 
 ---
 #GAM
@@ -285,7 +286,7 @@ data_plot <- data_plot +
 data_plot
 ```
 
-.comment[Note: as opposed to one fixed coefficient, \beta in linear regression, the smooth function can continually change over the range of the predictor x]
+.comment[Note: as opposed to one fixed coefficient, $β$ in linear regression, the smooth function can continually change over the range of the predictor x]
 
 ---
 exclude:true
@@ -306,7 +307,7 @@ data_plot
 ```
 
 ---
-exlude:true
+exclude:true
 # GAM
 
 ```{r, eval=FALSE, echo = FALSE}
@@ -350,7 +351,7 @@ AIC(linear_model, nested_gam_model)
 
 **AIC of the nested gam is lower, so linearity is not justified**
 
-.comment[Note that the model `y~s(x)` gives exactly the same results as `y~s(x)+x`. We used the s(x)+x to illustrate the nestedness of the model, but the +x can be omitted.]
+.comment[Note that the model `y~s(x)` gives exactly the same results as `y~s(x)+x`. We used the `s(x)+x` to illustrate the nestedness of the model, but the `+x` can be omitted.]
 
 ---
 exclude:true
@@ -423,7 +424,7 @@ nested_gam_model_s1
 **Answer** Yes non-linearity is justified. The estimated degrees of freedom (edf) are >> 1 (we'll get back to this soon).
 
 ---
-exclue:true
+exclude:true
 # Challenge 1 ![:cube]()
 
 We will now try this comparison test with some new simulated data, just to get a handle on it.
@@ -485,19 +486,24 @@ GAMs make it easy to include both smooth and linear terms, multiple smoothed ter
 For this section, we will use the `ISIT` data again.
 
 ```{r,eval=FALSE}
-isit
 head(isit)
 isit$Season <- as.factor(isit$Season)
 ```
 
 We will try to model the response `Sources` using the predictors `Season` and `SampleDepth` simultaneously.
 
+.comment[`Season` need to be converted into a factor] 
+
 ---
 # GAM with multiple variables
 
 Let's start with a basic model, with one smoothed term (`SampleDepth`) and one categorical predictor (`Season`, which has 2 levels).
+```{r,eval=TRUE,echo=FALSE}
+isit$Season <- as.factor(isit$Season)
+```
 
 ```{r}
+isit$Season <- as.factor(isit$Season)
 basic_model <- gam(Sources ~ Season + s(SampleDepth), data = isit)
 basic_summary <- summary(basic_model)
 basic_summary$p.table
@@ -558,7 +564,7 @@ The `edf` shown in the `s.table` is the estimated degrees of freedom – essenti
 
 - A high value (8–10 or higher) means that the spline is highly non-linear.
 
-> In our basic model the edf of smooth function s(x1) is ~2, which suggests a non-linear curve.
+> In our basic model the edf of smooth function s(SampleDepth) is ~8, which suggests a highly non-linear curve.
 
 ---
 # Note on estimated degrees of freedom
@@ -572,8 +578,8 @@ We will revisit the edf later in this workshop.
 ---
 # GAM with multiple variables
 
-```{r}
-plot(basic_model,all.terms = T,page=1)
+```{r,fig.width=12}
+plot(basic_model,all.terms = TRUE,page=1)
 ```
 ---
 # GAM with multiple variables
@@ -594,7 +600,7 @@ two_term_summary$s.table
 
 We can add a second term, `RelativeDepth`, but specify a linear relationship with `Sources`
 
-```{r}
+```{r,fig.width=10,fig.height=6.5}
 plot(two_term_model,page=1,all.terms = T)
 ```
 ---
@@ -615,7 +621,7 @@ two_smooth_summary$s.table
 
 We can also explore whether the relationship between `Sources` and `RelativeDepth` is non-linear
 
-```{r, fig.width=10}
+```{r,fig.width=10,fig.height=6.5}
 plot(two_smooth_model, page = 1,all.terms = T)
 ```
 
@@ -709,13 +715,21 @@ exclude:true
 # Challenge 2 - Solution ![:cube]()
 
 <br>
-```{r}
+```{r,eval=FALSE}
 three_term_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth) + Latitude, data = isit)
 three_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth) + s(Latitude), data = isit)
 three_smooth_summary <- summary(three_smooth_model)
 three_smooth_summary
 ```
+---
+# Challenge 2 - Solution ![:cube]()
 
+```{r,eval=TRUE,echo=FALSE}
+three_term_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth) + Latitude, data = isit)
+three_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth) + s(Latitude), data = isit)
+three_smooth_summary <- summary(three_smooth_model)
+three_smooth_summary
+```
 
 ---
 exclude:true
@@ -732,12 +746,12 @@ three_smooth_summary <- summary(three_smooth_model)
 # Challenge 2 - Solution ![:cube]()
 
 ```{r, eval = FALSE}
-plot(three_smooth_model, page = 1,all.terms = T)
+plot(three_smooth_model, page = 1,all.terms = TRUE)
 ```
 
 ```{r, fig.width = 8, fig.height = 7, echo = FALSE}
 par(mar=c(3.8,3.8,.2,.2))
-plot(three_smooth_model, page = 1,all.terms = T)
+plot(three_smooth_model, page = 1,all.terms = TRUE)
 ```
 
 ---
@@ -823,7 +837,10 @@ There are 2 ways to include interactions between variables:
 We will examine interaction effect using our categorical variable `Season` and ask whether the non-linear smoother `s(SampleDepth)` varies across different levels of `Season`.
 
 ```{r}
-factor_interact <- gam(Sources ~ Season + s(SampleDepth, by=Season) + s(RelativeDepth), data = isit)
+factor_interact <- gam(Sources ~ Season + 
+                         s(SampleDepth, by=Season) + 
+                         s(RelativeDepth), 
+                       data = isit)
 
 summary(factor_interact)$s.table
 ```
@@ -834,7 +851,7 @@ exclude:true
 
 We will examine interaction effect using our categorical variable `x0` and ask whether the non-linear smoother `s(x2)` varies across different levels of `x0`.
 
-```{r,eval=FALSE}
+```{r,eval=FALSE,fig.width=10,fig.height=6.5}
 factor_interact <- gam(y ~ x0 + s(x1) + s(x2, by = x0), data = gam_data)
 
 summary(factor_interact)$s.table
@@ -843,12 +860,12 @@ summary(factor_interact)$s.table
 ---
 # GAM with interaction terms
 
-```{r, fig.width = 8}
+```{r, fig.width = 10,fig.height=6.5}
 plot(factor_interact, page = 1)
 ```
 
 ---
-exckude:true
+exclude:true
 # GAM with interaction terms
 
 We can also visualise our model in 3D using `vis.gam`, where `theta` is the degree rotation on the x-y plane
@@ -866,7 +883,7 @@ Let's perform a model comparison using AIC to determine if the interaction term 
 AIC(two_smooth_model, factor_interact)
 ```
 
-From the plots, we saw that the shape of the smooth terms were comparable among the 4 levels of `x0`. The AIC confirms this as well (p > 0.05).
+From the plots, we saw that the shape of the smooth terms were comparable among the 2 levels of `Season`. The AIC confirms this as well.
 
 ---
 # GAM with interaction terms
@@ -1461,7 +1478,7 @@ plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "4"), add = T,
 All of the mixed models from this section can be compared using `AIC()` to determine the best fit model
 
 ```{r}
-AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth, test = "Chisq")
+AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
 ```
 
 ---

@@ -50,7 +50,7 @@ install.packages(c('ggplot2', 'itsadug', 'mgcv'))
 ```
 ---
 
-## Workshop overview
+# Workshop overview
 
 1. The linear model... and where if fails
 2. Introduction to GAM
@@ -133,6 +133,42 @@ class: inverse, center, middle
 ---
 # Generalized Additive Models (GAM)
 
+Let's look at an example. First, we will download the `ISIT` datasets.
+
+
+```r
+isit &lt;- read.csv("data/ISIT.csv", sep = ';')
+head(isit)
+```
+
+This datasets is comprised of bioluminescence levels (`Sources`) in relation to depth, seasons and different stations.
+
+
+For now, let's focus on Season 2.
+
+
+
+```r
+isit2 &lt;- subset(isit, Season==2)
+```
+---
+# GAM
+
+Trying to fit `Sources` to `SampleDepth` as a linear regression model, we would violate the assumptions listed above.
+
+```r
+linear_model &lt;- gam(Sources ~ SampleDepth, data = isit2)
+data_plot &lt;- ggplot(isit2, aes(y = Sources, x = SampleDepth)) + geom_point() +
+             geom_line(colour = "red", size = 1.2,aes(y = fitted(linear_model))) + theme_bw()
+data_plot
+```
+
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-5-1.png" width="432" style="display: block; margin: auto;" /&gt;
+
+---
+exclude:true
+# Generalized Additive Models (GAM)
+
 Let's look at an example. First, we'll generate some data, and plot it.
 
 
@@ -150,17 +186,18 @@ data_plot
 ```
 
 ---
+exclude:true
 # GAM
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-2-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 
 ---
+exclude:true
 # GAM
 
 Trying to fit these data as a linear regression model, we would violate the assumptions listed above.
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-3-1.png" width="432" style="display: block; margin: auto;" /&gt;
+
 
 ---
 # GAM
@@ -169,9 +206,53 @@ In GAM, the relationship between the response variable and the predictors is:
 
 `$$y = \alpha + s(x_1) + s(x_2) + ... + \epsilon$$`
 
-One big advantage of using GAM over a manual specification of the model is that the optimal shape, i.e. the degree of smoothness of `s(x)`, is determined automatically using a generalized cross-validation
+One big advantage of using GAM over a manual specification of the model is that the optimal shape, i.e. **the degree of smoothness** of `s(x)`, is determined automatically using a generalized cross-validation
 
 ---
+#GAM
+Let's try to fit the data using a smooth function with the function `mgcv::gam()`
+
+
+```r
+gam_model &lt;- gam(Sources ~ s(SampleDepth), data = isit2)
+
+```
+--
+
+
+```
+# 
+# Family: gaussian 
+# Link function: identity 
+# 
+# Formula:
+# Sources ~ s(SampleDepth)
+# 
+# Parametric coefficients:
+#             Estimate Std. Error t value Pr(&gt;|t|)    
+# (Intercept)  12.8937     0.2471   52.17   &lt;2e-16 ***
+# ---
+# Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+# 
+# Approximate significance of smooth terms:
+#                  edf Ref.df     F p-value    
+# s(SampleDepth) 8.908  8.998 214.1  &lt;2e-16 ***
+# ---
+# Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+# 
+# R-sq.(adj) =   0.81   Deviance explained = 81.4%
+# GCV = 28.287  Scale est. = 27.669    n = 453
+```
+
+---
+# GAM
+
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-11-1.png" width="432" style="display: block; margin: auto;" /&gt;
+
+.comment[Note: as opposed to one fixed coefficient, `\(β\)` in linear regression, the smooth function can continually change over the range of the predictor x]
+
+---
+exclude:true
 # GAM
 
 Let's try to fit the data using a smooth function with the function `mgcv::gam()`
@@ -184,42 +265,22 @@ gam_model &lt;- gam(y_obs ~ s(x))
 summary(gam_model)
 
 data_plot &lt;- data_plot +
-     geom_line(colour = "blue", size = 1.2, aes(y = fitted(gam_model)))
+     geom_line(colour = "blue", size = 1.2, 
+               aes(y = fitted(gam_model)))
 data_plot
 ```
 
 ---
+exclude:true
 # GAM
 
 
-```
-# 
-# Family: gaussian 
-# Link function: identity 
-# 
-# Formula:
-# y_obs ~ s(x)
-# 
-# Parametric coefficients:
-#             Estimate Std. Error t value Pr(&gt;|t|)    
-# (Intercept) 1.154422   0.006444   179.1   &lt;2e-16 ***
-# ---
-# Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-# 
-# Approximate significance of smooth terms:
-#        edf Ref.df     F p-value    
-# s(x) 8.317  8.872 171.3  &lt;2e-16 ***
-# ---
-# Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-# 
-# R-sq.(adj) =  0.859   Deviance explained = 86.3%
-# GCV = 0.010784  Scale est. = 0.010382  n = 250
-```
 
 ---
+exclude:true
 # GAM
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-6-1.png" width="432" style="display: block; margin: auto;" /&gt;
+
 
 .comment[Note: as opposed to one fixed coefficient, \beta in linear regression, the smooth function can continually change over the range of the predictor x]
 
@@ -234,10 +295,29 @@ The `mgcv` package also includes a default plot to look at the smooths:
 plot(gam_model)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-7-1.png" width="432" style="display: block; margin: auto;" /&gt;
-
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-15-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 ---
+# Test for linearity using GAM
+
+We can use `gam()` and `AIC()` to test whether an assumption of linearity is justified. To do so, we must simply set our smoothed model so that it is nested in our linear model.
+
+
+```r
+linear_model &lt;- gam(Sources ~ SampleDepth, data = isit2) # fit a regular linear model using gam()
+nested_gam_model &lt;- gam(Sources ~ s(SampleDepth) + SampleDepth, data = isit2)
+AIC(linear_model, nested_gam_model)
+#                        df      AIC
+# linear_model      3.00000 3143.720
+# nested_gam_model 10.90825 2801.451
+```
+
+**AIC of the nested gam is lower, so linearity is not justified**
+
+.comment[Note that the model `y ~ s(x)` gives exactly the same results as `y ~ s(x) + x`. We used the `s(x) + x` to illustrate the nestedness of the model, but the `+ x` can be omitted.]
+
+---
+exclude:true
 # Test for linearity using GAM
 
 We can use `gam()` and `anova()` to test whether an assumption of linearity is justified. To do so, we must simply set our smoothed model so that it is nested in our linear model.
@@ -247,20 +327,77 @@ We can use `gam()` and `anova()` to test whether an assumption of linearity is j
 linear_model &lt;- gam(y_obs ~ x) # fit a regular linear model using gam()
 nested_gam_model &lt;- gam(y_obs ~ s(x) + x)
 anova(linear_model, nested_gam_model, test = "Chisq")
-# Analysis of Deviance Table
-# 
-# Model 1: y_obs ~ x
-# Model 2: y_obs ~ s(x) + x
-#   Resid. Df Resid. Dev     Df Deviance  Pr(&gt;Chi)    
-# 1    248.00     6.5846                              
-# 2    240.13     2.4988 7.8721   4.0858 &lt; 2.2e-16 ***
-# ---
-# Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
 .comment[Note that the model `y_obs~s(x)` gives exactly the same results as `y_obs~s(x)+x`. We used the s(x)+x to illustrate the nestedness of the model, but the +x can be omitted.]
 
 ---
+# Challenge 1 ![:cube]()
+
+We will now try this comparison test with the data recorded in the first season, just to get a handle on it.
+
+
+```r
+isit1 &lt;- subset(isit, Season==1)
+```
+
+1. Fit a linear and smoothed GAM model to the relation between `SampleDepth` and `Sources`.
+2. Determine if linearity is justified for this data.
+3. What is the estimated degrees of freedom of the smoothed term?
+
+
+&lt;!-- we didn't talk about **edf** before... --&gt;
+---
+# Challenge 1 - Solution ![:cube]()
+
+
+```r
+linear_model_s1 &lt;- gam(Sources ~ SampleDepth, data = isit1)
+gam_model_s1 &lt;- gam(Sources ~ s(SampleDepth), data = isit1)
+```
+
+---
+# Challenge 1 - Solution ![:cube]()
+
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-20-1.png" width="432" style="display: block; margin: auto;" /&gt;
+---
+# Challenge 1 - Solution ![:cube]()
+
+
+```r
+linear_model_s1 &lt;- gam(Sources ~ SampleDepth,data = isit1)
+nested_gam_model_s1 &lt;- gam(Sources ~ s(SampleDepth),data = isit1)
+
+AIC(linear_model_s1, nested_gam_model_s1)
+#                           df      AIC
+# linear_model_s1     3.000000 2324.905
+# nested_gam_model_s1 9.644938 2121.249
+```
+
+
+---
+# Challenge 1 - Solution ![:cube]()
+
+
+```r
+nested_gam_model_s1
+# 
+# Family: gaussian 
+# Link function: identity 
+# 
+# Formula:
+# Sources ~ s(SampleDepth)
+# 
+# Estimated degrees of freedom:
+# 7.64  total = 8.64 
+# 
+# GCV score: 32.13946
+```
+
+**Answer** Yes non-linearity is justified. The estimated degrees of freedom (**edf**) are &gt;&gt; 1 (we'll get back to this soon).
+
+---
+exclude:true
 # Challenge 1 ![:cube]()
 
 We will now try this comparison test with some new simulated data, just to get a handle on it.
@@ -278,9 +415,10 @@ y_test_obs &lt;- rnorm(n, y_test_fit, 0.2)
 3. What is the estimated degrees of freedom of the smoothed term?
 
 
-&lt;!-- we didn't talk about edf before... --&gt;
+&lt;!-- we didn't talk about **edf** before... --&gt;
 
 ---
+exclude:true
 # Challenge 1 - Solution ![:cube]()
 
 
@@ -289,18 +427,10 @@ linear_model_test &lt;- gam(y_test_obs ~ x_test)
 nested_gam_model_test &lt;- gam(y_test_obs ~ s(x_test) + x_test)
 
 anova(linear_model_test, nested_gam_model_test, test="Chisq")
-# Analysis of Deviance Table
-# 
-# Model 1: y_test_obs ~ x_test
-# Model 2: y_test_obs ~ s(x_test) + x_test
-#   Resid. Df Resid. Dev     Df Deviance  Pr(&gt;Chi)    
-# 1     248.0     78.995                              
-# 2     240.1     10.420 7.8988   68.574 &lt; 2.2e-16 ***
-# ---
-# Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
 ---
+exclude:true
 # Challenge 1 - Solution ![:cube]()
 
 
@@ -310,35 +440,66 @@ qplot(x_test, y_test_obs) +
   theme_bw()
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-11-1.png" width="432" style="display: block; margin: auto;" /&gt;
-
 ---
+exclude:true
 # Challenge 1 - Solution ![:cube]()
 
 
 ```r
 nested_gam_model_test
-# 
-# Family: gaussian 
-# Link function: identity 
-# 
-# Formula:
-# y_test_obs ~ s(x_test) + x_test
-# 
-# Estimated degrees of freedom:
-# 7.51  total = 9.4 
-# 
-# GCV score: 0.04500348     rank: 10/11
 ```
 
-**Answer** Yes non-linearity is justified. The estimated degrees of freedom (edf) are &gt;&gt; 1 (we'll get back to this soon).
+**Answer** Yes non-linearity is justified. The estimated degrees of freedom (**edf**) are &gt;&gt; 1 (we'll get back to this soon).
 
 ---
 class: inverse, center, middle
 
 ## 3. Multiple smooth terms
+---
+# GAM with multiple variables
+
+GAMs make it easy to include both smooth and linear terms, multiple smoothed terms, and smoothed interactions.
+
+For this section, we will use the `ISIT` data again.
+
+
+```r
+head(isit)
+isit$Season &lt;- as.factor(isit$Season)
+```
+
+We will try to model the response `Sources` using the predictors `Season` and `SampleDepth` simultaneously.
+
+.comment[`Season` need to be converted into a factor] 
 
 ---
+# GAM with multiple variables
+
+Let's start with a basic model, with one smoothed term (`SampleDepth`) and one categorical predictor (`Season`, which has 2 levels).
+
+
+
+```r
+isit$Season &lt;- as.factor(isit$Season)
+basic_model &lt;- gam(Sources ~ Season + s(SampleDepth), data = isit)
+basic_summary &lt;- summary(basic_model)
+basic_summary$p.table
+#             Estimate Std. Error  t value     Pr(&gt;|t|)
+# (Intercept) 7.249251  0.3612771 20.06563 1.678335e-72
+# Season2     6.163134  0.4826192 12.77018 4.835600e-34
+
+basic_summary$s.table
+#                    edf   Ref.df        F p-value
+# s(SampleDepth) 8.82882 8.991424 184.5705       0
+```
+
+.comment[The `p.table` provides the significance table for each linear term
+
+The `s.table` provides the significance table for each smoothed term.
+]
+
+---
+exclude:true
 # GAM with multiple variables
 
 GAMs make it easy to include both smooth and linear terms, multiple smoothed terms, and smoothed interactions.
@@ -349,20 +510,13 @@ For this section, we will use simulated data generated using `mgcv::gamSim()`.
 ```r
 # ?gamSim
 gam_data &lt;-  gamSim(eg = 5)
-# Additive model + factor
 head(gam_data)
-#           y x0         x1         x2         x3
-# 1  4.723147  1 0.02573032 0.70706571 0.69248543
-# 2  8.886671  2 0.83272144 0.84997218 0.88974095
-# 3 11.196905  3 0.66302652 0.88025265 0.08469529
-# 4 10.886068  4 0.11126873 0.80087554 0.15109792
-# 5 12.270534  1 0.87969756 0.37692184 0.51467778
-# 6  9.020910  2 0.12441532 0.05154493 0.86526950
 ```
 
 We will try to model the response `y` using the predictors `x0` to `x3`.
 
 ---
+exclude:true
 # GAM with multiple variables
 
 Let's start with a basic model, with one smoothed term (x1) and one categorical predictor (x0, which has 4 levels).
@@ -372,15 +526,8 @@ Let's start with a basic model, with one smoothed term (x1) and one categorical 
 basic_model &lt;- gam(y ~ x0 + s(x1), data = gam_data)
 basic_summary &lt;- summary(basic_model)
 basic_summary$p.table
-#             Estimate Std. Error   t value     Pr(&gt;|t|)
-# (Intercept) 8.550030  0.3655849 23.387258 1.717989e-76
-# x02         2.418682  0.5165515  4.682364 3.908046e-06
-# x03         4.486193  0.5156501  8.700072 9.124666e-17
-# x04         6.528518  0.5204234 12.544629 1.322632e-30
 
 basic_summary$s.table
-#            edf   Ref.df        F p-value
-# s(x1) 1.923913 2.406719 42.43242       0
 ```
 
 .comment[The `p.table` provides the significance table for each linear term
@@ -394,38 +541,117 @@ The `s.table` provides the significance table for each smoothed term.
 
 ```r
 basic_summary$s.table
-#            edf   Ref.df        F p-value
-# s(x1) 1.923913 2.406719 42.43242       0
+#                    edf   Ref.df        F p-value
+# s(SampleDepth) 8.82882 8.991424 184.5705       0
 ```
 
-The `edf` shown in the `s.table` is the estimated degrees of freedom – essentially, a larger edf value implies more complex wiggly splines.
+The `edf` shown in the `s.table` is the estimated degrees of freedom – essentially, a larger **edf** value implies more complex wiggly splines.
 
 - A value close to 1 tend to be close to a linear term.
 
 - A high value (8–10 or higher) means that the spline is highly non-linear.
 
-&gt; In our basic model the edf of smooth function s(x1) is ~2, which suggests a non-linear curve.
+&gt; In our basic model the **edf** of smooth function s(SampleDepth) is ~8, which suggests a highly non-linear curve.
 
 ---
 # Note on estimated degrees of freedom
 
-The edf in GAM is different from the degrees of freedom in a linear regression.
+The **edf** in GAM is different from the degrees of freedom in a linear regression.
 
 In linear regression, the *model* degrees of freedom is equivalent to the number of non-redundant free parameters, p, in the model (and the *residual* degrees of freedom are given by n-p).
 
-We will revisit the edf later in this workshop.
+We will revisit the **edf** later in this workshop.
 
 ---
 # GAM with multiple variables
 
 
 ```r
-plot(basic_model)
+plot(basic_model, all.terms = TRUE,page=1)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-16-1.png" width="432" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-33-1.png" width="864" style="display: block; margin: auto;" /&gt;
+---
+# GAM with multiple variables
+
+We can add a second term, `RelativeDepth`, but specify a linear relationship with `Sources`
+
+
+```r
+two_term_model &lt;- gam(Sources ~ Season + s(SampleDepth) + RelativeDepth, data = isit)
+two_term_summary &lt;- summary(two_term_model)
+two_term_summary$p.table
+#                   Estimate   Std. Error   t value     Pr(&gt;|t|)
+# (Intercept)    9.795454112 0.6480068720 15.116281 1.897083e-45
+# Season2        6.048520138 0.4768786001 12.683564 1.221158e-33
+# RelativeDepth -0.001396801 0.0002968624 -4.705216 3.001531e-06
+
+two_term_summary$s.table
+#                     edf   Ref.df        F p-value
+# s(SampleDepth) 8.824423 8.990987 132.6712       0
+```
 
 ---
+
+# GAM with multiple variables
+
+We can add a second term, `RelativeDepth`, but specify a linear relationship with `Sources`
+
+
+```r
+plot(two_term_model, page = 1, all.terms = TRUE)
+```
+
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-35-1.png" width="720" style="display: block; margin: auto;" /&gt;
+---
+# GAM with multiple variables
+
+We can also explore whether the relationship between `Sources` and `RelativeDepth` is non-linear
+
+
+```r
+two_smooth_model &lt;- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth), data = isit)
+two_smooth_summary &lt;- summary(two_smooth_model)
+two_smooth_summary$p.table
+#             Estimate Std. Error  t value     Pr(&gt;|t|)
+# (Intercept) 7.940799  0.3451786 23.00490 1.585386e-89
+# Season2     4.958650  0.4784324 10.36437 1.190925e-23
+
+two_smooth_summary$s.table
+#                       edf   Ref.df         F p-value
+# s(SampleDepth)   8.918978 8.997053 151.14462       0
+# s(RelativeDepth) 8.752726 8.981255  20.44467       0
+```
+
+---
+# GAM with multiple variables
+
+We can also explore whether the relationship between `Sources` and `RelativeDepth` is non-linear
+
+
+```r
+plot(two_smooth_model, page = 1, all.terms = TRUE)
+```
+
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-37-1.png" width="720" style="display: block; margin: auto;" /&gt;
+
+---
+# GAM with multiple variables
+
+As before, we can perform an AIC to test if the smoothed term is necessary
+
+
+```r
+AIC(basic_model, two_term_model, two_smooth_model)
+#                        df      AIC
+# basic_model      11.82882 5208.362
+# two_term_model   12.82442 5188.422
+# two_smooth_model 20.67170 5053.743
+```
+
+.alert[The best fit model is the model with both smooth terms for `SampleDepth` and `RelativeDepth`]
+---
+exclude:true
 # GAM with multiple variables
 
 We can add a second term, `x2`, but specify a linear relationship with `y`
@@ -435,19 +661,12 @@ We can add a second term, `x2`, but specify a linear relationship with `y`
 two_term_model &lt;- gam(y ~ x0 + s(x1) + x2, data = gam_data)
 two_term_summary &lt;- summary(two_term_model)
 two_term_summary$p.table
-#              Estimate Std. Error    t value     Pr(&gt;|t|)
-# (Intercept) 11.400658  0.4177614  27.289879 9.396207e-93
-# x02          2.314405  0.4552138   5.084216 5.723467e-07
-# x03          4.487653  0.4543299   9.877520 1.063008e-20
-# x04          6.596149  0.4585778  14.383925 5.468771e-38
-# x2          -5.825948  0.5436671 -10.716021 1.114046e-23
 
 two_term_summary$s.table
-#            edf   Ref.df        F p-value
-# s(x1) 1.900864 2.377544 49.85908       0
 ```
 
 ---
+exclude:true
 # GAM with multiple variables
 
 We can add a second term, `x2`, but specify a linear relationship with `y`
@@ -457,10 +676,9 @@ We can add a second term, `x2`, but specify a linear relationship with `y`
 plot(two_term_model)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-18-1.png" width="432" style="display: block; margin: auto;" /&gt;
-
 
 ---
+exclude:true
 # GAM with multiple variables
 
 We can also explore whether the relationship between `y` and `x2` is non-linear
@@ -470,19 +688,12 @@ We can also explore whether the relationship between `y` and `x2` is non-linear
 two_smooth_model &lt;- gam(y ~ x0 + s(x1) + s(x2), data = gam_data)
 two_smooth_summary &lt;- summary(two_smooth_model)
 two_smooth_summary$p.table
-#             Estimate Std. Error   t value      Pr(&gt;|t|)
-# (Intercept) 8.937862  0.2217506 40.305927 2.373755e-140
-# x02         2.008045  0.3137690  6.399756  4.518133e-10
-# x03         3.832496  0.3143049 12.193562  3.758930e-29
-# x04         6.041521  0.3145299 19.208098  3.520507e-58
 
 two_smooth_summary$s.table
-#            edf   Ref.df        F p-value
-# s(x1) 2.546757 3.175726 68.10051       0
-# s(x2) 7.726989 8.582003 81.55441       0
 ```
 
 ---
+exclude:true
 # GAM with multiple variables
 
 We can also explore whether the relationship between `y` and `x2` is non-linear
@@ -492,40 +703,129 @@ We can also explore whether the relationship between `y` and `x2` is non-linear
 plot(two_smooth_model, page = 1)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-20-1.png" width="720" style="display: block; margin: auto;" /&gt;
-
 ---
+exclude:true
 # GAM with multiple variables
 
 As before, we can perform an ANOVA to test if the smoothed term is necessary
 
 
 ```r
-anova(basic_model, two_term_model, two_smooth_model, test = "Chisq")
-# Analysis of Deviance Table
-# 
-# Model 1: y ~ x0 + s(x1)
-# Model 2: y ~ x0 + s(x1) + x2
-# Model 3: y ~ x0 + s(x1) + s(x2)
-#   Resid. Df Resid. Dev      Df Deviance  Pr(&gt;Chi)    
-# 1    393.59     5231.6                               
-# 2    392.62     4051.3 0.97082   1180.2 &lt; 2.2e-16 ***
-# 3    384.24     1839.5 8.38019   2211.8 &lt; 2.2e-16 ***
-# ---
-# Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+anova(basic_model, two_term_model, two_smooth_model,test='Chisq')
 ```
 
 .alert[The best fit model is the model with both smooth terms for `x1` and `x2`]
+---
+# Challenge 2 ![:cube]()
+
+&lt;br&gt;
+
+1. Create 2 new models, with `Latitude` as a linear and smoothed term.
+2. Determine if `Latitude` is an important term to include using plots, coefficient tables and the AIC function.
 
 ---
+exclude:true
 # Challenge 2 ![:cube]()
 
 &lt;br&gt;
 
 1. Create 2 new models, with `x3` as a linear and smoothed term.
 2. Determine if `x3` is an important term to include using plots, coefficient tables and the anova function.
+---
+# Challenge 2 - Solution ![:cube]()
+
+&lt;br&gt;
+
+```r
+three_term_model &lt;- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth) + Latitude, data = isit)
+three_smooth_model &lt;- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth) + s(Latitude), data = isit)
+three_smooth_summary &lt;- summary(three_smooth_model)
+three_smooth_summary
+```
+---
+# Challenge 2 - Solution ![:cube]()
+
+
+```
+# 
+# Family: gaussian 
+# Link function: identity 
+# 
+# Formula:
+# Sources ~ Season + s(SampleDepth) + s(RelativeDepth) + s(Latitude)
+# 
+# Parametric coefficients:
+#             Estimate Std. Error t value Pr(&gt;|t|)    
+# (Intercept)   6.7303     0.4724  14.246   &lt;2e-16 ***
+# Season2       7.0671     0.7459   9.475   &lt;2e-16 ***
+# ---
+# Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+# 
+# Approximate significance of smooth terms:
+#                    edf Ref.df      F p-value    
+# s(SampleDepth)   8.915  8.997 69.666  &lt;2e-16 ***
+# s(RelativeDepth) 8.705  8.973 18.171  &lt;2e-16 ***
+# s(Latitude)      7.461  8.319  8.872  &lt;2e-16 ***
+# ---
+# Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+# 
+# R-sq.(adj) =  0.772   Deviance explained = 77.9%
+# GCV = 32.507  Scale est. = 31.391    n = 789
+```
 
 ---
+exclude:true
+# Challenge 2 - Solution ![:cube]()
+
+&lt;br&gt;
+
+```r
+three_term_model &lt;- gam(y ~ x0 + s(x1) + s(x2) + x3, data = gam_data)
+three_smooth_model &lt;- gam(y ~ x0 + s(x1) + s(x2) + s(x3), data = gam_data)
+three_smooth_summary &lt;- summary(three_smooth_model)
+```
+
+---
+# Challenge 2 - Solution ![:cube]()
+
+
+```r
+plot(three_smooth_model, page = 1, all.terms = TRUE)
+```
+
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-48-1.png" width="576" style="display: block; margin: auto;" /&gt;
+
+---
+# Challenge 2 - Solution ![:cube]()
+
+
+```r
+three_smooth_summary$s.table
+#                       edf   Ref.df         F p-value
+# s(SampleDepth)   8.914771 8.996550 69.666356       0
+# s(RelativeDepth) 8.705490 8.973103 18.171445       0
+# s(Latitude)      7.460636 8.318623  8.872204       0
+
+# edf = 1 therefore term is linear.
+
+AIC(two_smooth_model, three_term_model)
+#                        df      AIC
+# two_smooth_model 20.67170 5053.743
+# three_term_model 21.67511 5048.271
+```
+
+
+---
+exclude:true
+# Challenge 2 ![:cube]()
+
+&lt;br&gt;
+
+1. Create 2 new models, with `x3` as a linear and smoothed term.
+2. Determine if `x3` is an important term to include using plots, coefficient tables and the AIC function.
+
+---
+exclude:true
 # Challenge 2 - Solution ![:cube]()
 
 &lt;br&gt;
@@ -537,6 +837,7 @@ three_smooth_summary &lt;- summary(three_smooth_model)
 ```
 
 ---
+exclude:true
 # Challenge 2 - Solution ![:cube]()
 
 
@@ -544,29 +845,19 @@ three_smooth_summary &lt;- summary(three_smooth_model)
 plot(three_smooth_model, page = 1)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-24-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-52-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 ---
+exclude:true
 # Challenge 2 - Solution ![:cube]()
 
 
 ```r
 three_smooth_summary$s.table
-#            edf   Ref.df           F   p-value
-# s(x1) 2.542296 3.170441 67.75922314 0.0000000
-# s(x2) 7.731424 8.584355 80.90188472 0.0000000
-# s(x3) 1.000000 1.000000  0.02039697 0.8865092
 
 # edf = 1 therefore term is linear.
 
-anova(two_smooth_model, three_term_model, test = "Chisq")
-# Analysis of Deviance Table
-# 
-# Model 1: y ~ x0 + s(x1) + s(x2)
-# Model 2: y ~ x0 + s(x1) + s(x2) + x3
-#   Resid. Df Resid. Dev      Df Deviance Pr(&gt;Chi)
-# 1    384.24     1839.5                          
-# 2    383.25     1839.3 0.99707  0.18818   0.8418
+AIC(two_smooth_model, three_term_model, test = "Chisq")
 
 # term x3 is not significant, it should be dropped!
 ```
@@ -591,6 +882,26 @@ There are 2 ways to include interactions between variables:
 ---
 # GAM with interaction terms
 
+We will examine interaction effect using our categorical variable `Season` and ask whether the non-linear smoother `s(SampleDepth)` varies across different levels of `Season`.
+
+
+```r
+factor_interact &lt;- gam(Sources ~ Season + 
+                         s(SampleDepth, by=Season) + 
+                         s(RelativeDepth), 
+                       data = isit)
+
+summary(factor_interact)$s.table
+#                             edf   Ref.df          F p-value
+# s(SampleDepth):Season1 7.460544 7.958184  90.293845       0
+# s(SampleDepth):Season2 8.906585 8.995032 154.092891       0
+# s(RelativeDepth)       8.610018 8.946632   7.418761       0
+```
+
+---
+exclude:true
+# GAM with interaction terms
+
 We will examine interaction effect using our categorical variable `x0` and ask whether the non-linear smoother `s(x2)` varies across different levels of `x0`.
 
 
@@ -598,12 +909,6 @@ We will examine interaction effect using our categorical variable `x0` and ask w
 factor_interact &lt;- gam(y ~ x0 + s(x1) + s(x2, by = x0), data = gam_data)
 
 summary(factor_interact)$s.table
-#                edf   Ref.df        F p-value
-# s(x1)     2.401350 2.996664 67.18567       0
-# s(x2):x01 6.606775 7.708292 21.40363       0
-# s(x2):x02 6.436261 7.571201 19.96801       0
-# s(x2):x03 5.467172 6.618716 28.75426       0
-# s(x2):x04 6.422564 7.574388 26.43680       0
 ```
 
 ---
@@ -614,9 +919,10 @@ summary(factor_interact)$s.table
 plot(factor_interact, page = 1)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-27-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-56-1.png" width="720" style="display: block; margin: auto;" /&gt;
 
 ---
+exclude:true
 # GAM with interaction terms
 
 We can also visualise our model in 3D using `vis.gam`, where `theta` is the degree rotation on the x-y plane
@@ -626,28 +932,36 @@ We can also visualise our model in 3D using `vis.gam`, where `theta` is the degr
 vis.gam(factor_interact, view = c("x2","x0"), theta = 40, n.grid = 500, border = NA)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-28-1.png" width="432" style="display: block; margin: auto;" /&gt;
+---
+# GAM with interaction terms
+
+Let's perform a model comparison using AIC to determine if the interaction term is necessary
+
+
+```r
+AIC(two_smooth_model, factor_interact)
+#                        df      AIC
+# two_smooth_model 20.67170 5053.743
+# factor_interact  27.97715 4872.025
+```
+
+From the plots, we saw that the shape of the smooth terms were comparable among the 2 levels of `Season`. The AIC confirms this as well.
 
 ---
 # GAM with interaction terms
 
-Let's perform a model comparison using ANOVA to determine if the interaction term is necessary
+Finally we'll look at the interactions between 2 smoothed terms, `SampleDepth` and `RelativeDepth`.
 
 
 ```r
-anova(two_smooth_model, factor_interact, test = "Chisq")
-# Analysis of Deviance Table
-# 
-# Model 1: y ~ x0 + s(x1) + s(x2)
-# Model 2: y ~ x0 + s(x1) + s(x2, by = x0)
-#   Resid. Df Resid. Dev     Df Deviance Pr(&gt;Chi)
-# 1    384.24     1839.5                         
-# 2    363.53     1740.9 20.712   98.608   0.4482
+smooth_interact &lt;- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), data = isit)
+summary(smooth_interact)$s.table
+#                                   edf   Ref.df        F p-value
+# s(SampleDepth,RelativeDepth) 27.81416 28.90623 94.12238       0
 ```
 
-From the plots, we saw that the shape of the smooth terms were comparable among the 4 levels of `x0`. The anova test confirms this as well (p &gt; 0.05).
-
 ---
+exclude:true
 # GAM with interaction terms
 
 Finally we'll look at the interactions between 2 smoothed terms, `x1` and `x2`.
@@ -656,32 +970,19 @@ Finally we'll look at the interactions between 2 smoothed terms, `x1` and `x2`.
 ```r
 smooth_interact &lt;- gam(y~x0 + s(x1, x2), data = gam_data)
 summary(smooth_interact)$s.table
-#               edf   Ref.df        F p-value
-# s(x1,x2) 25.91803 28.42892 36.40735       0
 ```
 
----
-# GAM with interaction terms
-
-
-```r
-plot(smooth_interact, page = 1, scheme = 3)
-```
-
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-31-1.png" width="504" style="display: block; margin: auto;" /&gt;
+--
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-61-1.png" width="504" style="display: block; margin: auto;" /&gt;
 
 
 ---
+exclude:true
 # GAM with interaction terms
 
 
 ```r
 vis.gam(smooth_interact, view = c("x1", "x2"), theta=40, n.grid = 500, border = NA)
-```
-
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-32-1.png" width="576" style="display: block; margin: auto;" /&gt;
-
-```r
 # similar to plot(smooth_interact, page = 1, scheme = 1)
 ```
 
@@ -692,19 +993,13 @@ vis.gam(smooth_interact, view = c("x1", "x2"), theta=40, n.grid = 500, border = 
 
 
 ```r
-anova(two_smooth_model, smooth_interact, test = "Chisq")
-# Analysis of Deviance Table
-# 
-# Model 1: y ~ x0 + s(x1) + s(x2)
-# Model 2: y ~ x0 + s(x1, x2)
-#   Resid. Df Resid. Dev     Df Deviance Pr(&gt;Chi)  
-# 1    384.24     1839.5                           
-# 2    367.57     1710.3 16.671    129.2  0.04063 *
-# ---
-# Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+AIC(two_smooth_model, smooth_interact)
+#                        df      AIC
+# two_smooth_model 20.67170 5053.743
+# smooth_interact  30.81416 4943.031
 ```
 
-The interaction between `s(x1)` and `s(x2)` is significant and the 2D plot nicely illustrates this non-linear interactions, where `y` is large at high values of `x1` but low to mid-values of `x2`.
+The model with the interaction between `s(SampleDepth)` and `s(RelativeDepth)` have a lower AIC and the 2D plot nicely illustrates this non-linear interactions, where `Sources` is lower at high values of `SampleDepth` but mid to high values of `RelativeDepth`.
 
 ---
 class: inverse, center, middle
@@ -741,7 +1036,7 @@ The smooth functions have several parameters that can be set to change their beh
 `k` ![:faic](arrow-right) number of ‘knots’
   - determines the upper bound of the number of base functions used to build the curve.
   - constrains the wigglyness of a smooth.
-  - the number of base functions is reflected in the edf value.
+  - the number of base functions is reflected in the **edf** value.
   - the default k for `s()` is ~9, and for `te()` and `ti()` is 5 per dimension.
   - k should be &lt; the number of unique data points.
 
@@ -778,7 +1073,7 @@ qplot(nottem_month, nottem, colour = factor(nottem_year), geom = "line") +
 ---
 # Example smooth for cyclical data
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-35-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-65-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 ---
 # Example smooth for cyclical data
@@ -802,7 +1097,7 @@ summary(year_gam)$s.table
 plot(year_gam, page = 1, scale = 0)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-37-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-67-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 There is about 1-1.5 degree rise in temperature over the period, but within a given year there is about 20 degrees variation in temperature, on average. The actual data vary around these values and that is the unexplained variance.
 
@@ -842,11 +1137,11 @@ plot(range(gam_data3$x1), c(0,1), type = "n",
      ylab = "Probability", xlab = "x1 (time)")
 abline(h = 0.5)
 
-avg &lt;- aggregate(prop ~ x1, data=gam_data3, mean)
+avg &lt;- aggregate(prop ~ x1, data = gam_data3, mean)
 lines(avg$x1, avg$prop, col = "orange", lwd = 2)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-39-1.png" width="360" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-69-1.png" width="360" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAM using other distributions
@@ -908,9 +1203,9 @@ This represents how the log odds of successes vs failures changes over time (x1)
 
 --
 
-&gt; As the edf &gt; 1, the proportion of successes increases faster over time
+&gt; As the **edf** &gt; 1, the proportion of successes increases faster over time
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-43-1.png" width="309.6" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-73-1.png" width="309.6" style="display: block; margin: auto;" /&gt;
 
 ---
 # Visualizing the trend over time
@@ -926,7 +1221,7 @@ There are different ways this relationship can be represented graphically:
 
 What do these plots tell us about successes vs failures?
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-44-1.png" width="648" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-74-1.png" width="648" style="display: block; margin: auto;" /&gt;
 
 
 
@@ -989,7 +1284,7 @@ pacf(resid(year_gam), lag.max = 36, main = "pACF")
 ---
 # Model with correlated errors
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-46-1.png" width="648" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-76-1.png" width="648" style="display: block; margin: auto;" /&gt;
 
 .comment[ACF (and pACF) provide the cross correlation (and partial correlation) of a time series with itself at different time lags, and are used to identify after how many time steps observations start to be independent.]
 
@@ -1009,11 +1304,11 @@ year_gam_AR1 &lt;- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"),
 year_gam_AR2 &lt;- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"),
                      correlation = corARMA(form = ~ 1|nottem_year, p = 2),
                    data = data.frame(nottem, nottem_year, nottem_month))
-anova(year_gam$lme, year_gam_AR1$lme, year_gam_AR2$lme)
-#                  Model df      AIC      BIC    logLik   Test  L.Ratio p-value
-# year_gam$lme         1  5 1109.908 1127.311 -549.9538                        
-# year_gam_AR1$lme     2  6 1101.218 1122.102 -544.6092 1 vs 2 10.68921  0.0011
-# year_gam_AR2$lme     3  7 1101.598 1125.962 -543.7988 2 vs 3  1.62082  0.2030
+AIC(year_gam$lme, year_gam_AR1$lme, year_gam_AR2$lme)
+#                  df      AIC
+# year_gam$lme      5 1109.908
+# year_gam_AR1$lme  6 1101.218
+# year_gam_AR2$lme  7 1101.598
 ```
 
 .comment[AR(1) provides a significant increase in fit over the naive model (LRT = 10.69, p = 0.0011), but little improvement with AR(2) (LRT = 1.62, p = 0.203).]
@@ -1027,9 +1322,9 @@ As we saw in the section changing basis, `bs` specifies the type of underlying b
 
 **3 different types of random effects** in GAMMs (`fac` ![:faic](arrow-right) factor coding for the random effect; `x0` ![:faic](arrow-right) continuous fixed effect):
 
-- **random intercepts** adjust the height of other model terms with a constant value: `s(fac, bs="re")`
-- **random slopes** adjust the slope of the trend of a numeric predictor: `s(fac, x0, bs="re")`
-- **random smooths** adjust the trend of a numeric predictor in a nonlinear way: `s(x0, fac, bs="fs", m=1)`, where the argument m=1 sets a heavier penalty for the smooth moving away from 0, causing shrinkage to the mean.
+- **random intercepts** adjust the height of other model terms with a constant value: `s(fac, bs = "re")`
+- **random slopes** adjust the slope of the trend of a numeric predictor: `s(fac, x0, bs = "re")`
+- **random smooths** adjust the trend of a numeric predictor in a nonlinear way: `s(x0, fac, bs = "fs", m = 1)`, where the argument m=1 sets a heavier penalty for the smooth moving away from 0, causing shrinkage to the mean.
 
 ---
 # GAMM with a random intercept
@@ -1042,15 +1337,15 @@ gam_data2 &lt;- gamSim(eg = 6)
 # 4 term additive + random effectGu &amp; Wahba 4 term additive model
 str(gam_data2)
 # 'data.frame':	400 obs. of  11 variables:
-#  $ y  : num  8.72 10.75 15.3 16.79 11.55 ...
-#  $ x0 : num  0.277 0.698 0.379 0.869 0.568 ...
-#  $ x1 : num  0.407 0.3657 0.235 0.4764 0.0666 ...
-#  $ x2 : num  0.9221 0.0491 0.0245 0.9052 0.6511 ...
-#  $ x3 : num  0.0254 0.6572 0.2899 0.0727 0.8257 ...
-#  $ f  : num  6.8 10.42 12.57 15.44 9.39 ...
-#  $ f0 : num  1.528 1.625 1.857 0.799 1.955 ...
-#  $ f1 : num  2.26 2.08 1.6 2.59 1.14 ...
-#  $ f2 : num  0.0183 0.716 0.1143 0.0486 3.2902 ...
+#  $ y  : num  7.71 6.89 17.44 17.9 8.09 ...
+#  $ x0 : num  0.719 0.127 0.682 0.919 0.196 ...
+#  $ x1 : num  0.363 0.141 0.838 0.72 0.101 ...
+#  $ x2 : num  0.5125 0.87 0.0242 0.0559 0.7997 ...
+#  $ x3 : num  0.434 0.524 0.289 0.36 0.965 ...
+#  $ f  : num  9.35 8.31 16.13 17.7 6.48 ...
+#  $ f0 : num  1.543 0.779 1.681 0.502 1.156 ...
+#  $ f1 : num  2.07 1.33 5.34 4.22 1.22 ...
+#  $ f2 : num  2.74 0.208 0.11 0.984 1.105 ...
 #  $ f3 : num  0 0 0 0 0 0 0 0 0 0 ...
 #  $ fac: Factor w/ 4 levels "1","2","3","4": 1 2 3 4 1 2 3 4 1 2 ...
 ```
@@ -1063,13 +1358,13 @@ str(gam_data2)
 ```r
 gamm_intercept &lt;- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2)
 summary(gamm_intercept)$s.table
-#             edf   Ref.df         F    p-value
-# s(x0)  3.044725 3.776643  2.481658 0.03745107
-# s(fac) 2.960269 3.000000 95.146996 0.00000000
+#             edf   Ref.df          F   p-value
+# s(x0)  2.781221 3.461922   1.836913 0.1213125
+# s(fac) 2.980060 3.000000 138.458938 0.0000000
 plot(gamm_intercept, select = 2)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-49-1.png" width="396" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-79-1.png" width="396" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM with a random intercept
@@ -1098,7 +1393,7 @@ plot_smooth(gamm_intercept, view="x0", cond = list(fac = "4"), add = T, col = 't
 
 &lt;br&gt;
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-51-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-81-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 .pull-right[
 &amp;nbsp; &lt;font color="orange"&gt;fac1&lt;/font&gt; &amp;nbsp; &lt;font color="red"&gt;fac2&lt;/font&gt; &amp;nbsp; &lt;font color="purple"&gt;fac3&lt;/font&gt; &amp;nbsp; &lt;font color="turquoise"&gt;fac4&lt;/font&gt;
@@ -1113,9 +1408,9 @@ plot_smooth(gamm_intercept, view="x0", cond = list(fac = "4"), add = T, col = 't
 gamm_slope &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2)
 
 summary(gamm_slope)$s.table
-#                edf   Ref.df         F   p-value
-# s(x0)     2.961019 3.673378  1.444919 0.1799061
-# s(x0,fac) 2.946695 3.000000 72.392941 0.0000000
+#                edf  Ref.df         F   p-value
+# s(x0)     2.934270 3.65081  1.704098 0.1433844
+# s(x0,fac) 2.967931 3.00000 88.218032 0.0000000
 ```
 
 
@@ -1143,7 +1438,7 @@ plot_smooth(gamm_slope, view = "x0", cond = list(fac = "4"), add = T, col = 'tur
 
 &lt;br&gt;
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-54-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-84-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM with a random intercept and slope
@@ -1154,10 +1449,10 @@ gamm_int_slope &lt;- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
                       data = gam_data2)
 
 summary(gamm_int_slope)$s.table
-#                 edf   Ref.df          F    p-value
-# s(x0)     3.0121856 3.735986   2.399772 0.04264117
-# s(fac)    2.8151182 3.000000 154.712380 0.00000000
-# s(fac,x0) 0.7259132 3.000000   9.273901 0.07940166
+#                 edf   Ref.df          F   p-value
+# s(x0)     2.8349014 3.527307   1.891241 0.1116414
+# s(fac)    2.8908527 3.000000 286.763220 0.0000000
+# s(fac,x0) 0.9302864 3.000000  20.769809 0.1492401
 ```
 
 ---
@@ -1184,7 +1479,7 @@ plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "4"), add = T, col = 
 
 &lt;br&gt;
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-57-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-87-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM with a random intercept and slope
@@ -1196,7 +1491,7 @@ Note that the random slope is static in this case:
 plot(gamm_int_slope, select = 3)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-58-1.png" width="432" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-88-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM with a random smooth
@@ -1207,7 +1502,7 @@ gamm_smooth &lt;- gam(y ~ s(x0, fac, bs = "fs", m = 1), data = gam_data2)
 
 summary(gamm_smooth)$s.table
 #                edf Ref.df        F p-value
-# s(x0,fac) 4.814005     35 8.122226       0
+# s(x0,fac) 3.325697     35 11.68673       0
 ```
 
 ---
@@ -1220,7 +1515,7 @@ Here, if the random slope varied along `x0`, we would see different curves for e
 plot(gamm_smooth, select = 1)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-60-1.png" width="396" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-90-1.png" width="396" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM with a random smooth
@@ -1246,31 +1541,23 @@ plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "4"), add = T, col = 'tu
 
 &lt;br&gt;
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-62-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-92-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 .comment[Here, if the random slope varied along `x0`, we would see different curves for each level.]
 
 ---
 # GAMM
 
-All of the mixed models from this section can be compared using `anova()` to determine the best fit model
+All of the mixed models from this section can be compared using `AIC()` to determine the best fit model
 
 
 ```r
-anova(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth, test = "Chisq")
-# Analysis of Deviance Table
-# 
-# Model 1: y ~ s(x0) + s(fac, bs = "re")
-# Model 2: y ~ s(x0) + s(x0, fac, bs = "re")
-# Model 3: y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re")
-# Model 4: y ~ s(x0, fac, bs = "fs", m = 1)
-#   Resid. Df Resid. Dev       Df Deviance  Pr(&gt;Chi)    
-# 1    392.22     6554.0                                
-# 2    392.33     7290.6 -0.10372  -736.60 6.687e-13 ***
-# 3    391.11     6532.7  1.21687   757.94 2.551e-11 ***
-# 4    392.64     6690.5 -1.52776  -157.89  0.004796 ** 
-# ---
-# Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
+#                      df      AIC
+# gamm_intercept 7.761281 2221.157
+# gamm_slope     7.902202 2303.251
+# gamm_int_slope 8.656041 2220.686
+# gamm_smooth    5.325697 2223.927
 ```
 
 ---
@@ -1392,15 +1679,15 @@ Since `\(f\)` is unknown, `\(M\)` is estimated using a generalized cross validat
 
 
 ---
-# Brief note on estimated degrees of freedom (edf)
+# Brief note on estimated degrees of freedom (**edf**)
 
 How many degrees of freedom does a fitted GAM have?
 
-Instead of providing the output of the cross-validation in terms of `\(\lambda\)` (model complexity), the GAM function in the `mgcv` package uses a term called the estimated degrees of freedom (edf)
+Instead of providing the output of the cross-validation in terms of `\(\lambda\)` (model complexity), the GAM function in the `mgcv` package uses a term called the estimated degrees of freedom (**edf**)
 
-Because the number of free parameters in GAMs is difficult to define, the edf are related to `\(\lambda\)`, such that the greater the penalty, the smaller the edf.
+Because the number of free parameters in GAMs is difficult to define, the **edf** are related to `\(\lambda\)`, such that the greater the penalty, the smaller the **edf**.
 
-For example, if the arbitrarily large number of knots is k = 10, then k-1 sets the upper limit on the edf associated with a smooth term. This number then decreases as the penalty `\(\lambda\)` increases until the best fit penalty is found by cross-validation.
+For example, if the arbitrarily large number of knots is k = 10, then k-1 sets the upper limit on the **edf** associated with a smooth term. This number then decreases as the penalty `\(\lambda\)` increases until the best fit penalty is found by cross-validation.
 
 ---
 # Ressources

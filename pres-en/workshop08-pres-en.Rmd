@@ -80,7 +80,6 @@ install.packages(c('ggplot2', 'itsadug', 'mgcv'))
 5. Changing basis
 6. Other distributions
 7. Quick intro to GAMM
-8. GAM behind the scene
 
 ---
 # Learning objectives
@@ -111,12 +110,23 @@ Regression is the workhorse of statistics. It allows us to model a response vari
 
 --
 
-As we saw in the [linear models workshop](http://qcbs.ca/wiki/r_workshop4), regression makes 4 major assumptions:
+As we saw in the [linear models workshop](http://qcbs.ca/wiki/r_workshop4), a linear model is based on 4 major assumptions:
 
-1. Normally distributed error
-2. Homogeneity of the variance
-3. Indenpendance of the errors
-4. The response is linear : $y = β_0 + β_1x$
+1. Linear relationship between response and predictor variables: $$y_i = \beta_0 + \beta_1 \times x_i + \epsilon_i$$
+2. Normally distributed error: $$\epsilon_i \sim \mathcal{N}(0,\,\sigma^2)$$
+3. Homogeneity of the variance
+4. Independance of the errors
+
+<br>
+
+--
+
+*Linear model with multiple predictors:*
+
+$$y_i = \beta_0 + \beta_1x_{1,i}+\beta_2x_{2,i}+\beta_3x_{3,i}+...+\beta_kx_{k,i} + \epsilon_i$$
+
+???
+- A linear model can easily accomodate certain types of non-linear responses (e.g. $x^2$) but this approach strongly relies on (arbitrary or well-informed) choices, and is less flexible than using and additive model.
 
 ---
 # Linear regression
@@ -154,16 +164,16 @@ class: inverse, center, middle
 ---
 # Generalized Additive Models (GAM)
 
-Let's look at an example. First, we will download the `ISIT` datasets.
+Let's look at an example. First, we will load the `ISIT` datasets.
 
 ```{r, eval = FALSE, echo = TRUE}
-isit <- read.csv("data/ISIT.csv", sep = ';')
+isit <- read.csv("data/ISIT.csv")
 head(isit)
 ```
 
 This datasets is comprised of bioluminescence levels (`Sources`) in relation to depth, seasons and different stations.
 ```{r, eval = TRUE, echo = FALSE}
-isit <- read.csv("data/ISIT.csv", sep = ';')
+isit <- read.csv("data/ISIT.csv")
 ```
 
 For now, let's focus on Season 2.
@@ -240,15 +250,24 @@ data_plot
 ---
 # GAM
 
-In GAM, the relationship between the response variable and the predictors is:
+**Relationship between the response variable and predictor variables**
 
-$$y = \alpha + s(x_1) + s(x_2) + ... + \epsilon$$
+One predictor variable:
+$$y_i = \beta_0 + f(x_i) + \epsilon$$
 
-One big advantage of using GAM over a manual specification of the model is that the optimal shape, i.e. **the degree of smoothness** of `s(x)`, is determined automatically using a generalized cross-validation
+Multiple predictor variables:
+$$y_i = \beta_0 + f_1(x_{1,i}) + f_2(x_{2,i}) + ... + \epsilon$$
+
+One big advantage of using a GAM over a manual specification of the model is that the optimal shape, i.e. *the degree of smoothness* of $f(x)$, is determined automatically depending on the fitting method (usually maximum likelihood).
+
+???
+
+- Strictly speaking, the equations are for a Gaussian GAM with identity link, which is also called "additive model" (without "generalized").
 
 ---
 #GAM
-Let's try to fit the data using a smooth function with the function `mgcv::gam()`
+
+Let's try to fit a model to the data using a smooth function `s()` with `mgcv::gam()`
 
 ```{r, eval = FALSE,echo=TRUE}
 gam_model <- gam(Sources ~ s(SampleDepth), data = isit2)
@@ -271,13 +290,13 @@ data_plot <- data_plot +
 data_plot
 ```
 
-.comment[Note: as opposed to one fixed coefficient, $β$ in linear regression, the smooth function can continually change over the range of the predictor x]
+.comment[Note: as opposed to one fixed coefficient, $\beta$ in linear regression, the smooth function can continually change over the range of the predictor x]
 
 ---
 exclude:true
 # GAM
 
-Let's try to fit the data using a smooth function with the function `mgcv::gam()`
+Let's try to fit the data using a smooth function `s()` with `mgcv::gam()`
 
 
 ```{r, eval = FALSE}
@@ -363,7 +382,7 @@ isit1 <- subset(isit, Season==1)
 
 1. Fit a linear and smoothed GAM model to the relation between `SampleDepth` and `Sources`.
 2. Determine if linearity is justified for this data.
-3. What is the estimated degrees of freedom of the smoothed term?
+3. How many effective degrees of freedom does the smoothed term have?
 
 
 <!-- we didn't talk about **edf** before... -->
@@ -406,7 +425,7 @@ AIC(linear_model_s1, nested_gam_model_s1)
 nested_gam_model_s1
 ```
 
-**Answer** Yes non-linearity is justified. The estimated degrees of freedom (**edf**) are >> 1 (we'll get back to this soon).
+**Answer** Yes non-linearity is justified. The effective degrees of freedom (**EDF**) are >> 1 (we'll get back to this soon).
 
 ---
 exclude:true
@@ -460,6 +479,119 @@ nested_gam_model_test
 **Answer** Yes non-linearity is justified. The estimated degrees of freedom (**edf**) are >> 1 (we'll get back to this soon).
 
 ---
+# A closer look at GAMs
+
+We will now take a few minutes to look at what GAMs are doing behind the scenes. Lets first consider a simple model containing one smooth function $f$ of one covariate, $x$:
+
+$$y_i = f(x_i) + \epsilon_i$$
+
+To estimate the smooth function $f$, we need to represented the above equation in such a way that it becomes a linear model. This can be done by defining basis functions, $b_j(x)$, of which $f$ is composed:
+
+$$f(x) = \sum_{j=1}^q b_j(x) \times \beta_j$$
+---
+# Example: a polynomial basis
+
+Suppose that $f$ is believed to be a 4th order polynomial, so that the space of polynomials of order 4 and below contains $f$. A basis for this space would then be:
+
+$$b_0(x)=1 \ , \quad b_1(x)=x \ , \quad b_2(x)=x^2 \ , \quad b_3(x)=x^3 \ , \quad b_4(x)=x^4$$
+
+so that $f(x)$ becomes:
+
+$$f(x) = \beta_0 + x\beta_1 +  x^2\beta_2 + x^3\beta_3 + x^4\beta_4$$
+
+and the full model now becomes:
+
+$$y_i = \beta_0 + x_i\beta_1 +  x^2_i\beta_2 + x^3_i\beta_3 + x^4_i\beta_4 + \epsilon_i$$
+---
+# Example: a polynomial basis
+
+
+The basis functions are each multiplied by a real valued parameter, $\beta_j$, and are then summed to give the <font color="orange">final curve $f(x)$</font>.
+
+.center[
+![:scale 85%](images/polynomial_basis_example.png)
+]
+
+
+By varying the $\beta_j$ we can vary the form of $f(x)$ to produce any polynomial function of order 4 or lower.
+
+---
+# Example: a cubic spline basis
+
+A cubic spline is a curve constructed from sections of a cubic polynomial joined together so that they are continuous in value. Each section of cubic has different coefficients.
+
+.center[
+![](images/cubic_spline.png)
+]
+
+---
+# Example: a cubic spline basis
+
+Here's a representation of a smooth function using a rank 5 cubic spline basis with knot locations at increments of 0.2:
+
+.center[
+![:scale 40%](images/cubic_spline5.jpg)
+]
+
+Here, the knots are evenly spaced through the range of observed x values. However, the choice of the degree of model smoothness is controlled by the the number of knots, which was arbitrary.
+
+.comment[Is there a better way to select the knot locations?]
+
+---
+# Controlling the degree of smoothing with penalized regression splines
+
+Instead of controlling smoothness by altering the number of knots, we keep that fixed to size a little larger than reasonably necessary, and control the model’s smoothness by adding a “wiggleness” penalty.
+
+So, rather than fitting the model by minimizing (as with least squares regression):
+
+$$||y - XB||^{2}$$
+
+it can be fit by minimizing:
+
+$$||y - XB||^{2} + \lambda \int_0^1[f^{''}(x)]^2dx$$
+
+As $\lambda$ goes to infinity, the model becomes linear.
+
+---
+# Controlling the degree of smoothing with penalized regression splines
+
+If $\lambda$ is too high then the data will be over smoothed, and if it is too low then the data will be under smoothed.
+
+Ideally, it would be good to choose $\lambda$ so that the predicted $\hat{f}$ is as close as possible to $f$. A suitable criterion might be to choose $\lambda$ to minimize:
+
+$$M = 1/n \times \sum_{i=1}^n (\hat{f_i} - f_i)^2$$
+
+Since $f$ is unknown, $M$ is estimated using a generalized cross validation technique that leaves out each datum from the data in turn and considers the average ability of models fitted to the remaining data to predict the left out datum.
+
+---
+# Principle behind cross validation
+
+.center[
+![:scale 70%](images/smooth_sel.png)
+]
+
+1. fits many of the data poorly and does no better with the missing point.
+
+--
+
+2. fits the underlying signal quite well, smoothing through the noise and the missing datum is reasonably well predicted.
+
+--
+
+3. fits the noise as well as the signal and the extra variability induced causes it to predict the missing datum rather poorly.
+
+
+
+---
+# Principle behind cross validation
+
+.center[
+![](images/gcv.png)
+]
+
+
+---
+
 class: inverse, center, middle
 
 ## 3. Multiple smooth terms
@@ -477,7 +609,7 @@ isit$Season <- as.factor(isit$Season)
 
 We will try to model the response `Sources` using the predictors `Season` and `SampleDepth` simultaneously.
 
-.comment[`Season` need to be converted into a factor] 
+.comment[`Season` needs to be converted into a factor] 
 
 ---
 # GAM with multiple variables
@@ -537,35 +669,45 @@ The `s.table` provides the significance table for each smoothed term.
 ]
 
 ---
-# Note on estimated degrees of freedom
 
-```{r}
-basic_summary$s.table
-```
-
-The `edf` shown in the `s.table` is the estimated degrees of freedom – essentially, a larger **edf** value implies more complex wiggly splines.
-
-- A value close to 1 tend to be close to a linear term.
-
-- A high value (8–10 or higher) means that the spline is highly non-linear.
-
-> In our basic model the **edf** of smooth function s(SampleDepth) is ~8, which suggests a highly non-linear curve.
-
----
-# Note on estimated degrees of freedom
-
-The **edf** in GAM is different from the degrees of freedom in a linear regression.
-
-In linear regression, the *model* degrees of freedom is equivalent to the number of non-redundant free parameters, p, in the model (and the *residual* degrees of freedom are given by n-p).
-
-We will revisit the **edf** later in this workshop.
-
----
 # GAM with multiple variables
 
 ```{r,fig.width=12}
 plot(basic_model, all.terms = TRUE,page=1)
 ```
+
+---
+# Effective degrees of freedom (EDF)
+
+```{r}
+basic_summary$s.table
+```
+
+The `edf` shown in the `s.table` are the **effective degrees of freedom** (EDF) of the the smooth term –- essentially, more EDF imply more complex, wiggly splines.
+
+- A value close to 1 tend to be close to a linear term.
+
+- A higher value  means that the spline is non-linear.
+
+> In our basic model the EDF of the smooth function `s(SampleDepth)` are ~9, which suggests a highly non-linear curve.
+
+---
+# Effective degrees of freedom (EDF)
+
+The **EDF** of a GAM are estimated differently from the degrees of freedom in a linear regression.
+
+In linear regression, the *model* degrees of freedom are equivalent to the number of non-redundant free parameters $p$ in the model (and the *residual* degrees of freedom are given by $n-p$).
+
+Because the number of free parameters in GAMs is difficult to define, the **EDF** are related to the smoothing parameter $\lambda$, such that the greater the penalty, the smaller the **EDF**.
+
+---
+# Basis dimension and EDF
+
+An upper bound on the **EDF** is determined by the basis dimension $k$ for each smooth function (the **EDF** cannot exceed $k-1$)
+
+In practice, the exact choice of $k$ is arbitrary, but it should be **large enough** to accomodate a sufficiently complex smooth function.
+
+
 ---
 # GAM with multiple variables
 
@@ -949,12 +1091,13 @@ To model a non-linear smooth variable or surface, 3 different smooth functions a
 
 The smooth functions have several parameters that can be set to change their behavior. The most often-used parameters are :
 
-`k` ![:faic](arrow-right) number of ‘knots’
+`k` ![:faic](arrow-right) basis dimension
   - determines the upper bound of the number of base functions used to build the curve.
   - constrains the wigglyness of a smooth.
-  - the number of base functions is reflected in the **edf** value.
-  - the default k for `s()` is ~9, and for `te()` and `ti()` is 5 per dimension.
+  - the default $k$ for is 10 for `s()`, and 5 for `te()` and `ti()`.
   - k should be < the number of unique data points.
+  - the comlexity (i.e. non-linearity) of a smooth function in a fitted model is reflected by its effective degrees of freedom (**EDF**).
+
 
 ---
 # Parameters of smooth functions
@@ -1464,134 +1607,6 @@ All of the mixed models from this section can be compared using `AIC()` to deter
 AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
 ```
 
----
-class: inverse, center, middle
-
-# 8. GAM behind the scene
-
-
----
-# A closer look at GAM
-
-We will now take a few minutes to look at what GAMs are doing behind the scenes. Lets first consider a model containing one smooth function of one covariate, $x_i$:
-
-$$y_i = f(x_i) + ε_i$$
-
-To estimate the smooth function $f$, we need to represented the above equation in such a way that it becomes a linear model. This can be done by choosing a basis, $b_i(x)$, defining the space of functions of which $f$ is an element:
-
-$$f(x) = \sum_{i=1}^q b_i(x) \times β_i$$
----
-# Example: a polynomial basis
-
-Suppose that $f$ is believed to be a 4th order polynomial, so that the space of polynomials of order 4 and below contains $f$. A basis for this space would then be:
-
-$$b_1(x)=1,   b_2(x)=x,   b_3(x)=x^2,   b_4(x)=x^3,   b_5(x)=x^4$$
-
-so that $f(x)$ becomes:
-
-$$f(x) = β_1 + x_iβ_2 +  x^2_iβ_3 + x^3_iβ_4(x) + x^4_iβ_5$$
-
-and the full model now becomes:
-
-$$y_i = β_1 + x_iβ_2 +  x^2_iβ_3 + x^3_iβ_4(x) + x^4_iβ_5 + ε_i$$
----
-# Example: a polynomial basis
-
-
-The basis functions are each multiplied by a real valued parameter, $β_i$, and are then summed to give the <font color="orange">final curve $f(x)$</font>.
-
-.center[
-![:scale 85%](images/polynomial_basis_example.png)
-]
-
-
-By varying the $β_i$ we can vary the form of $f(x)$ to produce any polynomial function of order 4 or lower.
-
----
-# Example: a cubic spline basis
-
-A cubic spline is a curve constructed from sections of a cubic polynomial joined together so that they are continuous in value. Each section of cubic has different coefficients.
-
-.center[
-![](images/cubic_spline.png)
-]
-
----
-# Example: a cubic spline basis
-
-Here's a representation of a smooth function using a rank 5 cubic spline basis with knot locations at increments of 0.2:
-
-.center[
-![:scale 40%](images/cubic_spline5.jpg)
-]
-
-Here, the knots are evenly spaced through the range of observed x values. However, the choice of the degree of model smoothness is controlled by the the number of knots, which was arbitrary.
-
-.comment[Is there a better way to select the knot locations?]
-
----
-# Controlling the degree of smoothing with penalized regression splines
-
-Instead of controlling smoothness by altering the number of knots, we keep that fixed to size a little larger than reasonably necessary, and control the model’s smoothness by adding a “wiggleness” penalty.
-
-So, rather than fitting the model by minimizing (as with least squares regression):
-
-$$||y - XB||^{2}$$
-
-it can be fit by minimizing:
-
-$$||y - XB||^{2} + \lambda \int_0^1[f^{''}(x)]^2dx$$
-
-As $\lambda$ goes to infty, the model becomes linear.
-
----
-# Controlling the degree of smoothing with penalized regression splines
-
-If $\lambda$ is too high then the data will be over smoothed, and if it is too low then the data will be under smoothed.
-
-Ideally, it would be good to choose $\lambda$ so that the predicted $\hat{f}$ is as close as possible to $f$. A suitable criterion might be to choose $\lambda$ to minimize:
-
-$$M = 1/n \times \sum_{i=1}^n (\hat{f_i} - f_i)^2$$
-
-Since $f$ is unknown, $M$ is estimated using a generalized cross validation technique that leaves out each datum from the data in turn and considers the average ability of models fitted to the remaining data to predict the left out datum.
-
----
-# Principle behind cross validation
-
-.center[
-![:scale 70%](images/smooth_sel.png)
-]
-
-1. fits many of the data poorly and does no better with the missing point.
-
---
-
-2. fits the underlying signal quite well, smoothing through the noise and the missing datum is reasonably well predicted.
-
---
-
-3. fits the noise as well as the signal and the extra variability induced causes it to predict the missing datum rather poorly.
-
-
-
----
-# Principle behind cross validation
-
-.center[
-![](images/gcv.png)
-]
-
-
----
-# Brief note on estimated degrees of freedom (**edf**)
-
-How many degrees of freedom does a fitted GAM have?
-
-Instead of providing the output of the cross-validation in terms of $\lambda$ (model complexity), the GAM function in the `mgcv` package uses a term called the estimated degrees of freedom (**edf**)
-
-Because the number of free parameters in GAMs is difficult to define, the **edf** are related to $\lambda$, such that the greater the penalty, the smaller the **edf**.
-
-For example, if the arbitrarily large number of knots is k = 10, then k-1 sets the upper limit on the **edf** associated with a smooth term. This number then decreases as the penalty $\lambda$ increases until the best fit penalty is found by cross-validation.
 
 ---
 # Ressources

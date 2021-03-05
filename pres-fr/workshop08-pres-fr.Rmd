@@ -1557,7 +1557,7 @@ plot(gamm_int_slope, select = 3)
 # GAMM avec une surface lisse aléatoire
 
 ```{r}
-gamm_smooth <- gam(y ~ s(x0, fac, bs = "fs", m = 1), data = gam_data2)
+gamm_smooth <- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1), data = gam_data2)
 
 summary(gamm_smooth)$s.table
 ```

@@ -350,13 +350,13 @@ We can use `gam()` and `AIC()` to test whether an assumption of linearity is jus
 
 ```{r}
 linear_model <- gam(Sources ~ SampleDepth, data = isit2) # fit a regular linear model using gam()
-nested_gam_model <- gam(Sources ~ s(SampleDepth) + SampleDepth, data = isit2)
+nested_gam_model <- gam(Sources ~ s(SampleDepth), data = isit2)
 AIC(linear_model, nested_gam_model)
 ```
 
 **AIC of the nested gam is lower, so linearity is not justified**
 
-.comment[Note that the model `y ~ s(x)` gives exactly the same results as `y ~ s(x) + x`. We used the `s(x) + x` to illustrate the nestedness of the model, but the `+ x` can be omitted.]
+.comment[Note that the model `y ~ s(x)` is nested in the model `y ~ x`.]
 
 ---
 exclude:true

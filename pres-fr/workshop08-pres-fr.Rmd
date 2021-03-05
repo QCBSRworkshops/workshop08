@@ -350,13 +350,13 @@ Nous pouvons utiliser les fonctions `gam()` et `AIC()` pour tester formellement 
 
 ```{r}
 linear_model <- gam(Sources ~ SampleDepth, data = isit2) # fit a regular linear model using gam()
-nested_gam_model <- gam(Sources ~ s(SampleDepth) + SampleDepth ,data = isit2)
+nested_gam_model <- gam(Sources ~ s(SampleDepth), data = isit2)
 AIC(linear_model, nested_gam_model)
 ```
 
 **Le modèle linéaire à une valeur de AIC plus élevé, donc l'hypothèse de linéarité n'est pas acceptée.**
 
-.comment[Noté que le modèle `y~s(x)` donne exactement le même résultat que `y~s(x)+x`. Nous avons utilisé `s(x)+x` pour illustrer l'emboîtement du modèle, mais `+x` peut être omis.]
+.comment[Noté que le modèle `y ~ s(x)` est emboité dans  `y ~ x`.]
 
 ---
 exclude:true

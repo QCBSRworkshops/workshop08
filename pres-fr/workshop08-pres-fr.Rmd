@@ -1019,12 +1019,12 @@ plot(smooth_interact, page = 1, scheme = 3)
 
 
 ---
-exclude:true
+
 # GAM avec des termes d'interaction
 
-```{r, fig.width=8, fig.height=8,eval=FALSE}
-vis.gam(smooth_interact, view = c("x1", "x2"), theta=40, n.grid = 500, border = NA)
-# similaire à plot(smooth_interact, page = 1, scheme = 1)
+```{r, fig.width=8, fig.height=8}
+vis.gam(smooth_interact, view = c("SampleDepth", "RelativeDepth"), 
+        cond = list(Season = 1), theta=40, n.grid = 50, color = "cm")
 ```
 
 ---
@@ -1054,9 +1054,9 @@ Le modèle additif de base peut être étendu de plusieurs façons :
 Nous allons maintenant examiner ces aspects.
 
 ---
-# Other smooth functions
+# Fonctions lisses 
 
-Pour modéliser une surface lisse ou non-linéaire, nous pouvons utiliser trois fonctions lisses différentes :
+Pour modéliser une surface lisse ou non-linéaire, nous pouvons construire des fonctions lisses de différentes manières:
 
 `s()` ![:faic](arrow-right) pour modéliser un terme lisse 1-dimensionnel, ou pour modéliser une intéraction entre des variables mesurées sur la *même échelle*
 

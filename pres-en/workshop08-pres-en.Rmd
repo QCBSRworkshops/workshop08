@@ -1053,6 +1053,12 @@ smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), data = 
 summary(smooth_interact)$s.table
 ```
 
+--
+
+```{r, fig.width=7, fig.height=5.5,echo=FALSE}
+plot(smooth_interact, page = 1, scheme = 3)
+```
+
 ---
 exclude:true
 # GAM with interaction terms
@@ -1064,21 +1070,20 @@ smooth_interact <- gam(y~x0 + s(x1, x2), data = gam_data)
 summary(smooth_interact)$s.table
 ```
 
---
 ```{r, fig.width=7, fig.height=5.5,echo=FALSE}
 plot(smooth_interact, page = 1, scheme = 3)
 ```
 
 
 ---
-exclude:true
+
 # GAM with interaction terms
 
-```{r, fig.width=8, fig.height=8,eval=FALSE}
-vis.gam(smooth_interact, view = c("x1", "x2"), theta=40, n.grid = 500, border = NA)
-# similar to plot(smooth_interact, page = 1, scheme = 1)
-```
 
+```{r, fig.width=8, fig.height=8}
+vis.gam(smooth_interact, view = c("SampleDepth", "RelativeDepth"), 
+        cond = list(Season = 1), theta=40, n.grid = 50, color = "cm")
+```
 
 
 ---
@@ -1109,7 +1114,7 @@ We will now go over these aspects.
 ---
 # Other smooth functions
 
-To model a non-linear smooth variable or surface, 3 different smooth functions are available:
+To model a non-linear smooth variable or surface, smooth functions can be built in different ways:
 
 `s()` ![:faic](arrow-right) for modeling a 1-dimensional smooth or for modeling interactions among variables measured using the same unit and the same scale
 

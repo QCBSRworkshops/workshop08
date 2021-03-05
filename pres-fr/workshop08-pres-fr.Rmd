@@ -97,7 +97,7 @@ install.packages(c('ggplot2', 'itsadug', 'mgcv'))
 
 > Expérience du logiciel R (assez pour être en mesure d'exécuter un script et d'examiner les données et les objets dans R).
 
-> Une connaissance de base de la régression simple (vous devez savoir ce qu'on entend par une régression linéaire et une ANOVA).
+> Une connaissance de base de la régression linéaire.
 
 ---
 class: inverse, center, middle

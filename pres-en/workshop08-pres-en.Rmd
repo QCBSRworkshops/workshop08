@@ -95,7 +95,7 @@ install.packages(c('ggplot2', 'itsadug', 'mgcv'))
 # Prerequisites
 
 > Some experience in R (enough to be able to run a script and examine data and R objects)
-> a basic knowledge of regression (you should know what we mean by linear regression and ANOVA).
+> a basic knowledge of linear regression.
 
 ---
 class: inverse, center, middle

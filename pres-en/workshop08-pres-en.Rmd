@@ -1421,7 +1421,7 @@ year_gam_AR2 <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"),
 ```
 
 
---
+---
 
 # Model with correlated errors
 

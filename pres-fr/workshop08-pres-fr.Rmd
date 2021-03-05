@@ -76,7 +76,7 @@ install.packages(c('ggplot2', 'itsadug', 'mgcv'))
 
 1. Le modèle linéaire ... et où il échoue
 2. Introduction aux GAMs
-3. Plusieurs termes non linéaires
+3. GAM avec plusieurs termes non-linéaires
 4. Interactions
 5. Changer la fonction de base
 6. Intro rapide aux GAMMs
@@ -179,15 +179,15 @@ head(isit)
 
 Prenons que les données de la deuxième saison pour l'instant
 ```{r, echo = FALSE}
-isit <- read.csv("data/ISIT.csv", sep = ';')
+isit <- read.csv("data/ISIT.csv")
 library(ggplot2)
 library(mgcv)
 ```
 
 ```{r, echo = TRUE}
 isit2 <- subset(isit, Season==2)
-
 ```
+
 ---
 # GAM
 
@@ -198,6 +198,7 @@ data_plot <- ggplot(isit2, aes(y = Sources, x = SampleDepth)) + geom_point() +
              geom_line(colour = "red", size = 1.2, aes(y = fitted(linear_model))) + theme_bw()
 data_plot
 ```
+
 ---
 exclude:true
 # Modèles Additifs Généralisés (GAMs)
@@ -418,6 +419,7 @@ ggplot(isit1, aes(x = SampleDepth, y = Sources)) +
                    aes(y = fitted(gam_model_s1))) +
          theme_bw()
 ```
+
 ---
 # Défi 1 - Solution ![:cube]()
 
@@ -437,7 +439,7 @@ nested_gam_model_s1
 ```
 
 
-**Réponse** Oui la non-linéarité est justifiée. Les degrés de liberté effectifs (**EDF**) sont >> 1 (on reviendra la dessus bientôt).
+**Réponse** Oui, la non-linéarité est justifiée. Les degrés de liberté effectifs (**EDF**) sont >> 1 (on reviendra la dessus bientôt).
 
 ---
 exclude:true
@@ -599,7 +601,7 @@ $$M = 1/n \times \sum_{i=1}^n (\hat{f_i} - f_i)^2$$
 ---
 class: inverse, center, middle
 
-## 3. Plusieurs termes non linéaires
+## 3. GAM avec plusieurs termes non-linéaires
 ---
 # GAM à plusieurs variables
 
@@ -625,17 +627,23 @@ isit$Season <- as.factor(isit$Season)
 ```
 
 ```{r}
+isit$Season <- as.factor(isit$Season)
 basic_model <- gam(Sources ~ Season + s(SampleDepth), data = isit)
 basic_summary <- summary(basic_model)
-basic_summary$p.table
+```
 
+La sortie de `p.table` donne des informations sur les termes paramétriques :
+
+```{r}
+basic_summary$p.table
+```
+
+Le tableau `s.table` nous donne donne des informations sur le terme non linéaire :
+
+```{r}
 basic_summary$s.table
 ```
 
-.comment[La sortie de `p.table` fournit le tableau de résultats pour chaque terme paramétrique
-
-Le tableau `s.table` nous donne les résultats du terme non linéaire.
-]
 
 ---
 exclude:true
@@ -677,6 +685,11 @@ Le tableau `s.table` nous donne les résultats du terme non linéaire.
 ```{r,fig.width=12}
 plot(basic_model, all.terms = TRUE,page = 1)
 ```
+
+--
+
+Entre les saisons, il y a une différence marquée dans la bioluminescence.
+
 ---
 # Degrés de liberté effectifs (EDF)
 
@@ -718,8 +731,17 @@ Nous pouvons ajouter un second terme, `RelativeDepth`, mais spécifier une relat
 ```{r}
 two_term_model <- gam(Sources ~ Season + s(SampleDepth) + RelativeDepth, data = isit)
 two_term_summary <- summary(two_term_model)
-two_term_summary$p.table
+```
 
+Informations sur les effets paramétriques (termes linéaires) :
+
+```{r}
+two_term_summary$p.table
+```
+
+Informations sur les effets additifs (termes non linéaires) :
+
+```{r}
 two_term_summary$s.table
 ```
 
@@ -732,6 +754,7 @@ Nous pouvons ajouter un second terme, `RelativeDepth`, mais spécifier une relat
 ```{r,fig.width=10,fig.height=6.5}
 plot(two_term_model, page=1, all.terms = T)
 ```
+
 ---
 # GAM à plusieurs variables
 
@@ -741,10 +764,21 @@ Nous pouvons aussi vérifier que la relation entre `Sources` et `RelativeDepth` 
 ```{r}
 two_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth), data = isit)
 two_smooth_summary <- summary(two_smooth_model)
-two_smooth_summary$p.table
-
-two_smooth_summary$s.table
 ```
+
+Informations sur les effets paramétriques (termes linéaires) :
+
+```{r}
+two_term_summary$p.table
+```
+
+Informations sur les effets additifs (termes non linéaires) :
+
+```{r}
+two_term_summary$s.table
+```
+
+
 ---
 # GAM à plusieurs variables
 
@@ -843,6 +877,7 @@ exclude:true
 
 1. Créez deux nouveaux modèles avec la variable `x3` comme paramètre linéaire et non linéaire.
 2. Utilisez des graphiques, les tables des coefficients et la fonction `AIC()` afin de déterminer s'il est nécessaire d'inclure `x3` dans le modèle.
+
 ---
 # Défi 2 - Solution ![:cube]()
 ```{r,eval=FALSE}
@@ -860,6 +895,7 @@ three_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth) +
 three_smooth_summary <- summary(three_smooth_model)
 three_smooth_summary
 ```
+
 ---
 exclude:true
 # Défi 2 - Solution ![:cube]()
@@ -1006,15 +1042,16 @@ class: inverse, center, middle
 ## 5. Changer la fonction de base
 
 ---
-# Étendre le modèle de base de GAM
 
-Il est possible de modifier le modèle de base de GAM que nous avons vu avec :
+# Généralisation du modèle additif
 
-1. des fonctions plus complexes en modifiant la fonction de base (par exemple, cyclique),
-2. d'autres distributions : tout ce que vous pouvez faire avec un GLM (tel que spécifier l'argument `family`) est possible avec les GAMs,
-3. des modèles à effets mixtes en utilisant la fonction `gamm` ou le paquet `gamm4`.
+Le modèle additif de base peut être étendu de plusieurs façons :
 
-Nous allons maintenant passer au travers de ces 3 extensions.
+1. Utiliser de différents types de fonctions de base,
+2. Utiliser d'autres distributions pour la variable de réponse avec l'argument `famille` (comme dans un GLM),
+3. Utilisation de différents types d'effets aléatoires pour ajuster des modèles à effets mixtes.
+
+Nous allons maintenant examiner ces aspects.
 
 ---
 # Other smooth functions
@@ -1035,7 +1072,7 @@ Les fonctions lisses ont beaucoup de paramètres qui pourraient changer leur com
 `k` ![:faic](arrow-right) dimensions de base
   - détermine la limite supérieure du nombre de fonctions de base utilisées pour construire la courbe.
   - contraint l'ondulation d'une fonction lisse.
-  - par défaut, $k$ pour `s()` est 10, et 5 pour chaque dimension de `te()` and `ti()`.
+  - par défaut, $k$ est 10 pour `s()`, et 5 pour chaque dimension de `te()` and `ti()`.
   - k devrait être < au nombre de données uniques.
   - la comlexité (ou la non-linéarité) d'une fonction lisse dans un modèle ajusté est reflétée par ses degrés de liberté effectifs (**EDF**)
 
@@ -1139,15 +1176,26 @@ Nous allons tester si cette tendance est linéaire ou non avec un GAM logistique
 ```{r, warning=F}
 prop_model <- gam(prop ~ s(x1), data = gam_data3, weights = total, family = "binomial")
 prop_summary <- summary(prop_model)
-prop_summary$p.table
-prop_summary$s.table
 ```
 
 <!--Warning messages:
 1: In eval(family$initialize) : non-integer #successes in a binomial glm!??-->
-.comment[Que représente l'intercepte dans ce modèle?
 
-Qu'est ce que le terme de lissage indique?]
+--
+
+.comment[Qu'est ce que représente l'intercepte dans ce modèle?]
+
+```{r}
+prop_summary$p.table
+```
+
+--
+
+.comment[Qu'est ce que le terme de lissage indique?]
+
+```{r}
+prop_summary$s.table
+```
 
 ---
 # GAM avec d'autres distributions
@@ -1185,7 +1233,11 @@ Cela représente comment le ratio de succès vs échecs change sur l'échelle de
 
 > Puisque les **EDF** > 1, la proportion des succès augmente plus rapidement avec $x1$
 
-```{r, fig.height=3.5, fig.width=4, echo = FALSE}
+```{r, fig.height=4.3, fig.width=4.3, eval = FALSE}
+plot(prop_model)
+```
+
+```{r, fig.height=4.3, fig.width=4.3, echo = FALSE}
 par(mar = c(4,4,0,0))
 plot(prop_model)
 ```
@@ -1264,7 +1316,9 @@ Lorsque les observations ne sont pas indépendantes, les GAMs peuvent être util
 ---
 # Modèle avec erreurs autocorrélées
 
-Pour commencer, nous allons jeter un coup d’œil au premier cas; un modèle avec autocorrélation temporelle dans les résidus. Ré-examinons le modèle de la température de Nottingham et vérifions si les résidus sont corrélés en faisant appel à la fonction (partielle) d'autocorrélation.
+Pour commencer, nous allons jeter un coup d’œil au premier cas; un modèle avec autocorrélation temporelle dans les résidus. 
+
+Ré-examinons le modèle de la température de Nottingham et vérifions si les résidus sont corrélés en faisant appel à la fonction (partielle) d'autocorrélation.
 
 ```{r, eval = F, fig.width=9, fig.height=4.5}
 par(mfrow = c(1,2))
@@ -1281,14 +1335,23 @@ acf(resid(year_gam), lag.max = 36, main = "ACF")
 pacf(resid(year_gam), lag.max = 36, main = "pACF")
 ```
 
-.comment[ACF (et pACF) donne la corrélation croisée (et la corrélation partielle) d'une série temporelle avec elle-même à différent décalage de temps, et sont utilisés pour identifier combien d'intervalle de temps sont nécessaires pour que les observations commencent à être indépendantes.]
+.comment[ACF donne la corrélation croisée et pACF la corrélation partielle d'une série temporelle avec elle-même à différent décalage de temps.]
 
- Les graphiques des fonctions d'autocorrélation suggèrent qu'un modèle AR de faible ordre est nécessaire (avec un ou deux intervalles de temps décalés).
+ACF et pACF sont utilisés pour identifier combien d'intervalle de temps sont nécessaires pour que les observations commencent à être indépendantes.
+
+--
+
+Les graphiques des fonctions d'autocorrélation suggèrent qu'un modèle AR de faible ordre est nécessaire (avec un ou deux intervalles de temps décalés).
 
 ---
 # Modèle avec erreurs autocorrélées
 
-Nous pouvons tester l'autocorrélation en ajoutant des structures AR au modèle : AR(1) (corrélation avec un intervalle de temps décalé) ou un AR(2) (corrélation à 2 intervalles de temps décalés)
+Nous pouvons ajouter des structures d'autocorrelation au modèle : 
+
+- **AR(1)** : corrélation avec un intervalle de temps décalé, ou
+- **AR(2)** : corrélation à 2 intervalles de temps décalés
+
+--
 
 ```{r}
 
@@ -1299,10 +1362,17 @@ year_gam_AR1 <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"),
 year_gam_AR2 <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"),
                      correlation = corARMA(form = ~ 1|nottem_year, p = 2),
                    data = data.frame(nottem, nottem_year, nottem_month))
+```
+
+---
+
+# Modèle avec erreurs autocorrélées
+
+```{r}
 AIC(year_gam$lme, year_gam_AR1$lme, year_gam_AR2$lme)
 ```
 
-.comment[Le modèle avec la structure AR(1) prévoit une augmentation significative comparativement au premier modèle (LRT = 10,69, p = 0,0011), mais il y a très peu d'intérêt à considérer le modèle AR(2) (LRT = 1,62, b = 0,203).]
+Le modèle avec la structure AR(1) donne un meilleur ajustement au premier modèle. Mais il y a peu d'intérêt à considérer le modèle AR(2).
 
 ---
 # Modélisation avec effets mixtes

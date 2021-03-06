@@ -76,12 +76,11 @@ install.packages(c('ggplot2', 'itsadug', 'mgcv'))
 
 1. Le modèle linéaire ... et où il échoue
 2. Introduction aux GAMs
-3. Plusieurs termes non linéaires
+3. GAM avec plusieurs termes non-linéaires
 4. Interactions
 5. Changer la fonction de base
 6. Intro rapide aux GAMMs
 7. Autres distributions
-8. Les GAMs en coulisse
 
 ---
 # Objectifs d'apprentissage
@@ -98,7 +97,7 @@ install.packages(c('ggplot2', 'itsadug', 'mgcv'))
 
 > Expérience du logiciel R (assez pour être en mesure d'exécuter un script et d'examiner les données et les objets dans R).
 
-> Une connaissance de base de la régression simple (vous devez savoir ce qu'on entend par une régression linéaire et une ANOVA).
+> Une connaissance de base de la régression linéaire.
 
 ---
 class: inverse, center, middle
@@ -114,13 +113,20 @@ class: inverse, center, middle
 La régression linéaire est ce que la plupart des gens apprennent avant tout en statistiques et est parmi les méthodes les plus performantes. Elle nous permet de modéliser une variable réponse en fonction de facteurs prédictifs et d'une erreur résiduelle.
 
 --
-Tel que vu dans l'[atelier sur les modèles linéaires](http://qcbs.ca/wiki/r_workshop4), la régression fait cependant quatre suppositions importantes :
+Tel que vu dans l'[atelier sur les modèles linéaires](http://qcbs.ca/wiki/r_workshop4), le modèle linéaire fait cependant quatre suppositions importantes :
 
-1. L'erreur est distribuée normalement
-2. La variance des erreurs est constante
-3. Chaque erreur est indépendante des autres (homoscédasticité)
-4. La réponse est linéaire: $y = β_0 + β_1x$
+1. Relation linéaire entre les variables de réponse et les variables prédicteurs:  $$y_i = \beta_0 + \beta_1 \times x_i + \epsilon_i$$
+2. L'erreur est distribuée normalement: $$\epsilon_i \sim \mathcal{N}(0,\,\sigma^2)$$
+3. La variance des erreurs est constante
+4. Chaque erreur est indépendante des autres (homoscédasticité)
 
+<br>
+
+--
+
+*Modèle linéaire avec plusieurs prédicteurs:*
+
+$$y_i = \beta_0 + \beta_1x_{1,i}+\beta_2x_{2,i}+\beta_3x_{3,i}+...+\beta_kx_{k,i} + \epsilon_i$$
 
 ---
 # La régression linéaire
@@ -157,31 +163,31 @@ class: inverse, center, middle
 ---
 # Modèle Additif Généralisé (GAM)
 
-Examinons un exemple! Nous allons utilsé le jeu de données `ISIT`.
+Examinons un exemple! Nous allons utiliser le jeu de données `ISIT`.
 
 ```{r, eval = FALSE, echo = TRUE}
-isit <- read.csv("data/ISIT.csv", sep = ';')
+isit <- read.csv("data/ISIT.csv")
 head(isit)
 ```
 
 Ce jeu de donnée comporte des mesures de bioluminescence en relation à la profondeur (*depth*), la station de rechercher et la saison (*Season*).
 
 ```{r, eval = FALSE, echo = FALSE}
-isit <- read.csv("data/ISIT.csv", sep = ';')
+isit <- read.csv("data/ISIT.csv")
 head(isit)
 ```
 
 Prenons que les données de la deuxième saison pour l'instant
 ```{r, echo = FALSE}
-isit <- read.csv("data/ISIT.csv", sep = ';')
+isit <- read.csv("data/ISIT.csv")
 library(ggplot2)
 library(mgcv)
 ```
 
 ```{r, echo = TRUE}
 isit2 <- subset(isit, Season==2)
-
 ```
+
 ---
 # GAM
 
@@ -192,6 +198,7 @@ data_plot <- ggplot(isit2, aes(y = Sources, x = SampleDepth)) + geom_point() +
              geom_line(colour = "red", size = 1.2, aes(y = fitted(linear_model))) + theme_bw()
 data_plot
 ```
+
 ---
 exclude:true
 # Modèles Additifs Généralisés (GAMs)
@@ -247,15 +254,24 @@ data_plot
 ---
 # GAM
 
-Dans un GAM, la relation entre la variable réponse et le prédicteur est :
+**Relation entre la variable réponse et le prédicteur**
 
-$$y = \alpha + s(x_1) + s(x_2) + ... + \varepsilon$$
+Une variable prédicteur:
+$$y_i = \beta_0 + f(x_i) + \epsilon$$
 
-Un des grands avantages d'utiliser un GAM est que la forme optimale de la non-linéarité, i.e. **le degré de lissage** de `s(x)`, est contrôlée en utilisant une régression pénalisée qui est déterminée automatiquement à l'aide d'une méthode de validation croisée généralisée.
+Plusieurs variables prédicteurs:
+$$y_i = \beta_0 + f_1(x_{1,i}) + f_2(x_{2,i}) + ... + \epsilon$$
+
+
+Un des grands avantages d'utiliser un GAM est que la forme optimale de la non-linéarité, i.e. **le degré de lissage** de $f(x)$ est contrôlée en utilisant une régression pénalisée qui est déterminée automatiquement est déterminée automatiquement selon la méthode d'ajustement (généralement le *maximum de vraisemblance* ou *maximum likelihood*).
+
+???
+
+- Au sens strict, les équations concernent un GAM gaussien avec lien d'identité, qui est aussi appelé "modèle additif" (sans "généralisé").
 
 ---
 #GAM
-Essayons de modéliser les données à l'aide d'une fonction de lissage avec la fonction `mgcv::gam()`
+Essayons de modéliser les données à l'aide d'une fonction de lissage `s(x)` avec `mgcv::gam()`
 
 
 ```{r, eval = FALSE,echo=TRUE}
@@ -278,13 +294,13 @@ data_plot <- data_plot +
 data_plot
 ```
 
-.comment[Note: contrairement à un coefficient fixe $β$, la fonction de lissage peut changer tout au long du gradient $x$]
+.comment[Note: contrairement à un coefficient fixe $\beta$, la fonction de lissage peut changer tout au long du gradient $x$]
 
 ---
 exclude:true
 # GAM
 
-Essayons de modéliser les données à l'aide d'une fonction de lissage avec la fonction `mgcv::gam()`
+Essayons de modéliser les données à l'aide d'une fonction de lissage `s(x)` avec `mgcv::gam()`
 
 ```{r, eval = FALSE}
 library(mgcv)
@@ -315,7 +331,7 @@ data_plot <- data_plot +
 data_plot
 ```
 
-.comment[Note: contrairement à un coefficient fixe $β$, la fonction de lissage peut changer tout au long du gradient $x$]
+.comment[Note: contrairement à un coefficient fixe $\beta$, la fonction de lissage peut changer tout au long du gradient $x$]
 
 
 ---
@@ -334,13 +350,13 @@ Nous pouvons utiliser les fonctions `gam()` et `AIC()` pour tester formellement 
 
 ```{r}
 linear_model <- gam(Sources ~ SampleDepth, data = isit2) # fit a regular linear model using gam()
-nested_gam_model <- gam(Sources ~ s(SampleDepth) + SampleDepth ,data = isit2)
+nested_gam_model <- gam(Sources ~ s(SampleDepth), data = isit2)
 AIC(linear_model, nested_gam_model)
 ```
 
 **Le modèle linéaire à une valeur de AIC plus élevé, donc l'hypothèse de linéarité n'est pas acceptée.**
 
-.comment[Noté que le modèle `y~s(x)` donne exactement le même résultat que `y~s(x)+x`. Nous avons utilisé `s(x)+x` pour illustrer l'emboîtement du modèle, mais `+x` peut être omis.]
+.comment[Noté que le modèle `y ~ s(x)` est emboité dans  `y ~ x`.]
 
 ---
 exclude:true
@@ -378,7 +394,7 @@ isit1 <- subset(isit, Season==1)
 
 1. Ajustez un modèle linéaire et un GAM à la relation entre `Sources` et `SampleDepth`.
 2. Déterminez si l'hypothèse de linéarité est justifiée pour ces données.
-3. Quels sont les degrés de libertés effectifs du terme non-linéaire ?
+3. Quels sont les degrés de liberté effectifs du terme non-linéaire ?
 
 
 <!-- nous n'Avons pas encore parler du **edf** -->
@@ -403,6 +419,7 @@ ggplot(isit1, aes(x = SampleDepth, y = Sources)) +
                    aes(y = fitted(gam_model_s1))) +
          theme_bw()
 ```
+
 ---
 # Défi 1 - Solution ![:cube]()
 
@@ -422,7 +439,7 @@ nested_gam_model_s1
 ```
 
 
-**Réponse** Oui la non-linéarité est justifiée. Les degrés de libertés effectifs (**edf**) sont >> 1 (on reviendra la dessus bientôt).
+**Réponse** Oui, la non-linéarité est justifiée. Les degrés de liberté effectifs (**EDF**) sont >> 1 (on reviendra la dessus bientôt).
 
 ---
 exclude:true
@@ -439,7 +456,7 @@ y_test_obs <- rnorm(n, y_test_fit, 0.2)
 
 1. Ajustez un modèle linéaire et un GAM à la relation entre `x_test` et `y_test_obs`.
 2. Déterminez si l'hypothèse de linéarité est justifiée pour ces données.
-3. Quels sont les degrés de libertés effectifs du terme non-linéaire ?
+3. Quels sont les degrés de liberté effectifs du terme non-linéaire ?
 
 
 <!-- nous n'avons pas parlé de degrés de liberté avant... -->
@@ -473,12 +490,118 @@ exclude:true
 nested_gam_model_test
 ```
 
-**Réponse** Oui la non-linéarité est justifiée. Les degrés de libertés effectifs (**edf**) sont >> 1 (on reviendra la dessus bientôt).
+**Réponse** Oui la non-linéarité est justifiée. Les degrés de liberté effectifs (**EDF**) sont >> 1 (on reviendra la dessus bientôt).
+
+---
+# Un regard plus approfondi sur les GAMs
+
+Nous allons maintenant prendre quelques minutes pour regarder comment fonctionnent les GAMs. Commençons en considérant d'abord un modèle qui contient une fonction lisse $f$ d'une covariable, $x$ :
+
+$$y_i = f(x_i) + \epsilon_i$$
+
+Pour estimer la fonction $f$, nous avons besoin de représenter l'équation ci-dessus de manière à ce qu'elle devienne un modèle linéaire. Cela peut être fait en définissant des fonctions de base, $b_j(x)$, dont est composée $f$ :
+
+$$f(x) = \sum_{j=1}^q b_j(x) \times \beta_j$$
+
+---
+# Exemple : une base polynomiale
+
+Supposons que $f$ est considérée comme un polynôme d'ordre 4, de sorte que l'espace des polynômes d'ordre 4 et moins contient $f$. Une base de cet espace serait alors :
+
+$$b_0(x)=1 \ , \quad b_1(x)=x \ , \quad b_2(x)=x^2 \ , \quad b_3(x)=x^3 \ , \quad b_4(x)=x^4$$
+
+Alors $f(x)$ devient :
+
+$$f(x) = \beta_0 + x\beta_1 +  x^2\beta_2 + x^3\beta_3 + x^4\beta_4$$
+
+... et le modèle complet devient :
+
+$$y_i = \beta_0 + x_i\beta_1 +  x^2_i\beta_2 + x^3_i\beta_3 + x^4_i\beta_4 + \epsilon_i$$
+
+---
+# Exemple : une base polynomiale
+
+Chaque fonction de base est multipliée par un paramètre à valeur réelle, $\beta_j$, et est ensuite additionnée pour donner la <font color="orange">courbe finale $f(x)$</font>.
+
+.center[
+![:scale 85%](images/polynomial_basis_example.png)
+]
+
+En faisant varier le coefficient $\beta_j$, on peut faire varier la forme de $f(x)$ pour produire une fonction polynomiale d'ordre 4 ou moins.
+
+---
+# Exemple : une base de spline cubique
+
+Un spline cubique est une courbe construite à partir de sections d'un polynôme cubique reliées entre elles de sorte qu'elles sont continues en valeur. Chaque section du spline a des coefficients différents.
+
+.center[
+![](images/cubic_spline.png)
+]
+
+---
+# Exemple : une base de spline cubique
+
+Voici une représentation d'une fonction lisse utilisant une base de régression spline cubique de rang 5 avec des nœuds situés à incréments de 0.2:
+
+.center[
+![:scale 40%](images/cubic_spline5.jpg)
+]
+
+Dans cet exemple, les nœuds sont espacés uniformément à travers la gamme des valeurs observées de x. Le choix du degré de finesse du modèle est pré-déterminé par le nombre de nœuds, qui était arbitraire.
+
+.comment[Y a-t-il une meilleure façon de sélectionner les emplacements des nœuds?]
+
+---
+# Contrôler le degré de lissage avec des splines de régression pénalisés
+
+Au lieu de contrôler le lissage (non linéarité) en modifiant le nombre de nœuds, nous gardons celui-ci fixé à une taille un peu plus grande que raisonnablement nécessaire et on contrôle le lissage du modèle en ajoutant une pénalité sur le niveau de courbure. Donc, plutôt que d'ajuster le modèle en minimisant (comme avec la méthode des moindres carrés) :
+
+$$||y - XB||^{2}$$
+
+Il peut être modélisé en minimisant :
+
+$$||y - XB||^{2} + \lambda \int_0^1[f^{''}(x)]^2dx$$
+
+Quand $\lambda$ tend vers $∞$, le modèle devient linéaire.
+
+---
+# Contrôler le degré de lissage avec des splines de régression pénalisés
+
+Si $λ$ est trop élevé, les données seront trop lissées et si elle est trop faible, les données ne seront pas assez lissées. Idéalement, il serait bon de choisir une valeur $λ$ de sorte que le $\hat{f}$ prédit est aussi proche que possible du $f$ observé. Un critère approprié pourrait être de choisir $λ$ pour minimiser :
+
+$$M = 1/n \times \sum_{i=1}^n (\hat{f_i} - f_i)^2$$
+
+Étant donné que $f$ est inconnue, $M$ est estimé en utilisant une technique de validation croisée généralisée qui laisse de côté, à chaque tour, une donnée et estime la capacité moyenne des modèles, construits sur les données restantes, de prédire la donnée qui a été mise de côté.
+
+---
+# Principe de validation croisée
+
+.center[
+![:scale 60%](images/smooth_sel.png)
+]
+
+1. ajustement faible par rapport aux données et ne fait pas mieux avec le point manquant.
+
+--
+
+2. très bon ajustement de la courbe du signal sous-jacent, le lissage passe à travers le bruit et la donnée manquante est plutôt bien prédite.
+
+--
+
+3. la courbe ajuste le bruit aussi bien que le signal, la variabilité supplémentaire amène à prédire la donnée manquante plutôt mal.
+
+---
+# Principe de validation croisée
+
+.center[
+![](images/gcv.png)
+]
+
 
 ---
 class: inverse, center, middle
 
-## 3. Plusieurs termes non linéaires
+## 3. GAM avec plusieurs termes non-linéaires
 ---
 # GAM à plusieurs variables
 
@@ -504,17 +627,23 @@ isit$Season <- as.factor(isit$Season)
 ```
 
 ```{r}
+isit$Season <- as.factor(isit$Season)
 basic_model <- gam(Sources ~ Season + s(SampleDepth), data = isit)
 basic_summary <- summary(basic_model)
-basic_summary$p.table
+```
 
+La sortie de `p.table` donne des informations sur les termes paramétriques :
+
+```{r}
+basic_summary$p.table
+```
+
+Le tableau `s.table` nous donne donne des informations sur le terme non linéaire :
+
+```{r}
 basic_summary$s.table
 ```
 
-.comment[La sortie de `p.table` fournit le tableau de résultats pour chaque terme paramétrique
-
-Le tableau `s.table` nous donne les résultats du terme non linéaire.
-]
 
 ---
 exclude:true
@@ -551,36 +680,50 @@ Le tableau `s.table` nous donne les résultats du terme non linéaire.
 ]
 
 ---
-# Note sur les degrés de liberté estimés
-
-```{r}
-basic_summary$s.table
-```
-
-Le paramètre `edf` indiqué dans le tableau `s.table` correspond au **degrés de liberté estimés** – essentiellement, plus la valeur de l'**edf** est élevée, plus la non-linéarité est forte.
-
-- Une valeur proche de 1 se rapproche d'un terme linéaire.
-
-- Une valeur elevée (8–10 ou plus) signifie que la courbe est fortement non-linéaire.
-
-> Dans notre modèle de base, l'**edf** du terme non-linéaire `s(SampleDepth)` est ~9, ce qui suggère une courbe fortement non-linéaire.
-
----
-# Note sur les degrés de liberté estimés
-
-Les **edf** dans un GAM sont différents des degrés de liberté dans une régression linéaire.
-
-Dans la régression linéaire, les degrés de libertés du *modèle* sont équivalents au nombre de paramètres libres non redondants, p, dans le modèle (et les degrés de libertés *résiduels* sont égaux à $n-p$).
-
-Nous reviendrons plus tard sur le concept d'**edf**.
-
----
 # GAM à plusieurs variables
 
 ```{r,fig.width=12}
 plot(basic_model, all.terms = TRUE,page = 1)
 ```
+
+--
+
+Entre les saisons, il y a une différence marquée dans la bioluminescence.
+
 ---
+# Degrés de liberté effectifs (EDF)
+
+```{r}
+basic_summary$s.table
+```
+
+Les `edf` indiqués dans le tableau `s.table` correspond aux **degrés de liberté effectifs** de la fonction lisse -– essentiellement, plus d'**EDF**, plus la non-linéarité est forte.
+
+- Une valeur proche de 1 se rapproche d'un terme linéaire.
+
+- Une valeur elevée signifie que la courbe est non-linéaire.
+
+> Dans notre modèle de base, les **EDF** du terme non-linéaire `s(SampleDepth)` sont ~9, ce qui suggère une courbe fortement non-linéaire.
+
+---
+# Degrés de liberté effectifs (EDF)
+
+Les **EDF** dans un GAM sont estimés différemment des degrés de liberté dans une régression linéaire.
+
+Dans la régression linéaire, les degrés de liberté du *modèle* sont équivalents au nombre de paramètres libres non redondants, $p$, dans le modèle (et les degrés de liberté *résiduels* sont égaux à $n-p$).
+
+Parce que le nombre de paramètres libres des splines de lissage (tel que les GAMs) est souvent difficile à définir, les **EDF** sont liés à $\lambda$, où l'effet de la pénalité est de réduire les degrés de liberté.
+
+---
+
+# Dimensions de base et EDF
+
+La limite supérieure d'**EDF** est déterminée par les dimensions de base $k$ de la fonction lisse (les **EDF** ne peut pas dépasser $k-1$)
+
+En pratique, le choix exact de $k$ est arbitraire, mais il devrait être **suffisamment grand** pour permettre une fonction lisse suffisamment complexe.
+
+---
+
 # GAM à plusieurs variables
 
 Nous pouvons ajouter un second terme, `RelativeDepth`, mais spécifier une relation linéaire avec `Sources`
@@ -588,8 +731,17 @@ Nous pouvons ajouter un second terme, `RelativeDepth`, mais spécifier une relat
 ```{r}
 two_term_model <- gam(Sources ~ Season + s(SampleDepth) + RelativeDepth, data = isit)
 two_term_summary <- summary(two_term_model)
-two_term_summary$p.table
+```
 
+Informations sur les effets paramétriques (termes linéaires) :
+
+```{r}
+two_term_summary$p.table
+```
+
+Informations sur les effets additifs (termes non linéaires) :
+
+```{r}
 two_term_summary$s.table
 ```
 
@@ -602,6 +754,7 @@ Nous pouvons ajouter un second terme, `RelativeDepth`, mais spécifier une relat
 ```{r,fig.width=10,fig.height=6.5}
 plot(two_term_model, page=1, all.terms = T)
 ```
+
 ---
 # GAM à plusieurs variables
 
@@ -611,10 +764,21 @@ Nous pouvons aussi vérifier que la relation entre `Sources` et `RelativeDepth` 
 ```{r}
 two_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth), data = isit)
 two_smooth_summary <- summary(two_smooth_model)
-two_smooth_summary$p.table
-
-two_smooth_summary$s.table
 ```
+
+Informations sur les effets paramétriques (termes linéaires) :
+
+```{r}
+two_term_summary$p.table
+```
+
+Informations sur les effets additifs (termes non linéaires) :
+
+```{r}
+two_term_summary$s.table
+```
+
+
 ---
 # GAM à plusieurs variables
 
@@ -713,6 +877,7 @@ exclude:true
 
 1. Créez deux nouveaux modèles avec la variable `x3` comme paramètre linéaire et non linéaire.
 2. Utilisez des graphiques, les tables des coefficients et la fonction `AIC()` afin de déterminer s'il est nécessaire d'inclure `x3` dans le modèle.
+
 ---
 # Défi 2 - Solution ![:cube]()
 ```{r,eval=FALSE}
@@ -730,6 +895,7 @@ three_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth) +
 three_smooth_summary <- summary(three_smooth_model)
 three_smooth_summary
 ```
+
 ---
 exclude:true
 # Défi 2 - Solution ![:cube]()
@@ -853,12 +1019,12 @@ plot(smooth_interact, page = 1, scheme = 3)
 
 
 ---
-exclude:true
+
 # GAM avec des termes d'interaction
 
-```{r, fig.width=8, fig.height=8,eval=FALSE}
-vis.gam(smooth_interact, view = c("x1", "x2"), theta=40, n.grid = 500, border = NA)
-# similaire à plot(smooth_interact, page = 1, scheme = 1)
+```{r, fig.width=8, fig.height=8}
+vis.gam(smooth_interact, view = c("SampleDepth", "RelativeDepth"), 
+        cond = list(Season = 1), theta=40, n.grid = 50, color = "cm")
 ```
 
 ---
@@ -876,20 +1042,21 @@ class: inverse, center, middle
 ## 5. Changer la fonction de base
 
 ---
-# Étendre le modèle de base de GAM
 
-Il est possible de modifier le modèle de base de GAM que nous avons vu avec :
+# Généralisation du modèle additif
 
-1. des fonctions plus complexes en modifiant la fonction de base (par exemple, cyclique),
-2. d'autres distributions : tout ce que vous pouvez faire avec un GLM (tel que spécifier l'argument `family`) est possible avec les GAMs,
-3. des modèles à effets mixtes en utilisant la fonction `gamm` ou le paquet `gamm4`.
+Le modèle additif de base peut être étendu de plusieurs façons :
 
-Nous allons maintenant passer au travers de ces 3 extensions.
+1. Utiliser de différents types de fonctions de base,
+2. Utiliser d'autres distributions pour la variable de réponse avec l'argument `famille` (comme dans un GLM),
+3. Utilisation de différents types d'effets aléatoires pour ajuster des modèles à effets mixtes.
+
+Nous allons maintenant examiner ces aspects.
 
 ---
-# Other smooth functions
+# Fonctions lisses 
 
-Pour modéliser une surface lisse ou non-linéaire, nous pouvons utiliser trois fonctions lisses différentes :
+Pour modéliser une surface lisse ou non-linéaire, nous pouvons construire des fonctions lisses de différentes manières:
 
 `s()` ![:faic](arrow-right) pour modéliser un terme lisse 1-dimensionnel, ou pour modéliser une intéraction entre des variables mesurées sur la *même échelle*
 
@@ -902,12 +1069,12 @@ Pour modéliser une surface lisse ou non-linéaire, nous pouvons utiliser trois 
 
 Les fonctions lisses ont beaucoup de paramètres qui pourraient changer leur comportement. Les paramètres les plus souvent utilisés sont les suivants :
 
-`k` ![:faic](arrow-right) nombre de ‘noeuds’
+`k` ![:faic](arrow-right) dimensions de base
   - détermine la limite supérieure du nombre de fonctions de base utilisées pour construire la courbe.
   - contraint l'ondulation d'une fonction lisse.
-  - le nombre de fonctions de base est représenté par l'**edf**.
-  - par défaut, la limite supérieure de k pour `s()` est ~9, et de 5 pour chaque dimension de `te()` and `ti()`.
+  - par défaut, $k$ est 10 pour `s()`, et 5 pour chaque dimension de `te()` and `ti()`.
   - k devrait être < au nombre de données uniques.
+  - la comlexité (ou la non-linéarité) d'une fonction lisse dans un modèle ajusté est reflétée par ses degrés de liberté effectifs (**EDF**)
 
 ---
 # Paramètres des fonctions lisses
@@ -1009,15 +1176,26 @@ Nous allons tester si cette tendance est linéaire ou non avec un GAM logistique
 ```{r, warning=F}
 prop_model <- gam(prop ~ s(x1), data = gam_data3, weights = total, family = "binomial")
 prop_summary <- summary(prop_model)
-prop_summary$p.table
-prop_summary$s.table
 ```
 
 <!--Warning messages:
 1: In eval(family$initialize) : non-integer #successes in a binomial glm!??-->
-.comment[Que représente l'intercepte dans ce modèle?
 
-Qu'est ce que le terme de lissage indique?]
+--
+
+.comment[Qu'est ce que représente l'intercepte dans ce modèle?]
+
+```{r}
+prop_summary$p.table
+```
+
+--
+
+.comment[Qu'est ce que le terme de lissage indique?]
+
+```{r}
+prop_summary$s.table
+```
 
 ---
 # GAM avec d'autres distributions
@@ -1053,9 +1231,13 @@ Cela représente comment le ratio de succès vs échecs change sur l'échelle de
 
 --
 
-> Puisque l'**edf** > 1, la proportion des succès augmente plus rapidement avec $x1$
+> Puisque les **EDF** > 1, la proportion des succès augmente plus rapidement avec $x1$
 
-```{r, fig.height=3.5, fig.width=4, echo = FALSE}
+```{r, fig.height=4.3, fig.width=4.3, eval = FALSE}
+plot(prop_model)
+```
+
+```{r, fig.height=4.3, fig.width=4.3, echo = FALSE}
 par(mar = c(4,4,0,0))
 plot(prop_model)
 ```
@@ -1134,7 +1316,9 @@ Lorsque les observations ne sont pas indépendantes, les GAMs peuvent être util
 ---
 # Modèle avec erreurs autocorrélées
 
-Pour commencer, nous allons jeter un coup d’œil au premier cas; un modèle avec autocorrélation temporelle dans les résidus. Ré-examinons le modèle de la température de Nottingham et vérifions si les résidus sont corrélés en faisant appel à la fonction (partielle) d'autocorrélation.
+Pour commencer, nous allons jeter un coup d’œil au premier cas; un modèle avec autocorrélation temporelle dans les résidus. 
+
+Ré-examinons le modèle de la température de Nottingham et vérifions si les résidus sont corrélés en faisant appel à la fonction (partielle) d'autocorrélation.
 
 ```{r, eval = F, fig.width=9, fig.height=4.5}
 par(mfrow = c(1,2))
@@ -1151,14 +1335,23 @@ acf(resid(year_gam), lag.max = 36, main = "ACF")
 pacf(resid(year_gam), lag.max = 36, main = "pACF")
 ```
 
-.comment[ACF (et pACF) donne la corrélation croisée (et la corrélation partielle) d'une série temporelle avec elle-même à différent décalage de temps, et sont utilisés pour identifier combien d'intervalle de temps sont nécessaires pour que les observations commencent à être indépendantes.]
+.comment[ACF donne la corrélation croisée et pACF la corrélation partielle d'une série temporelle avec elle-même à différent décalage de temps.]
 
- Les graphiques des fonctions d'autocorrélation suggèrent qu'un modèle AR de faible ordre est nécessaire (avec un ou deux intervalles de temps décalés).
+ACF et pACF sont utilisés pour identifier combien d'intervalle de temps sont nécessaires pour que les observations commencent à être indépendantes.
+
+--
+
+Les graphiques des fonctions d'autocorrélation suggèrent qu'un modèle AR de faible ordre est nécessaire (avec un ou deux intervalles de temps décalés).
 
 ---
 # Modèle avec erreurs autocorrélées
 
-Nous pouvons tester l'autocorrélation en ajoutant des structures AR au modèle : AR(1) (corrélation avec un intervalle de temps décalé) ou un AR(2) (corrélation à 2 intervalles de temps décalés)
+Nous pouvons ajouter des structures d'autocorrelation au modèle : 
+
+- **AR(1)** : corrélation avec un intervalle de temps décalé, ou
+- **AR(2)** : corrélation à 2 intervalles de temps décalés
+
+--
 
 ```{r}
 
@@ -1169,10 +1362,17 @@ year_gam_AR1 <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"),
 year_gam_AR2 <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"),
                      correlation = corARMA(form = ~ 1|nottem_year, p = 2),
                    data = data.frame(nottem, nottem_year, nottem_month))
+```
+
+---
+
+# Modèle avec erreurs autocorrélées
+
+```{r}
 AIC(year_gam$lme, year_gam_AR1$lme, year_gam_AR2$lme)
 ```
 
-.comment[Le modèle avec la structure AR(1) prévoit une augmentation significative comparativement au premier modèle (LRT = 10,69, p = 0,0011), mais il y a très peu d'intérêt à considérer le modèle AR(2) (LRT = 1,62, b = 0,203).]
+Le modèle avec la structure AR(1) donne un meilleur ajustement au premier modèle. Mais il y a peu d'intérêt à considérer le modèle AR(2).
 
 ---
 # Modélisation avec effets mixtes
@@ -1357,7 +1557,7 @@ plot(gamm_int_slope, select = 3)
 # GAMM avec une surface lisse aléatoire
 
 ```{r}
-gamm_smooth <- gam(y ~ s(x0, fac, bs = "fs", m = 1), data = gam_data2)
+gamm_smooth <- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1), data = gam_data2)
 
 summary(gamm_smooth)$s.table
 ```
@@ -1419,132 +1619,6 @@ Tous ces modèles mixtes peuvent être comparés en utilisant la fonction `AIC()
 AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
 ```
 
----
-class: inverse, center, middle
-
-# 8. Les GAMs en coulisse
-
-
----
-# Un regard plus approfondi sur les GAMs
-
-Nous allons maintenant prendre quelques minutes pour regarder comment fonctionnent les GAMs. Commençons en considérant d'abord un modèle qui contient une fonction lisse d'une covariable, $x_i$ :
-
-$$y_i = f(x_i) + ε_i$$
-
-Pour estimer la fonction $f$, nous avons besoin de représenter l'équation ci-dessus de manière à ce qu'elle devienne un modèle linéaire. Cela peut être fait en choisissant une base, $b_i(x)$, définissant l'espace des fonctions dont $f$ est un élément :
-
-$$f(x) = \sum_{i=1}^q b_i(x) \times β_i$$
-
----
-# Exemple : une base polynomiale
-
-Supposons que $f$ est considérée comme un polynôme d'ordre 4, de sorte que l'espace des polynômes d'ordre 4 et moins contient $f$. Une base de cet espace serait alors :
-
-$$b_1(x)=1,   b_2(x)=x,   b_3(x)=x^2,   b_4(x)=x^3,   b_5(x)=x^4$$
-
-et $f(x)$ devient :
-
-$$f(x) = β_1 + x_iβ_2 +  x^2_iβ_3 + x^3_iβ_4(x) + x^4_iβ_5$$
-
-et le modèle complet devient :
-
-$$y_i = β_1 + x_iβ_2 +  x^2_iβ_3 + x^3_iβ_4(x) + x^4_iβ_5 + ε_i$$
-
----
-# Exemple : une base polynomiale
-
-Chaque fonction de base est multipliée par un paramètre à valeur réelle, $β_i$, et est ensuite additionnée pour donner la <font color="orange">courbe finale $f(x)$</font>.
-
-.center[
-![:scale 85%](images/polynomial_basis_example.png)
-]
-
-En faisant varier le coefficient $β_i$, on peut faire varier la forme de $f(x)$ pour produire une fonction polynomiale d'ordre 4 ou moins.
-
----
-# Exemple : une base de spline cubique
-
-Un spline cubique est une courbe construite à partir de sections d'un polynôme cubique reliées entre elles de sorte qu'elles sont continues en valeur. Chaque section du spline a des coefficients différents.
-
-.center[
-![](images/cubic_spline.png)
-]
-
----
-# Exemple : une base de spline cubique
-
-Voici une représentation d'une fonction lisse utilisant une base de régression spline cubique de rang 5 avec des nœuds situés à incréments de 0.2:
-
-.center[
-![:scale 40%](images/cubic_spline5.jpg)
-]
-
-Dans cet exemple, les nœuds sont espacés uniformément à travers la gamme des valeurs observées de x. Le choix du degré de finesse du modèle est pré-déterminé par le nombre de nœuds, qui était arbitraire.
-
-.comment[Y a-t-il une meilleure façon de sélectionner les emplacements des nœuds?]
-
----
-# Contrôler le degré de lissage avec des splines de régression pénalisés
-
-Au lieu de contrôler le lissage (non linéarité) en modifiant le nombre de nœuds, nous gardons celui-ci fixé à une taille un peu plus grande que raisonnablement nécessaire et on contrôle le lissage du modèle en ajoutant une pénalité sur le niveau de courbure. Donc, plutôt que d'ajuster le modèle en minimisant (comme avec la méthode des moindres carrés) :
-
-$$||y - XB||^{2}$$
-
-Il peut être modélisé en minimisant :
-
-$$||y - XB||^{2} + \lambda \int_0^1[f^{''}(x)]^2dx$$
-
-Quand $\lambda$ tend vers $∞$, le modèle devient linéaire.
-
----
-# Contrôler le degré de lissage avec des splines de régression pénalisés
-
-Si $λ$ est trop élevé, les données seront trop lissées et si elle est trop faible, les données ne seront pas assez lissées. Idéalement, il serait bon de choisir une valeur $λ$ de sorte que le $\hat{f}$ prédit est aussi proche que possible du $f$ observé. Un critère approprié pourrait être de choisir $λ$ pour minimiser :
-
-$$M = 1/n \times \sum_{i=1}^n (\hat{f_i} - f_i)^2$$
-
-Étant donné que $f$ est inconnue, $M$ est estimé en utilisant une technique de validation croisée généralisée qui laisse de côté, à chaque tour, une donnée et estime la capacité moyenne des modèles, construits sur les données restantes, de prédire la donnée qui a été mise de côté.
-
----
-# Principe de validation croisée
-
-.center[
-![:scale 60%](images/smooth_sel.png)
-]
-
-1. ajustement faible par rapport aux données et ne fait pas mieux avec le point manquant.
-
---
-
-2. très bon ajustement de la courbe du signal sous-jacent, le lissage passe à travers le bruit et la donnée manquante est plutôt bien prédite.
-
---
-
-3. la courbe ajuste le bruit aussi bien que le signal, la variabilité supplémentaire amène à prédire la donnée manquante plutôt mal.
-
----
-# Principe de validation croisée
-
-.center[
-![](images/gcv.png)
-]
-
-
----
-# Note supplémentaire sur les degrés de liberté effectifs (**edf**)
-
-Combien de degrés de liberté a un GAM ?
-
-Au lieu de fournir la sortie de la validation croisée en termes de $\lambda$ (complexité de l'ajustement), la fonction GAM du paquet `mgvc` utilise un terme appelé les degrés de liberté effectifs (**edf**).
-
-
----
-# Note supplémentaire sur les degrés de liberté effectifs (**edf**)
-
-Parce que le nombre de paramètres libres des splines de lissage (tel que les GAMs) est souvent difficile à définir, les **edf** sont liés à $\lambda$, où l'effet de la pénalité est de réduire les degrés de libertés.
-
-Par exemple, si le nombre de noeuds est arbitrairement réglé à k = 10, k-1 définit la limite supérieure des degrés de libertés associés à un terme de lissage. Ce nombre diminue alors que la pénalité $\lambda$ augmente jusqu'à ce que le meilleur modèle soit trouvé par validation croisée.
 
 ---
 # Ressources

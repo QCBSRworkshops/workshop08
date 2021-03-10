@@ -78,9 +78,9 @@ install.packages(c('ggplot2', 'itsadug', 'mgcv'))
 2. Introduction aux GAMs
 3. GAM avec plusieurs termes non-linéaires
 4. Interactions
-5. Changer la fonction de base
-6. Intro rapide aux GAMMs
-7. Autres distributions
+5. Généralisation du modèle additif
+6. Changer la fonction de base
+7. Intro rapide aux GAMMs
 
 ---
 # Objectifs d'apprentissage
@@ -1039,7 +1039,8 @@ Le modèle avec l'intéraction entre `s(SampleDepth)` et `s(RelativeDepth)` a un
 ---
 class: inverse, center, middle
 
-## 5. Changer la fonction de base
+# 5. Généralisation du modèle additif
+
 
 ---
 
@@ -1047,11 +1048,266 @@ class: inverse, center, middle
 
 Le modèle additif de base peut être étendu de plusieurs façons :
 
-1. Utiliser de différents types de fonctions de base,
-2. Utiliser d'autres distributions pour la variable de réponse avec l'argument `famille` (comme dans un GLM),
-3. Utilisation de différents types d'effets aléatoires pour ajuster des modèles à effets mixtes.
+1. Utilisation de différents types d'effets aléatoires pour ajuster des modèles à effets mixtes.
+2. Utiliser de différents types de fonctions de base,
+3. Utiliser d'autres distributions pour la variable de réponse avec l'argument `famille` (comme dans un GLM),
 
 Nous allons maintenant examiner ces aspects.
+
+
+---
+
+# Modèle additif généralisé
+
+Jusqu'à présent, nous avons utilisé des modèles additifs simples (gaussiens), l'équivalent non linéaire d'un modèle linéaire.
+
+--
+
+Mais que pouvons-nous faire si :
+- les observations de la variable de réponse ne **suivent pas une distribution normale** ?
+- la **variance n'est pas constante** ? (hétéroscédasticité)
+
+--
+
+.comment[Ces situations se produisent fréquemment !]
+
+Tout comme les modèles linéaires généralisés (GLM), nous pouvons formuler des modèles additifs **généralisés** pour répondre à ces problèmes.
+
+---
+
+# Modèle additif généralisé
+
+
+Rappelons le modèle d'interaction pour les données de bioluminescence :
+
+```{r}
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), data = isit)
+
+summary(smooth_interact)$p.table
+
+summary(smooth_interact)$s.table
+```
+
+---
+
+# Validation d'un GAM
+
+Comme pour un GLM, il est essentiel de vérifier si nous avons correctement spécifié le modèle, en particulier la *distribution* de la réponse.
+
+**Il faut vérifier :**
+
+1. Le choix des dimensions de base `k`.
+2. Les tracés des résidus (comme pour un GLM).
+
+
+--
+
+<br>
+Fonctions incluses dans `mgcv` :
+
+- `k.check()` effectue une vérification des dimensions de base.
+- `gam.check()` produit des tracés de résidus (et fournit également la sortie de `k.check()`.
+
+
+---
+
+# Validation d'un GAM
+
+##### Première étape :
+
+Avons-nous choisi `k` assez grand ? 
+
+.comment [Le défaut pour les interactions lisses est `k = 30`].
+
+```{r}
+k.check(smooth_interact)
+```
+
+--
+
+Les **EDF se rapprochent beaucoup de** `k`, cela pourrait être problématique.
+
+---
+
+# Validation d'un GAM
+
+Refaisons le modèle avec un `k` plus grand :
+
+```{r}
+smooth_interact_k30 <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+                           data = isit)
+summary(smooth_interact_k30)$p.table
+summary(smooth_interact_k30)$s.table
+```
+
+--
+
+Est-ce que `k` est assez grand ?
+
+```{r}
+k.check(smooth_interact_k30)
+```
+
+--
+
+C'est mieux, remplaçons l'ancien modèle :
+
+```{r}
+smooth_interact <- smooth_interact_k30
+```
+
+---
+
+# Validation d'un GAM
+
+##### Deuxième étape :
+
+Regardons les tracés des résidus, en utilisant `gam.check()` :
+
+```{r, eval = FALSE}
+par(mfrow = c(2,2)) # Afficher les 4 tracés à la fois
+gam.check(smooth_interact)
+```
+
+.comment [En plus des tracés, `gam.check()` fournit également la sortie de `k.check()`].
+
+---
+
+# Validation d'un GAM
+
+```{r, echo=FALSE, results = FALSE, fig.height=6, fig.width=8}
+par(mfrow=c(2,2), mar = c(4,4,2,1.1), oma =c(0,0,0,0))
+gam.check(smooth_interact)
+```
+
+--
+<br>
+
+.alert[Hétéroscédasticité marquée et tendances dans les résidus]
+
+
+???
+
+- Ces tracés sont un peu différents de ceux produits par `plot` pour un modèle linéaire (par exemple, pas de tracé de levier).
+- Les participants devraient déjà être familiarisés avec les graphiques de résidus (ils sont expliqués plus en détail dans les ateliers 4 et 6).
+- Problème : hétéroscédasticité, visible dans "residuals vs. linear predictor".
+- Autre problème : quelques observations extrêmes(visibles dans le tracé QQ, et "response vs. fitted").
+
+
+---
+
+# Autres distributions
+
+
+Pour notre modèle d'interaction, nous avons besoin d'une distribution de probabilité qui permet à la **variance d'augmenter avec la moyenne**.
+
+--
+
+Une famille de distributions qui possède cette propriété et qui fonctionne bien dans un GAM est la famille **Tweedie**.
+
+Une fonction de liaison commune pour les distributions *Tweedie* est le $log$.
+
+--
+
+<br>
+
+Comme dans un GLM, nous pouvons utiliser l'argument `family = ` dans `gam()` pour ajuster des modèles avec d'autres distributions (y compris des distributions telles que `binomial`, `poisson`, `gamma` etc).
+
+Pour en savoir plus sur les familles disponibles dans `mgcv` :
+```{r, eval = FALSE}
+?family.mgcv
+```
+
+
+---
+
+# Défi 3 ![:cube]()
+
+1. Ajuster un nouveau modèle `smooth_interact_tw` avec la même formule que le modèle `smooth_interact` mais avec une distribution de la famille *Tweedie* (au lieu de la distribution normale) et `log` comme fonction de liaison. Pour ce faire, on peut utiliser `family = tw(link = "log")` dans `gam()`.
+2. Vérifier le choix de `k` et les tracés de résidus pour le nouveau modèle.
+3. Comparer `smooth_interact_tw` avec `smooth_interact`. Lequel est meilleur ?
+
+--
+
+<br>
+
+.comment[Indice :]
+
+```{r}
+# Distribution normale
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+                          data = isit)
+# Tweedie avec log comme fonction de liaison
+smooth_interact_tw <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+                          family = tw(link = "log"),
+                          data = isit)
+```
+
+
+---
+
+# Défi 3 - Solution ![:cube]()
+
+Ajuster le modèle :
+
+```{r}
+smooth_interact_tw <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+                          family = tw(link = "log"),
+                          data = isit)
+summary(smooth_interact_tw)$p.table
+summary(smooth_interact_tw)$s.table
+```
+
+--
+
+Vérifier les dimensions de base :
+```{r}
+k.check(smooth_interact_tw)
+```
+
+---
+
+# Challenge 3 - Solution ![:cube]()
+
+Tracé des résidus :
+
+```{r, eval = FALSE}
+par(mfrow=c(2,2))
+gam.check(smooth_interact_tw)
+```
+
+
+```{r, echo = FALSE, results = FALSE, fig.height = 6, fig.width = 8}
+par(mfrow=c(2,2), mar = c(4,4,2,1.1), oma =c(0,0,0,0))
+gam.check(smooth_interact_tw)
+```
+
+
+???
+- Les résidus semblent meilleurs, mais il est évident que le modèle manque quelque chose. Il pourrait s'agir d'un effet spatial (longitude et latitude), ou d'un effet aléatoire (par exemple basé sur `Station`).
+
+---
+
+# Défi 3 - Solution ![:cube]()
+
+Comparer les modèles:
+
+```{r}
+AIC(smooth_interact, smooth_interact_tw)
+```
+
+.comment[L'AIC nous permet de comparer des modèles qui sont basés sur des distributions différentes !]
+
+--
+
+Utiliser une distribution *Tweedie* au lieu d'une distribution *normale* améliore beaucoup notre modèle !
+
+
+---
+class: inverse, center, middle
+
+## 6. Changer la fonction de base
+
 
 ---
 # Fonctions lisses 
@@ -1135,169 +1391,6 @@ summary(year_gam)$s.table
 plot(year_gam, page = 1, scale = 0)
 ```
 Il y a une hausse d'environ 1-1.5 degrés au cours de la série, mais au cours d'une année, il y a une variation d'environ 20 degrés. Les données réelles varient autour de ces valeurs prédites et ceci représente donc la variance inexpliquée.
-
----
-class: inverse, center, middle
-
-## 6. Autres distributions
-
----
-# GAM avec d'autres distributions
-
-Un bref aperçu de l'utilisation des GAMs lorsque la variable réponse ne suit pas une distribution normale ou que les données sont des abondances ou proportions (par exemple, distribution Gamma, binomiale, Poisson, binomiale négative).
-
-Nous allons utiliser un exemple de données où une répartition binomiale sera nécessaire; la variable réponse représente le nombre de succès (l'événement a eu lieu) en fonction des défaillances au cours d'une expérience.
-
-```{r}
-gam_data3 <- read.csv("data/other_dist.csv")
-str(gam_data3)
-```
-
-<!-- should change the name of the variables in the csv files, to make them meaningful-->
-
----
-# GAM avec d'autres distributions
-
-```{r, fig.height=4, fig.width=4}
-plot(range(gam_data3$x1), c(0,1), type = "n",
-     main = "Probabilités de succès dans le temps",
-     ylab = "Probabilité", xlab = "x1 (temps)")
-abline(h = 0.5)
-
-avg <- aggregate(prop ~ x1, data=gam_data3, mean)
-lines(avg$x1, avg$prop, col = "orange", lwd = 2)
-```
-
----
-# GAM avec d'autres distributions
-
-Nous allons tester si cette tendance est linéaire ou non avec un GAM logistique (nous utilisons une famille de distributions binomiales parce que nous avons des données de proportion).
-
-```{r, warning=F}
-prop_model <- gam(prop ~ s(x1), data = gam_data3, weights = total, family = "binomial")
-prop_summary <- summary(prop_model)
-```
-
-<!--Warning messages:
-1: In eval(family$initialize) : non-integer #successes in a binomial glm!??-->
-
---
-
-.comment[Qu'est ce que représente l'intercepte dans ce modèle?]
-
-```{r}
-prop_summary$p.table
-```
-
---
-
-.comment[Qu'est ce que le terme de lissage indique?]
-
-```{r}
-prop_summary$s.table
-```
-
----
-# GAM avec d'autres distributions
-
-```{r, echo = FALSE}
-prop_summary$p.table
-```
-
-.comment[Que représente l'intercepte dans ce modèle?]
-
-**Rappel** le modèle utilise le nombre de succès vs échecs pour calculer le *logit*, qui est la logarithme du rapport entre les succès et échecs :
-
-.small[
-- Si succès = échecs, le rapport = 1 et le logit est de 0 (log(1) = 0).
-- Si succès > échecs, le rapport > 1 et le logit a une valeur positive (log(2) = 0.69).
-- Si succès < échecs, le rapport < 1 et le logit a une valeur négative (log(.5) = -0.69).
-]
-
---
-
-> Ici, l'estimé est positif ce qui signifie, qu'en moyenne, il y a plus de succès que d'échecs.
-
----
-# GAM avec d'autres distributions
-
-```{r, echo = FALSE}
-prop_summary$s.table
-```
-
-.comment[Qu'est ce que le terme de lissage indique?]
-
-Cela représente comment le ratio de succès vs échecs change sur l'échelle de $x1$.
-
---
-
-> Puisque les **EDF** > 1, la proportion des succès augmente plus rapidement avec $x1$
-
-```{r, fig.height=4.3, fig.width=4.3, eval = FALSE}
-plot(prop_model)
-```
-
-```{r, fig.height=4.3, fig.width=4.3, echo = FALSE}
-par(mar = c(4,4,0,0))
-plot(prop_model)
-```
-
----
-# Visualiser la tendance au fil du temps
-
-Il y a différente façon de représenter cette relation graphiquement :
-
-- **Contribution/effet partiel** correspond aux effets isolés d'une interaction ou prédiction particulière. Si vous visualisez votre modèle GAM avec `plot()`, vous obtenez les effets partiels.
-- **effets additionnés** correspond aux mesures réponse prédites pour une valeur ou niveau donné de prédicteurs. Si vous visualisez votre GAM avec `itsadug::plot_smooth()`, vous obtenez les effets additionnés.
-
-
----
-# Visualiser la tendance au fil du temps
-
-Que nous disent ces graphes sur les succès et échecs?
-
-```{r, echo = FALSE, fig.height = 4.5, fig.width = 9}
-library(itsadug)
-par(mfrow=c(1,2), mar = c(4,4,0,0))
-plot(prop_model, select = 1, scale = 0, shade=TRUE)
-abline(h=0)
-
-out <- plot_smooth(prop_model, view = "x1",main = "", print.summary = F)
-diff <- find_difference(out$fv$fit, out$fv$CI, xVals = out$fv$x1)
-addInterval(0, lowVals = diff$start, highVals = diff$end, col = 'red', lwd = 2)
-abline(v=c(diff$start, diff$end), lty = 3, col = 'red')
-text(mean(c(diff$start, diff$end)), 2.1, "succès > échecs", col = 'red', font = 2)
-```
-
-
-
-.pull-left[
-**Contribution / effets partiels**
-
-La valeur logit augmente, donc les succès augmentent et les échecs diminuent.]
-
-.pull-right[
-**Valeurs ajustées, effets additionnés, intercepte inclu**
-
-Quantités égales de succès et d'échecs jusqu'à $x1 = 400$.
-]
-
-<!-- this code should be shown but it is not well explained...-->
----
-# Visualiser la tendance au fil du temps
-
-Enfin, pour nous aider à interpréter les résultats, nous pouvons re-transformer l'effet sur une échelle de proportions avec la fonction `itsadug::plot_smooth()` :
-
-```{r, echo = -1, fig.height=3.5, fig.width==4}
-par(mar=c(3.8,4,0,0))
-plot_smooth(prop_model, view = "x1", main = "",
-            transform = plogis, ylim = c(0,1), print.summary = F)
-abline(h = 0.5, v = diff$start, col = 'red', lty = 2)
-```
-
-Comme précédemment, la proportion de succès augmente au-dessus de 0.5 à $x1 = 400$.
-
-<!-- again, lack of explanation here...-->
 
 
 ---
@@ -1656,3 +1749,167 @@ class: inverse, center, bottom
 <br>
 
 ![:scale 50%](images/qcbs_logo.png)
+
+---
+class: inverse, center, middle
+
+# Exemple supplémentaire avec d'autres distributions
+
+---
+# GAM avec d'autres distributions
+
+Un bref aperçu de l'utilisation des GAMs lorsque la variable réponse ne suit pas une distribution normale ou que les données sont des abondances ou proportions (par exemple, distribution Gamma, binomiale, Poisson, binomiale négative).
+
+Nous allons utiliser un exemple de données où une répartition binomiale sera nécessaire; la variable réponse représente le nombre de succès (l'événement a eu lieu) en fonction des défaillances au cours d'une expérience.
+
+```{r}
+gam_data3 <- read.csv("data/other_dist.csv")
+str(gam_data3)
+```
+
+<!-- should change the name of the variables in the csv files, to make them meaningful-->
+
+---
+# GAM avec d'autres distributions
+
+```{r, fig.height=4, fig.width=4}
+plot(range(gam_data3$x1), c(0,1), type = "n",
+     main = "Probabilités de succès dans le temps",
+     ylab = "Probabilité", xlab = "x1 (temps)")
+abline(h = 0.5)
+
+avg <- aggregate(prop ~ x1, data=gam_data3, mean)
+lines(avg$x1, avg$prop, col = "orange", lwd = 2)
+```
+
+---
+# GAM avec d'autres distributions
+
+Nous allons tester si cette tendance est linéaire ou non avec un GAM logistique (nous utilisons une famille de distributions binomiales parce que nous avons des données de proportion).
+
+```{r, warning=F}
+prop_model <- gam(prop ~ s(x1), data = gam_data3, weights = total, family = "binomial")
+prop_summary <- summary(prop_model)
+```
+
+<!--Warning messages:
+1: In eval(family$initialize) : non-integer #successes in a binomial glm!??-->
+
+--
+
+.comment[Qu'est ce que représente l'intercepte dans ce modèle?]
+
+```{r}
+prop_summary$p.table
+```
+
+--
+
+.comment[Qu'est ce que le terme de lissage indique?]
+
+```{r}
+prop_summary$s.table
+```
+
+---
+# GAM avec d'autres distributions
+
+```{r, echo = FALSE}
+prop_summary$p.table
+```
+
+.comment[Que représente l'intercepte dans ce modèle?]
+
+**Rappel** le modèle utilise le nombre de succès vs échecs pour calculer le *logit*, qui est la logarithme du rapport entre les succès et échecs :
+
+.small[
+- Si succès = échecs, le rapport = 1 et le logit est de 0 (log(1) = 0).
+- Si succès > échecs, le rapport > 1 et le logit a une valeur positive (log(2) = 0.69).
+- Si succès < échecs, le rapport < 1 et le logit a une valeur négative (log(.5) = -0.69).
+]
+
+--
+
+> Ici, l'estimé est positif ce qui signifie, qu'en moyenne, il y a plus de succès que d'échecs.
+
+---
+# GAM avec d'autres distributions
+
+```{r, echo = FALSE}
+prop_summary$s.table
+```
+
+.comment[Qu'est ce que le terme de lissage indique?]
+
+Cela représente comment le ratio de succès vs échecs change sur l'échelle de $x1$.
+
+--
+
+> Puisque les **EDF** > 1, la proportion des succès augmente plus rapidement avec $x1$
+
+```{r, fig.height=4.3, fig.width=4.3, eval = FALSE}
+plot(prop_model)
+```
+
+```{r, fig.height=4.3, fig.width=4.3, echo = FALSE}
+par(mar = c(4,4,0,0))
+plot(prop_model)
+```
+
+---
+# Visualiser la tendance au fil du temps
+
+Il y a différente façon de représenter cette relation graphiquement :
+
+- **Contribution/effet partiel** correspond aux effets isolés d'une interaction ou prédiction particulière. Si vous visualisez votre modèle GAM avec `plot()`, vous obtenez les effets partiels.
+- **effets additionnés** correspond aux mesures réponse prédites pour une valeur ou niveau donné de prédicteurs. Si vous visualisez votre GAM avec `itsadug::plot_smooth()`, vous obtenez les effets additionnés.
+
+
+---
+# Visualiser la tendance au fil du temps
+
+Que nous disent ces graphes sur les succès et échecs?
+
+```{r, echo = FALSE, fig.height = 4.5, fig.width = 9}
+library(itsadug)
+par(mfrow=c(1,2), mar = c(4,4,0,0))
+plot(prop_model, select = 1, scale = 0, shade=TRUE)
+abline(h=0)
+
+out <- plot_smooth(prop_model, view = "x1",main = "", print.summary = F)
+diff <- find_difference(out$fv$fit, out$fv$CI, xVals = out$fv$x1)
+addInterval(0, lowVals = diff$start, highVals = diff$end, col = 'red', lwd = 2)
+abline(v=c(diff$start, diff$end), lty = 3, col = 'red')
+text(mean(c(diff$start, diff$end)), 2.1, "succès > échecs", col = 'red', font = 2)
+```
+
+
+
+.pull-left[
+**Contribution / effets partiels**
+
+La valeur logit augmente, donc les succès augmentent et les échecs diminuent.]
+
+.pull-right[
+**Valeurs ajustées, effets additionnés, intercepte inclu**
+
+Quantités égales de succès et d'échecs jusqu'à $x1 = 400$.
+]
+
+<!-- this code should be shown but it is not well explained...-->
+---
+# Visualiser la tendance au fil du temps
+
+Enfin, pour nous aider à interpréter les résultats, nous pouvons re-transformer l'effet sur une échelle de proportions avec la fonction `itsadug::plot_smooth()` :
+
+```{r, echo = -1, fig.height=3.5, fig.width==4}
+par(mar=c(3.8,4,0,0))
+plot_smooth(prop_model, view = "x1", main = "",
+            transform = plogis, ylim = c(0,1), print.summary = F)
+abline(h = 0.5, v = diff$start, col = 'red', lty = 2)
+```
+
+Comme précédemment, la proportion de succès augmente au-dessus de 0.5 à $x1 = 400$.
+
+<!-- again, lack of explanation here...-->
+

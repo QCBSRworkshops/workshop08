@@ -1071,9 +1071,10 @@ class: inverse, center, middle
 
 Le modèle additif de base peut être étendu de plusieurs façons :
 
-1. Utilisation de différents types d'effets aléatoires pour ajuster des modèles à effets mixtes.
+1. Utiliser d'autres distributions pour la variable de réponse avec l'argument `family` (comme dans un GLM),
 2. Utiliser de différents types de fonctions de base,
-3. Utiliser d'autres distributions pour la variable de réponse avec l'argument `famille` (comme dans un GLM),
+3. Utilisation de différents types d'effets aléatoires pour ajuster des modèles à effets mixtes.
+
 
 Nous allons maintenant examiner ces aspects.
 
@@ -1141,7 +1142,7 @@ Fonctions incluses dans `mgcv` :
 
 Avons-nous choisi `k` assez grand ? 
 
-.comment [Le défaut pour les interactions lisses est `k = 30`].
+.comment[Le défaut pour les interactions lisses est `k = 30`].
 
 ```{r}
 k.check(smooth_interact)
@@ -1193,7 +1194,7 @@ par(mfrow = c(2,2)) # Afficher les 4 tracés à la fois
 gam.check(smooth_interact)
 ```
 
-.comment [En plus des tracés, `gam.check()` fournit également la sortie de `k.check()`].
+.comment[En plus des graphiques, `gam.check()` fournit également la sortie de `k.check()`].
 
 ---
 
@@ -1291,9 +1292,9 @@ k.check(smooth_interact_tw)
 
 ---
 
-# Challenge 3 - Solution ![:cube]()
+# Défi 3 - Solution ![:cube]()
 
-Tracé des résidus :
+Tracés des résidus :
 
 ```{r, eval = FALSE}
 par(mfrow=c(2,2))

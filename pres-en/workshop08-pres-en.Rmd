@@ -1118,7 +1118,7 @@ vis.gam(smooth_interact, view = c("SampleDepth", "RelativeDepth"),
 AIC(two_smooth_model, smooth_interact)
 ```
 
-The model with the interaction between `s(SampleDepth)` and `s(RelativeDepth)` have a lower AIC and the 2D plot nicely illustrates this non-linear interactions, where `Sources` is lower at high values of `SampleDepth` but mid to high values of `RelativeDepth`.
+The model with the interaction between `s(SampleDepth)` and `s(RelativeDepth)` has a lower AIC and the plots nicely illustrate the non-linear interaction, where `Sources` is lower at high values of `SampleDepth` but increases with `RelativeDepth`.
 
 
 
@@ -1155,7 +1155,7 @@ But what can we do if:
 
 .comment[These cases are very common!]
 
-Just like generalized linear models (GLM), we can formulate **generalized** additive models to deal with these issues
+Just like generalized linear models (GLM), we can formulate **generalized** additive models to deal with these issues.
 
 ---
 

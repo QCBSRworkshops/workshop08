@@ -772,13 +772,13 @@ two_smooth_summary <- summary(two_smooth_model)
 Information on parametric effects (linear terms):
 
 ```{r}
-two_term_summary$p.table
+two_smooth_summary$p.table
 ```
 
 Information on additive effects (non-linear terms):
 
 ```{r}
-two_term_summary$s.table
+two_smooth_summary$s.table
 ```
 
 ---
@@ -865,7 +865,7 @@ anova(basic_model, two_term_model, two_smooth_model,test='Chisq')
 
 <br>
 
-1. Create 2 new models, with `Latitude` as a linear and smoothed term.
+1. Create 2 new models, by adding `Latitude` to `two_smooth_model` as a linear and smoothed term.
 2. Determine if `Latitude` is an important term to include using plots, coefficient tables and the AIC function.
 
 ---
@@ -1179,7 +1179,7 @@ summary(smooth_interact)$s.table
 
 As for a GLM, it is essential to check whether we correctly specifified the model, especially the *distribution* for the response.
 
-**We have two verify:**
+**We have to verify:**
 
 1. The choice of basis dimension `k`.
 2. The residuals plots (just as for a GLM).
@@ -1218,10 +1218,10 @@ The **EDF are very close to** `k`, this could be problematic.
 Let's refit the model with a larger `k`:
 
 ```{r}
-smooth_interact_k30 <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+smooth_interact_k60 <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
                            data = isit, method = "REML")
-summary(smooth_interact_k30)$p.table
-summary(smooth_interact_k30)$s.table
+summary(smooth_interact_k60)$p.table
+summary(smooth_interact_k60)$s.table
 ```
 
 --
@@ -1229,7 +1229,7 @@ summary(smooth_interact_k30)$s.table
 Is `k` large enough this time?
 
 ```{r}
-k.check(smooth_interact_k30)
+k.check(smooth_interact_k60)
 ```
 
 --
@@ -1237,7 +1237,7 @@ k.check(smooth_interact_k30)
 Looks better, let's replace the old model:
 
 ```{r}
-smooth_interact <- smooth_interact_k30
+smooth_interact <- smooth_interact_k60
 ```
 
 ---

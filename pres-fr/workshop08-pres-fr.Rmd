@@ -775,13 +775,13 @@ two_smooth_summary <- summary(two_smooth_model)
 Informations sur les effets paramétriques (termes linéaires) :
 
 ```{r}
-two_term_summary$p.table
+two_smooth_summary$p.table
 ```
 
 Informations sur les effets additifs (termes non linéaires) :
 
 ```{r}
-two_term_summary$s.table
+two_smooth_summary$s.table
 ```
 
 
@@ -872,7 +872,7 @@ AIC(basic_model, two_term_model, two_smooth_model)
 
 <br>
 
-1. Créez deux nouveaux modèles avec la variable `Latitude` comme paramètre linéaire et non linéaire.
+1. Créez deux nouveaux modèles en ajoutant la variable `Latitude` comme paramètre linéaire et non linéaire au modèle précédent.
 2. Utilisez des graphiques, les tables des coefficients et la fonction `AIC()` afin de déterminer s'il est nécessaire d'inclure `Latitude` dans le modèle.
 
 ---
@@ -1159,10 +1159,10 @@ Les **EDF se rapprochent beaucoup de** `k`, cela pourrait être problématique.
 Refaisons le modèle avec un `k` plus grand :
 
 ```{r}
-smooth_interact_k30 <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+smooth_interact_k60 <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
                            data = isit, method = "REML")
-summary(smooth_interact_k30)$p.table
-summary(smooth_interact_k30)$s.table
+summary(smooth_interact_k60)$p.table
+summary(smooth_interact_k60)$s.table
 ```
 
 --
@@ -1170,7 +1170,7 @@ summary(smooth_interact_k30)$s.table
 Est-ce que `k` est assez grand ?
 
 ```{r}
-k.check(smooth_interact_k30)
+k.check(smooth_interact_k60)
 ```
 
 --
@@ -1178,7 +1178,7 @@ k.check(smooth_interact_k30)
 C'est mieux, remplaçons l'ancien modèle :
 
 ```{r}
-smooth_interact <- smooth_interact_k30
+smooth_interact <- smooth_interact_k60
 ```
 
 ---

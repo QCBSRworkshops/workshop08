@@ -82,6 +82,7 @@ install.packages(c('ggplot2', 'itsadug', 'mgcv'))
 7. Quick intro to GAMM
 
 ---
+
 # Learning objectives
 
 1. Use the mgcv package to fit non-linear relationships,
@@ -291,7 +292,7 @@ data_plot <- data_plot +
 data_plot
 ```
 
-Note: as opposed to one fixed coefficient, $\beta$ in linear regression, the smooth function can continually change over the range of the predictor $x$
+Note: as opposed to one fixed coefficient, $\beta$ in linear regression, the smooth function can continually change over the range of the predictor $x$.
 
 ---
 exclude:true
@@ -563,9 +564,10 @@ Ideally, it would be good to choose $\lambda$ so that the predicted $\hat{f}$ is
 
 $$M = 1/n \times \sum_{i=1}^n (\hat{f_i} - f_i)^2$$
 
-Since $f$ is unknown, $M$ is estimated using a generalized cross validation technique that leaves out each datum from the data in turn and considers the average ability of models fitted to the remaining data to predict the left out datum.
+Since $f$ is unknown, $M$ must be estimated. The recommend methods for this are maximum likelihood (*ML*) or restricted maximum likelihood estimation (*REML*). Generalized cross validation (*GCV*) is another possibility.
 
 ---
+exclude:true
 # Principle behind cross validation
 
 .center[
@@ -574,17 +576,18 @@ Since $f$ is unknown, $M$ is estimated using a generalized cross validation tech
 
 1. fits many of the data poorly and does no better with the missing point.
 
---
+
 
 2. fits the underlying signal quite well, smoothing through the noise and the missing datum is reasonably well predicted.
 
---
+
 
 3. fits the noise as well as the signal and the extra variability induced causes it to predict the missing datum rather poorly.
 
 
 
 ---
+exclude:true
 # Principle behind cross validation
 
 .center[
@@ -597,6 +600,7 @@ Since $f$ is unknown, $M$ is estimated using a generalized cross validation tech
 class: inverse, center, middle
 
 ## 3. GAM with multiple smooth terms
+
 ---
 # GAM with multiple variables
 
@@ -623,7 +627,7 @@ isit$Season <- as.factor(isit$Season)
 
 ```{r}
 isit$Season <- as.factor(isit$Season)
-basic_model <- gam(Sources ~ Season + s(SampleDepth), data = isit)
+basic_model <- gam(Sources ~ Season + s(SampleDepth), data = isit, method = "REML")
 basic_summary <- summary(basic_model)
 ```
 
@@ -727,7 +731,8 @@ We will talk about choosing $k$ in section 5.
 We can add a second term, `RelativeDepth`, but specify a linear relationship with `Sources`
 
 ```{r}
-two_term_model <- gam(Sources ~ Season + s(SampleDepth) + RelativeDepth, data = isit)
+two_term_model <- gam(Sources ~ Season + s(SampleDepth) + RelativeDepth, 
+                      data = isit, method = "REML")
 two_term_summary <- summary(two_term_model)
 ```
 
@@ -759,7 +764,8 @@ plot(two_term_model, page = 1, all.terms = TRUE)
 We can also explore whether the relationship between `Sources` and `RelativeDepth` is non-linear
 
 ```{r}
-two_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth), data = isit)
+two_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth), 
+                        data = isit, method = "REML")
 two_smooth_summary <- summary(two_smooth_model)
 ```
 
@@ -875,8 +881,16 @@ exclude:true
 
 <br>
 ```{r,eval=FALSE}
-three_term_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth) + Latitude, data = isit)
-three_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth) + s(Latitude), data = isit)
+three_term_model <- gam(Sources ~ 
+                          Season + s(SampleDepth) + s(RelativeDepth) + 
+                          Latitude, 
+                        data = isit, method = "REML")
+
+three_smooth_model <- gam(Sources ~ 
+                            Season + s(SampleDepth) + s(RelativeDepth) + 
+                            s(Latitude),
+                          data = isit, method = "REML")
+
 three_smooth_summary <- summary(three_smooth_model)
 three_smooth_summary
 ```
@@ -884,8 +898,16 @@ three_smooth_summary
 # Challenge 2 - Solution ![:cube]()
 
 ```{r,eval=TRUE,echo=FALSE}
-three_term_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth) + Latitude, data = isit)
-three_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth) + s(Latitude), data = isit)
+three_term_model <- gam(Sources ~ 
+                          Season + s(SampleDepth) + s(RelativeDepth) + 
+                          Latitude, 
+                        data = isit, method = "REML")
+
+three_smooth_model <- gam(Sources ~ 
+                            Season + s(SampleDepth) + s(RelativeDepth) + 
+                            s(Latitude),
+                          data = isit, method = "REML")
+
 three_smooth_summary <- summary(three_smooth_model)
 three_smooth_summary
 ```
@@ -1000,7 +1022,7 @@ We will examine interaction effect using our categorical variable `Season` and a
 factor_interact <- gam(Sources ~ Season + 
                          s(SampleDepth, by=Season) + 
                          s(RelativeDepth), 
-                       data = isit)
+                       data = isit, method = "REML")
 
 summary(factor_interact)$s.table
 ```
@@ -1051,7 +1073,8 @@ From the plots, we saw that the shape of the smooth terms were comparable among 
 Finally we'll look at the interactions between 2 smoothed terms, `SampleDepth` and `RelativeDepth`.
 
 ```{r}
-smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), data = isit)
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), 
+                       data = isit, method = "REML")
 summary(smooth_interact)$s.table
 ```
 
@@ -1142,7 +1165,8 @@ Just like generalized linear models (GLM), we can formulate **generalized** addi
 Lets recall the interaction model for the bioluminescence data:
 
 ```{r}
-smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), data = isit)
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), 
+                       data = isit, method = "REML")
 
 summary(smooth_interact)$p.table
 
@@ -1195,7 +1219,7 @@ Let's refit the model with a larger `k`:
 
 ```{r}
 smooth_interact_k30 <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
-                           data = isit)
+                           data = isit, method = "REML")
 summary(smooth_interact_k30)$p.table
 summary(smooth_interact_k30)$s.table
 ```
@@ -1297,11 +1321,11 @@ To get an overview of families available in `mgcv`:
 ```{r}
 # Normal distribution
 smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
-                          data = isit)
+                          data = isit, method = "REML")
 # Tweedie family with log link
 smooth_interact_tw <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
                           family = tw(link = "log"),
-                          data = isit)
+                          data = isit, method = "REML")
 ```
 
 
@@ -1314,7 +1338,7 @@ Fit the model:
 ```{r}
 smooth_interact_tw <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
                           family = tw(link = "log"),
-                          data = isit)
+                          data = isit, method = "REML")
 summary(smooth_interact_tw)$p.table
 summary(smooth_interact_tw)$s.table
 ```
@@ -1442,7 +1466,7 @@ qplot(nottem_month, nottem, colour = factor(nottem_year), geom = "line") +
 We can model both the cyclic change of temperature across months and the non-linear trend through years, using a cyclical cubic spline, or `cc`, for the month variable and a regular smooth for the year variable.
 
 ```{r, fig.height=4, fig.width=8}
-year_gam <- gam(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"))
+year_gam <- gam(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"), method = "REML")
 summary(year_gam)$s.table
 ```
 
@@ -1560,7 +1584,7 @@ str(gam_data2)
 
 ```{r, fig.height=5, fig.width=5.5, echo = -1}
 par(mar=c(4,4,1,1))
-gamm_intercept <- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2)
+gamm_intercept <- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2, method = "REML")
 summary(gamm_intercept)$s.table
 plot(gamm_intercept, select = 2)
 ```
@@ -1611,7 +1635,7 @@ plot_smooth(gamm_intercept, view ="x0", cond = list(fac = "4"), add = T, col = '
 # GAMM with a random slope
 
 ```{r}
-gamm_slope <- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2)
+gamm_slope <- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2, method = "REML")
 
 summary(gamm_slope)$s.table
 ```
@@ -1659,7 +1683,7 @@ plot_smooth(gamm_slope, view = "x0", cond = list(fac = "4"), add = T, col = 'tur
 
 ```{r}
 gamm_int_slope <- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
-                      data = gam_data2)
+                      data = gam_data2, method = "REML")
 
 summary(gamm_int_slope)$s.table
 ```
@@ -1713,7 +1737,8 @@ plot(gamm_int_slope, select = 3)
 # GAMM with a random smooth
 
 ```{r}
-gamm_smooth <- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1), data = gam_data2)
+gamm_smooth <- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1), 
+                   data = gam_data2, method = "REML")
 
 summary(gamm_smooth)$s.table
 ```
@@ -1843,7 +1868,8 @@ lines(avg$x1, avg$prop, col = "orange", lwd = 2)
 We will test if this trend is linear or not using a logistic GAM (we use a binomial family distribution given that our response is proportion data).
 
 ```{r, warning=F}
-prop_model <- gam(prop ~ s(x1), data = gam_data3, weights = total, family = "binomial")
+prop_model <- gam(prop ~ s(x1), data = gam_data3, weights = total, 
+                  family = "binomial", method = "REML")
 prop_summary <- summary(prop_model)
 ```
 

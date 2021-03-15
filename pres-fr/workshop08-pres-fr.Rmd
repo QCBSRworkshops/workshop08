@@ -78,9 +78,9 @@ install.packages(c('ggplot2', 'itsadug', 'mgcv'))
 2. Introduction aux GAMs
 3. GAM avec plusieurs termes non-linéaires
 4. Interactions
-5. Changer la fonction de base
-6. Intro rapide aux GAMMs
-7. Autres distributions
+5. Généralisation du modèle additif
+6. Changer la fonction de base
+7. Intro rapide aux GAMMs
 
 ---
 # Objectifs d'apprentissage
@@ -294,7 +294,7 @@ data_plot <- data_plot +
 data_plot
 ```
 
-.comment[Note: contrairement à un coefficient fixe $\beta$, la fonction de lissage peut changer tout au long du gradient $x$]
+Note: contrairement à un coefficient fixe $\beta$, la fonction de lissage peut changer tout au long du gradient $x$.
 
 ---
 exclude:true
@@ -571,9 +571,10 @@ Si $λ$ est trop élevé, les données seront trop lissées et si elle est trop 
 
 $$M = 1/n \times \sum_{i=1}^n (\hat{f_i} - f_i)^2$$
 
-Étant donné que $f$ est inconnue, $M$ est estimé en utilisant une technique de validation croisée généralisée qui laisse de côté, à chaque tour, une donnée et estime la capacité moyenne des modèles, construits sur les données restantes, de prédire la donnée qui a été mise de côté.
+Étant donné que $f$ est inconnue, $M$ doit être estimé. Les méthodes recommandées pour ce faire sont le maximum de vraisemblance (maximum likelihood, *ML*) ou l'estimation par maximum de vraisemblance restreint (restricted maximum likelihood, *REML*). La validation croisée généralisée (*GCV*) est une autre possibilité.
 
 ---
+exclude:true
 # Principe de validation croisée
 
 .center[
@@ -582,15 +583,16 @@ $$M = 1/n \times \sum_{i=1}^n (\hat{f_i} - f_i)^2$$
 
 1. ajustement faible par rapport aux données et ne fait pas mieux avec le point manquant.
 
---
+
 
 2. très bon ajustement de la courbe du signal sous-jacent, le lissage passe à travers le bruit et la donnée manquante est plutôt bien prédite.
 
---
+
 
 3. la courbe ajuste le bruit aussi bien que le signal, la variabilité supplémentaire amène à prédire la donnée manquante plutôt mal.
 
 ---
+exclude:true
 # Principe de validation croisée
 
 .center[
@@ -628,7 +630,7 @@ isit$Season <- as.factor(isit$Season)
 
 ```{r}
 isit$Season <- as.factor(isit$Season)
-basic_model <- gam(Sources ~ Season + s(SampleDepth), data = isit)
+basic_model <- gam(Sources ~ Season + s(SampleDepth), data = isit, method = "REML")
 basic_summary <- summary(basic_model)
 ```
 
@@ -722,6 +724,8 @@ La limite supérieure d'**EDF** est déterminée par les dimensions de base $k$ 
 
 En pratique, le choix exact de $k$ est arbitraire, mais il devrait être **suffisamment grand** pour permettre une fonction lisse suffisamment complexe.
 
+Nous discuterons du choix de $k$ dans la section 5.
+
 ---
 
 # GAM à plusieurs variables
@@ -729,7 +733,8 @@ En pratique, le choix exact de $k$ est arbitraire, mais il devrait être **suffi
 Nous pouvons ajouter un second terme, `RelativeDepth`, mais spécifier une relation linéaire avec `Sources`
 
 ```{r}
-two_term_model <- gam(Sources ~ Season + s(SampleDepth) + RelativeDepth, data = isit)
+two_term_model <- gam(Sources ~ Season + s(SampleDepth) + RelativeDepth, 
+                      data = isit, method = "REML")
 two_term_summary <- summary(two_term_model)
 ```
 
@@ -762,20 +767,21 @@ plot(two_term_model, page=1, all.terms = T)
 Nous pouvons aussi vérifier que la relation entre `Sources` et `RelativeDepth` est non-linéaire.
 
 ```{r}
-two_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth), data = isit)
+two_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth), 
+                        data = isit, method = "REML")
 two_smooth_summary <- summary(two_smooth_model)
 ```
 
 Informations sur les effets paramétriques (termes linéaires) :
 
 ```{r}
-two_term_summary$p.table
+two_smooth_summary$p.table
 ```
 
 Informations sur les effets additifs (termes non linéaires) :
 
 ```{r}
-two_term_summary$s.table
+two_smooth_summary$s.table
 ```
 
 
@@ -866,7 +872,7 @@ AIC(basic_model, two_term_model, two_smooth_model)
 
 <br>
 
-1. Créez deux nouveaux modèles avec la variable `Latitude` comme paramètre linéaire et non linéaire.
+1. Créez deux nouveaux modèles en ajoutant la variable `Latitude` comme paramètre linéaire et non linéaire au modèle précédent.
 2. Utilisez des graphiques, les tables des coefficients et la fonction `AIC()` afin de déterminer s'il est nécessaire d'inclure `Latitude` dans le modèle.
 
 ---
@@ -881,8 +887,16 @@ exclude:true
 ---
 # Défi 2 - Solution ![:cube]()
 ```{r,eval=FALSE}
-three_term_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth) + Latitude, data = isit)
-three_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth) + s(Latitude), data = isit)
+three_term_model <- gam(Sources ~ 
+                          Season + s(SampleDepth) + s(RelativeDepth) + 
+                          Latitude, 
+                        data = isit, method = "REML")
+
+three_smooth_model <- gam(Sources ~ 
+                            Season + s(SampleDepth) + s(RelativeDepth) + 
+                            s(Latitude),
+                          data = isit, method = "REML")
+
 three_smooth_summary <- summary(three_smooth_model)
 three_smooth_summary
 ```
@@ -890,8 +904,16 @@ three_smooth_summary
 ---
 # Défi 2 - Solution ![:cube]()
 ```{r,eval=TRUE,echo=FALSE}
-three_term_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth) + Latitude, data = isit)
-three_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth) + s(Latitude), data = isit)
+three_term_model <- gam(Sources ~ 
+                          Season + s(SampleDepth) + s(RelativeDepth) + 
+                          Latitude, 
+                        data = isit, method = "REML")
+
+three_smooth_model <- gam(Sources ~ 
+                            Season + s(SampleDepth) + s(RelativeDepth) + 
+                            s(Latitude),
+                          data = isit, method = "REML")
+
 three_smooth_summary <- summary(three_smooth_model)
 three_smooth_summary
 ```
@@ -956,7 +978,7 @@ Nous allons examiner l'effet de l'interaction en utilisant notre variable qualit
 factor_interact <- gam(Sources ~ Season + 
                          s(SampleDepth,by=Season) + 
                          s(RelativeDepth), 
-                       data = isit)
+                       data = isit, method = "REML")
 
 summary(factor_interact)$s.table
 ```
@@ -1007,7 +1029,8 @@ AIC(two_smooth_model, factor_interact)
 Finalement, nous regardons les interactions entre 2 termes non linéaires, `SampleDepth` et `RelativeDepth`.
 
 ```{r}
-smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), data = isit)
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), 
+                       data = isit, method = "REML")
 summary(smooth_interact)$s.table
 ```
 
@@ -1039,7 +1062,8 @@ Le modèle avec l'intéraction entre `s(SampleDepth)` et `s(RelativeDepth)` a un
 ---
 class: inverse, center, middle
 
-## 5. Changer la fonction de base
+# 5. Généralisation du modèle additif
+
 
 ---
 
@@ -1047,11 +1071,268 @@ class: inverse, center, middle
 
 Le modèle additif de base peut être étendu de plusieurs façons :
 
-1. Utiliser de différents types de fonctions de base,
-2. Utiliser d'autres distributions pour la variable de réponse avec l'argument `famille` (comme dans un GLM),
+1. Utiliser d'autres distributions pour la variable de réponse avec l'argument `family` (comme dans un GLM),
+2. Utiliser de différents types de fonctions de base,
 3. Utilisation de différents types d'effets aléatoires pour ajuster des modèles à effets mixtes.
 
+
 Nous allons maintenant examiner ces aspects.
+
+
+---
+
+# Modèle additif généralisé
+
+Jusqu'à présent, nous avons utilisé des modèles additifs simples (gaussiens), l'équivalent non linéaire d'un modèle linéaire.
+
+--
+
+Mais que pouvons-nous faire si :
+- les observations de la variable de réponse ne **suivent pas une distribution normale** ?
+- la **variance n'est pas constante** ? (hétéroscédasticité)
+
+--
+
+.comment[Ces situations se produisent fréquemment !]
+
+Tout comme les modèles linéaires généralisés (GLM), nous pouvons formuler des modèles additifs **généralisés** pour répondre à ces problèmes.
+
+---
+
+# Modèle additif généralisé
+
+
+Rappelons le modèle d'interaction pour les données de bioluminescence :
+
+```{r}
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), 
+                       data = isit, method = "REML")
+
+summary(smooth_interact)$p.table
+
+summary(smooth_interact)$s.table
+```
+
+---
+
+# Validation d'un GAM
+
+Comme pour un GLM, il est essentiel de vérifier si nous avons correctement spécifié le modèle, en particulier la *distribution* de la réponse.
+
+**Il faut vérifier :**
+
+1. Le choix des dimensions de base `k`.
+2. Les tracés des résidus (comme pour un GLM).
+
+
+--
+
+<br>
+Fonctions incluses dans `mgcv` :
+
+- `k.check()` effectue une vérification des dimensions de base.
+- `gam.check()` produit des tracés de résidus (et fournit également la sortie de `k.check()`.
+
+
+---
+
+# Validation d'un GAM
+
+##### Première étape :
+
+Avons-nous choisi `k` assez grand ? 
+
+.comment[Le défaut pour les interactions lisses est `k = 30`].
+
+```{r}
+k.check(smooth_interact)
+```
+
+--
+
+Les **EDF se rapprochent beaucoup de** `k`, cela pourrait être problématique.
+
+---
+
+# Validation d'un GAM
+
+Refaisons le modèle avec un `k` plus grand :
+
+```{r}
+smooth_interact_k60 <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+                           data = isit, method = "REML")
+summary(smooth_interact_k60)$p.table
+summary(smooth_interact_k60)$s.table
+```
+
+--
+
+Est-ce que `k` est assez grand ?
+
+```{r}
+k.check(smooth_interact_k60)
+```
+
+--
+
+C'est mieux, remplaçons l'ancien modèle :
+
+```{r}
+smooth_interact <- smooth_interact_k60
+```
+
+---
+
+# Validation d'un GAM
+
+##### Deuxième étape :
+
+Regardons les tracés des résidus, en utilisant `gam.check()` :
+
+```{r, eval = FALSE}
+par(mfrow = c(2,2)) # Afficher les 4 tracés à la fois
+gam.check(smooth_interact)
+```
+
+.comment[En plus des graphiques, `gam.check()` fournit également la sortie de `k.check()`].
+
+---
+
+# Validation d'un GAM
+
+```{r, echo=FALSE, results = FALSE, fig.height=6, fig.width=8}
+par(mfrow=c(2,2), mar = c(4,4,2,1.1), oma =c(0,0,0,0))
+gam.check(smooth_interact)
+```
+
+--
+<br>
+
+.alert[Hétéroscédasticité marquée et tendances dans les résidus]
+
+
+???
+
+- Ces tracés sont un peu différents de ceux produits par `plot` pour un modèle linéaire (par exemple, pas de tracé de levier).
+- Les participants devraient déjà être familiarisés avec les graphiques de résidus (ils sont expliqués plus en détail dans les ateliers 4 et 6).
+- Problème : hétéroscédasticité, visible dans "residuals vs. linear predictor".
+- Autre problème : quelques observations extrêmes(visibles dans le tracé QQ, et "response vs. fitted").
+
+
+---
+
+# Autres distributions
+
+
+Pour notre modèle d'interaction, nous avons besoin d'une distribution de probabilité qui permet à la **variance d'augmenter avec la moyenne**.
+
+--
+
+Une famille de distributions qui possède cette propriété et qui fonctionne bien dans un GAM est la famille **Tweedie**.
+
+Une fonction de liaison commune pour les distributions *Tweedie* est le $log$.
+
+--
+
+<br>
+
+Comme dans un GLM, nous pouvons utiliser l'argument `family = ` dans `gam()` pour ajuster des modèles avec d'autres distributions (y compris des distributions telles que `binomial`, `poisson`, `gamma` etc).
+
+Pour en savoir plus sur les familles disponibles dans `mgcv` :
+```{r, eval = FALSE}
+?family.mgcv
+```
+
+
+---
+
+# Défi 3 ![:cube]()
+
+1. Ajuster un nouveau modèle `smooth_interact_tw` avec la même formule que le modèle `smooth_interact` mais avec une distribution de la famille *Tweedie* (au lieu de la distribution normale) et `log` comme fonction de liaison. Pour ce faire, on peut utiliser `family = tw(link = "log")` dans `gam()`.
+2. Vérifier le choix de `k` et les tracés de résidus pour le nouveau modèle.
+3. Comparer `smooth_interact_tw` avec `smooth_interact`. Lequel est meilleur ?
+
+--
+
+<br>
+
+.comment[Indice :]
+
+```{r}
+# Distribution normale
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+                          data = isit, method = "REML")
+# Tweedie avec log comme fonction de liaison
+smooth_interact_tw <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+                          family = tw(link = "log"),
+                          data = isit, method = "REML")
+```
+
+
+---
+
+# Défi 3 - Solution ![:cube]()
+
+Ajuster le modèle :
+
+```{r}
+smooth_interact_tw <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+                          family = tw(link = "log"),
+                          data = isit, method = "REML")
+summary(smooth_interact_tw)$p.table
+summary(smooth_interact_tw)$s.table
+```
+
+--
+
+Vérifier les dimensions de base :
+```{r}
+k.check(smooth_interact_tw)
+```
+
+---
+
+# Défi 3 - Solution ![:cube]()
+
+Tracés des résidus :
+
+```{r, eval = FALSE}
+par(mfrow=c(2,2))
+gam.check(smooth_interact_tw)
+```
+
+
+```{r, echo = FALSE, results = FALSE, fig.height = 6, fig.width = 8}
+par(mfrow=c(2,2), mar = c(4,4,2,1.1), oma =c(0,0,0,0))
+gam.check(smooth_interact_tw)
+```
+
+
+???
+- Les résidus semblent meilleurs, mais il est évident que le modèle manque quelque chose. Il pourrait s'agir d'un effet spatial (longitude et latitude), ou d'un effet aléatoire (par exemple basé sur `Station`).
+
+---
+
+# Défi 3 - Solution ![:cube]()
+
+Comparer les modèles:
+
+```{r}
+AIC(smooth_interact, smooth_interact_tw)
+```
+
+.comment[L'AIC nous permet de comparer des modèles qui sont basés sur des distributions différentes !]
+
+--
+
+Utiliser une distribution *Tweedie* au lieu d'une distribution *normale* améliore beaucoup notre modèle !
+
+
+---
+class: inverse, center, middle
+
+## 6. Changer la fonction de base
+
 
 ---
 # Fonctions lisses 
@@ -1124,7 +1405,7 @@ qplot(nottem_month, nottem, colour = factor(nottem_year), geom = "line") +
 Nous pouvons modéliser le changement cyclique de température à travers les mois et la tendance non-linéaire à travers les années, en utilisant une spline cubique, ou `cc` pour modéliser les effets de mois ainsi qu'un terme non-linéaire pour la variable année.
 
 ```{r, fig.height=4, fig.width=8}
-year_gam <- gam(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"))
+year_gam <- gam(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"), method = "REML")
 summary(year_gam)$s.table
 ```
 
@@ -1136,10 +1417,369 @@ plot(year_gam, page = 1, scale = 0)
 ```
 Il y a une hausse d'environ 1-1.5 degrés au cours de la série, mais au cours d'une année, il y a une variation d'environ 20 degrés. Les données réelles varient autour de ces valeurs prédites et ceci représente donc la variance inexpliquée.
 
+
 ---
 class: inverse, center, middle
 
-## 6. Autres distributions
+# 7. Intro rapide aux GAMMs
+
+---
+# La non-indépendance des données
+
+Lorsque les observations ne sont pas indépendantes, les GAMs peuvent être utilisés soit pour incorporer :
+
+- une structure de corrélation pour modéliser les résidus autocorrélés (autorégressif (AR), moyenne mobile (MA), ou une combinaison des deux (ARMA)) ,
+- des effets aléatoires qui modélisent l'indépendance entre les observations d'un même site.
+
+---
+# Modèle avec erreurs autocorrélées
+
+Pour commencer, nous allons jeter un coup d’œil au premier cas; un modèle avec autocorrélation temporelle dans les résidus. 
+
+Ré-examinons le modèle de la température de Nottingham et vérifions si les résidus sont corrélés en faisant appel à la fonction (partielle) d'autocorrélation.
+
+```{r, eval = F, fig.width=9, fig.height=4.5}
+par(mfrow = c(1,2))
+acf(resid(year_gam), lag.max = 36, main = "ACF")
+pacf(resid(year_gam), lag.max = 36, main = "pACF")
+```
+
+---
+# Modèle avec erreurs autocorrélées
+
+```{r, echo = F, fig.width=8.5, fig.height=4}
+par(mfrow = c(1,2))
+acf(resid(year_gam), lag.max = 36, main = "ACF")
+pacf(resid(year_gam), lag.max = 36, main = "pACF")
+```
+
+.comment[ACF donne la corrélation croisée et pACF la corrélation partielle d'une série temporelle avec elle-même à différent décalage de temps.]
+
+ACF et pACF sont utilisés pour identifier combien d'intervalle de temps sont nécessaires pour que les observations commencent à être indépendantes.
+
+--
+
+Les graphiques des fonctions d'autocorrélation suggèrent qu'un modèle AR de faible ordre est nécessaire (avec un ou deux intervalles de temps décalés).
+
+---
+# Modèle avec erreurs autocorrélées
+
+Nous pouvons ajouter des structures d'autocorrelation au modèle : 
+
+- **AR(1)** : corrélation avec un intervalle de temps décalé, ou
+- **AR(2)** : corrélation à 2 intervalles de temps décalés
+
+--
+
+```{r}
+
+year_gam <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"))
+year_gam_AR1 <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"),
+                     correlation = corARMA(form = ~ 1|nottem_year, p = 1),
+                   data = data.frame(nottem, nottem_year, nottem_month))
+year_gam_AR2 <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"),
+                     correlation = corARMA(form = ~ 1|nottem_year, p = 2),
+                   data = data.frame(nottem, nottem_year, nottem_month))
+```
+
+---
+
+# Modèle avec erreurs autocorrélées
+
+```{r}
+AIC(year_gam$lme, year_gam_AR1$lme, year_gam_AR2$lme)
+```
+
+Le modèle avec la structure AR(1) donne un meilleur ajustement au premier modèle. Mais il y a peu d'intérêt à considérer le modèle AR(2).
+
+---
+# Modélisation avec effets mixtes
+
+Comme nous l'avons vu dans la section précédente, `bs` spécifie la fonction de base sous-jacente. Pour les facteurs aléatoires (origine et pente linéaire), nous utilisons `bs = "re"` et pour les pentes aléatoires non linéaires, nous utilisons `bs = "fs"`.
+
+---
+# Modélisation avec effets mixtes
+
+**3 types d'effets aléatoires différents** sont possibles lors de l'utilisation des GAMMs (où `fac` ![:faic](arrow-right) variable qualitative utilisée pour l'effet aléatoire; `x0` ![:faic](arrow-right) effet quantitatif fixe) :
+
+- **interceptes aléatoires** ajustent la hauteur des termes du modèle avec une valeur constante de pente : `s(fac, bs = "re")`
+- **pentes aléatoires** ajustent la pente d'une variable explicative numérique : `s(fac, x0, bs = "re")`
+- **surfaces lisses aléatoires** ajustent la tendance d'une prédiction numérique de façon non linéaire: `s(x0, fac, bs = "fs", m = 1)`, où l'argument $m = 1$ met une plus grande pénalité au lissage qui s'éloigne de 0, ce qui entraîne un retrait vers la moyenne.
+
+---
+# GAMM avec un intercepte aléatoire
+
+Tel que vu précédemment, nous allons utiliser `gamSim()` pour générer un ensemble de données, cette fois-ci avec une composante d'effet aléatoire. Ensuite, nous construirons un modèle avec un intercepte aléatoire en utilisant `fac` comme facteur aléatoire.
+
+```{r}
+gam_data2 <- gamSim(eg = 6)
+str(gam_data2)
+```
+
+
+---
+# GAMM avec un intercepte aléatoire
+
+```{r, fig.height=4.5, fig.width=5.5, echo = -1}
+par(mar=c(4,4,1,1))
+gamm_intercept <- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2, method = "REML")
+summary(gamm_intercept)$s.table
+plot(gamm_intercept, select = 2)
+```
+
+---
+# GAMM avec un intercepte aléatoire
+
+Nous allons premièrement tracer l'effet combiné de `x0` (sans les niveaux de l'effet aléatoire) et ensuite une courbe pour les 4 niveaux de `fac` :
+
+```{r, eval = FALSE}
+par(mfrow = c(1,2), cex = 1.1)
+
+plot_smooth(gamm_intercept, view = "x0", rm.ranef = T,
+            main = "intercept + s(x1)")
+
+plot_smooth(gamm_intercept, view = "x0", cond = list(fac="1"),
+            main = "... + s(fac)", col = 'orange', ylim = c(8,21))
+
+plot_smooth(gamm_intercept, view = "x0", cond = list(fac = "2"), add = T, col = 'red')
+
+plot_smooth(gamm_intercept, view="x0", cond = list(fac = "3"), add = T, col = 'purple')
+
+plot_smooth(gamm_intercept, view="x0", cond = list(fac = "4"), add = T, col = 'turquoise')
+```
+
+---
+# GAMM avec un intercepte aléatoire
+
+<br>
+
+```{r, echo = F, fig.width=12, fig.height=6}
+par(mfrow = c(1,2), cex = 1.1, mar = c(4,4,1,1))
+plot_smooth(gamm_intercept, view = "x0", rm.ranef = T,
+            main = "intercept + s(x1)", print.summary=F)
+plot_smooth(gamm_intercept, view = "x0", cond = list(fac = "1"),
+            main = "... + s(fac)", col = 'orange', ylim = c(8,21), print.summary=F)
+plot_smooth(gamm_intercept, view = "x0", cond = list(fac = "2"), add = T, col = 'red', print.summary = F)
+plot_smooth(gamm_intercept, view = "x0", cond = list(fac = "3"), add = T, col = 'purple', print.summary = F)
+plot_smooth(gamm_intercept, view = "x0", cond = list(fac = "4"), add = T, col = 'turquoise', print.summary = F)
+```
+
+.pull-right[
+&nbsp; <font color="orange">fac1</font> &nbsp; <font color="red">fac2</font> &nbsp; <font color="purple">fac3</font> &nbsp; <font color="turquoise">fac4</font>
+]
+
+
+---
+# GAMM avec une pente aléatoire
+
+```{r}
+gamm_slope <- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2, method = "REML")
+
+summary(gamm_slope)$s.table
+```
+
+
+---
+# GAMM avec une pente aléatoire
+
+```{r, eval = FALSE}
+par(mfrow = c(1,2), cex = 1.1)
+
+plot_smooth(gamm_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)")
+
+plot_smooth(gamm_slope, view = "x0", cond = list(fac = "1"),
+            main = "... + s(fac)", col = 'orange', ylim = c(7,22))
+
+plot_smooth(gamm_slope, view = "x0", cond = list(fac = "2"), add = T, col = 'red')
+
+plot_smooth(gamm_slope, view = "x0", cond = list(fac = "3"), add = T, col = 'purple')
+
+plot_smooth(gamm_slope, view = "x0", cond = list(fac = "4"), add = T, col = 'turquoise')
+```
+
+---
+# GAMM avec une pente aléatoire
+
+<br>
+
+```{r, echo = F, fig.width=12, fig.height=6}
+par(mfrow = c(1,2), cex = 1.1, mar = c(4,4,1,1))
+plot_smooth(gamm_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)",
+            print.summary=F)
+plot_smooth(gamm_slope, view = "x0", cond = list(fac = "1"),
+            main = "... + s(fac)", col = 'orange', ylim = c(7,22), print.summary=F)
+plot_smooth(gamm_slope, view = "x0", cond = list(fac = "2"), add = T, col = 'red',
+            print.summary = F)
+plot_smooth(gamm_slope, view = "x0", cond = list(fac = "3"), add = T, col = 'purple',
+            print.summary = F)
+plot_smooth(gamm_slope, view = "x0", cond = list(fac = "4"), add = T, col = 'turquoise',
+            print.summary = F)
+```
+
+---
+# GAMM avec un intercepte et une pente aléatoire
+
+```{r}
+gamm_int_slope <- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
+                      data = gam_data2, method = "REML")
+
+summary(gamm_int_slope)$s.table
+```
+
+---
+# GAMM avec un intercepte et une pente aléatoire
+
+```{r, eval = FALSE}
+par(mfrow = c(1,2), cex = 1.1)
+
+plot_smooth(gamm_int_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)")
+
+plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "1"),
+            main="... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(7,22))
+
+plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "2"), add = T, col='red')
+
+plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "3"), add = T, col = 'purple')
+
+plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "4"), add = T, col = 'turquoise')
+```
+
+---
+# GAMM avec un intercepte et une pente aléatoire
+
+<br>
+
+```{r, echo = F, fig.width=12, fig.height=6}
+par(mfrow = c(1,2), cex = 1.1, mar = c(4,4,1,1))
+plot_smooth(gamm_int_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)", print.summary = F)
+plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "1"), print.summary=F,
+            main="... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(7,22))
+plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "2"), add = T,
+            col='red',print.summary = F)
+plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "3"), add = T,
+            col = 'purple', print.summary = F)
+plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "4"), add = T,
+            col = 'turquoise', print.summary = F)
+```
+
+---
+# GAMM avec un intercepte et une pente aléatoire
+
+Notez que la pente aléatoire est statique dans ce cas :
+
+```{r, fig.width=5, fig.height=5}
+plot(gamm_int_slope, select = 3)
+```
+
+---
+# GAMM avec une surface lisse aléatoire
+
+```{r}
+gamm_smooth <- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1), 
+                   data = gam_data2, method = "REML")
+
+summary(gamm_smooth)$s.table
+```
+
+---
+# GAMM avec une surface lisse aléatoire
+
+Ici, si les pentes aléatoires variaient selon `x0`, nous aurons des courbes variables pour chaque niveau :
+
+```{r, echo = -1, fig.height=5, fig.width=5}
+par(mar=c(4,4,.5,.5), lwd = 2)
+plot(gamm_smooth, select = 1)
+```
+
+---
+# GAMM avec une surface lisse aléatoire
+
+```{r, eval = FALSE}
+par(mfrow = c(1,2), cex = 1.1)
+
+plot_smooth(gamm_smooth, view = "x0", rm.ranef = T, main = "intercept + s(x0)")
+
+plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "1"),
+            main="... + s(x0, fac)", col = 'orange', ylim = c(7,22))
+
+plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "2"), add = T, col='red')
+
+plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "3"), add = T, col = 'purple')
+
+plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "4"), add = T, col = 'turquoise')
+```
+
+---
+# GAMM avec une surface lisse aléatoire
+
+<br>
+
+```{r, echo = F, fig.width=12, fig.height=6}
+par(mfrow = c(1,2), cex = 1.1, mar = c(4,4,1,1))
+plot_smooth(gamm_smooth, view = "x0", rm.ranef = T, main = "intercept + s(x0)", print.summary=F)
+plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "1"), print.summary=F,
+            main="... + s(x0, fac)", col = 'orange', ylim = c(7,22))
+plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "2"), add = T,
+            col='red',print.summary = F)
+plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "3"), add = T,
+            col = 'purple', print.summary = F)
+plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "4"), add = T,
+            col = 'turquoise', print.summary = F)
+```
+
+.comment[Ici, si la pente aléatoire varie selon `x0`, nous aurons des courbes variables pour chaque niveau.]
+
+---
+# GAMM
+
+Tous ces modèles mixtes peuvent être comparés en utilisant la fonction `AIC()` pour trouver le meilleur modèle.
+
+```{r}
+AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
+```
+
+
+---
+# Ressources
+
+Il existe beaucoup d'information sur les GAMs.
+
+Simon Wood, l'auteur de la librairie `mgcv`, a un [site](http://people.bath.ac.uk/sw283/mgcv/) très utile avec des conférences et des notes introductives sur la façon d'utiliser les GAMs.
+
+Il a aussi écrit un livre, *Generalized Additive Models: An Introduction with R*, que nous avons utilisé comme référence pour cet atelier.
+
+.center[[![:scale 28%](https://images.tandf.co.uk/common/jackets/amazon/978149872/9781498728331.jpg)](https://www.crcpress.com/Generalized-Additive-Models-An-Introduction-with-R-Second-Edition/Wood/p/book/9781498728331)]
+
+
+---
+# Ressources
+
+Le matériel de cet atelier a également été obtenu à partir des blogs et des tutoriels suivants :
+
+- [From the bottom of the heap](http://www.fromthebottomoftheheap.net/blog/)
+
+- [Overview GAMM analysis of time series data](http://www.sfs.uni-tuebingen.de/~jvanrij/Tutorial/GAMM.html)
+
+- [Advanced Analysis of Time series data](http://www.sfs.uni-tuebingen.de/~jvanrij/LSA2015/AnswersLab2.html)
+
+- Noam Ross a crée un tutorial [GAMs in R](https://noamross.github.io/gams-in-r-course/) (voir aussi [ce preprint](https://peerj.com/preprints/27320/))
+
+Enfin, les pages d'aide, disponibles via `?gam` dans R sont une excellente ressource.
+
+---
+class: inverse, center, bottom
+
+# Merci pour votre participation à cet atelier!
+
+<hr>
+<br>
+
+![:scale 50%](images/qcbs_logo.png)
+
+---
+class: inverse, center, middle
+
+# Exemple supplémentaire avec d'autres distributions
 
 ---
 # GAM avec d'autres distributions
@@ -1174,7 +1814,8 @@ lines(avg$x1, avg$prop, col = "orange", lwd = 2)
 Nous allons tester si cette tendance est linéaire ou non avec un GAM logistique (nous utilisons une famille de distributions binomiales parce que nous avons des données de proportion).
 
 ```{r, warning=F}
-prop_model <- gam(prop ~ s(x1), data = gam_data3, weights = total, family = "binomial")
+prop_model <- gam(prop ~ s(x1), data = gam_data3, weights = total, 
+                  family = "binomial", method = "REML")
 prop_summary <- summary(prop_model)
 ```
 
@@ -1299,360 +1940,3 @@ Comme précédemment, la proportion de succès augmente au-dessus de 0.5 à $x1 
 
 <!-- again, lack of explanation here...-->
 
-
----
-class: inverse, center, middle
-
-# 7. Intro rapide aux GAMMs
-
----
-# La non-indépendance des données
-
-Lorsque les observations ne sont pas indépendantes, les GAMs peuvent être utilisés soit pour incorporer :
-
-- une structure de corrélation pour modéliser les résidus autocorrélés (autorégressif (AR), moyenne mobile (MA), ou une combinaison des deux (ARMA)) ,
-- des effets aléatoires qui modélisent l'indépendance entre les observations d'un même site.
-
----
-# Modèle avec erreurs autocorrélées
-
-Pour commencer, nous allons jeter un coup d’œil au premier cas; un modèle avec autocorrélation temporelle dans les résidus. 
-
-Ré-examinons le modèle de la température de Nottingham et vérifions si les résidus sont corrélés en faisant appel à la fonction (partielle) d'autocorrélation.
-
-```{r, eval = F, fig.width=9, fig.height=4.5}
-par(mfrow = c(1,2))
-acf(resid(year_gam), lag.max = 36, main = "ACF")
-pacf(resid(year_gam), lag.max = 36, main = "pACF")
-```
-
----
-# Modèle avec erreurs autocorrélées
-
-```{r, echo = F, fig.width=8.5, fig.height=4}
-par(mfrow = c(1,2))
-acf(resid(year_gam), lag.max = 36, main = "ACF")
-pacf(resid(year_gam), lag.max = 36, main = "pACF")
-```
-
-.comment[ACF donne la corrélation croisée et pACF la corrélation partielle d'une série temporelle avec elle-même à différent décalage de temps.]
-
-ACF et pACF sont utilisés pour identifier combien d'intervalle de temps sont nécessaires pour que les observations commencent à être indépendantes.
-
---
-
-Les graphiques des fonctions d'autocorrélation suggèrent qu'un modèle AR de faible ordre est nécessaire (avec un ou deux intervalles de temps décalés).
-
----
-# Modèle avec erreurs autocorrélées
-
-Nous pouvons ajouter des structures d'autocorrelation au modèle : 
-
-- **AR(1)** : corrélation avec un intervalle de temps décalé, ou
-- **AR(2)** : corrélation à 2 intervalles de temps décalés
-
---
-
-```{r}
-
-year_gam <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"))
-year_gam_AR1 <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"),
-                     correlation = corARMA(form = ~ 1|nottem_year, p = 1),
-                   data = data.frame(nottem, nottem_year, nottem_month))
-year_gam_AR2 <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"),
-                     correlation = corARMA(form = ~ 1|nottem_year, p = 2),
-                   data = data.frame(nottem, nottem_year, nottem_month))
-```
-
----
-
-# Modèle avec erreurs autocorrélées
-
-```{r}
-AIC(year_gam$lme, year_gam_AR1$lme, year_gam_AR2$lme)
-```
-
-Le modèle avec la structure AR(1) donne un meilleur ajustement au premier modèle. Mais il y a peu d'intérêt à considérer le modèle AR(2).
-
----
-# Modélisation avec effets mixtes
-
-Comme nous l'avons vu dans la section précédente, `bs` spécifie la fonction de base sous-jacente. Pour les facteurs aléatoires (origine et pente linéaire), nous utilisons `bs = "re"` et pour les pentes aléatoires non linéaires, nous utilisons `bs = "fs"`.
-
----
-# Modélisation avec effets mixtes
-
-**3 types d'effets aléatoires différents** sont possibles lors de l'utilisation des GAMMs (où `fac` ![:faic](arrow-right) variable qualitative utilisée pour l'effet aléatoire; `x0` ![:faic](arrow-right) effet quantitatif fixe) :
-
-- **interceptes aléatoires** ajustent la hauteur des termes du modèle avec une valeur constante de pente : `s(fac, bs = "re")`
-- **pentes aléatoires** ajustent la pente d'une variable explicative numérique : `s(fac, x0, bs = "re")`
-- **surfaces lisses aléatoires** ajustent la tendance d'une prédiction numérique de façon non linéaire: `s(x0, fac, bs = "fs", m = 1)`, où l'argument $m = 1$ met une plus grande pénalité au lissage qui s'éloigne de 0, ce qui entraîne un retrait vers la moyenne.
-
----
-# GAMM avec un intercepte aléatoire
-
-Tel que vu précédemment, nous allons utiliser `gamSim()` pour générer un ensemble de données, cette fois-ci avec une composante d'effet aléatoire. Ensuite, nous construirons un modèle avec un intercepte aléatoire en utilisant `fac` comme facteur aléatoire.
-
-```{r}
-gam_data2 <- gamSim(eg = 6)
-str(gam_data2)
-```
-
-
----
-# GAMM avec un intercepte aléatoire
-
-```{r, fig.height=4.5, fig.width=5.5, echo = -1}
-par(mar=c(4,4,1,1))
-gamm_intercept <- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2)
-summary(gamm_intercept)$s.table
-plot(gamm_intercept, select = 2)
-```
-
----
-# GAMM avec un intercepte aléatoire
-
-Nous allons premièrement tracer l'effet combiné de `x0` (sans les niveaux de l'effet aléatoire) et ensuite une courbe pour les 4 niveaux de `fac` :
-
-```{r, eval = FALSE}
-par(mfrow = c(1,2), cex = 1.1)
-
-plot_smooth(gamm_intercept, view = "x0", rm.ranef = T,
-            main = "intercept + s(x1)")
-
-plot_smooth(gamm_intercept, view = "x0", cond = list(fac="1"),
-            main = "... + s(fac)", col = 'orange', ylim = c(8,21))
-
-plot_smooth(gamm_intercept, view = "x0", cond = list(fac = "2"), add = T, col = 'red')
-
-plot_smooth(gamm_intercept, view="x0", cond = list(fac = "3"), add = T, col = 'purple')
-
-plot_smooth(gamm_intercept, view="x0", cond = list(fac = "4"), add = T, col = 'turquoise')
-```
-
----
-# GAMM avec un intercepte aléatoire
-
-<br>
-
-```{r, echo = F, fig.width=12, fig.height=6}
-par(mfrow = c(1,2), cex = 1.1, mar = c(4,4,1,1))
-plot_smooth(gamm_intercept, view = "x0", rm.ranef = T,
-            main = "intercept + s(x1)", print.summary=F)
-plot_smooth(gamm_intercept, view = "x0", cond = list(fac = "1"),
-            main = "... + s(fac)", col = 'orange', ylim = c(8,21), print.summary=F)
-plot_smooth(gamm_intercept, view = "x0", cond = list(fac = "2"), add = T, col = 'red', print.summary = F)
-plot_smooth(gamm_intercept, view = "x0", cond = list(fac = "3"), add = T, col = 'purple', print.summary = F)
-plot_smooth(gamm_intercept, view = "x0", cond = list(fac = "4"), add = T, col = 'turquoise', print.summary = F)
-```
-
-.pull-right[
-&nbsp; <font color="orange">fac1</font> &nbsp; <font color="red">fac2</font> &nbsp; <font color="purple">fac3</font> &nbsp; <font color="turquoise">fac4</font>
-]
-
-
----
-# GAMM avec une pente aléatoire
-
-```{r}
-gamm_slope <- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2)
-
-summary(gamm_slope)$s.table
-```
-
-
----
-# GAMM avec une pente aléatoire
-
-```{r, eval = FALSE}
-par(mfrow = c(1,2), cex = 1.1)
-
-plot_smooth(gamm_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)")
-
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "1"),
-            main = "... + s(fac)", col = 'orange', ylim = c(7,22))
-
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "2"), add = T, col = 'red')
-
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "3"), add = T, col = 'purple')
-
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "4"), add = T, col = 'turquoise')
-```
-
----
-# GAMM avec une pente aléatoire
-
-<br>
-
-```{r, echo = F, fig.width=12, fig.height=6}
-par(mfrow = c(1,2), cex = 1.1, mar = c(4,4,1,1))
-plot_smooth(gamm_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)",
-            print.summary=F)
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "1"),
-            main = "... + s(fac)", col = 'orange', ylim = c(7,22), print.summary=F)
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "2"), add = T, col = 'red',
-            print.summary = F)
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "3"), add = T, col = 'purple',
-            print.summary = F)
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "4"), add = T, col = 'turquoise',
-            print.summary = F)
-```
-
----
-# GAMM avec un intercepte et une pente aléatoire
-
-```{r}
-gamm_int_slope <- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
-                      data = gam_data2)
-
-summary(gamm_int_slope)$s.table
-```
-
----
-# GAMM avec un intercepte et une pente aléatoire
-
-```{r, eval = FALSE}
-par(mfrow = c(1,2), cex = 1.1)
-
-plot_smooth(gamm_int_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)")
-
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "1"),
-            main="... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(7,22))
-
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "2"), add = T, col='red')
-
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "3"), add = T, col = 'purple')
-
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "4"), add = T, col = 'turquoise')
-```
-
----
-# GAMM avec un intercepte et une pente aléatoire
-
-<br>
-
-```{r, echo = F, fig.width=12, fig.height=6}
-par(mfrow = c(1,2), cex = 1.1, mar = c(4,4,1,1))
-plot_smooth(gamm_int_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)", print.summary = F)
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "1"), print.summary=F,
-            main="... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(7,22))
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "2"), add = T,
-            col='red',print.summary = F)
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "3"), add = T,
-            col = 'purple', print.summary = F)
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "4"), add = T,
-            col = 'turquoise', print.summary = F)
-```
-
----
-# GAMM avec un intercepte et une pente aléatoire
-
-Notez que la pente aléatoire est statique dans ce cas :
-
-```{r, fig.width=5, fig.height=5}
-plot(gamm_int_slope, select = 3)
-```
-
----
-# GAMM avec une surface lisse aléatoire
-
-```{r}
-gamm_smooth <- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1), data = gam_data2)
-
-summary(gamm_smooth)$s.table
-```
-
----
-# GAMM avec une surface lisse aléatoire
-
-Ici, si les pentes aléatoires variaient selon `x0`, nous aurons des courbes variables pour chaque niveau :
-
-```{r, echo = -1, fig.height=5, fig.width=5}
-par(mar=c(4,4,.5,.5), lwd = 2)
-plot(gamm_smooth, select = 1)
-```
-
----
-# GAMM avec une surface lisse aléatoire
-
-```{r, eval = FALSE}
-par(mfrow = c(1,2), cex = 1.1)
-
-plot_smooth(gamm_smooth, view = "x0", rm.ranef = T, main = "intercept + s(x0)")
-
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "1"),
-            main="... + s(x0, fac)", col = 'orange', ylim = c(7,22))
-
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "2"), add = T, col='red')
-
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "3"), add = T, col = 'purple')
-
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "4"), add = T, col = 'turquoise')
-```
-
----
-# GAMM avec une surface lisse aléatoire
-
-<br>
-
-```{r, echo = F, fig.width=12, fig.height=6}
-par(mfrow = c(1,2), cex = 1.1, mar = c(4,4,1,1))
-plot_smooth(gamm_smooth, view = "x0", rm.ranef = T, main = "intercept + s(x0)", print.summary=F)
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "1"), print.summary=F,
-            main="... + s(x0, fac)", col = 'orange', ylim = c(7,22))
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "2"), add = T,
-            col='red',print.summary = F)
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "3"), add = T,
-            col = 'purple', print.summary = F)
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "4"), add = T,
-            col = 'turquoise', print.summary = F)
-```
-
-.comment[Ici, si la pente aléatoire varie selon `x0`, nous aurons des courbes variables pour chaque niveau.]
-
----
-# GAMM
-
-Tous ces modèles mixtes peuvent être comparés en utilisant la fonction `AIC()` pour trouver le meilleur modèle.
-
-```{r}
-AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
-```
-
-
----
-# Ressources
-
-Il existe beaucoup d'information sur les GAMs.
-
-Simon Wood, l'auteur de la librairie `mgcv`, a un [site](http://people.bath.ac.uk/sw283/mgcv/) très utile avec des conférences et des notes introductives sur la façon d'utiliser les GAMs.
-
-Il a aussi écrit un livre, *Generalized Additive Models: An Introduction with R*, que nous avons utilisé comme référence pour cet atelier.
-
-.center[[![:scale 28%](https://images.tandf.co.uk/common/jackets/amazon/978149872/9781498728331.jpg)](https://www.crcpress.com/Generalized-Additive-Models-An-Introduction-with-R-Second-Edition/Wood/p/book/9781498728331)]
-
-
----
-# Ressources
-
-Le matériel de cet atelier a également été obtenu à partir des blogs et des tutoriels suivants :
-
-- [From the bottom of the heap](http://www.fromthebottomoftheheap.net/blog/)
-
-- [Overview GAMM analysis of time series data](http://www.sfs.uni-tuebingen.de/~jvanrij/Tutorial/GAMM.html)
-
-- [Advanced Analysis of Time series data](http://www.sfs.uni-tuebingen.de/~jvanrij/LSA2015/AnswersLab2.html)
-
-- Noam Ross a crée un tutorial [GAMs in R](https://noamross.github.io/gams-in-r-course/) (voir aussi [ce preprint](https://peerj.com/preprints/27320/))
-
-Enfin, les pages d'aide, disponibles via `?gam` dans R sont une excellente ressource.
-
----
-class: inverse, center, bottom
-
-# Merci pour votre participation à cet atelier!
-
-<hr>
-<br>
-
-![:scale 50%](images/qcbs_logo.png)

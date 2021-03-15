@@ -77,11 +77,12 @@ install.packages(c('ggplot2', 'itsadug', 'mgcv'))
 2. Introduction to GAM
 3. GAM with multiple smooth terms
 4. Interactions
-5. Changing basis
-6. Other distributions
+5. Generalization of the additive model
+6. Changing basis
 7. Quick intro to GAMM
 
 ---
+
 # Learning objectives
 
 1. Use the mgcv package to fit non-linear relationships,
@@ -291,7 +292,7 @@ data_plot <- data_plot +
 data_plot
 ```
 
-.comment[Note: as opposed to one fixed coefficient, $\beta$ in linear regression, the smooth function can continually change over the range of the predictor x]
+Note: as opposed to one fixed coefficient, $\beta$ in linear regression, the smooth function can continually change over the range of the predictor $x$.
 
 ---
 exclude:true
@@ -563,9 +564,10 @@ Ideally, it would be good to choose $\lambda$ so that the predicted $\hat{f}$ is
 
 $$M = 1/n \times \sum_{i=1}^n (\hat{f_i} - f_i)^2$$
 
-Since $f$ is unknown, $M$ is estimated using a generalized cross validation technique that leaves out each datum from the data in turn and considers the average ability of models fitted to the remaining data to predict the left out datum.
+Since $f$ is unknown, $M$ must be estimated. The recommend methods for this are maximum likelihood (*ML*) or restricted maximum likelihood estimation (*REML*). Generalized cross validation (*GCV*) is another possibility.
 
 ---
+exclude:true
 # Principle behind cross validation
 
 .center[
@@ -574,17 +576,18 @@ Since $f$ is unknown, $M$ is estimated using a generalized cross validation tech
 
 1. fits many of the data poorly and does no better with the missing point.
 
---
+
 
 2. fits the underlying signal quite well, smoothing through the noise and the missing datum is reasonably well predicted.
 
---
+
 
 3. fits the noise as well as the signal and the extra variability induced causes it to predict the missing datum rather poorly.
 
 
 
 ---
+exclude:true
 # Principle behind cross validation
 
 .center[
@@ -597,6 +600,7 @@ Since $f$ is unknown, $M$ is estimated using a generalized cross validation tech
 class: inverse, center, middle
 
 ## 3. GAM with multiple smooth terms
+
 ---
 # GAM with multiple variables
 
@@ -623,7 +627,7 @@ isit$Season <- as.factor(isit$Season)
 
 ```{r}
 isit$Season <- as.factor(isit$Season)
-basic_model <- gam(Sources ~ Season + s(SampleDepth), data = isit)
+basic_model <- gam(Sources ~ Season + s(SampleDepth), data = isit, method = "REML")
 basic_summary <- summary(basic_model)
 ```
 
@@ -695,9 +699,9 @@ There is a pronounced difference in bioluminescence between the seasons.
 basic_summary$s.table
 ```
 
-The `edf` shown in the `s.table` are the **effective degrees of freedom** (EDF) of the the smooth term –- essentially, more EDF imply more complex, wiggly splines.
+The `edf` shown in the `s.table` are the **effective degrees of freedom** (EDF) of the the smooth term - essentially, more EDF imply more complex, wiggly splines.
 
-- A value close to 1 tend to be close to a linear term.
+- A value close to 1 tends to be close to a linear term.
 
 - A higher value  means that the spline is non-linear.
 
@@ -719,6 +723,7 @@ An upper bound on the **EDF** is determined by the basis dimension $k$ for each 
 
 In practice, the exact choice of $k$ is arbitrary, but it should be **large enough** to accomodate a sufficiently complex smooth function.
 
+We will talk about choosing $k$ in section 5.
 
 ---
 # GAM with multiple variables
@@ -726,7 +731,8 @@ In practice, the exact choice of $k$ is arbitrary, but it should be **large enou
 We can add a second term, `RelativeDepth`, but specify a linear relationship with `Sources`
 
 ```{r}
-two_term_model <- gam(Sources ~ Season + s(SampleDepth) + RelativeDepth, data = isit)
+two_term_model <- gam(Sources ~ Season + s(SampleDepth) + RelativeDepth, 
+                      data = isit, method = "REML")
 two_term_summary <- summary(two_term_model)
 ```
 
@@ -758,20 +764,21 @@ plot(two_term_model, page = 1, all.terms = TRUE)
 We can also explore whether the relationship between `Sources` and `RelativeDepth` is non-linear
 
 ```{r}
-two_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth), data = isit)
+two_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth), 
+                        data = isit, method = "REML")
 two_smooth_summary <- summary(two_smooth_model)
 ```
 
 Information on parametric effects (linear terms):
 
 ```{r}
-two_term_summary$p.table
+two_smooth_summary$p.table
 ```
 
 Information on additive effects (non-linear terms):
 
 ```{r}
-two_term_summary$s.table
+two_smooth_summary$s.table
 ```
 
 ---
@@ -858,7 +865,7 @@ anova(basic_model, two_term_model, two_smooth_model,test='Chisq')
 
 <br>
 
-1. Create 2 new models, with `Latitude` as a linear and smoothed term.
+1. Create 2 new models, by adding `Latitude` to `two_smooth_model` as a linear and smoothed term.
 2. Determine if `Latitude` is an important term to include using plots, coefficient tables and the AIC function.
 
 ---
@@ -874,8 +881,16 @@ exclude:true
 
 <br>
 ```{r,eval=FALSE}
-three_term_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth) + Latitude, data = isit)
-three_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth) + s(Latitude), data = isit)
+three_term_model <- gam(Sources ~ 
+                          Season + s(SampleDepth) + s(RelativeDepth) + 
+                          Latitude, 
+                        data = isit, method = "REML")
+
+three_smooth_model <- gam(Sources ~ 
+                            Season + s(SampleDepth) + s(RelativeDepth) + 
+                            s(Latitude),
+                          data = isit, method = "REML")
+
 three_smooth_summary <- summary(three_smooth_model)
 three_smooth_summary
 ```
@@ -883,8 +898,16 @@ three_smooth_summary
 # Challenge 2 - Solution ![:cube]()
 
 ```{r,eval=TRUE,echo=FALSE}
-three_term_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth) + Latitude, data = isit)
-three_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth) + s(Latitude), data = isit)
+three_term_model <- gam(Sources ~ 
+                          Season + s(SampleDepth) + s(RelativeDepth) + 
+                          Latitude, 
+                        data = isit, method = "REML")
+
+three_smooth_model <- gam(Sources ~ 
+                            Season + s(SampleDepth) + s(RelativeDepth) + 
+                            s(Latitude),
+                          data = isit, method = "REML")
+
 three_smooth_summary <- summary(three_smooth_model)
 three_smooth_summary
 ```
@@ -974,6 +997,7 @@ AIC(two_smooth_model, three_term_model, test = "Chisq")
 
 
 ---
+
 class: inverse, center, middle
 
 ## 4. Interactions
@@ -998,7 +1022,7 @@ We will examine interaction effect using our categorical variable `Season` and a
 factor_interact <- gam(Sources ~ Season + 
                          s(SampleDepth, by=Season) + 
                          s(RelativeDepth), 
-                       data = isit)
+                       data = isit, method = "REML")
 
 summary(factor_interact)$s.table
 ```
@@ -1049,7 +1073,8 @@ From the plots, we saw that the shape of the smooth terms were comparable among 
 Finally we'll look at the interactions between 2 smoothed terms, `SampleDepth` and `RelativeDepth`.
 
 ```{r}
-smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), data = isit)
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), 
+                       data = isit, method = "REML")
 summary(smooth_interact)$s.table
 ```
 
@@ -1093,23 +1118,282 @@ vis.gam(smooth_interact, view = c("SampleDepth", "RelativeDepth"),
 AIC(two_smooth_model, smooth_interact)
 ```
 
-The model with the interaction between `s(SampleDepth)` and `s(RelativeDepth)` have a lower AIC and the 2D plot nicely illustrates this non-linear interactions, where `Sources` is lower at high values of `SampleDepth` but mid to high values of `RelativeDepth`.
+The model with the interaction between `s(SampleDepth)` and `s(RelativeDepth)` has a lower AIC and the plots nicely illustrate the non-linear interaction, where `Sources` is lower at high values of `SampleDepth` but increases with `RelativeDepth`.
+
+
 
 ---
 class: inverse, center, middle
 
-## 5. Changing basis
+## 5. Generalization of the additive model
 
 ---
+
 # Generalization of the additive model
 
 The basic additive model can be extended in the following way:
 
-1. Using different kinds of basis functions,
-2. Using other distributions for the response variable with the `family` argument (just as in a GLM),
-3. Using different kinds of random effects to fit mixed effect models.
+1. Using other **distributions** for the response variable with the `family` argument (just as in a GLM),
+2. Using different kinds of **basis functions**,
+3. Using different kinds of **random effects** to fit mixed effect models.
 
 We will now go over these aspects.
+
+---
+
+# Generalized additive models
+
+We have so far worked with simple (Gaussian) additive models, the non-linear equivalent to a linear model.
+
+--
+
+But what can we do if:
+- the observations of the response variable do **not follow a normal distribution**?
+- the **variance is not constant**? (heteroscedasticity)
+
+--
+
+.comment[These cases are very common!]
+
+Just like generalized linear models (GLM), we can formulate **generalized** additive models to deal with these issues.
+
+---
+
+# Generalized additive models
+
+
+Lets recall the interaction model for the bioluminescence data:
+
+```{r}
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), 
+                       data = isit, method = "REML")
+
+summary(smooth_interact)$p.table
+
+summary(smooth_interact)$s.table
+```
+
+---
+
+# GAM model checking
+
+As for a GLM, it is essential to check whether we correctly specifified the model, especially the *distribution* for the response.
+
+**We have to verify:**
+
+1. The choice of basis dimension `k`.
+2. The residuals plots (just as for a GLM).
+
+
+--
+
+<br>
+Useful functions included in `mgcv`:
+
+- `k.check()` performs a basis dimension check.
+- `gam.check()` produces residual plots (and also calls `k.check()`).
+
+---
+
+# GAM model checking
+
+##### First step:
+
+Have we chosen `k` large enough? 
+
+.comment[The default for smooth interactions is `k = 30`]
+
+```{r}
+k.check(smooth_interact)
+```
+
+--
+
+The **EDF are very close to** `k`, this could be problematic.
+
+---
+
+# GAM model checking
+
+Let's refit the model with a larger `k`:
+
+```{r}
+smooth_interact_k60 <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+                           data = isit, method = "REML")
+summary(smooth_interact_k60)$p.table
+summary(smooth_interact_k60)$s.table
+```
+
+--
+
+Is `k` large enough this time?
+
+```{r}
+k.check(smooth_interact_k60)
+```
+
+--
+
+Looks better, let's replace the old model:
+
+```{r}
+smooth_interact <- smooth_interact_k60
+```
+
+---
+
+# GAM model checking
+
+##### Second Step:
+
+Let's look at the residual plots, using `gam.check()`:
+
+```{r, eval = FALSE}
+par(mfrow = c(2,2)) # Show all 4 plots side by side
+gam.check(smooth_interact)
+```
+
+.comment[In addition to the plots, `gam.check()` also provides the output of `k.check()`.]
+
+---
+
+# GAM model checking
+
+```{r, echo=FALSE, results = FALSE, fig.height=6, fig.width=8}
+par(mfrow=c(2,2), mar = c(4,4,2,1.1), oma =c(0,0,0,0))
+gam.check(smooth_interact)
+```
+
+--
+<br>
+
+.alert[Pronounced heteroscedasticity and patterns in the residuals]
+
+
+???
+
+- These plots are a little different than those produced by `plot` for a linear model (e.g. no leverage plot)
+- Participants should already be familiar with residual plots (they are explaned more in detail in workshops 4 and 6)
+- Obvious problem: heteroscedasticity, visible in residuals vs. linear predictor.
+- Another problem: a few strong outliers (visible in QQ plot, response vs. fitted)
+
+---
+
+# Other distributions
+
+
+For our interaction model, we need a probability distribution that allows the **variance to increase with the mean**.
+
+--
+
+One family of distributions that has this property and that works well in a GAM is the **Tweedie** family.
+
+A common link function for *Tweedie* distributions is the $log$.
+
+--
+
+<br>
+
+As in a GLM, we can use the `family = ` argument in `gam()` to fit models with other distributions (including distributions such as `binomial`, `poisson`, `gamma` etc.).
+
+To get an overview of families available in `mgcv`:
+```{r, eval = FALSE}
+?family.mgcv
+```
+
+
+
+
+---
+
+# Challenge 3 ![:cube]()
+
+1. Fit a new model `smooth_interact_tw` with the same formula as the `smooth_interact` model but with a distribution from the *Tweedie* family (instead of the normal distribution) and `log` link function. You can do so by using `family = tw(link = "log")` inside `gam()`.
+2. Check the choice of `k` and the residual plots for the new model.
+3. Compare `smooth_interact_tw` with `smooth_interact`. Which one would you choose?
+
+--
+
+<br>
+
+.comment[Hint:]
+
+```{r}
+# Normal distribution
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+                          data = isit, method = "REML")
+# Tweedie family with log link
+smooth_interact_tw <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+                          family = tw(link = "log"),
+                          data = isit, method = "REML")
+```
+
+
+---
+
+# Challenge 3 - Solution ![:cube]()
+
+Fit the model:
+
+```{r}
+smooth_interact_tw <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+                          family = tw(link = "log"),
+                          data = isit, method = "REML")
+summary(smooth_interact_tw)$p.table
+summary(smooth_interact_tw)$s.table
+```
+
+--
+
+Check the basis dimension:
+
+```{r}
+k.check(smooth_interact_tw)
+```
+
+---
+
+# Challenge 3 - Solution ![:cube]()
+
+Residual plots:
+
+```{r, eval = FALSE}
+par(mfrow=c(2,2))
+gam.check(smooth_interact_tw)
+```
+
+
+```{r, echo = FALSE, results = FALSE, fig.height = 6, fig.width = 8}
+par(mfrow=c(2,2), mar = c(4,4,2,1.1), oma =c(0,0,0,0))
+gam.check(smooth_interact_tw)
+```
+
+
+???
+- The residuals look much better, but it is clear that something is missing from the model. This could be a spatial affect (longtitude and latitude), or a random effect (e.g. based on `Station`).
+
+---
+
+# Challenge 3 - Solution ![:cube]()
+
+Compare the models:
+
+```{r}
+AIC(smooth_interact, smooth_interact_tw)
+```
+
+.comment[AIC allows us to compare models that are based on different distributions!]
+
+--
+
+Using a *Tweedie* instead of a *normal* distribution greatly improves our model!
+
+
+---
+class: inverse, center, middle
+
+## 6. Changing basis
+
 
 ---
 # Other smooth functions
@@ -1182,7 +1466,7 @@ qplot(nottem_month, nottem, colour = factor(nottem_year), geom = "line") +
 We can model both the cyclic change of temperature across months and the non-linear trend through years, using a cyclical cubic spline, or `cc`, for the month variable and a regular smooth for the year variable.
 
 ```{r, fig.height=4, fig.width=8}
-year_gam <- gam(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"))
+year_gam <- gam(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"), method = "REML")
 summary(year_gam)$s.table
 ```
 
@@ -1195,10 +1479,360 @@ plot(year_gam, page = 1, scale = 0)
 
 There is about 1-1.5 degree rise in temperature over the period, but within a given year there is about 20 degrees variation in temperature, on average. The actual data vary around these values and that is the unexplained variance.
 
+
+
 ---
 class: inverse, center, middle
 
-## 6. Other distributions
+# 7. Quick intro to GAMM
+
+---
+# Dealing with non-independence
+
+When observations are not independent, GAMs can be used to either incorporate:
+
+- a serial correlation structure to model residual autocorrelation (autoregressive AR, moving average MA, or a combination of the two ARMA),
+- random effects that model independence among observations from the same site.
+
+---
+# Model with correlated errors
+
+Let's have a look at a model with temporal autocorrelation in the residuals. We will revisit the Nottingham temperature model and test for correlated errors using the (partial) autocorrelation function.
+
+```{r, eval = FALSE, fig.width=9, fig.height=4.5}
+par(mfrow = c(1,2))
+acf(resid(year_gam), lag.max = 36, main = "ACF")
+pacf(resid(year_gam), lag.max = 36, main = "pACF")
+```
+
+---
+# Model with correlated errors
+
+```{r, echo = F, fig.width=9, fig.height=4.5}
+par(mfrow = c(1,2))
+acf(resid(year_gam), lag.max = 36, main = "ACF")
+pacf(resid(year_gam), lag.max = 36, main = "pACF")
+```
+
+.comment[ACF evaluates the cross correlation and pACF the partial correlation of a time series with itself at different time lags]
+
+ACF and pACF are used to identify after how many time steps observations start to be independent.
+
+--
+
+The ACF plot of our model residuals suggests a significant lag of 1, and perhaps a lag of 2. Therefore, a low-order AR model is likely needed.
+
+---
+# Model with correlated errors
+
+We can add AR structures to the model: 
+
+- **AR(1)**: correlation at 1 time step, or 
+- **AR(2)** correlation at 2 time steps.
+
+--
+
+```{r}
+year_gam <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"))
+year_gam_AR1 <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"),
+                     correlation = corARMA(form = ~ 1|nottem_year, p = 1),
+                   data = data.frame(nottem, nottem_year, nottem_month))
+year_gam_AR2 <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"),
+                     correlation = corARMA(form = ~ 1|nottem_year, p = 2),
+                   data = data.frame(nottem, nottem_year, nottem_month))
+
+```
+
+
+---
+
+# Model with correlated errors
+
+```{r}
+AIC(year_gam$lme, year_gam_AR1$lme, year_gam_AR2$lme)
+```
+
+AR(1) provides a better fit over the naive model. But there is little improvement with AR(2).
+
+
+---
+# Mixed modelling
+
+As we saw in the section changing basis, `bs` specifies the type of underlying base function. For random intercepts and linear random slopes we use `bs = "re"`, but for random smooths we use `bs = "fs"`.
+
+--
+
+**3 different types of random effects** in GAMMs (`fac` ![:faic](arrow-right) factor coding for the random effect; `x0` ![:faic](arrow-right) continuous fixed effect):
+
+- **random intercepts** adjust the height of other model terms with a constant value: `s(fac, bs = "re")`
+- **random slopes** adjust the slope of the trend of a numeric predictor: `s(fac, x0, bs = "re")`
+- **random smooths** adjust the trend of a numeric predictor in a nonlinear way: `s(x0, fac, bs = "fs", m = 1)`, where the argument m=1 sets a heavier penalty for the smooth moving away from 0, causing shrinkage to the mean.
+
+---
+# GAMM with a random intercept
+
+As before, we will use the `gamSim()` function to generate a dataset, here with a random effect, then run a model with a random intercept using `fac` as the random factor.
+
+```{r}
+gam_data2 <- gamSim(eg = 6)
+str(gam_data2)
+```
+
+
+---
+# GAMM with a random intercept
+
+```{r, fig.height=5, fig.width=5.5, echo = -1}
+par(mar=c(4,4,1,1))
+gamm_intercept <- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2, method = "REML")
+summary(gamm_intercept)$s.table
+plot(gamm_intercept, select = 2)
+```
+
+---
+# GAMM with a random intercept
+
+We can plot the summed effects for the `x0` without random effects, and then plot the predictions of all 4 levels of the random `fac` effect:
+
+```{r, eval = FALSE}
+par(mfrow = c(1,2), cex = 1.1)
+
+plot_smooth(gamm_intercept, view = "x0", rm.ranef = T,
+            main = "intercept + s(x1)")
+
+plot_smooth(gamm_intercept, view = "x0", cond = list(fac="1"),
+            main = "... + s(fac)", col = 'orange', ylim = c(8,21))
+
+plot_smooth(gamm_intercept, view = "x0", cond = list(fac = "2"), add = T, col = 'red')
+
+plot_smooth(gamm_intercept, view="x0", cond = list(fac = "3"), add = T, col = 'purple')
+
+plot_smooth(gamm_intercept, view="x0", cond = list(fac = "4"), add = T, col = 'turquoise')
+```
+
+---
+# GAMM with a random intercept
+
+<br>
+
+```{r, echo = F, fig.width=12, fig.height=6}
+par(mfrow = c(1,2), cex = 1.1, mar=c(4,4,1,1))
+plot_smooth(gamm_intercept, view = "x0", rm.ranef = T,
+            main = "intercept + s(x1)", print.summary = F)
+plot_smooth(gamm_intercept, view = "x0", cond = list(fac="1"),
+            main = "... + s(fac)", col = 'orange', ylim = c(8,21), print.summary = F)
+plot_smooth(gamm_intercept, view = "x0", cond = list(fac = "2"), add = T, col = 'red', print.summary = F)
+plot_smooth(gamm_intercept, view ="x0", cond = list(fac = "3"), add = T, col = 'purple', print.summary = F)
+plot_smooth(gamm_intercept, view ="x0", cond = list(fac = "4"), add = T, col = 'turquoise', print.summary = F)
+```
+
+.pull-right[
+&nbsp; <font color="orange">fac1</font> &nbsp; <font color="red">fac2</font> &nbsp; <font color="purple">fac3</font> &nbsp; <font color="turquoise">fac4</font>
+]
+
+
+---
+# GAMM with a random slope
+
+```{r}
+gamm_slope <- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2, method = "REML")
+
+summary(gamm_slope)$s.table
+```
+
+
+---
+# GAMM with a random slope
+
+```{r, eval = FALSE}
+par(mfrow = c(1,2), cex = 1.1)
+
+plot_smooth(gamm_slope, view = "x0", rm.ranef = TRUE, main = "intercept + s(x0)")
+
+plot_smooth(gamm_slope, view = "x0", cond = list(fac = "1"),
+            main = "... + s(fac)", col = 'orange', ylim = c(7,22))
+
+plot_smooth(gamm_slope, view = "x0", cond = list(fac = "2"), add = T, col = 'red')
+
+plot_smooth(gamm_slope, view = "x0", cond = list(fac = "3"), add = T, col = 'purple')
+
+plot_smooth(gamm_slope, view = "x0", cond = list(fac = "4"), add = T, col = 'turquoise')
+```
+
+---
+# GAMM with a random slope
+
+<br>
+
+```{r, echo = F, fig.width=12, fig.height=6}
+par(mfrow = c(1,2), cex = 1.1, mar=c(4,4,1,1))
+plot_smooth(gamm_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)",
+            print.summary = F)
+plot_smooth(gamm_slope, view = "x0", cond = list(fac = "1"),
+            main = "... + s(fac)", col = 'orange', ylim = c(7,22), print.summary = F)
+plot_smooth(gamm_slope, view = "x0", cond = list(fac = "2"), add = T, col = 'red',
+            print.summary = F)
+plot_smooth(gamm_slope, view = "x0", cond = list(fac = "3"), add = T, col = 'purple',
+            print.summary = F)
+plot_smooth(gamm_slope, view = "x0", cond = list(fac = "4"), add = T, col = 'turquoise',
+            print.summary = F)
+```
+
+---
+# GAMM with a random intercept and slope
+
+```{r}
+gamm_int_slope <- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
+                      data = gam_data2, method = "REML")
+
+summary(gamm_int_slope)$s.table
+```
+
+---
+# GAMM with a random intercept and slope
+
+```{r, eval = FALSE}
+par(mfrow = c(1,2), cex = 1.1)
+
+plot_smooth(gamm_int_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)")
+
+plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "1"),
+            main="... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(7,22))
+
+plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "2"), add = T, col='red')
+
+plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "3"), add = T, col = 'purple')
+
+plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "4"), add = T, col = 'turquoise')
+```
+
+---
+# GAMM with a random intercept and slope
+
+<br>
+
+```{r, echo = F, fig.width=12, fig.height=6}
+par(mfrow = c(1,2), cex = 1.1, mar=c(4,4,1,1))
+plot_smooth(gamm_int_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)", print.summary = F)
+plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "1"), print.summary = F,
+            main="... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(7,22))
+plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "2"), add = T,
+            col='red',print.summary = F)
+plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "3"), add = T,
+            col = 'purple', print.summary = F)
+plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "4"), add = T,
+            col = 'turquoise', print.summary = F)
+```
+
+---
+# GAMM with a random intercept and slope
+
+Note that the random slope is static in this case:
+
+```{r}
+plot(gamm_int_slope, select = 3)
+```
+
+---
+# GAMM with a random smooth
+
+```{r}
+gamm_smooth <- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1), 
+                   data = gam_data2, method = "REML")
+
+summary(gamm_smooth)$s.table
+```
+
+---
+# GAMM with a random smooth
+
+Here, if the random slope varied along `x0`, we would see different curves for each level:
+
+```{r, echo = -1, fig.height=5.5, fig.width=5.5}
+par(mar=c(4,4,.5,.5), lwd = 2)
+plot(gamm_smooth, select = 1)
+```
+
+---
+# GAMM with a random smooth
+
+```{r, eval = FALSE}
+par(mfrow = c(1,2), cex = 1.1)
+
+plot_smooth(gamm_smooth, view = "x0", rm.ranef = T, main = "intercept + s(x0)")
+
+plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "1"),
+            main="... + s(x0, fac)", col = 'orange', ylim = c(7,22))
+
+plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "2"), add = T, col='red')
+
+plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "3"), add = T, col = 'purple')
+
+plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "4"), add = T, col = 'turquoise')
+```
+
+---
+# GAMM with a random smooth
+
+<br>
+
+```{r, echo = F, fig.width=12, fig.height=6}
+par(mfrow = c(1,2), cex = 1.1, mar=c(4,4,1,1))
+plot_smooth(gamm_smooth, view = "x0", rm.ranef = T, main = "intercept + s(x0)", print.summary = F)
+plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "1"), print.summary = F,
+            main="... + s(x0, fac)", col = 'orange', ylim = c(7,22))
+plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "2"), add = T,
+            col='red',print.summary = F)
+plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "3"), add = T,
+            col = 'purple', print.summary = F)
+plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "4"), add = T,
+            col = 'turquoise', print.summary = F)
+```
+
+.comment[Here, if the random slope varied along `x0`, we would see different curves for each level.]
+
+---
+# GAMM
+
+All of the mixed models from this section can be compared using `AIC()` to determine the best fit model
+
+```{r}
+AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
+```
+
+
+---
+# Ressources
+
+There's a great deal more out there on GAM… this was just the very surface.
+
+Simon Wood, the author of the `mgcv` package has a very useful [website](http://people.bath.ac.uk/sw283/mgcv/) with introductory talks and notes on how to use GAM.
+
+He's also written a book, Generalized Additive Models: An Introduction with R, which we used as reference for this workshop.
+
+Material from this workshop were also obtained from the following fantastic blogs and tutorials:
+
+- [From the bottom of the heap](http://www.fromthebottomoftheheap.net/blog/)
+
+- [Overview GAMM analysis of time series data](http://www.sfs.uni-tuebingen.de/~jvanrij/Tutorial/GAMM.html)
+
+- [Advanced Analysis of Time series data](http://www.sfs.uni-tuebingen.de/~jvanrij/LSA2015/AnswersLab2.html)
+
+Finally, the help pages, available through `?gam` in R, are an excellent resource.
+
+
+
+---
+class: inverse, center, bottom
+
+# Thank you for attending this workshop!
+
+![:scale 50%](images/qcbs_logo.png)
+
+---
+class: inverse, center, middle
+
+# Additional example with other distributions
 
 
 ---
@@ -1234,7 +1868,8 @@ lines(avg$x1, avg$prop, col = "orange", lwd = 2)
 We will test if this trend is linear or not using a logistic GAM (we use a binomial family distribution given that our response is proportion data).
 
 ```{r, warning=F}
-prop_model <- gam(prop ~ s(x1), data = gam_data3, weights = total, family = "binomial")
+prop_model <- gam(prop ~ s(x1), data = gam_data3, weights = total, 
+                  family = "binomial", method = "REML")
 prop_summary <- summary(prop_model)
 ```
 
@@ -1362,350 +1997,3 @@ As in the logit plot, the proportion of successes increases above 0.5 at x1=400.
 
 <!-- again, lack of explanation here...-->
 
-
----
-class: inverse, center, middle
-
-# 7. Quick intro to GAMM
-
----
-# Dealing with non-independence
-
-When observations are not independent, GAMs can be used to either incorporate:
-
-- a serial correlation structure to model residual autocorrelation (autoregressive AR, moving average MA, or a combination of the two ARMA),
-- random effects that model independence among observations from the same site.
-
----
-# Model with correlated errors
-
-Let's have a look at a model with temporal autocorrelation in the residuals. We will revisit the Nottingham temperature model and test for correlated errors using the (partial) autocorrelation function.
-
-```{r, eval = FALSE, fig.width=9, fig.height=4.5}
-par(mfrow = c(1,2))
-acf(resid(year_gam), lag.max = 36, main = "ACF")
-pacf(resid(year_gam), lag.max = 36, main = "pACF")
-```
-
----
-# Model with correlated errors
-
-```{r, echo = F, fig.width=9, fig.height=4.5}
-par(mfrow = c(1,2))
-acf(resid(year_gam), lag.max = 36, main = "ACF")
-pacf(resid(year_gam), lag.max = 36, main = "pACF")
-```
-
-.comment[ACF evaluates the cross correlation and pACF the partial correlation of a time series with itself at different time lags]
-
-ACF and pACF are used to identify after how many time steps observations start to be independent.
-
---
-
-The ACF plot of our model residuals suggests a significant lag of 1, and perhaps a lag of 2. Therefore, a low-order AR model is likely needed.
-
----
-# Model with correlated errors
-
-We can add AR structures to the model: 
-
-- **AR(1)**: correlation at 1 time step, or 
-- **AR(2)** correlation at 2 time steps.
-
---
-
-```{r}
-year_gam <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"))
-year_gam_AR1 <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"),
-                     correlation = corARMA(form = ~ 1|nottem_year, p = 1),
-                   data = data.frame(nottem, nottem_year, nottem_month))
-year_gam_AR2 <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"),
-                     correlation = corARMA(form = ~ 1|nottem_year, p = 2),
-                   data = data.frame(nottem, nottem_year, nottem_month))
-
-```
-
-
----
-
-# Model with correlated errors
-
-```{r}
-AIC(year_gam$lme, year_gam_AR1$lme, year_gam_AR2$lme)
-```
-
-AR(1) provides a better fit over the naive model. But there is little improvement with AR(2).
-
-
----
-# Mixed modelling
-
-As we saw in the section changing basis, `bs` specifies the type of underlying base function. For random intercepts and linear random slopes we use `bs = "re"`, but for random smooths we use `bs = "fs"`.
-
---
-
-**3 different types of random effects** in GAMMs (`fac` ![:faic](arrow-right) factor coding for the random effect; `x0` ![:faic](arrow-right) continuous fixed effect):
-
-- **random intercepts** adjust the height of other model terms with a constant value: `s(fac, bs = "re")`
-- **random slopes** adjust the slope of the trend of a numeric predictor: `s(fac, x0, bs = "re")`
-- **random smooths** adjust the trend of a numeric predictor in a nonlinear way: `s(x0, fac, bs = "fs", m = 1)`, where the argument m=1 sets a heavier penalty for the smooth moving away from 0, causing shrinkage to the mean.
-
----
-# GAMM with a random intercept
-
-As before, we will use the `gamSim()` function to generate a dataset, here with a random effect, then run a model with a random intercept using `fac` as the random factor.
-
-```{r}
-gam_data2 <- gamSim(eg = 6)
-str(gam_data2)
-```
-
-
----
-# GAMM with a random intercept
-
-```{r, fig.height=5, fig.width=5.5, echo = -1}
-par(mar=c(4,4,1,1))
-gamm_intercept <- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2)
-summary(gamm_intercept)$s.table
-plot(gamm_intercept, select = 2)
-```
-
----
-# GAMM with a random intercept
-
-We can plot the summed effects for the `x0` without random effects, and then plot the predictions of all 4 levels of the random `fac` effect:
-
-```{r, eval = FALSE}
-par(mfrow = c(1,2), cex = 1.1)
-
-plot_smooth(gamm_intercept, view = "x0", rm.ranef = T,
-            main = "intercept + s(x1)")
-
-plot_smooth(gamm_intercept, view = "x0", cond = list(fac="1"),
-            main = "... + s(fac)", col = 'orange', ylim = c(8,21))
-
-plot_smooth(gamm_intercept, view = "x0", cond = list(fac = "2"), add = T, col = 'red')
-
-plot_smooth(gamm_intercept, view="x0", cond = list(fac = "3"), add = T, col = 'purple')
-
-plot_smooth(gamm_intercept, view="x0", cond = list(fac = "4"), add = T, col = 'turquoise')
-```
-
----
-# GAMM with a random intercept
-
-<br>
-
-```{r, echo = F, fig.width=12, fig.height=6}
-par(mfrow = c(1,2), cex = 1.1, mar=c(4,4,1,1))
-plot_smooth(gamm_intercept, view = "x0", rm.ranef = T,
-            main = "intercept + s(x1)", print.summary = F)
-plot_smooth(gamm_intercept, view = "x0", cond = list(fac="1"),
-            main = "... + s(fac)", col = 'orange', ylim = c(8,21), print.summary = F)
-plot_smooth(gamm_intercept, view = "x0", cond = list(fac = "2"), add = T, col = 'red', print.summary = F)
-plot_smooth(gamm_intercept, view ="x0", cond = list(fac = "3"), add = T, col = 'purple', print.summary = F)
-plot_smooth(gamm_intercept, view ="x0", cond = list(fac = "4"), add = T, col = 'turquoise', print.summary = F)
-```
-
-.pull-right[
-&nbsp; <font color="orange">fac1</font> &nbsp; <font color="red">fac2</font> &nbsp; <font color="purple">fac3</font> &nbsp; <font color="turquoise">fac4</font>
-]
-
-
----
-# GAMM with a random slope
-
-```{r}
-gamm_slope <- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2)
-
-summary(gamm_slope)$s.table
-```
-
-
----
-# GAMM with a random slope
-
-```{r, eval = FALSE}
-par(mfrow = c(1,2), cex = 1.1)
-
-plot_smooth(gamm_slope, view = "x0", rm.ranef = TRUE, main = "intercept + s(x0)")
-
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "1"),
-            main = "... + s(fac)", col = 'orange', ylim = c(7,22))
-
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "2"), add = T, col = 'red')
-
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "3"), add = T, col = 'purple')
-
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "4"), add = T, col = 'turquoise')
-```
-
----
-# GAMM with a random slope
-
-<br>
-
-```{r, echo = F, fig.width=12, fig.height=6}
-par(mfrow = c(1,2), cex = 1.1, mar=c(4,4,1,1))
-plot_smooth(gamm_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)",
-            print.summary = F)
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "1"),
-            main = "... + s(fac)", col = 'orange', ylim = c(7,22), print.summary = F)
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "2"), add = T, col = 'red',
-            print.summary = F)
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "3"), add = T, col = 'purple',
-            print.summary = F)
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "4"), add = T, col = 'turquoise',
-            print.summary = F)
-```
-
----
-# GAMM with a random intercept and slope
-
-```{r}
-gamm_int_slope <- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
-                      data = gam_data2)
-
-summary(gamm_int_slope)$s.table
-```
-
----
-# GAMM with a random intercept and slope
-
-```{r, eval = FALSE}
-par(mfrow = c(1,2), cex = 1.1)
-
-plot_smooth(gamm_int_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)")
-
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "1"),
-            main="... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(7,22))
-
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "2"), add = T, col='red')
-
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "3"), add = T, col = 'purple')
-
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "4"), add = T, col = 'turquoise')
-```
-
----
-# GAMM with a random intercept and slope
-
-<br>
-
-```{r, echo = F, fig.width=12, fig.height=6}
-par(mfrow = c(1,2), cex = 1.1, mar=c(4,4,1,1))
-plot_smooth(gamm_int_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)", print.summary = F)
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "1"), print.summary = F,
-            main="... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(7,22))
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "2"), add = T,
-            col='red',print.summary = F)
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "3"), add = T,
-            col = 'purple', print.summary = F)
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "4"), add = T,
-            col = 'turquoise', print.summary = F)
-```
-
----
-# GAMM with a random intercept and slope
-
-Note that the random slope is static in this case:
-
-```{r}
-plot(gamm_int_slope, select = 3)
-```
-
----
-# GAMM with a random smooth
-
-```{r}
-gamm_smooth <- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1), data = gam_data2)
-
-summary(gamm_smooth)$s.table
-```
-
----
-# GAMM with a random smooth
-
-Here, if the random slope varied along `x0`, we would see different curves for each level:
-
-```{r, echo = -1, fig.height=5.5, fig.width=5.5}
-par(mar=c(4,4,.5,.5), lwd = 2)
-plot(gamm_smooth, select = 1)
-```
-
----
-# GAMM with a random smooth
-
-```{r, eval = FALSE}
-par(mfrow = c(1,2), cex = 1.1)
-
-plot_smooth(gamm_smooth, view = "x0", rm.ranef = T, main = "intercept + s(x0)")
-
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "1"),
-            main="... + s(x0, fac)", col = 'orange', ylim = c(7,22))
-
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "2"), add = T, col='red')
-
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "3"), add = T, col = 'purple')
-
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "4"), add = T, col = 'turquoise')
-```
-
----
-# GAMM with a random smooth
-
-<br>
-
-```{r, echo = F, fig.width=12, fig.height=6}
-par(mfrow = c(1,2), cex = 1.1, mar=c(4,4,1,1))
-plot_smooth(gamm_smooth, view = "x0", rm.ranef = T, main = "intercept + s(x0)", print.summary = F)
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "1"), print.summary = F,
-            main="... + s(x0, fac)", col = 'orange', ylim = c(7,22))
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "2"), add = T,
-            col='red',print.summary = F)
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "3"), add = T,
-            col = 'purple', print.summary = F)
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "4"), add = T,
-            col = 'turquoise', print.summary = F)
-```
-
-.comment[Here, if the random slope varied along `x0`, we would see different curves for each level.]
-
----
-# GAMM
-
-All of the mixed models from this section can be compared using `AIC()` to determine the best fit model
-
-```{r}
-AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
-```
-
-
----
-# Ressources
-
-There's a great deal more out there on GAM… this was just the very surface.
-
-Simon Wood, the author of the `mgcv` package has a very useful [website](http://people.bath.ac.uk/sw283/mgcv/) with introductory talks and notes on how to use GAM.
-
-He's also written a book, Generalized Additive Models: An Introduction with R, which we used as reference for this workshop.
-
-Material from this workshop were also obtained from the following fantastic blogs and tutorials:
-
-- [From the bottom of the heap](http://www.fromthebottomoftheheap.net/blog/)
-
-- [Overview GAMM analysis of time series data](http://www.sfs.uni-tuebingen.de/~jvanrij/Tutorial/GAMM.html)
-
-- [Advanced Analysis of Time series data](http://www.sfs.uni-tuebingen.de/~jvanrij/LSA2015/AnswersLab2.html)
-
-Finally, the help pages, available through `?gam` in R, are an excellent resource.
-
-
-
----
-class: inverse, center, bottom
-
-# Thank you for attending this workshop!
-
-![:scale 50%](images/qcbs_logo.png)

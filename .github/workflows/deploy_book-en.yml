@@ -65,7 +65,31 @@ jobs:
           
       - name: 🧶 Render the book using bookdown
         run: Rscript -e 'bookdown::render_book("index.Rmd")'
-        
+
+      - name: 📜 Create script using purl
+        run: |
+         Rscript -e 'rmds <- list.files(pattern = ".Rmd");
+         rmds <- rmds[-length(rmds)];
+         for (file in rmds){
+         file_r <- gsub("Rmd","R",file)
+         if(file.exists(file_r)){
+         file.remove(file_r)
+         }
+         knitr::purl(file,documentation = 0,output = file_r)
+         };
+         rfiles <- list.files(pattern = ".R$");
+         sink("workshop08-script-en.R", append = FALSE);
+         for(file in rfiles){
+         current_file = readLines(file)
+         cat("#### Section:",file,"\n\n")
+         cat(current_file, "\n", sep ="\n")
+         };
+         sink();
+         script <- readLines("workshop08-script-en.R");
+         script <- gsub("## ", "", script);
+         write(script, file = "workshop08-script-en.R");
+         file.copy("workshop08-script-en.R", "_book/")'
+
       - name: 🔺 Upload artifact containing the book
         uses: actions/upload-artifact@v1
         with:

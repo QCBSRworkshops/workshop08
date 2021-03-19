@@ -65,8 +65,8 @@ jobs:
           
       - name: 🧶 Render the book using bookdown
         run: Rscript -e 'bookdown::render_book("index.Rmd")'
- 
-       - name: 📜 Create script using purl
+
+      - name: 📜 Create script using purl
         run: |
          Rscript -e 'rmds <- list.files(pattern = ".Rmd");
          rmds <- rmds[-length(rmds)];

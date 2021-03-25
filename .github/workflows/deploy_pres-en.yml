@@ -71,6 +71,7 @@ jobs:
          Rscript -e 'knitr::purl("workshop08-pres-en.Rmd",documentation = 0,output = "workshop08-script-en.R");
          script <- readLines("workshop08-script-en.R");
          script <- gsub("## ", "", script);
+         script <- script[-(1:12)];
          write(script, file = "workshop08-script-en.R");
          file.copy("workshop08-script-en.R", "_pres/")'
 

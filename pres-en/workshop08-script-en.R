@@ -1,15 +1,3 @@
-knitr::opts_chunk$set(
-  comment = "#",
-  collapse = TRUE,
-  warning = FALSE,
-  message = FALSE,
-  cache = TRUE,
-  fig.width = 6, fig.height = 6,
-  fig.retina = 3,
-  fig.align = 'center'
-)
-options(repos = structure(c(CRAN="http://cran.r-project.org")))
-
 # Standard procedure to check and install packages and their dependencies, if needed.
 
 list.of.packages <- c("ggplot2", "itsadug", "mgcv")

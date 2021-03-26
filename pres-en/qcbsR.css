@@ -324,11 +324,11 @@ table, td, th {
 
 .pull-left {
   float: left;
-  width: 47%;
+  width: 48%;
 }
 .pull-right {
   float: right;
-  width: 48%;
+  width: 49%;
 }
 
 .pull-right, .pull-right p {
@@ -341,7 +341,7 @@ table, td, th {
 }
 .pull-right2 {
   float: right;
-  width: 30%;
+  width: 31%;
 }
 
 .pull-right2, .pull-right2 p {
@@ -354,7 +354,7 @@ table, td, th {
 }
 .pull-right3 {
   float: right;
-  width: 40%;
+  width: 42%;
 }
 
 .pull-right3, .pull-right3 p {
@@ -378,7 +378,6 @@ table, td, th {
   padding-left: 0rem ;
 }
 
-
 .pull-left4 {
   float: left;
   width: 37%;
@@ -393,3 +392,11 @@ table, td, th {
   padding-left: 0rem ;
 }
 
+.column-left{ float: left; width: 31.333%; }
+.column-right{ float: right; width: 31.333%; }
+.column-centre{ display: inline-block; width: 31.333%; }
+
+/* Font colour */
+
+.red { color: red; }
+.lightgray  { color: lightgray; }

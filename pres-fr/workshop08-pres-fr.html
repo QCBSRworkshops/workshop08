@@ -1240,7 +1240,7 @@ Avons-nous choisi `k` assez grand ?
 ```r
 k.check(smooth_interact)
 #                              k'      edf   k-index p-value
-# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883    0.07
+# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883  0.0775
 ```
 
 --
@@ -1274,7 +1274,7 @@ Est-ce que `k` est assez grand ?
 ```r
 k.check(smooth_interact_k60)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626   0.925
+# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626   0.895
 ```
 
 --
@@ -1637,15 +1637,15 @@ gam_data2 &lt;- gamSim(eg = 6)
 # 4 term additive + random effectGu &amp; Wahba 4 term additive model
 str(gam_data2)
 # 'data.frame':	400 obs. of  11 variables:
-#  $ y  : num  7.49 11.28 9.79 19.97 6.1 ...
-#  $ x0 : num  0.421 0.205 0.988 0.108 0.43 ...
-#  $ x1 : num  0.0167 0.2982 0.1051 0.9414 0.1738 ...
-#  $ x2 : num  0.7966 0.5221 0.0298 0.9916 0.8448 ...
-#  $ x3 : num  0.765 0.639 0.187 0.187 0.788 ...
-#  $ f  : num  7.13 11.77 10.51 19.24 6.8 ...
-#  $ f0 : num  1.9381 1.201 0.0785 0.6634 1.9523 ...
-#  $ f1 : num  1.03 1.82 1.23 6.57 1.42 ...
-#  $ f2 : num  1.16 2.76 1.96e-01 6.24e-08 4.37e-01 ...
+#  $ y  : num  12.4 16.8 15.3 20.6 17.7 ...
+#  $ x0 : num  0.659 0.565 0.676 0.97 0.414 ...
+#  $ x1 : num  0.981 0.771 0.624 0.62 0.802 ...
+#  $ x2 : num  0.901 0.516 0.458 0.452 0.359 ...
+#  $ x3 : num  0.377 0.515 0.77 0.237 0.46 ...
+#  $ f  : num  11.9 15.4 17.2 18.8 15.5 ...
+#  $ f0 : num  1.755 1.958 1.702 0.186 1.927 ...
+#  $ f1 : num  7.11 4.67 3.48 3.46 4.97 ...
+#  $ f2 : num  0.0611 2.7451 3.0425 3.1308 5.6116 ...
 #  $ f3 : num  0 0 0 0 0 0 0 0 0 0 ...
 #  $ fac: Factor w/ 4 levels "1","2","3","4": 1 2 3 4 1 2 3 4 1 2 ...
 ```
@@ -1658,9 +1658,9 @@ str(gam_data2)
 ```r
 gamm_intercept &lt;- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2, method = "REML")
 summary(gamm_intercept)$s.table
-#             edf  Ref.df          F     p-value
-# s(x0)  2.935680 3.66112   4.952605 0.001139765
-# s(fac) 2.971593 3.00000 105.133828 0.000000000
+#             edf   Ref.df         F   p-value
+# s(x0)  1.829413 2.291256  0.621566 0.4901505
+# s(fac) 2.964431 3.000000 83.127485 0.0000000
 plot(gamm_intercept, select = 2)
 ```
 
@@ -1708,9 +1708,9 @@ plot_smooth(gamm_intercept, view="x0", cond = list(fac = "4"), add = T, col = 't
 gamm_slope &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2, method = "REML")
 
 summary(gamm_slope)$s.table
-#                edf   Ref.df         F    p-value
-# s(x0)     2.660088 3.318679  3.559561 0.01187722
-# s(x0,fac) 2.952145 3.000000 64.726935 0.00000000
+#                edf   Ref.df         F   p-value
+# s(x0)     2.466707 3.084428  1.823991 0.1425771
+# s(x0,fac) 2.959891 3.000000 72.717041 0.0000000
 ```
 
 
@@ -1749,10 +1749,10 @@ gamm_int_slope &lt;- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
                       data = gam_data2, method = "REML")
 
 summary(gamm_int_slope)$s.table
-#                edf   Ref.df          F     p-value
-# s(x0)     2.945399 3.671653   4.921872 0.001160315
-# s(fac)    2.922998 3.000000 530.926362 0.000000000
-# s(fac,x0) 1.775068 3.000000 161.077132 0.054631621
+#                edf   Ref.df          F    p-value
+# s(x0)     2.102680 2.634147   0.816029 0.38532946
+# s(fac)    2.810475 3.000000 384.916672 0.00000000
+# s(fac,x0) 2.248054 3.000000 232.402976 0.01233198
 ```
 
 ---
@@ -1802,9 +1802,9 @@ gamm_smooth &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1),
                    data = gam_data2, method = "REML")
 
 summary(gamm_smooth)$s.table
-#                edf    Ref.df        F    p-value
-# s(x0)     2.832348  3.474617 3.759829 0.00797596
-# s(x0,fac) 6.837961 35.000000 9.371340 0.00000000
+#                edf    Ref.df         F   p-value
+# s(x0)     1.780234  2.175833 0.7539514 0.5324579
+# s(x0,fac) 6.086733 35.000000 7.3707954 0.0000000
 ```
 
 ---
@@ -1856,10 +1856,10 @@ Tous ces modèles mixtes peuvent être comparés en utilisant la fonction `AIC()
 ```r
 AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
 #                       df      AIC
-# gamm_intercept  8.293260 2253.391
-# gamm_slope      8.038441 2327.923
-# gamm_int_slope 10.996144 2252.637
-# gamm_smooth    13.672631 2253.308
+# gamm_intercept  7.290809 2244.909
+# gamm_slope      8.083819 2264.423
+# gamm_int_slope 10.368149 2241.789
+# gamm_smooth    12.457734 2246.793
 ```
 
 

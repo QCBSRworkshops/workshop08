@@ -32,7 +32,7 @@ class: inverse, center, middle
 # À propos de cet atelier
 [![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=repo&amp;message=dev&amp;color=6f42c1&amp;logo=github)](https://github.com/QCBSRworkshops/workshop08)
 [![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=wiki&amp;message=08&amp;logo=wikipedia)](https://wiki.qcbs.ca/r_atelier8)
-[![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=Diapos&amp;message=08&amp;color=red&amp;logo=html5)](https://qcbsrworkshops.github.io/workshop08/workshop08-fr/workshop08-fr.html)
+[![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=Diapos&amp;message=08&amp;color=red&amp;logo=html5)](https://qcbsrworkshops.github.io/workshop08/pres-fr/workshop08-pres-fr.html)
 [![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=Diapos&amp;message=08&amp;color=red&amp;logo=adobe-acrobat-reader)](https://qcbsrworkshops.github.io/workshop08/workshop08-fr/workshop08-fr.pdf)
 [![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=script&amp;message=08&amp;color=2a50b8&amp;logo=r)](https://qcbsrworkshops.github.io/workshop08/workshop08-fr/workshop08-fr.R)
 
@@ -1240,7 +1240,7 @@ Avons-nous choisi `k` assez grand ?
 ```r
 k.check(smooth_interact)
 #                              k'      edf   k-index p-value
-# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883  0.0775
+# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883   0.075
 ```
 
 --
@@ -1274,7 +1274,7 @@ Est-ce que `k` est assez grand ?
 ```r
 k.check(smooth_interact_k60)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626   0.895
+# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626  0.8875
 ```
 
 --
@@ -1401,7 +1401,7 @@ Vérifier les dimensions de base :
 ```r
 k.check(smooth_interact_tw)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062   0.825
+# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062  0.8325
 ```
 
 ---
@@ -1637,15 +1637,15 @@ gam_data2 &lt;- gamSim(eg = 6)
 # 4 term additive + random effectGu &amp; Wahba 4 term additive model
 str(gam_data2)
 # 'data.frame':	400 obs. of  11 variables:
-#  $ y  : num  12.4 16.8 15.3 20.6 17.7 ...
-#  $ x0 : num  0.659 0.565 0.676 0.97 0.414 ...
-#  $ x1 : num  0.981 0.771 0.624 0.62 0.802 ...
-#  $ x2 : num  0.901 0.516 0.458 0.452 0.359 ...
-#  $ x3 : num  0.377 0.515 0.77 0.237 0.46 ...
-#  $ f  : num  11.9 15.4 17.2 18.8 15.5 ...
-#  $ f0 : num  1.755 1.958 1.702 0.186 1.927 ...
-#  $ f1 : num  7.11 4.67 3.48 3.46 4.97 ...
-#  $ f2 : num  0.0611 2.7451 3.0425 3.1308 5.6116 ...
+#  $ y  : num  6.24 15.81 9.84 30.89 11.85 ...
+#  $ x0 : num  0.498 0.445 0.989 0.84 0.42 ...
+#  $ x1 : num  0.123 0.561 0.203 0.943 0.601 ...
+#  $ x2 : num  0.0899 0.4659 0.034 0.2156 0.6191 ...
+#  $ x3 : num  0.781 0.55 0.812 0.362 0.889 ...
+#  $ f  : num  9.11 14 10.85 28.4 11.54 ...
+#  $ f0 : num  2 1.9704 0.0685 0.9662 1.9374 ...
+#  $ f1 : num  1.28 3.07 1.5 6.6 3.32 ...
+#  $ f2 : num  2.834 2.952 0.279 8.84 3.28 ...
 #  $ f3 : num  0 0 0 0 0 0 0 0 0 0 ...
 #  $ fac: Factor w/ 4 levels "1","2","3","4": 1 2 3 4 1 2 3 4 1 2 ...
 ```
@@ -1658,9 +1658,9 @@ str(gam_data2)
 ```r
 gamm_intercept &lt;- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2, method = "REML")
 summary(gamm_intercept)$s.table
-#             edf   Ref.df         F   p-value
-# s(x0)  1.829413 2.291256  0.621566 0.4901505
-# s(fac) 2.964431 3.000000 83.127485 0.0000000
+#             edf   Ref.df        F    p-value
+# s(x0)  2.808262 3.496506  4.23648 0.00392955
+# s(fac) 2.967954 3.000000 92.31112 0.00000000
 plot(gamm_intercept, select = 2)
 ```
 
@@ -1708,9 +1708,9 @@ plot_smooth(gamm_intercept, view="x0", cond = list(fac = "4"), add = T, col = 't
 gamm_slope &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2, method = "REML")
 
 summary(gamm_slope)$s.table
-#                edf   Ref.df         F   p-value
-# s(x0)     2.466707 3.084428  1.823991 0.1425771
-# s(x0,fac) 2.959891 3.000000 72.717041 0.0000000
+#                edf   Ref.df        F     p-value
+# s(x0)     3.046949 3.788224  4.83561 0.001275959
+# s(x0,fac) 2.957579 3.000000 69.04866 0.000000000
 ```
 
 
@@ -1749,10 +1749,10 @@ gamm_int_slope &lt;- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
                       data = gam_data2, method = "REML")
 
 summary(gamm_int_slope)$s.table
-#                edf   Ref.df          F    p-value
-# s(x0)     2.102680 2.634147   0.816029 0.38532946
-# s(fac)    2.810475 3.000000 384.916672 0.00000000
-# s(fac,x0) 2.248054 3.000000 232.402976 0.01233198
+#                edf   Ref.df          F     p-value
+# s(x0)     2.807654 3.492778   4.220677 0.004051715
+# s(fac)    2.898214 3.000000 380.082152 0.000000000
+# s(fac,x0) 1.681858 3.000000 121.430493 0.091016562
 ```
 
 ---
@@ -1802,9 +1802,9 @@ gamm_smooth &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1),
                    data = gam_data2, method = "REML")
 
 summary(gamm_smooth)$s.table
-#                edf    Ref.df         F   p-value
-# s(x0)     1.780234  2.175833 0.7539514 0.5324579
-# s(x0,fac) 6.086733 35.000000 7.3707954 0.0000000
+#                edf    Ref.df        F    p-value
+# s(x0)     2.652109  3.210933 2.858487 0.03361331
+# s(x0,fac) 8.311739 35.000000 8.401967 0.00000000
 ```
 
 ---
@@ -1856,10 +1856,10 @@ Tous ces modèles mixtes peuvent être comparés en utilisant la fonction `AIC()
 ```r
 AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
 #                       df      AIC
-# gamm_intercept  7.290809 2244.909
-# gamm_slope      8.083819 2264.423
-# gamm_int_slope 10.368149 2241.789
-# gamm_smooth    12.457734 2246.793
+# gamm_intercept  8.170595 2254.362
+# gamm_slope      8.472171 2297.544
+# gamm_int_slope 10.843505 2254.810
+# gamm_smooth    15.173573 2252.987
 ```
 
 

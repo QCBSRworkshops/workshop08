@@ -6,12 +6,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapitre 6 Interactions | Atelier 8 : Modèles additifs généralisés en R</title>
   <meta name="description" content="Modèles additifs généralisés en R" />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapitre 6 Interactions | Atelier 8 : Modèles additifs généralisés en R" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://github.com/qcbsRworkshops/" />
-  <meta property="og:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
+  <meta property="og:image" content="https://github.com/qcbsRworkshops//assets/images/logo/csbq_logo_accueil.png" />
   <meta property="og:description" content="Modèles additifs généralisés en R" />
   <meta name="github-repo" content="qcbsRworkshops/workshop08" />
 
@@ -19,7 +19,7 @@
   <meta name="twitter:title" content="Chapitre 6 Interactions | Atelier 8 : Modèles additifs généralisés en R" />
   
   <meta name="twitter:description" content="Modèles additifs généralisés en R" />
-  <meta name="twitter:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
+  <meta name="twitter:image" content="https://github.com/qcbsRworkshops//assets/images/logo/csbq_logo_accueil.png" />
 
 <meta name="author" content="Développé et maintenu par les contributeurs et contributrices de la Série d’ateliers R du CSBQ." />
 
@@ -50,6 +50,8 @@
 
 
 <script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 
 
 <style type="text/css">
@@ -115,6 +117,7 @@ code span.va { color: #000000; } /* Variable */
 code span.vs { color: #4e9a06; } /* VerbatimString */
 code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
 </style>
+
 
 <link rel="stylesheet" href="assets/qcbs-style.css" type="text/css" />
 </head>
@@ -227,14 +230,14 @@ notre variable qualitative <code>x0</code> et examiner si la non-linérité de
 <code>s(x2)</code> varie selon les différents niveaux de <code>x0</code>. Pour déterminer si
 les courbes diffèrent significativement entre les niveaux du facteur,
 nous allons utiliser une ANOVA sur l’interaction.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="interactions.html#cb20-1"></a>categorical_interact &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>x0 <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x1) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x2, <span class="dt">by =</span> x0), </span>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="interactions.html#cb20-1"></a>categorical_interact &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>x0 <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x1) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x2, <span class="dt">by =</span> x0),</span>
 <span id="cb20-2"><a href="interactions.html#cb20-2"></a>    <span class="dt">data =</span> gam_data)</span>
 <span id="cb20-3"><a href="interactions.html#cb20-3"></a>categorical_interact_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(categorical_interact)</span>
 <span id="cb20-4"><a href="interactions.html#cb20-4"></a><span class="kw">print</span>(categorical_interact_summary<span class="op">$</span>s.table)</span>
 <span id="cb20-5"><a href="interactions.html#cb20-5"></a><span class="kw">plot</span>(categorical_interact, <span class="dt">page =</span> <span class="dv">1</span>)</span>
 <span id="cb20-6"><a href="interactions.html#cb20-6"></a><span class="co"># ou nous pouvons utiliser la fonction vis.gam où theta</span></span>
 <span id="cb20-7"><a href="interactions.html#cb20-7"></a><span class="co"># représente la rotation du plan x-y</span></span>
-<span id="cb20-8"><a href="interactions.html#cb20-8"></a><span class="kw">vis.gam</span>(categorical_interact, <span class="dt">view =</span> <span class="kw">c</span>(<span class="st">&quot;x2&quot;</span>, <span class="st">&quot;x0&quot;</span>), <span class="dt">theta =</span> <span class="dv">40</span>, </span>
+<span id="cb20-8"><a href="interactions.html#cb20-8"></a><span class="kw">vis.gam</span>(categorical_interact, <span class="dt">view =</span> <span class="kw">c</span>(<span class="st">&quot;x2&quot;</span>, <span class="st">&quot;x0&quot;</span>), <span class="dt">theta =</span> <span class="dv">40</span>,</span>
 <span id="cb20-9"><a href="interactions.html#cb20-9"></a>    <span class="dt">n.grid =</span> <span class="dv">500</span>, <span class="dt">border =</span> <span class="ot">NA</span>)</span>
 <span id="cb20-10"><a href="interactions.html#cb20-10"></a><span class="kw">anova</span>(two_smooth_model, categorical_interact, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
 <p><img src="images/graphic3.1b.png" width="350" /></p>
@@ -250,7 +253,7 @@ supprimé.</p>
 <span id="cb21-4"><a href="interactions.html#cb21-4"></a><span class="kw">plot</span>(smooth_interact, <span class="dt">page =</span> <span class="dv">1</span>, <span class="dt">scheme =</span> <span class="dv">3</span>)</span>
 <span id="cb21-5"><a href="interactions.html#cb21-5"></a><span class="co"># plot(smooth_interact,page=1,scheme=1) donne un graphique</span></span>
 <span id="cb21-6"><a href="interactions.html#cb21-6"></a><span class="co"># comparable à vis.gam()</span></span>
-<span id="cb21-7"><a href="interactions.html#cb21-7"></a><span class="kw">vis.gam</span>(smooth_interact, <span class="dt">view =</span> <span class="kw">c</span>(<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>), <span class="dt">theta =</span> <span class="dv">40</span>, <span class="dt">n.grid =</span> <span class="dv">500</span>, </span>
+<span id="cb21-7"><a href="interactions.html#cb21-7"></a><span class="kw">vis.gam</span>(smooth_interact, <span class="dt">view =</span> <span class="kw">c</span>(<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>), <span class="dt">theta =</span> <span class="dv">40</span>, <span class="dt">n.grid =</span> <span class="dv">500</span>,</span>
 <span id="cb21-8"><a href="interactions.html#cb21-8"></a>    <span class="dt">border =</span> <span class="ot">NA</span>)</span>
 <span id="cb21-9"><a href="interactions.html#cb21-9"></a><span class="kw">anova</span>(two_smooth_model, smooth_interact, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
 <p><img src="images/graphic3.2b.png" width="350" /></p>
@@ -301,6 +304,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": false
 },
 "fontsettings": {

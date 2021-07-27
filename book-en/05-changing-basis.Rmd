@@ -1,0 +1,91 @@
+# (PART\*) Advanced Concepts {-}
+
+# Changing the Basis
+
+We won't go too much further into this in this workshop, but you should
+know you can expand on the basic model we've looked at today with:
+
+-   more complicated smooths, by changing the basis,
+-   other distributions: anything you can do with a GLM using the family
+    argument,
+-   mixed effect models, using gamm or the gamm4 package.
+
+We will first have a look at changing the basis, followed by a quick
+intro to using other distribution and GAMMs (Generalized Additive Mixed
+Models). Let's look at one place where knowing how to change the basis
+can help: cyclical data. That is, data where you want the predictor to
+match at the ends. Imagine you have a time series of climate data,
+broken down by monthly measurement, and you want to see if there's a
+time-trend in yearly temperature. We'll use the Nottingham temperature
+time series for this:
+
+```{r, echo = TRUE, eval = FALSE}
+data(nottem)
+n_years <- length(nottem)/12
+nottem_month <- rep(1:12, times=n_years)
+nottem_year <- rep(1920:(1920+n_years-1),each=12)
+nottem_plot <- qplot(nottem_month,nottem, 
+                    colour=factor(nottem_year), 
+                    geom="line") + theme_bw()
+print(nottem_plot)
+```
+
+Using the nottem data, we have created three new vectors; `n_years`
+corresponds to the number of years of data (20 years), `nottem_month` is
+a categorical variable coding for the 12 months of the year, for every
+year sampled (sequence 1 to 12 repeated 20 times), and `nottem_year` is
+a variable where the year corresponding to each month is provided.
+
+Monthly data from the years 1920 through to 1940:
+
+![](images//graphic4.1.jpg){width="500"}
+
+To model this, we need to use what's called a cyclical cubic spline, or
+`"cc"`, to model month effects as well as a term for year.
+
+```{r, echo = TRUE, eval = FALSE}
+year_gam <- gam(nottem~s(nottem_year)+s(nottem_month, bs="cc"))
+summary(year_gam)$s.table
+plot(year_gam,page=1, scale=0)
+```
+
+![](images//graphic4.2.jpg){width="700"}
+
+There is about 1-1.5 degree rise in temperature over the period, but
+within a given year there is about 20 degrees variation in temperature,
+on average. The actual data vary around these values and that is the
+unexplained variance. Here we can see one of the very interesting
+bonuses of using GAMs. We can either plot the response surface (fitted
+values) or the terms (contribution of each covariate) as shown here. You
+can imagine these as plots of the changing regression coefficients, and
+how their contribution (or effect size) varies over time. In the first
+plot, we see that positive contributions of temperature occurred
+post-1930.
+
+Over longer time scales, for example using paleolimnological data,
+others ([Simpson & Anderson 2009; Fig.
+3c](http://www.aslo.info/lo/toc/vol_54/issue_6_part_2/2529.pdf)) have
+used GAMs to plot the contribution (effect) of temperature on algal
+assemblages in lakes, to illustrate how significant contributions only
+occurred during two extreme cold events (that is, the contribution is
+significant when the confidence intervals do not overlap zero, at around
+300 and 100 B.C.). This allowed the authors to not only determine how
+much variance was explained by temperature over the last few centuries,
+but also pinpoint when in time this effect was significant. If of
+interest to you, the code to plot either the response surface
+(`type = "response"`) or the terms (`type = "terms"`) is given below.
+When terms is selected, you obtain the same figure as above.
+
+Contribution plot:
+```{r, echo = TRUE, eval = FALSE}
+pred<-predict(year_gam, type = "terms", se = TRUE)
+I<-order(nottem_year)
+plusCI<-I(pred$fit[,1] + 1.96*pred$se[,1])
+minusCI<-I(pred$fit[,1] - 1.96*pred$se[,1])
+xx <- c(nottem_year[I],rev(nottem_year[I]))
+yy <- c(plusCI[I],rev(minusCI[I]))
+plot(xx,yy,type="n",cex.axis=1.2)
+polygon(xx,yy,col="light grey",border="light grey")
+lines(nottem_year[I], pred$fit[,1][I],lty=1)
+abline(h=0)
+```

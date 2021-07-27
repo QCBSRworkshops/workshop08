@@ -1,0 +1,15 @@
+## categorical_interact <- gam(y~x0+s(x1)+s(x2,by=x0),data=gam_data)
+## categorical_interact_summary <- summary(categorical_interact)
+## print(categorical_interact_summary$s.table)
+## plot(categorical_interact,page=1)
+## # ou nous pouvons utiliser la fonction vis.gam où theta représente la rotation du plan x-y
+## vis.gam(categorical_interact,view=c("x2","x0"),theta=40,n.grid=500,border=NA)
+## anova(two_smooth_model, categorical_interact,test="Chisq")
+
+## smooth_interact <- gam(y~x0+s(x1,x2),data=gam_data)
+## smooth_interact_summary <- summary(smooth_interact)
+## print(smooth_interact_summary$s.table)
+## plot(smooth_interact,page=1,scheme=3)
+## # plot(smooth_interact,page=1,scheme=1) donne un graphique comparable à vis.gam()
+## vis.gam(smooth_interact,view=c("x1","x2"),theta=40,n.grid=500,border=NA)
+## anova(two_smooth_model,smooth_interact,test="Chisq")

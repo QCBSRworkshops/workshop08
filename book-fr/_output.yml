@@ -1,0 +1,20 @@
+bookdown::gitbook:
+  css: assets/qcbs-style.css
+  includes:
+    before_body: assets/qcbs-big-image.html
+    after_body: assets/qcbs-footer.html
+  highlight: tango
+  config:
+    toc:
+      collapse: section
+      before: |
+        <li class="toc-logo"><a href="./"><img src="assets/images/csbq_logo_gray_accueil.png"></a></li>
+        <link rel="icon" type="image/png" href="assets/images/favicon.ico"/>
+      after: |
+        <li><a href="https://github.com/qcbsRworkshops" target="blank">QCBS R Workshop Series</a></li>
+    download: ["rmd"]
+    sharing:
+      github: yes
+      facebook: yes
+      twitter: yes
+      all: no

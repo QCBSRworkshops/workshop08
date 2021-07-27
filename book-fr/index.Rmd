@@ -1,0 +1,94 @@
+--- 
+title: "Atelier 8 : Modèles additifs généralisés en `R`"
+subtitle: "Série d'ateliers R du CSBQ"
+author:
+- Développé et maintenu par les contributeurs et contributrices de la Série d'ateliers R du CSBQ^[La Série d'ateliers R du CSBQ fait partie du [Centre de la science de la biodiversité du Québec](https://www.qcbs.ca), et est maintenue par les coordonnateurs et les coordonnatrices de la série, et les membres étudiants diplômés, postdoctoraux et professionnels de la recherche. **Les contributeurs et contributrices de cet atelier sont accessibles[ici](lien)**].
+date: "`r Sys.time()`"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: ["references.bib"]
+biblio-style: apalike
+link-citations: yes
+cover-image: assets/images/logo/csbq_logo_accueil.png
+github-repo: "qcbsRworkshops/workshop08"
+description: "Modèles additifs généralisés en `R`"
+favicon: "assets/images/favicon.ico"
+always_allow_html: yes
+url: 'https\://github.com/qcbsRworkshops/'
+config:
+  edit:
+    link: https://github.com/qcbsRworkshops/workshop09/edit/main/book-fr/%s
+    text: "Suggest changes"
+---
+# (PART\*) Série d'ateliers R du CSBQ {-}
+
+# Préface {-}
+
+La **Série d'ateliers R du CSBQ** est une série de 10 ateliers qui guide les participants à travers les étapes nécessaires à l'utilisation de R pour un large éventail d'analyses statistiques pertinentes pour la recherche en biologie et en écologie. Ces ateliers en accès libre ont été créés par des membres du CSBQ, à la fois pour les membres du CSBQ et pour la communauté au sens large.
+
+Le contenu de cet atelier a été revu par plusieurs membres du CSBQ. Si vous souhaitez suggérer des modifications, veuillez contacter les coordinateurs de la série actuelle, dont la liste figure sur la page principale de Github
+
+## Code de conduit
+
+La Série d'ateliers R du CSBQ et le Symposium R du CSBQ sont des lieux dédiés à fournir un environnement accueillant et favorable à toutes les personnes, indépendamment de leurs origines ou de leur identité.
+
+Les participants, les présentateurs et les organisateurs de la série d'ateliers et d'autres activités connexes acceptent le présent code de conduite lorsqu'ils assistent à des activités liées aux ateliers.
+
+Nous ne tolérons pas les comportements irrespectueux ou qui excluent, intimident ou gênent les autres.
+
+Nous ne tolérons pas la discrimination ou le harcèlement fondés sur des caractéristiques telles que, mais sans s'y limiter, l'identité et l'expression du genre, l'orientation sexuelle, le handicap, l'apparence physique, la taille du corps, la citoyenneté, la nationalité, les origines ethniques ou sociales, la grossesse, le statut familial, les informations génétiques, la religion ou les convictions (ou l'absence de celles-ci), l'appartenance à une minorité nationale, la propriété, l'âge, l'éducation, le statut socio-économique, les choix techniques et le niveau d'expérience.
+
+Il s'applique à tous les espaces gérés par l'atelier ou affiliés à celui-ci, y compris, mais sans s'y limiter, les ateliers, les listes de diffusion et les forums en ligne tels que GitHub, Slack et Twitter.
+
+### Comportement attendu
+
+Tous les participants sont tenus de faire preuve de respect et de courtoisie envers les autres. Toutes les interactions doivent être professionnelles, quelle que soit la plateforme utilisée : en ligne ou en personne. 
+
+Afin de favoriser un environnement d'apprentissage positif et professionnel, nous encourageons les types de comportements suivants dans tous les événements et plates-formes des ateliers :
+
+- Utiliser un langage accueillant et inclusif ;
+- Respecter les différents points de vue et expériences ;
+- Accepter avec grâce les critiques constructives ;
+- Se concentrer sur ce qui est le mieux pour la communauté ;
+- Faire preuve de courtoisie et de respect envers les autres membres de la communauté.
+
+### Comportements inacceptables
+
+Voici quelques exemples de comportements inacceptables de la part des participants à tout événement ou plateforme d'atelier :
+
+- les commentaires écrits ou verbaux qui ont pour effet d'exclure des personnes sur la base de leur appartenance à un groupe spécifique ;
+- faire craindre à quelqu'un pour sa sécurité, par exemple en le harcelant ou en l'intimidant ;
+- des menaces ou des propos violents dirigés contre une autre personne ;
+- l'affichage d'images sexuelles ou violentes ;
+- l'attention sexuelle non désirée ;
+- les contacts physiques non consensuels ou non désirés ;
+- des insultes ou des rabais ;
+- les blagues sexistes, racistes, homophobes, transphobes, incapables ou d'exclusion ;
+- l'incitation à la violence, au suicide ou à l'automutilation ;
+- la poursuite de l'interaction (y compris la photographie ou l'enregistrement) avec une personne après qu'on - lui a demandé d'arrêter ;
+- la publication d'une communication privée sans consentement.
+
+## Contributeurs et contributrices
+
+```{r eval=FALSE, include=FALSE}
+CETTE SECTION NE DOIT ÊTRE ÉDITÉE QUE PAR LES COORDINATEURS DE LA SÉRIE D'ATELIERS
+```
+
+Développé à l'origine par :
+
+A contribué à modifier la présentation :
+
+Contribution avec des changements à la documentation écrite :
+
+Contribution en signalant des problèmes et en suggérant des modifications :
+
+
+## Contribuez à la série!
+
+En construction.
+
+```{r include=FALSE}
+library(knitr)
+opts_chunk$set(tidy.opts = list(width.cutoff = 60),
+               tidy = TRUE)
+```

@@ -1,5 +1,0 @@
-book_filename: "book-fr"
-delete_merged_file: true
-language:
-  ui:
-    chapter_name: "Chapitre "

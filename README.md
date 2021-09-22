@@ -45,13 +45,13 @@ Since 2014, several QCBS members contributed to consistently and collaboratively
 
 |      2022 - 2021 - 2020      |      2019 - 2018 - 2017     |      2016 - 2015 - 2014      |
 |:----------------------------:|:---------------------------:|:----------------------------:|
-| [Daniel Schoenig]()         |  (more to come) | (more to come)  |
-|  [Laurie Maynard]()         |   |   |
-|  [Marie-Hélène Brice]()     |   |   |
-|  [Kevin Cazelles]()         |   |   |
-|  [Pedro Henrique P. Braga]()|   |   |
-|  [Esteban Gongora]()        |   |   |
-|  [Linley Sherin]()        |   |   |
+| Daniel Schoenig         |  (more to come) | Eric Pedersen  |
+|  Laurie Maynard         |   |  Zofia Taranu |
+|  Marie-Hélène Brice     |   |  Cédric Frenette Dussault |
+|  Kevin Cazelles         |   | Emmanuelle Chrétien  |
+|  Pedro Henrique P. Braga|   |  Vincent Fugère |
+|  Esteban Gongora        |   |  |
+|  Linley Sherin        |   |   |
 
 
 # Development status

@@ -1240,7 +1240,7 @@ Avons-nous choisi `k` assez grand ?
 ```r
 k.check(smooth_interact)
 #                              k'      edf   k-index p-value
-# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883  0.0475
+# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883   0.065
 ```
 
 --
@@ -1401,7 +1401,7 @@ Vérifier les dimensions de base :
 ```r
 k.check(smooth_interact_tw)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062  0.8025
+# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062    0.83
 ```
 
 ---
@@ -1637,15 +1637,15 @@ gam_data2 &lt;- gamSim(eg = 6)
 # 4 term additive + random effectGu &amp; Wahba 4 term additive model
 str(gam_data2)
 # 'data.frame':	400 obs. of  11 variables:
-#  $ y  : num  10.4 16.2 14.2 18.2 19.2 ...
-#  $ x0 : num  0.417 0.272 0.224 0.698 0.457 ...
-#  $ x1 : num  0.268 0.615 0.166 0.13 0.19 ...
-#  $ x2 : num  0.617 0.298 0.572 0.681 0.259 ...
-#  $ x3 : num  0.3879 0.0947 0.3447 0.6712 0.9439 ...
-#  $ f  : num  9.91 18.66 14.72 18.04 15.13 ...
-#  $ f0 : num  1.93 1.51 1.3 1.62 1.98 ...
-#  $ f1 : num  1.71 3.42 1.39 1.3 1.46 ...
-#  $ f2 : num  3.27 7.73 3.03 3.12 8.68 ...
+#  $ y  : num  13 12.5 18.7 27.4 9.4 ...
+#  $ x0 : num  0.205 0.862 0.389 0.599 0.447 ...
+#  $ x1 : num  0.66 0.449 0.859 0.949 0.467 ...
+#  $ x2 : num  0.124 0.613 0.121 0.418 0.393 ...
+#  $ x3 : num  0.2502 0.6749 0.7016 0.0172 0.8293 ...
+#  $ f  : num  13 12.6 21.3 24.3 12 ...
+#  $ f0 : num  1.2 0.842 1.88 1.905 1.972 ...
+#  $ f1 : num  3.74 2.46 5.57 6.67 2.54 ...
+#  $ f2 : num  5.04 3.26 4.88 3.78 4.47 ...
 #  $ f3 : num  0 0 0 0 0 0 0 0 0 0 ...
 #  $ fac: Factor w/ 4 levels "1","2","3","4": 1 2 3 4 1 2 3 4 1 2 ...
 ```
@@ -1658,9 +1658,9 @@ str(gam_data2)
 ```r
 gamm_intercept &lt;- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2, method = "REML")
 summary(gamm_intercept)$s.table
-#             edf   Ref.df        F   p-value
-# s(x0)  2.302122 2.865528  2.10695 0.1111366
-# s(fac) 2.968693 3.000000 95.06209 0.0000000
+#             edf   Ref.df          F   p-value
+# s(x0)  2.389035 2.971925   2.158683 0.1013041
+# s(fac) 2.974592 3.000000 117.201557 0.0000000
 plot(gamm_intercept, select = 2)
 ```
 
@@ -1709,8 +1709,8 @@ gamm_slope &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2, method
 
 summary(gamm_slope)$s.table
 #                edf   Ref.df         F   p-value
-# s(x0)     2.224915 2.769906  1.745111 0.1711074
-# s(x0,fac) 2.952428 3.000000 65.145599 0.0000000
+# s(x0)     2.402128 2.988339  2.015131 0.1157191
+# s(x0,fac) 2.959062 3.000000 73.632182 0.0000000
 ```
 
 
@@ -1749,10 +1749,10 @@ gamm_int_slope &lt;- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
                       data = gam_data2, method = "REML")
 
 summary(gamm_int_slope)$s.table
-#                 edf   Ref.df           F   p-value
-# s(x0)     2.3000368 2.862832   2.0956866 0.1128141
-# s(fac)    2.9646051 3.000000 107.2482471 0.0000000
-# s(fac,x0) 0.1314067 3.000000   0.3922835 0.4691603
+#                   edf   Ref.df            F   p-value
+# s(x0)     2.389034357 2.971923 2.158640e+00 0.1013098
+# s(fac)    2.974564039 3.000000 1.173296e+02 0.0000000
+# s(fac,x0) 0.001063198 3.000000 2.274209e-04 0.6262925
 ```
 
 ---
@@ -1802,9 +1802,9 @@ gamm_smooth &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1),
                    data = gam_data2, method = "REML")
 
 summary(gamm_smooth)$s.table
-#                edf    Ref.df        F   p-value
-# s(x0)     2.302019  2.865335 2.106104 0.1112605
-# s(x0,fac) 2.974312 35.000000 8.148384 0.0000000
+#                edf    Ref.df         F   p-value
+# s(x0)     2.388962  2.971784  2.158209 0.1013883
+# s(x0,fac) 2.979310 35.000000 10.046004 0.0000000
 ```
 
 ---
@@ -1856,10 +1856,10 @@ Tous ces modèles mixtes peuvent être comparés en utilisant la fonction `AIC()
 ```r
 AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
 #                      df      AIC
-# gamm_intercept 7.865189 2243.715
-# gamm_slope     7.769123 2300.052
-# gamm_int_slope 8.111924 2243.968
-# gamm_smooth    7.876133 2243.728
+# gamm_intercept 7.971694 2200.843
+# gamm_slope     7.987762 2277.500
+# gamm_int_slope 7.973761 2200.846
+# gamm_smooth    7.980913 2200.854
 ```
 
 

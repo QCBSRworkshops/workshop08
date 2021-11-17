@@ -244,8 +244,6 @@ a:hover {
 /* Inverted slide */
 
 .inverse {
-  border-left: 5px solid #f3f3f3;
-  border-right: 5px solid #f3f3f3;
   background-color: #062c45;
   color: #f3f3f3;
 }
@@ -268,7 +266,7 @@ a:hover {
 
 .inverse code {
   overflow-x: auto;
-  padding: .4em;
+  padding: .2em;
   background: rgba(53, 80, 111, 0.75);
   border: 0.5px solid #25374c;
   margin: 0 2px
@@ -276,8 +274,6 @@ a:hover {
 
 
 .darkerinverse {
-  border-left: 5px solid #f3f3f3;
-  border-right: 5px solid #f3f3f3;
   background-color: #333333;
   color: #f3f3f3;
 }
@@ -300,7 +296,7 @@ a:hover {
 
 .darkerinverse code {
   overflow-x: auto;
-  padding: .4em;
+  padding: .2em;
   background: rgba(53, 80, 111, 0.75);
   border: 0.5px solid #25374c;
   margin: 0 2px

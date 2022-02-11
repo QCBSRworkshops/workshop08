@@ -74,15 +74,12 @@ Voici quelques exemples de comportements inacceptables de la part des participan
 CETTE SECTION NE DOIT ÊTRE ÉDITÉE QUE PAR LES COORDINATEURS DE LA SÉRIE D'ATELIERS
 ```
 
-Développé à l'origine par :
+Cet atelier a été développé à l’origine par Eric Pedersen et Zofia Taranu, et originalement révisé en français by Cédric Frenette Dussault.
 
-A contribué à modifier la présentation :
+Depuis 2014, plusieurs membres du CSBQ ont contribué à développer et à mettre à jour cet atelier collaborativement sur une base régulière, dans le cadre du Prix d’apprentissage et de développement du Centre de science de la biodiversité du Québec. Ces membres sont:
 
-Contribution avec des changements à la documentation écrite :
-
-Contribution en signalant des problèmes et en suggérant des modifications :
-
-
+Daniel Schoenig, Laurie Maynard, Marie-Hélène Brice, Kevin Cazelles, Pedro Henrique P. Braga, Esteban Gongora, Linley Sherin, Eric Pedersen, Zofia Taranu, Cédric Frenette Dussault, Emmanuelle Chrétien, Vincent Fugère.
+	
 ## Contribuez à la série!
 
 En construction.
@@ -91,4 +88,6 @@ En construction.
 library(knitr)
 opts_chunk$set(tidy.opts = list(width.cutoff = 60),
                tidy = TRUE)
+
+options(repos=structure(c(CRAN = "http://cran.r-project.org")))
 ```

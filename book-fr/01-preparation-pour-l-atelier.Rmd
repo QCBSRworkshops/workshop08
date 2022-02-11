@@ -1,7 +1,7 @@
 # (PART\*) Modèles additifs généralisés en `R` {-}
 
-# Résumé et Objectifs d'apprentissage
-## Résumé
+# Objectifs d'apprentissage
+
 L'objectif de l'atelier d'aujourd'hui sera d'examiner
 ce que nous entendons par un modèle non-linéaire et comment les GAMs
 (modèles additifs généralisés) nous permettent de modéliser les
@@ -12,7 +12,9 @@ interactions, comment prendre en compte la non-indépendance des données
 en se basant sur les ateliers précédents. Enfin, nous allons brièvement
 aborder la mécanique derrière le fonctionnement des GAMs.
 
-## Objectifs d'apprentissage
+Nous vous recommandons d'avoir une certaine expérience de R, en particulier de la consultation de données et d'objets dans des scripts R, et une connaissance de base de la régression linéaire avant de suivre cet atelier.
+
+Plus spécifiquement, cet atelier portera sur comment:
 
 1.  Utiliser la librairie *mgcv* pour modéliser les relations non
     linéaires
@@ -29,28 +31,25 @@ aborder la mécanique derrière le fonctionnement des GAMs.
 
 # Préparez-vous pour cet atelier
 
-Pour vous preparer pour cet atelier, vous devez suivre les étapes suivantes:
+Tout le matériel de l'atelier se trouve sur [r.qcbs.ca/fr/workshops/r-workshop-08/](https://r.qcbs.ca/fr/workshops/r-workshop-08/). Cela inclut un [script R](https://r.qcbs.ca/workshop08/book-fr/workshop08-script-fr.R) qui rassemble tous les morceaux de code présentés dans ce livre.
 
-Téléchargez le script R et les données pour cet atelier:
+Pour cet atelier, nous travaillerons avec les jeux de données suivants :
 
--    [Script R](http://qcbs.ca/wiki/_media/gam_e.r)
--    [Données](http://qcbs.ca/wiki/_media/other_dist.csv)
+* [ISIT.csv](https://r.qcbs.ca/workshop08/pres-en/data/ISIT.csv) 
+* [other_dist.csv](https://r.qcbs.ca/workshop08/pres-en/data/other_dist.csv) 
 
-Télechargez les paquets R pour cet atelier (vous pouvez suivre le script pour plus d'instructions):
+Vous devriez également vous assurer que vous avez téléchargé, installé et chargé les paquets R suivants:
 
--    [ggplot2 (for plotting)](https://cran.r-project.org/web/packages/ggplot2/index.html)
--    [mgcv (for GAM fitting)](https://cran.r-project.org/web/packages/mgcv/index.html)
--    [itsadug (for visualization of GAMs)](https://cran.r-project.org/web/packages/itsadug/index.html)
+* [ggplot2](https://cran.r-project.org/package=ggplot2)
+* [itsadug](https://cran.r-project.org/package=itsadug)
+* [mgcv](https://cran.r-project.org/package=mgcv)
 
-```{r, echo = TRUE, eval = FALSE}
+```{r, echo = TRUE, eval = TRUE, message= FALSE, warning = FALSE, results = 'hide'}
 install.packages("ggplot2")
 install.packages("mgcv")
 install.packages("itsadug")
 
 library(ggplot2)
+library(mgcv)
 library(itsadug)
-library(itsadug)
-
-source(file.choose()) # use coldiss.R which you have downloaded to your own directory
 ```
-

@@ -1,16 +1,18 @@
 # (PART\*) Generalized Additive Models in `R` {-}
 
-# Summary and Learning objectives
-## Summary
-The goal of today's workshop will be to first examine what
+# Learning objectives
+
+The goal of Workhsop 8 is to first examine what
 we mean by a non-linear model, and how Generalized Additive
 Models (GAMs) allow us to handle non-linear relationships. We will also go
 over how to plot and interpret these non-linear relationships, how to
-include interaction terms, autocorrelated errors and expand on previous
-workshop by briefly examining a mixed modelling framework. Lastly, we
-will briefly touch upon what GAMs are doing behind the scenes.
+include interaction terms, autocorrelated errors, and expand on previous
+workshops by briefly examining a mixed modelling framework. Lastly, we
+will briefly touch upon what GAMs are doing behind the scenes. 
 
-## Learning Objectives
+We recommend some working experience in R, particularly with examining data and objects in R scripts, and a basic knowledge of linear regression before following this workshop.
+
+More specifically, this workshop will cover how to:
 
 1.  Use the `mgcv` package to fit non-linear relationships,
 2.  Understand the output of a GAM to help you understand your data,
@@ -25,28 +27,26 @@ will briefly touch upon what GAMs are doing behind the scenes.
 
 # Preparing for the workshop
 
-To prepare for this workshop, you must do the following steps:
+All workshop materials are found at [r.qcbs.ca/workshops/r-workshop-08](https://r.qcbs.ca/workshops/r-workshop-08/). This includes an [R script](https://r.qcbs.ca/workshop08/book-en/workshop08-script-en.R) which contains all code chunks shown in this book.
 
-Download the R script and data required for this workshop:
+For this workshop, we will be working with the following dataset:
 
--    [R Script](http://qcbs.ca/wiki/_media/gam_e.r)
--    [Data](http://qcbs.ca/wiki/_media/other_dist.csv)
+* [ISIT.csv](https://r.qcbs.ca/workshop08/pres-en/data/ISIT.csv) 
+* [other_dist.csv](https://r.qcbs.ca/workshop08/pres-en/data/other_dist.csv) 
+  
+You should also make sure you have downloaded, installed, and loaded these packages:
 
-Make sure to load the following packages (see how in the R script):
+* [ggplot2](https://cran.r-project.org/package=ggplot2)
+* [itsadug](https://cran.r-project.org/package=itsadug)
+* [mgcv](https://cran.r-project.org/package=mgcv)
 
--    [ggplot2 (for plotting)](https://cran.r-project.org/web/packages/ggplot2/index.html)
--    [mgcv (for GAM fitting)](https://cran.r-project.org/web/packages/mgcv/index.html)
--    [itsadug (for visualization of GAMs)](https://cran.r-project.org/web/packages/itsadug/index.html)
-
-```{r, echo = TRUE, eval = FALSE}
+```{r, echo = TRUE, eval = TRUE, message= FALSE, warning = FALSE, results = 'hide'}
 install.packages("ggplot2")
 install.packages("mgcv")
 install.packages("itsadug")
 
 library(ggplot2)
+library(mgcv)
 library(itsadug)
-library(itsadug)
-
-source(file.choose()) # use coldiss.R which you have downloaded to your own directory
 ```
 

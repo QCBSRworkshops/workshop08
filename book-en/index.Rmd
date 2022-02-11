@@ -73,22 +73,20 @@ Examples of unacceptable behaviour by participants at any workshop event/platfor
 THIS SECTION MUST ONLY BE EDITED BY THE COORDINATORS OF THE WORKSHOP SERIES
 ```
 
-Originally developed by:
+This workshop was originally developed by Eric Pedersen and Zofia Taranu, and originally revised in French by Cédric Frenette Dussault.
 
-Contributed with changes to the presentation:
+Since 2014, several QCBS members contributed to consistently and collaboratively develop and update this workshop, as part of the Learning and Development Award from the Québec Centre for Biodiversity Science. They were:
 
-Contributed with changes to the written material:
-
-Contributed by reporting issues and suggesting modifications:
+Daniel Schoenig, Laurie Maynard, Marie-Hélène Brice, Kevin Cazelles, Pedro Henrique P. Braga, Esteban Gongora, Linley Sherin, Eric Pedersen, Zofia Taranu, Cédric Frenette Dussault, Emmanuelle Chrétien, Vincent Fugère.
 
 
 ## Contributing
-
-Under construction.
 
 
 ```{r include=FALSE}
 library(knitr)
 opts_chunk$set(tidy.opts = list(width.cutoff = 60),
                tidy = TRUE)
+
+options(repos=structure(c(CRAN = "http://cran.r-project.org")))
 ```

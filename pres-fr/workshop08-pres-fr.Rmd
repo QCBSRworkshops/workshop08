@@ -1770,27 +1770,15 @@ AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
 ---
 # Ressources
 
-Il existe beaucoup d'information sur les GAMs.
-
-Simon Wood, l'auteur de la librairie `mgcv`, a un [site](http://people.bath.ac.uk/sw283/mgcv/) très utile avec des conférences et des notes introductives sur la façon d'utiliser les GAMs.
-
-Il a aussi écrit un livre, *Generalized Additive Models: An Introduction with R*, que nous avons utilisé comme référence pour cet atelier.
-
-.center[[![:scale 28%](https://images.tandf.co.uk/common/jackets/amazon/978149872/9781498728331.jpg)](https://www.crcpress.com/Generalized-Additive-Models-An-Introduction-with-R-Second-Edition/Wood/p/book/9781498728331)]
-
-
----
-# Ressources
-
-Le matériel de cet atelier a également été obtenu à partir des blogs et des tutoriels suivants :
-
-- [From the bottom of the heap](http://www.fromthebottomoftheheap.net/blog/)
-
-- [Overview GAMM analysis of time series data](http://www.sfs.uni-tuebingen.de/~jvanrij/Tutorial/GAMM.html)
-
-- [Advanced Analysis of Time series data](http://www.sfs.uni-tuebingen.de/~jvanrij/LSA2015/AnswersLab2.html)
-
-- Noam Ross a crée un tutorial [GAMs in R](https://noamross.github.io/gams-in-r-course/) (voir aussi [ce preprint](https://peerj.com/preprints/27320/))
+Cet atelier présente une brève introduction aux concepts de base et aux librairies populaires pour vous aider à estimer, évaluer et visualiser les GAMs dans R, mais il y a beaucoup plus à explorer!
+<br><br>
+* Le livre [Generalized Additive Models: An Introduction with R](https://www.routledge.com/Generalized-Additive-Models-An-Introduction-with-R-Second-Edition/Wood/p/book/9781498728331) par Simon Wood (auteur de la librairie `mgcv`). 
+* Le site web de Simon Wood, [maths.ed.ac.uk/~swood34/](https://www.maths.ed.ac.uk/~swood34/).
+* Le blogue de Gavin Simpson, [From the bottom of the heap](https://fromthebottomoftheheap.net/). 
+* La librairie [`gratia`](https://cran.r-project.org/web/packages/gratia/index.html) de Gavin Simpson for GAM visualisation in `ggplot2`.
+* Le cours [Generalized Additive Models: An Introduction with R](https://noamross.github.io/gams-in-r-course/) de Noam Ross.
+* [Overview GAMM analysis of time series data](https://jacolienvanrij.com/Tutorials/GAMM.html) tutoriel de Jacolien van Rij.
+* [Hierarchical generalized additive models in ecology: an introduction with mgcv](https://peerj.com/articles/6876/) de Pedersen et al. (2019).
 
 Enfin, les pages d'aide, disponibles via `?gam` dans R sont une excellente ressource.
 

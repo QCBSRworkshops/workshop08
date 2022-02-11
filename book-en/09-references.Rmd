@@ -1,24 +1,20 @@
+# Resources
+
+This workshop is intended as a brief introduction to basic concepts, and popular packages to help you estimate, evaluate, and visualise GAMs in R, but there is so much more to GAMs!
+
+We have a few resources to suggest if you would like to delve deeper into the subject of GAMs and how to implement them in R. Many of these resources inspired and contributed to the contents of this workshop. This is not meant to be an exhaustive list, but provides some very helpful next steps.
+
+* The book [Generalized Additive Models: An Introduction with R](https://www.routledge.com/Generalized-Additive-Models-An-Introduction-with-R-Second-Edition/Wood/p/book/9781498728331) by Simon Wood (the author of the `mgcv` package) is probably the most thorough resource you can find about GAMs. 
+* Gavin Simpson's blog, [From the bottom of the heap](https://fromthebottomoftheheap.net/), covers a lot of different aspects of GAMs and how to implement them in R. 
+* Gavin Simpson's package [`gratia`](https://cran.r-project.org/web/packages/gratia/index.html) is a useful reimplementation of GAM visualisation tools in `ggplot2`.
+* [Generalized Additive Models: An Introduction with R](https://noamross.github.io/gams-in-r-course/) by Noam Ross is well-designed, interactive, and free course that covers GAMs in greater detail.
+* [Overview GAMM analysis of time series data](https://jacolienvanrij.com/Tutorials/GAMM.html) by Jacolien van Rij is a helpful in-depth tutorial about GAMMs that greatly inspired the GAMM section of this workshop.
+* Simon Wood also catalogues talks and notes about GAMs on his website ([maths.ed.ac.uk/~swood34/](https://www.maths.ed.ac.uk/~swood34/)).
+* [Hierarchical generalized additive models in ecology: an introduction with mgcv](https://peerj.com/articles/6876/) by Pedersen et al. (2019) is a great introduction to hierarchical GAMs, how to design them, and how they can be implemented in R.
+
+Finally, the help pages, available through `?gam` in R, are always an excellent
+resource.
+
 `r if (knitr::is_html_output()) '
 # References
 '`
-
-There's a great deal more out there on GAMs. This was just the very
-surface.
-
-Simon Wood, the author of the `mgcv` package, has a very useful website
-with introductory talks and notes on how to use GAMs:
-
--   <http://people.bath.ac.uk/sw283/mgcv/>
-
-He's also written a book, Generalized Additive Models: An Introduction
-with R, which we used as reference for this workshop.
-
-Material from this workshop were also obtained from the following
-fantastic blogs and tutorials:
-
--   <http://www.fromthebottomoftheheap.net/blog/>
--   <http://www.sfs.uni-tuebingen.de/~jvanrij/Tutorial/GAMM.html>
--   <http://www.sfs.uni-tuebingen.de/~jvanrij/LSA2015/AnswersLab2.html>
-
-Finally, the help pages, available through `?gam` in R, are an excellent
-resource.

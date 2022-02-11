@@ -9,6 +9,7 @@ documentclass: book
 bibliography: ["references.bib"]
 biblio-style: apalike
 link-citations: yes
+nocite: '@*'
 cover-image: assets/images/logo/csbq_logo_accueil.png
 github-repo: "qcbsRworkshops/workshop08"
 description: "Modèles additifs généralisés en `R`"

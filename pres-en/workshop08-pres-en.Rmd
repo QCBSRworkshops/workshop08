@@ -21,12 +21,38 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   warning = FALSE,
   message = FALSE,
-  cache = TRUE,
+  cache = FALSE,
   fig.width = 6, fig.height = 6,
   fig.retina = 3,
   fig.align = 'center'
 )
 options(repos = structure(c(CRAN="http://cran.r-project.org")))
+```
+
+```{r output-lines, echo = FALSE}
+# Function to control the lines shown in code chunk outputs, to avoid overflow
+# note: sometimes cache needs to be set to true in the knitr setup chunk for this to take effect in xaringan::infinite_moon_reader()
+library(knitr)
+hook_output <- knit_hooks$get("output")
+knit_hooks$set(output = function(x, options) {
+   lines <- options$output.lines
+   if (is.null(lines)) {
+     return(hook_output(x, options))  # pass to default hook
+   }
+   x <- unlist(strsplit(x, "\n"))
+   more <- "..."
+   if (length(lines)==1) {        # first n lines
+     if (length(x) > lines) {
+       # truncate the output, but add ....
+       x <- c(head(x, lines), more)
+     }
+   } else {
+     x <- c(more, x[lines], more)
+   }
+   # paste these lines together
+   x <- paste(c(x, ""), collapse = "\n")
+   hook_output(x, options)
+ })
 ```
 
 class: inverse, center, middle
@@ -271,13 +297,12 @@ One big advantage of using a GAM over a manual specification of the model is tha
 
 Let's try to fit a model to the data using a smooth function `s()` with `mgcv::gam()`
 
-```{r, eval = FALSE,echo=TRUE}
+```{r, eval = FALSE, echo = TRUE}
 gam_model <- gam(Sources ~ s(SampleDepth), data = isit2)
-
 ```
 --
 
-```{r, eval=TRUE, echo = FALSE}
+```{r, eval=TRUE, echo = FALSE, output.lines = -c(1,4,5,6,11,12)}
 gam_model <- gam(Sources ~ s(SampleDepth), data = isit2)
 summary(gam_model)
 ```
@@ -754,7 +779,7 @@ two_term_summary$s.table
 
 We can add a second term, `RelativeDepth`, but specify a linear relationship with `Sources`
 
-```{r,fig.width=10,fig.height=6.5}
+```{r,fig.width=10,fig.height=6}
 plot(two_term_model, page = 1, all.terms = TRUE)
 ```
 
@@ -786,7 +811,7 @@ two_smooth_summary$s.table
 
 We can also explore whether the relationship between `Sources` and `RelativeDepth` is non-linear
 
-```{r,fig.width=10,fig.height=6.5}
+```{r,fig.width=10,fig.height=6}
 plot(two_smooth_model, page = 1, all.terms = TRUE)
 ```
 
@@ -897,7 +922,7 @@ three_smooth_summary
 ---
 # Challenge 2 - Solution ![:cube]()
 
-```{r,eval=TRUE,echo=FALSE}
+```{r,eval=TRUE,echo=FALSE, output.lines = -c(1,13,14)}
 three_term_model <- gam(Sources ~ 
                           Season + s(SampleDepth) + s(RelativeDepth) + 
                           Latitude, 

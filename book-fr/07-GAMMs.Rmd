@@ -13,8 +13,9 @@ Lorsque les observations ne sont pas indépendantes, les GAMs peuvent
 
 En plus de changer la fonction de base, nous pouvons aussi complexifier
 le modèle en intégrant une structure d'auto-corrélation (ou même des
-effets mixtes) en utilisant les fonctions `gamm` ou `gamm4`. Pour
-commencer, nous allons jeter un coup d'œil au premier cas ; un modèle
+effets mixtes) en utilisant les fonctions `gamm()` dans la librairie `mgcv`. Bien que nous ne l'utilisions pas ici, la librairie [`gamm4`](https://cran.r-project.org/web/packages/gamm4/gamm4.pdf) peut également être utilisé pour estimer des modèles GAMMs dans R. 
+
+Pour commencer, nous allons jeter un coup d'œil au premier cas ; un modèle
 avec autocorrélation temporelle dans les résidus. Ré-examinons le modèle
 de la température de Nottingham; nous allons vérifier si les résidus
 sont corrélés en faisant appel à la fonction (partielle)

@@ -1291,7 +1291,7 @@ Have we chosen `k` large enough?
 ```r
 k.check(smooth_interact)
 #                              k'      edf   k-index p-value
-# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883    0.06
+# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883  0.0825
 ```
 
 --
@@ -1325,7 +1325,7 @@ Is `k` large enough this time?
 ```r
 k.check(smooth_interact_k60)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626  0.8975
+# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626  0.8875
 ```
 
 --
@@ -1454,7 +1454,7 @@ Check the basis dimension:
 ```r
 k.check(smooth_interact_tw)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062    0.81
+# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062   0.815
 ```
 
 ---
@@ -1690,15 +1690,15 @@ gam_data2 &lt;- gamSim(eg = 6)
 # 4 term additive + random effectGu &amp; Wahba 4 term additive model
 str(gam_data2)
 # 'data.frame':	400 obs. of  11 variables:
-#  $ y  : num  10.8 10.9 11.3 22.2 12.3 ...
-#  $ x0 : num  0.2762 0.0843 0.1574 0.7977 0.354 ...
-#  $ x1 : num  0.679 0.669 0.29 0.872 0.31 ...
-#  $ x2 : num  0.9057 0.0836 0.8747 0.048 0.6408 ...
-#  $ x3 : num  0.765 0.356 0.179 0.334 0.285 ...
-#  $ f  : num  8.46 12.77 11.91 19.59 9.96 ...
-#  $ f0 : num  1.526 0.524 0.949 1.187 1.793 ...
-#  $ f1 : num  3.89 3.81 1.78 5.73 1.86 ...
-#  $ f2 : num  0.0474 2.4378 0.1774 0.6747 3.3077 ...
+#  $ y  : num  11.9 15.8 19 21.3 16.9 ...
+#  $ x0 : num  0.718 0.893 0.573 0.938 0.31 ...
+#  $ x1 : num  0.592 0.324 0.889 0.705 0.597 ...
+#  $ x2 : num  0.673 0.234 0.713 0.547 0.355 ...
+#  $ x3 : num  0.449 0.896 0.667 0.645 0.991 ...
+#  $ f  : num  11 17.5 19.6 19.3 13.7 ...
+#  $ f0 : num  1.55 0.658 1.947 0.387 1.653 ...
+#  $ f1 : num  3.27 1.91 5.92 4.09 3.3 ...
+#  $ f2 : num  3.18 8.91 2.73 2.86 5.74 ...
 #  $ f3 : num  0 0 0 0 0 0 0 0 0 0 ...
 #  $ fac: Factor w/ 4 levels "1","2","3","4": 1 2 3 4 1 2 3 4 1 2 ...
 ```
@@ -1711,9 +1711,9 @@ str(gam_data2)
 ```r
 gamm_intercept &lt;- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2, method = "REML")
 summary(gamm_intercept)$s.table
-#             edf   Ref.df        F    p-value
-# s(x0)  2.920628 3.638677   4.9850 0.00115617
-# s(fac) 2.970452 3.000000 100.4999 0.00000000
+#             edf   Ref.df         F  p-value
+# s(x0)  1.295774 1.533098  2.206947 0.175796
+# s(fac) 2.970202 3.000000 99.818203 0.000000
 plot(gamm_intercept, select = 2)
 ```
 
@@ -1761,9 +1761,9 @@ plot_smooth(gamm_intercept, view="x0", cond = list(fac = "4"), add = T, col = 't
 gamm_slope &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2, method = "REML")
 
 summary(gamm_slope)$s.table
-#                edf   Ref.df         F     p-value
-# s(x0)     2.847670 3.549474  4.434221 0.002851919
-# s(x0,fac) 2.954038 3.000000 62.260081 0.000000000
+#                edf   Ref.df          F   p-value
+# s(x0)     1.836146 2.292232  0.6697461 0.4630231
+# s(x0,fac) 2.951553 3.000000 57.2252695 0.0000000
 ```
 
 
@@ -1802,10 +1802,10 @@ gamm_int_slope &lt;- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
                       data = gam_data2, method = "REML")
 
 summary(gamm_int_slope)$s.table
-#                 edf   Ref.df          F     p-value
-# s(x0)     2.9257685 3.644269   5.011614 0.001104202
-# s(fac)    2.9529053 3.000000 176.072407 0.000000000
-# s(fac,x0) 0.5663559 3.000000  12.599521 0.277693826
+#                 edf   Ref.df            F  p-value
+# s(x0)     1.2964822 1.534245 2.205481e+00 0.176024
+# s(fac)    2.9701735 3.000000 9.990503e+01 0.000000
+# s(fac,x0) 0.0009834 3.000000 2.250285e-04 0.590433
 ```
 
 ---
@@ -1855,9 +1855,9 @@ gamm_smooth &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1),
                    data = gam_data2, method = "REML")
 
 summary(gamm_smooth)$s.table
-#                edf    Ref.df        F    p-value
-# s(x0)     2.899694  3.597402 4.676167 0.00193457
-# s(x0,fac) 4.218329 35.000000 8.688242 0.00000000
+#                edf    Ref.df        F   p-value
+# s(x0)     1.295678  1.532894 2.205429 0.1759747
+# s(x0,fac) 2.974928 35.000000 8.556033 0.0000000
 ```
 
 ---
@@ -1908,33 +1908,28 @@ All of the mixed models from this section can be compared using `AIC()` to deter
 
 ```r
 AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
-#                       df      AIC
-# gamm_intercept  8.235030 2258.100
-# gamm_slope      8.177480 2329.820
-# gamm_int_slope  9.639194 2259.578
-# gamm_smooth    10.887296 2260.674
+#                      df      AIC
+# gamm_intercept 6.532793 2228.161
+# gamm_slope     7.291408 2309.481
+# gamm_int_slope 6.535847 2228.164
+# gamm_smooth    6.541988 2228.171
 ```
 
 
 ---
-# Ressources
+# Resources
 
-There's a great deal more out there on GAM… this was just the very surface.
-
-Simon Wood, the author of the `mgcv` package has a very useful [website](http://people.bath.ac.uk/sw283/mgcv/) with introductory talks and notes on how to use GAM.
-
-He's also written a book, Generalized Additive Models: An Introduction with R, which we used as reference for this workshop.
-
-Material from this workshop were also obtained from the following fantastic blogs and tutorials:
-
-- [From the bottom of the heap](http://www.fromthebottomoftheheap.net/blog/)
-
-- [Overview GAMM analysis of time series data](http://www.sfs.uni-tuebingen.de/~jvanrij/Tutorial/GAMM.html)
-
-- [Advanced Analysis of Time series data](http://www.sfs.uni-tuebingen.de/~jvanrij/LSA2015/AnswersLab2.html)
+This workshop was a brief introduction to basic concepts, and popular packages to help you estimate, evaluate, and visualise GAMs in R, but there is so much more to explore!
+&lt;br&gt;&lt;br&gt;
+* The book [Generalized Additive Models: An Introduction with R](https://www.routledge.com/Generalized-Additive-Models-An-Introduction-with-R-Second-Edition/Wood/p/book/9781498728331) by Simon Wood (the author of the `mgcv` package). 
+* Simon Wood's website, [maths.ed.ac.uk/~swood34/](https://www.maths.ed.ac.uk/~swood34/).
+* Gavin Simpson's blog, [From the bottom of the heap](https://fromthebottomoftheheap.net/). 
+* Gavin Simpson's package [`gratia`](https://cran.r-project.org/web/packages/gratia/index.html) for GAM visualisation in `ggplot2`.
+* [Generalized Additive Models: An Introduction with R](https://noamross.github.io/gams-in-r-course/) course by Noam Ross.
+* [Overview GAMM analysis of time series data](https://jacolienvanrij.com/Tutorials/GAMM.html) tutorial by Jacolien van Rij.
+* [Hierarchical generalized additive models in ecology: an introduction with mgcv](https://peerj.com/articles/6876/) by Pedersen et al. (2019).
 
 Finally, the help pages, available through `?gam` in R, are an excellent resource.
-
 
 
 ---

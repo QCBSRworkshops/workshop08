@@ -30,7 +30,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />
-<link rel="prev" href="résumé-et-objectifs-dapprentissage.html"/>
+<link rel="prev" href="objectifs-dapprentissage.html"/>
 <link rel="next" href="le-modèle-linéaireet-où-il-échoue.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -146,10 +146,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#contribuez-à-la-série"><i class="fa fa-check"></i><b>0.3</b> Contribuez à la série!</a></li>
 </ul></li>
 <li class="part"><span><b>Modèles additifs généralisés en <code>R</code></b></span></li>
-<li class="chapter" data-level="1" data-path="résumé-et-objectifs-dapprentissage.html"><a href="résumé-et-objectifs-dapprentissage.html"><i class="fa fa-check"></i><b>1</b> Résumé et Objectifs d’apprentissage</a><ul>
-<li class="chapter" data-level="1.1" data-path="résumé-et-objectifs-dapprentissage.html"><a href="résumé-et-objectifs-dapprentissage.html#résumé"><i class="fa fa-check"></i><b>1.1</b> Résumé</a></li>
-<li class="chapter" data-level="1.2" data-path="résumé-et-objectifs-dapprentissage.html"><a href="résumé-et-objectifs-dapprentissage.html#objectifs-dapprentissage"><i class="fa fa-check"></i><b>1.2</b> Objectifs d’apprentissage</a></li>
-</ul></li>
+<li class="chapter" data-level="1" data-path="objectifs-dapprentissage.html"><a href="objectifs-dapprentissage.html"><i class="fa fa-check"></i><b>1</b> Objectifs d’apprentissage</a></li>
 <li class="chapter" data-level="2" data-path="préparez-vous-pour-cet-atelier.html"><a href="préparez-vous-pour-cet-atelier.html"><i class="fa fa-check"></i><b>2</b> Préparez-vous pour cet atelier</a></li>
 <li class="chapter" data-level="3" data-path="le-modèle-linéaireet-où-il-échoue.html"><a href="le-modèle-linéaireet-où-il-échoue.html"><i class="fa fa-check"></i><b>3</b> Le modèle linéaire…et où il échoue</a></li>
 <li class="chapter" data-level="4" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html"><i class="fa fa-check"></i><b>4</b> Introduction aux GAMs</a><ul>
@@ -180,7 +177,8 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="10.3" data-path="les-gams-en-coulisse.html"><a href="les-gams-en-coulisse.html#illustration-du-principe-de-validation-croisée"><i class="fa fa-check"></i><b>10.3</b> Illustration du principe de validation croisée</a></li>
 <li class="chapter" data-level="10.4" data-path="les-gams-en-coulisse.html"><a href="les-gams-en-coulisse.html#note-supplémentaire-sur-les-degrés-de-liberté-effectifs-edf"><i class="fa fa-check"></i><b>10.4</b> Note supplémentaire sur les degrés de liberté effectifs (edf)</a></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>11</b> References</a></li>
+<li class="chapter" data-level="11" data-path="ressources.html"><a href="ressources.html"><i class="fa fa-check"></i><b>11</b> Ressources</a></li>
+<li class="chapter" data-level="12" data-path="réferences.html"><a href="réferences.html"><i class="fa fa-check"></i><b>12</b> Réferences</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/qcbsRworkshops" target="blank">QCBS R Workshop Series</a></li>
 
@@ -218,27 +216,25 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 --!>
 <div id="préparez-vous-pour-cet-atelier" class="section level1">
 <h1><span class="header-section-number">Chapitre 2</span> Préparez-vous pour cet atelier</h1>
-<p>Pour vous preparer pour cet atelier, vous devez suivre les étapes suivantes:</p>
-<p>Téléchargez le script R et les données pour cet atelier:</p>
+<p>Tout le matériel de l’atelier se trouve sur <a href="https://r.qcbs.ca/fr/workshops/r-workshop-08/">r.qcbs.ca/fr/workshops/r-workshop-08/</a>. Cela inclut un <a href="https://r.qcbs.ca/workshop08/book-fr/workshop08-script-fr.R">script R</a> qui rassemble tous les morceaux de code présentés dans ce livre.</p>
+<p>Pour cet atelier, nous travaillerons avec les jeux de données suivants :</p>
 <ul>
-<li><a href="http://qcbs.ca/wiki/_media/gam_e.r">Script R</a></li>
-<li><a href="http://qcbs.ca/wiki/_media/other_dist.csv">Données</a></li>
+<li><a href="https://r.qcbs.ca/workshop08/pres-en/data/ISIT.csv">ISIT.csv</a></li>
+<li><a href="https://r.qcbs.ca/workshop08/pres-en/data/other_dist.csv">other_dist.csv</a></li>
 </ul>
-<p>Télechargez les paquets R pour cet atelier (vous pouvez suivre le script pour plus d’instructions):</p>
+<p>Vous devriez également vous assurer que vous avez téléchargé, installé et chargé les paquets R suivants:</p>
 <ul>
-<li><a href="https://cran.r-project.org/web/packages/ggplot2/index.html">ggplot2 (for plotting)</a></li>
-<li><a href="https://cran.r-project.org/web/packages/mgcv/index.html">mgcv (for GAM fitting)</a></li>
-<li><a href="https://cran.r-project.org/web/packages/itsadug/index.html">itsadug (for visualization of GAMs)</a></li>
+<li><a href="https://cran.r-project.org/package=ggplot2">ggplot2</a></li>
+<li><a href="https://cran.r-project.org/package=itsadug">itsadug</a></li>
+<li><a href="https://cran.r-project.org/package=mgcv">mgcv</a></li>
 </ul>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="préparez-vous-pour-cet-atelier.html#cb1-1"></a><span class="kw">install.packages</span>(<span class="st">&quot;ggplot2&quot;</span>)</span>
 <span id="cb1-2"><a href="préparez-vous-pour-cet-atelier.html#cb1-2"></a><span class="kw">install.packages</span>(<span class="st">&quot;mgcv&quot;</span>)</span>
 <span id="cb1-3"><a href="préparez-vous-pour-cet-atelier.html#cb1-3"></a><span class="kw">install.packages</span>(<span class="st">&quot;itsadug&quot;</span>)</span>
 <span id="cb1-4"><a href="préparez-vous-pour-cet-atelier.html#cb1-4"></a></span>
 <span id="cb1-5"><a href="préparez-vous-pour-cet-atelier.html#cb1-5"></a><span class="kw">library</span>(ggplot2)</span>
-<span id="cb1-6"><a href="préparez-vous-pour-cet-atelier.html#cb1-6"></a><span class="kw">library</span>(itsadug)</span>
-<span id="cb1-7"><a href="préparez-vous-pour-cet-atelier.html#cb1-7"></a><span class="kw">library</span>(itsadug)</span>
-<span id="cb1-8"><a href="préparez-vous-pour-cet-atelier.html#cb1-8"></a></span>
-<span id="cb1-9"><a href="préparez-vous-pour-cet-atelier.html#cb1-9"></a><span class="kw">source</span>(<span class="kw">file.choose</span>())  <span class="co"># use coldiss.R which you have downloaded to your own directory</span></span></code></pre></div>
+<span id="cb1-6"><a href="préparez-vous-pour-cet-atelier.html#cb1-6"></a><span class="kw">library</span>(mgcv)</span>
+<span id="cb1-7"><a href="préparez-vous-pour-cet-atelier.html#cb1-7"></a><span class="kw">library</span>(itsadug)</span></code></pre></div>
 
 </div>
 <hr>
@@ -252,7 +248,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="résumé-et-objectifs-dapprentissage.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="objectifs-dapprentissage.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="le-modèle-linéaireet-où-il-échoue.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>

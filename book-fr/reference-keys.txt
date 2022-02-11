@@ -3,8 +3,6 @@ comportement-attendu
 comportements-inacceptables
 contributeurs-et-contributrices
 contribuez-à-la-série
-résumé-et-objectifs-dapprentissage
-résumé
 objectifs-dapprentissage
 préparez-vous-pour-cet-atelier
 le-modèle-linéaireet-où-il-échoue
@@ -27,4 +25,5 @@ un-autre-exemple-une-base-de-spline-cubique
 contrôler-le-degré-de-lissage-avec-des-splines-de-régression-pénalisés
 illustration-du-principe-de-validation-croisée
 note-supplémentaire-sur-les-degrés-de-liberté-effectifs-edf
-references
+ressources
+réferences

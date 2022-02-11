@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Atelier 8 : Modèles additifs généralisés en R</title>
+  <title>Chapitre 1 Objectifs d’apprentissage | Atelier 8 : Modèles additifs généralisés en R</title>
   <meta name="description" content="Modèles additifs généralisés en R" />
   <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Atelier 8 : Modèles additifs généralisés en R" />
+  <meta property="og:title" content="Chapitre 1 Objectifs d’apprentissage | Atelier 8 : Modèles additifs généralisés en R" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://github.com/qcbsRworkshops/" />
   <meta property="og:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="qcbsRworkshops/workshop08" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Atelier 8 : Modèles additifs généralisés en R" />
+  <meta name="twitter:title" content="Chapitre 1 Objectifs d’apprentissage | Atelier 8 : Modèles additifs généralisés en R" />
   
   <meta name="twitter:description" content="Modèles additifs généralisés en R" />
   <meta name="twitter:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />
-
-<link rel="next" href="objectifs-dapprentissage.html"/>
+<link rel="prev" href="index.html"/>
+<link rel="next" href="préparez-vous-pour-cet-atelier.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -214,72 +214,31 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
   <img class= "hero-image" src="assets/images/jean-philippe-delberghe-75xPHEQBmvA-unsplash_hero_image.jpg">
 </div>
 --!>
-<div id="header">
-<h1 class="title">Atelier 8 : Modèles additifs généralisés en <code>R</code></h1>
-<h2 class="subtitle"><em>Série d’ateliers R du CSBQ</em></h2>
-<p class="author"><em>Développé et maintenu par les contributeurs et contributrices de la Série d’ateliers R du CSBQ<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</em></p>
-<p class="date"><em>2022-02-11 19:14:41</em></p>
-</div>
-<div id="préface" class="section level1 unnumbered">
-<h1>Préface</h1>
-<p>La <strong>Série d’ateliers R du CSBQ</strong> est une série de 10 ateliers qui guide les participants à travers les étapes nécessaires à l’utilisation de R pour un large éventail d’analyses statistiques pertinentes pour la recherche en biologie et en écologie. Ces ateliers en accès libre ont été créés par des membres du CSBQ, à la fois pour les membres du CSBQ et pour la communauté au sens large.</p>
-<p>Le contenu de cet atelier a été revu par plusieurs membres du CSBQ. Si vous souhaitez suggérer des modifications, veuillez contacter les coordinateurs de la série actuelle, dont la liste figure sur la page principale de Github</p>
-<div id="code-de-conduit" class="section level2">
-<h2><span class="header-section-number">0.1</span> Code de conduit</h2>
-<p>La Série d’ateliers R du CSBQ et le Symposium R du CSBQ sont des lieux dédiés à fournir un environnement accueillant et favorable à toutes les personnes, indépendamment de leurs origines ou de leur identité.</p>
-<p>Les participants, les présentateurs et les organisateurs de la série d’ateliers et d’autres activités connexes acceptent le présent code de conduite lorsqu’ils assistent à des activités liées aux ateliers.</p>
-<p>Nous ne tolérons pas les comportements irrespectueux ou qui excluent, intimident ou gênent les autres.</p>
-<p>Nous ne tolérons pas la discrimination ou le harcèlement fondés sur des caractéristiques telles que, mais sans s’y limiter, l’identité et l’expression du genre, l’orientation sexuelle, le handicap, l’apparence physique, la taille du corps, la citoyenneté, la nationalité, les origines ethniques ou sociales, la grossesse, le statut familial, les informations génétiques, la religion ou les convictions (ou l’absence de celles-ci), l’appartenance à une minorité nationale, la propriété, l’âge, l’éducation, le statut socio-économique, les choix techniques et le niveau d’expérience.</p>
-<p>Il s’applique à tous les espaces gérés par l’atelier ou affiliés à celui-ci, y compris, mais sans s’y limiter, les ateliers, les listes de diffusion et les forums en ligne tels que GitHub, Slack et Twitter.</p>
-<div id="comportement-attendu" class="section level3">
-<h3><span class="header-section-number">0.1.1</span> Comportement attendu</h3>
-<p>Tous les participants sont tenus de faire preuve de respect et de courtoisie envers les autres. Toutes les interactions doivent être professionnelles, quelle que soit la plateforme utilisée : en ligne ou en personne.</p>
-<p>Afin de favoriser un environnement d’apprentissage positif et professionnel, nous encourageons les types de comportements suivants dans tous les événements et plates-formes des ateliers :</p>
-<ul>
-<li>Utiliser un langage accueillant et inclusif ;</li>
-<li>Respecter les différents points de vue et expériences ;</li>
-<li>Accepter avec grâce les critiques constructives ;</li>
-<li>Se concentrer sur ce qui est le mieux pour la communauté ;</li>
-<li>Faire preuve de courtoisie et de respect envers les autres membres de la communauté.</li>
-</ul>
-</div>
-<div id="comportements-inacceptables" class="section level3">
-<h3><span class="header-section-number">0.1.2</span> Comportements inacceptables</h3>
-<p>Voici quelques exemples de comportements inacceptables de la part des participants à tout événement ou plateforme d’atelier :</p>
-<ul>
-<li>les commentaires écrits ou verbaux qui ont pour effet d’exclure des personnes sur la base de leur appartenance à un groupe spécifique ;</li>
-<li>faire craindre à quelqu’un pour sa sécurité, par exemple en le harcelant ou en l’intimidant ;</li>
-<li>des menaces ou des propos violents dirigés contre une autre personne ;</li>
-<li>l’affichage d’images sexuelles ou violentes ;</li>
-<li>l’attention sexuelle non désirée ;</li>
-<li>les contacts physiques non consensuels ou non désirés ;</li>
-<li>des insultes ou des rabais ;</li>
-<li>les blagues sexistes, racistes, homophobes, transphobes, incapables ou d’exclusion ;</li>
-<li>l’incitation à la violence, au suicide ou à l’automutilation ;</li>
-<li>la poursuite de l’interaction (y compris la photographie ou l’enregistrement) avec une personne après qu’on - lui a demandé d’arrêter ;</li>
-<li>la publication d’une communication privée sans consentement.</li>
-</ul>
-</div>
-</div>
-<div id="contributeurs-et-contributrices" class="section level2">
-<h2><span class="header-section-number">0.2</span> Contributeurs et contributrices</h2>
-<p>Cet atelier a été développé à l’origine par Eric Pedersen et Zofia Taranu, et originalement révisé en français by Cédric Frenette Dussault.</p>
-<p>Depuis 2014, plusieurs membres du CSBQ ont contribué à développer et à mettre à jour cet atelier collaborativement sur une base régulière, dans le cadre du Prix d’apprentissage et de développement du Centre de science de la biodiversité du Québec. Ces membres sont:</p>
-<p>Daniel Schoenig, Laurie Maynard, Marie-Hélène Brice, Kevin Cazelles, Pedro Henrique P. Braga, Esteban Gongora, Linley Sherin, Eric Pedersen, Zofia Taranu, Cédric Frenette Dussault, Emmanuelle Chrétien, Vincent Fugère.</p>
-</div>
-<div id="contribuez-à-la-série" class="section level2">
-<h2><span class="header-section-number">0.3</span> Contribuez à la série!</h2>
-<p>En construction.</p>
-
-</div>
-</div>
-
-
-
-<div class="footnotes">
-<hr />
-<ol start="1">
-<li id="fn1"><p>La Série d’ateliers R du CSBQ fait partie du <a href="https://www.qcbs.ca">Centre de la science de la biodiversité du Québec</a>, et est maintenue par les coordonnateurs et les coordonnatrices de la série, et les membres étudiants diplômés, postdoctoraux et professionnels de la recherche. <strong>Les contributeurs et contributrices de cet atelier sont accessibles<a href="lien">ici</a></strong><a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<div id="objectifs-dapprentissage" class="section level1">
+<h1><span class="header-section-number">Chapitre 1</span> Objectifs d’apprentissage</h1>
+<p>L’objectif de l’atelier d’aujourd’hui sera d’examiner
+ce que nous entendons par un modèle non-linéaire et comment les GAMs
+(modèles additifs généralisés) nous permettent de modéliser les
+relations non-linéaires. Nous examinerons également comment tracer et
+interpréter ces relations non-linéaires, comment ajouter des
+interactions, comment prendre en compte la non-indépendance des données
+(<em>e.g.</em> erreurs autocorrélées) et comment inclure des effets aléatoires
+en se basant sur les ateliers précédents. Enfin, nous allons brièvement
+aborder la mécanique derrière le fonctionnement des GAMs.</p>
+<p>Nous vous recommandons d’avoir une certaine expérience de R, en particulier de la consultation de données et d’objets dans des scripts R, et une connaissance de base de la régression linéaire avant de suivre cet atelier.</p>
+<p>Plus spécifiquement, cet atelier portera sur comment:</p>
+<ol style="list-style-type: decimal">
+<li>Utiliser la librairie <em>mgcv</em> pour modéliser les relations non
+linéaires</li>
+<li>Évaluer la sortie d’un GAM afin de mieux comprendre nos données</li>
+<li>Utiliser des tests pour déterminer si nos relations correspondent à
+des modèles non linéaires ou linéaires</li>
+<li>Ajouter des interactions non linéaires entre les variables
+explicatives</li>
+<li>Comprendre l’idée d’une fonction de base (<em>basis function</em>) et la
+raison pour laquelle ça rend les GAMs si puissants !</li>
+<li>Comment modéliser la dépendance dans les données (autocorrélation,
+structure hiérarchique) en utilisant les GAMMs</li>
 </ol>
 </div>
 <hr>
@@ -293,8 +252,8 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-
-<a href="objectifs-dapprentissage.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="préparez-vous-pour-cet-atelier.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

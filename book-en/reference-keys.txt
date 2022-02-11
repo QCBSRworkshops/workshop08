@@ -25,4 +25,5 @@ another-example-a-cubic-spline-basis
 controlling-the-degree-of-smoothing-with-penalized-regression-splines
 illustration-of-the-principle-behind-cross-validation
 brief-note-on-effective-degrees-of-freedom-edf
+resources
 references

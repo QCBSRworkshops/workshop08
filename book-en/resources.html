@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 1 Learning objectives | Workshop 8: Generalized additive models in R</title>
+  <title>Chapter 11 Resources | Workshop 8: Generalized additive models in R</title>
   <meta name="description" content="Generalized additive models in R" />
   <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 1 Learning objectives | Workshop 8: Generalized additive models in R" />
+  <meta property="og:title" content="Chapter 11 Resources | Workshop 8: Generalized additive models in R" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://github.com/qcbsRworkshops/" />
   <meta property="og:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="qcbsRworkshops/workshop08" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 1 Learning objectives | Workshop 8: Generalized additive models in R" />
+  <meta name="twitter:title" content="Chapter 11 Resources | Workshop 8: Generalized additive models in R" />
   
   <meta name="twitter:description" content="Generalized additive models in R" />
   <meta name="twitter:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />
-<link rel="prev" href="index.html"/>
-<link rel="next" href="preparing-for-the-workshop.html"/>
+<link rel="prev" href="gams-behind-the-scenes.html"/>
+<link rel="next" href="references.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -214,28 +214,21 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
   <img class= "hero-image" src="assets/images/jean-philippe-delberghe-75xPHEQBmvA-unsplash_hero_image.jpg">
 </div>
 --!>
-<div id="learning-objectives" class="section level1">
-<h1><span class="header-section-number">Chapter 1</span> Learning objectives</h1>
-<p>The goal of Workhsop 8 is to first examine what
-we mean by a non-linear model, and how Generalized Additive
-Models (GAMs) allow us to handle non-linear relationships. We will also go
-over how to plot and interpret these non-linear relationships, how to
-include interaction terms, autocorrelated errors, and expand on previous
-workshops by briefly examining a mixed modelling framework. Lastly, we
-will briefly touch upon what GAMs are doing behind the scenes.</p>
-<p>We recommend some working experience in R, particularly with examining data and objects in R scripts, and a basic knowledge of linear regression before following this workshop.</p>
-<p>More specifically, this workshop will cover how to:</p>
-<ol style="list-style-type: decimal">
-<li>Use the <code>mgcv</code> package to fit non-linear relationships,</li>
-<li>Understand the output of a GAM to help you understand your data,</li>
-<li>Use tests to determine if a non-linear model fits better than a
-linear one,</li>
-<li>Include smooth interactions between variables,</li>
-<li>Understand the idea of a basis function, and why it makes GAMs so
-powerful,</li>
-<li>Account for dependence in data (autocorrelation, hierarchical
-structure) using GAMMs.</li>
-</ol>
+<div id="resources" class="section level1">
+<h1><span class="header-section-number">Chapter 11</span> Resources</h1>
+<p>This workshop is intended as a brief introduction to basic concepts, and popular packages to help you estimate, evaluate, and visualise GAMs in R, but there is so much more to GAMs!</p>
+<p>We have a few resources to suggest if you would like to delve deeper into the subject of GAMs and how to implement them in R. Many of these resources inspired and contributed to the contents of this workshop. This is not meant to be an exhaustive list, but provides some very helpful next steps.</p>
+<ul>
+<li>The book <a href="https://www.routledge.com/Generalized-Additive-Models-An-Introduction-with-R-Second-Edition/Wood/p/book/9781498728331">Generalized Additive Models: An Introduction with R</a> by Simon Wood (the author of the <code>mgcv</code> package) is probably the most thorough resource you can find about GAMs.</li>
+<li>Gavin Simpson’s blog, <a href="https://fromthebottomoftheheap.net/">From the bottom of the heap</a>, covers a lot of different aspects of GAMs and how to implement them in R.</li>
+<li>Gavin Simpson’s package <a href="https://cran.r-project.org/web/packages/gratia/index.html"><code>gratia</code></a> is a useful reimplementation of GAM visualisation tools in <code>ggplot2</code>.</li>
+<li><a href="https://noamross.github.io/gams-in-r-course/">Generalized Additive Models: An Introduction with R</a> by Noam Ross is well-designed, interactive, and free course that covers GAMs in greater detail.</li>
+<li><a href="https://jacolienvanrij.com/Tutorials/GAMM.html">Overview GAMM analysis of time series data</a> by Jacolien van Rij is a helpful in-depth tutorial about GAMMs that greatly inspired the GAMM section of this workshop.</li>
+<li>Simon Wood also catalogues talks and notes about GAMs on his website (<a href="https://www.maths.ed.ac.uk/~swood34/">maths.ed.ac.uk/~swood34/</a>).</li>
+<li><a href="https://peerj.com/articles/6876/">Hierarchical generalized additive models in ecology: an introduction with mgcv</a> by Pedersen et al. (2019) is a great introduction to hierarchical GAMs, how to design them, and how they can be implemented in R.</li>
+</ul>
+<p>Finally, the help pages, available through <code>?gam</code> in R, are always an excellent
+resource.</p>
 </div>
 <hr>
 <center> 
@@ -248,8 +241,8 @@ structure) using GAMMs.</li>
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="preparing-for-the-workshop.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="gams-behind-the-scenes.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

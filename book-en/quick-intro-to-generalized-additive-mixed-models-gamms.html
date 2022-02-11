@@ -146,10 +146,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#contributing"><i class="fa fa-check"></i><b>0.3</b> Contributing</a></li>
 </ul></li>
 <li class="part"><span><b>Generalized Additive Models in <code>R</code></b></span></li>
-<li class="chapter" data-level="1" data-path="summary-and-learning-objectives.html"><a href="summary-and-learning-objectives.html"><i class="fa fa-check"></i><b>1</b> Summary and Learning objectives</a><ul>
-<li class="chapter" data-level="1.1" data-path="summary-and-learning-objectives.html"><a href="summary-and-learning-objectives.html#summary"><i class="fa fa-check"></i><b>1.1</b> Summary</a></li>
-<li class="chapter" data-level="1.2" data-path="summary-and-learning-objectives.html"><a href="summary-and-learning-objectives.html#learning-objectives"><i class="fa fa-check"></i><b>1.2</b> Learning Objectives</a></li>
-</ul></li>
+<li class="chapter" data-level="1" data-path="learning-objectives.html"><a href="learning-objectives.html"><i class="fa fa-check"></i><b>1</b> Learning objectives</a></li>
 <li class="chapter" data-level="2" data-path="preparing-for-the-workshop.html"><a href="preparing-for-the-workshop.html"><i class="fa fa-check"></i><b>2</b> Preparing for the workshop</a></li>
 <li class="chapter" data-level="3" data-path="the-linear-modeland-where-if-fails.html"><a href="the-linear-modeland-where-if-fails.html"><i class="fa fa-check"></i><b>3</b> The linear model…and where if fails</a></li>
 <li class="chapter" data-level="4" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html"><i class="fa fa-check"></i><b>4</b> Introduction to GAMs</a><ul>
@@ -231,8 +228,8 @@ same site.</li>
 </ul>
 <p>That is, in addition to changing the basis as with the nottem example
 above, we can also add complexity to the model by incorporating an
-autocorrelation structure or mixed effects using the <code>gamm</code> or the
-<code>gamm4</code> package. To start, let’s have a look at the first case; a model
+autocorrelation structure or mixed effects using the <code>gamm()</code> function in the <code>mgcv</code> package. Although we will not be using it here, the <a href="https://cran.r-project.org/web/packages/gamm4/gamm4.pdf"><code>gamm4</code></a> package can also be used to estimate GAMMs in R.</p>
+<p>To start, let’s have a look at the first case; a model
 with temporal autocorrelation in the residuals. We will revisit the
 Nottingham temperature model and test for correlated errors using the
 (partial) autocorrelation function.</p>

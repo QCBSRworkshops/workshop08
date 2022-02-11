@@ -5,10 +5,8 @@ install.packages("mgcv")
 install.packages("itsadug")
 
 library(ggplot2)
+library(mgcv)
 library(itsadug)
-library(itsadug)
-
-source(file.choose()) # use coldiss.R which you have downloaded to your own directory
 
 
 ##Section: 02-introduction.R 

@@ -3,8 +3,6 @@ expected-behaviour
 unacceptable-behaviour
 contributors
 contributing
-summary-and-learning-objectives
-summary
 learning-objectives
 preparing-for-the-workshop
 the-linear-modeland-where-if-fails

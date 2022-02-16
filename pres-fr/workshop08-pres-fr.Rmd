@@ -66,8 +66,8 @@ list.of.packages <- c("ggplot2", "itsadug", "mgcv")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 
 if(length(new.packages) > 0) {
-  install.packages(new.packages, dependencies = TRUE) 
-  print(paste0("The following package was installed:", new.packages)) 
+  install.packages(new.packages, dependencies = TRUE)
+  print(paste0("The following package was installed:", new.packages))
 } else if(length(new.packages) == 0) {
     print("All packages were already installed previously")
 }
@@ -141,7 +141,7 @@ class: inverse, center, middle
 La régression linéaire est ce que la plupart des gens apprennent avant tout en statistiques et est parmi les méthodes les plus performantes. Elle nous permet de modéliser une variable réponse en fonction de facteurs prédictifs et d'une erreur résiduelle.
 
 --
-Tel que vu dans l'[atelier sur les modèles linéaires](http://qcbs.ca/wiki/r_workshop4), le modèle linéaire fait cependant quatre suppositions importantes :
+Tel que vu dans l'[atelier sur les modèles linéaires](http://qcbs.ca/wiki/r_workshop4), le modèle linéaire fait quatre suppositions importantes :
 
 1. Relation linéaire entre les variables de réponse et les variables prédicteurs:  $$y_i = \beta_0 + \beta_1 \times x_i + \epsilon_i$$
 2. L'erreur est distribuée normalement: $$\epsilon_i \sim \mathcal{N}(0,\,\sigma^2)$$
@@ -159,7 +159,7 @@ $$y_i = \beta_0 + \beta_1x_{1,i}+\beta_2x_{2,i}+\beta_3x_{3,i}+...+\beta_kx_{k,i
 ---
 # La régression linéaire
 
-Il n'y a qu'une façon pour qu'un modèle linéaire soit correctement appliqué :
+Les modèles linéaires fonctionnent très bien dans certains cas spécifiques où tous ces critères sont respectés:
 
 .center[
 ![](images/linreg.png)
@@ -372,7 +372,7 @@ plot(gam_model)
 ```
 
 ---
-#Test de linéarité avec GAM
+# Test de linéarité avec GAM
 
 Nous pouvons utiliser les fonctions `gam()` et `AIC()` pour tester formellement si une hypothèse de linéarité est justifiée. Nous devons simplement le configurer de sorte que notre modèle non-linéaire soit emboîté dans notre modèle linéaire.
 
@@ -390,7 +390,7 @@ AIC(linear_model, nested_gam_model)
 exclude:true
 # Test de linéarité avec GAM
 
-Nous pouvons utiliser les fonctions `gam()` et `anova()` pour tester formellement si une hypothèse de linéarité est justifiée. Nous devons simplement le configurer de sorte que notre modèle non-linéaire soit emboîté dans notre modèle linéaire.
+On peut utiliser `gam()` et `AIC()` pour tester si une supposition de linéarité est justifiée. Ici, on demande si l'ajout d'une fonction lisse au modèle linéaire améliore l'ajustement du modèle à nos données:
 
 ```{r,eval=FALSE}
 linear_model <- gam(y_obs ~ x) # ajuster un modèle linéaire régulier avec gam()
@@ -646,7 +646,7 @@ isit$Season <- as.factor(isit$Season)
 
 Nous allons essayer de modéliser la réponse `Sources` avec les prédicteurs `Season` and `SampleDepth` simultanément.
 
-.comment[La variable `Season` doit etre convertie en facteur] 
+.comment[La variable `Season` doit etre convertie en facteur]
 
 ---
 # GAM à plusieurs variables
@@ -761,7 +761,7 @@ Nous discuterons du choix de $k$ dans la section 5.
 Nous pouvons ajouter un second terme, `RelativeDepth`, mais spécifier une relation linéaire avec `Sources`
 
 ```{r}
-two_term_model <- gam(Sources ~ Season + s(SampleDepth) + RelativeDepth, 
+two_term_model <- gam(Sources ~ Season + s(SampleDepth) + RelativeDepth,
                       data = isit, method = "REML")
 two_term_summary <- summary(two_term_model)
 ```
@@ -795,7 +795,7 @@ plot(two_term_model, page=1, all.terms = T)
 Nous pouvons aussi vérifier que la relation entre `Sources` et `RelativeDepth` est non-linéaire.
 
 ```{r}
-two_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth), 
+two_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth),
                         data = isit, method = "REML")
 two_smooth_summary <- summary(two_smooth_model)
 ```
@@ -915,13 +915,13 @@ exclude:true
 ---
 # Défi 2 - Solution ![:cube]()
 ```{r,eval=FALSE}
-three_term_model <- gam(Sources ~ 
-                          Season + s(SampleDepth) + s(RelativeDepth) + 
-                          Latitude, 
+three_term_model <- gam(Sources ~
+                          Season + s(SampleDepth) + s(RelativeDepth) +
+                          Latitude,
                         data = isit, method = "REML")
 
-three_smooth_model <- gam(Sources ~ 
-                            Season + s(SampleDepth) + s(RelativeDepth) + 
+three_smooth_model <- gam(Sources ~
+                            Season + s(SampleDepth) + s(RelativeDepth) +
                             s(Latitude),
                           data = isit, method = "REML")
 
@@ -932,13 +932,13 @@ three_smooth_summary
 ---
 # Défi 2 - Solution ![:cube]()
 ```{r,eval=TRUE,echo=FALSE, output.lines = -c(1,13,14)}
-three_term_model <- gam(Sources ~ 
-                          Season + s(SampleDepth) + s(RelativeDepth) + 
-                          Latitude, 
+three_term_model <- gam(Sources ~
+                          Season + s(SampleDepth) + s(RelativeDepth) +
+                          Latitude,
                         data = isit, method = "REML")
 
-three_smooth_model <- gam(Sources ~ 
-                            Season + s(SampleDepth) + s(RelativeDepth) + 
+three_smooth_model <- gam(Sources ~
+                            Season + s(SampleDepth) + s(RelativeDepth) +
                             s(Latitude),
                           data = isit, method = "REML")
 
@@ -1003,9 +1003,9 @@ Il y a deux façons de modéliser une interaction entre deux variables :
 Nous allons examiner l'effet de l'interaction en utilisant notre variable qualitative `Season` et examiner si la non-linéarité de `s(SampleDepth)` varie selon les différents niveaux de `Season`.
 
 ```{r}
-factor_interact <- gam(Sources ~ Season + 
-                         s(SampleDepth,by=Season) + 
-                         s(RelativeDepth), 
+factor_interact <- gam(Sources ~ Season +
+                         s(SampleDepth,by=Season) +
+                         s(RelativeDepth),
                        data = isit, method = "REML")
 
 summary(factor_interact)$s.table
@@ -1057,7 +1057,7 @@ AIC(two_smooth_model, factor_interact)
 Finalement, nous regardons les interactions entre 2 termes non linéaires, `SampleDepth` et `RelativeDepth`.
 
 ```{r}
-smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), 
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth),
                        data = isit, method = "REML")
 summary(smooth_interact)$s.table
 ```
@@ -1074,7 +1074,7 @@ plot(smooth_interact, page = 1, scheme = 3)
 # GAM avec des termes d'interaction
 
 ```{r, fig.width=8, fig.height=8}
-vis.gam(smooth_interact, view = c("SampleDepth", "RelativeDepth"), 
+vis.gam(smooth_interact, view = c("SampleDepth", "RelativeDepth"),
         cond = list(Season = 1), theta=40, n.grid = 50, color = "cm")
 ```
 
@@ -1133,7 +1133,7 @@ Tout comme les modèles linéaires généralisés (GLM), nous pouvons formuler d
 Rappelons le modèle d'interaction pour les données de bioluminescence :
 
 ```{r}
-smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), 
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth),
                        data = isit, method = "REML")
 
 summary(smooth_interact)$p.table
@@ -1168,7 +1168,7 @@ Fonctions incluses dans `mgcv` :
 
 ##### Première étape :
 
-Avons-nous choisi `k` assez grand ? 
+Avons-nous choisi `k` assez grand ?
 
 .comment[Le défaut pour les interactions lisses est `k = 30`].
 
@@ -1187,7 +1187,7 @@ Les **EDF se rapprochent beaucoup de** `k`, cela pourrait être problématique.
 Refaisons le modèle avec un `k` plus grand :
 
 ```{r}
-smooth_interact_k60 <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+smooth_interact_k60 <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60),
                            data = isit, method = "REML")
 summary(smooth_interact_k60)$p.table
 summary(smooth_interact_k60)$s.table
@@ -1288,10 +1288,10 @@ Pour en savoir plus sur les familles disponibles dans `mgcv` :
 
 ```{r}
 # Distribution normale
-smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60),
                           data = isit, method = "REML")
 # Tweedie avec log comme fonction de liaison
-smooth_interact_tw <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+smooth_interact_tw <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60),
                           family = tw(link = "log"),
                           data = isit, method = "REML")
 ```
@@ -1304,7 +1304,7 @@ smooth_interact_tw <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 6
 Ajuster le modèle :
 
 ```{r}
-smooth_interact_tw <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+smooth_interact_tw <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60),
                           family = tw(link = "log"),
                           data = isit, method = "REML")
 summary(smooth_interact_tw)$p.table
@@ -1363,7 +1363,7 @@ class: inverse, center, middle
 
 
 ---
-# Fonctions lisses 
+# Fonctions lisses
 
 Pour modéliser une surface lisse ou non-linéaire, nous pouvons construire des fonctions lisses de différentes manières:
 
@@ -1462,7 +1462,7 @@ Lorsque les observations ne sont pas indépendantes, les GAMs peuvent être util
 ---
 # Modèle avec erreurs autocorrélées
 
-Pour commencer, nous allons jeter un coup d’œil au premier cas; un modèle avec autocorrélation temporelle dans les résidus. 
+Pour commencer, nous allons jeter un coup d’œil au premier cas; un modèle avec autocorrélation temporelle dans les résidus.
 
 Ré-examinons le modèle de la température de Nottingham et vérifions si les résidus sont corrélés en faisant appel à la fonction (partielle) d'autocorrélation.
 
@@ -1492,7 +1492,7 @@ Les graphiques des fonctions d'autocorrélation suggèrent qu'un modèle AR de f
 ---
 # Modèle avec erreurs autocorrélées
 
-Nous pouvons ajouter des structures d'autocorrelation au modèle : 
+Nous pouvons ajouter des structures d'autocorrelation au modèle :
 
 - **AR(1)** : corrélation avec un intervalle de temps décalé, ou
 - **AR(2)** : corrélation à 2 intervalles de temps décalés
@@ -1703,7 +1703,7 @@ plot(gamm_int_slope, select = 3)
 # GAMM avec une surface lisse aléatoire
 
 ```{r}
-gamm_smooth <- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1), 
+gamm_smooth <- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1),
                    data = gam_data2, method = "REML")
 
 summary(gamm_smooth)$s.table
@@ -1772,9 +1772,9 @@ AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
 
 Cet atelier présente une brève introduction aux concepts de base et aux librairies populaires pour vous aider à estimer, évaluer et visualiser les GAMs dans R, mais il y a beaucoup plus à explorer!
 <br><br>
-* Le livre [Generalized Additive Models: An Introduction with R](https://www.routledge.com/Generalized-Additive-Models-An-Introduction-with-R-Second-Edition/Wood/p/book/9781498728331) par Simon Wood (auteur de la librairie `mgcv`). 
+* Le livre [Generalized Additive Models: An Introduction with R](https://www.routledge.com/Generalized-Additive-Models-An-Introduction-with-R-Second-Edition/Wood/p/book/9781498728331) par Simon Wood (auteur de la librairie `mgcv`).
 * Le site web de Simon Wood, [maths.ed.ac.uk/~swood34/](https://www.maths.ed.ac.uk/~swood34/).
-* Le blogue de Gavin Simpson, [From the bottom of the heap](https://fromthebottomoftheheap.net/). 
+* Le blogue de Gavin Simpson, [From the bottom of the heap](https://fromthebottomoftheheap.net/).
 * La librairie [`gratia`](https://cran.r-project.org/web/packages/gratia/index.html) de Gavin Simpson for GAM visualisation in `ggplot2`.
 * Le cours [Generalized Additive Models: An Introduction with R](https://noamross.github.io/gams-in-r-course/) de Noam Ross.
 * [Overview GAMM analysis of time series data](https://jacolienvanrij.com/Tutorials/GAMM.html) tutoriel de Jacolien van Rij.
@@ -1830,7 +1830,7 @@ lines(avg$x1, avg$prop, col = "orange", lwd = 2)
 Nous allons tester si cette tendance est linéaire ou non avec un GAM logistique (nous utilisons une famille de distributions binomiales parce que nous avons des données de proportion).
 
 ```{r, warning=F}
-prop_model <- gam(prop ~ s(x1), data = gam_data3, weights = total, 
+prop_model <- gam(prop ~ s(x1), data = gam_data3, weights = total,
                   family = "binomial", method = "REML")
 prop_summary <- summary(prop_model)
 ```
@@ -1955,4 +1955,3 @@ abline(h = 0.5, v = diff$start, col = 'red', lty = 2)
 Comme précédemment, la proportion de succès augmente au-dessus de 0.5 à $x1 = 400$.
 
 <!-- again, lack of explanation here...-->
-

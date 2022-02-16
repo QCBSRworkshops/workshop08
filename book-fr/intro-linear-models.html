@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapitre 3 Le modèle linéaire…et où il échoue | Atelier 8 : Modèles additifs généralisés en R</title>
+  <title>Chapitre 3 Le modèle linéaire… et où il échoue | Atelier 8 : Modèles additifs généralisés en R</title>
   <meta name="description" content="Modèles additifs généralisés en R" />
   <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapitre 3 Le modèle linéaire…et où il échoue | Atelier 8 : Modèles additifs généralisés en R" />
+  <meta property="og:title" content="Chapitre 3 Le modèle linéaire… et où il échoue | Atelier 8 : Modèles additifs généralisés en R" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://github.com/qcbsRworkshops/" />
   <meta property="og:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="qcbsRworkshops/workshop08" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapitre 3 Le modèle linéaire…et où il échoue | Atelier 8 : Modèles additifs généralisés en R" />
+  <meta name="twitter:title" content="Chapitre 3 Le modèle linéaire… et où il échoue | Atelier 8 : Modèles additifs généralisés en R" />
   
   <meta name="twitter:description" content="Modèles additifs généralisés en R" />
   <meta name="twitter:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -148,10 +148,11 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li class="part"><span><b>Modèles additifs généralisés en <code>R</code></b></span></li>
 <li class="chapter" data-level="1" data-path="objectifs-dapprentissage.html"><a href="objectifs-dapprentissage.html"><i class="fa fa-check"></i><b>1</b> Objectifs d’apprentissage</a></li>
 <li class="chapter" data-level="2" data-path="préparez-vous-pour-cet-atelier.html"><a href="préparez-vous-pour-cet-atelier.html"><i class="fa fa-check"></i><b>2</b> Préparez-vous pour cet atelier</a></li>
-<li class="chapter" data-level="3" data-path="le-modèle-linéaireet-où-il-échoue.html"><a href="le-modèle-linéaireet-où-il-échoue.html"><i class="fa fa-check"></i><b>3</b> Le modèle linéaire…et où il échoue</a></li>
+<li class="chapter" data-level="3" data-path="intro-linear-models.html"><a href="intro-linear-models.html"><i class="fa fa-check"></i><b>3</b> Le modèle linéaire… et où il échoue</a></li>
 <li class="chapter" data-level="4" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html"><i class="fa fa-check"></i><b>4</b> Introduction aux GAMs</a><ul>
-<li class="chapter" data-level="4.1" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#défi-1"><i class="fa fa-check"></i><b>4.1</b> DÉFI 1</a><ul>
-<li class="chapter" data-level="4.1.1" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#réponse-au-défi-1"><i class="fa fa-check"></i><b>4.1.1</b> Réponse au défi 1</a></li>
+<li class="chapter" data-level="4.1" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#test-de-linéarité"><i class="fa fa-check"></i><b>4.1</b> Test de linéarité</a></li>
+<li class="chapter" data-level="4.2" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#défi-1"><i class="fa fa-check"></i><b>4.2</b> Défi 1</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#défi-1-solution"><i class="fa fa-check"></i><b>4.2.1</b> Défi 1: Solution</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="plusieurs-termes-non-linéaires.html"><a href="plusieurs-termes-non-linéaires.html"><i class="fa fa-check"></i><b>5</b> Plusieurs termes non linéaires</a><ul>
@@ -214,34 +215,25 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
   <img class= "hero-image" src="assets/images/jean-philippe-delberghe-75xPHEQBmvA-unsplash_hero_image.jpg">
 </div>
 --!>
-<div id="le-modèle-linéaireet-où-il-échoue" class="section level1">
-<h1><span class="header-section-number">Chapitre 3</span> Le modèle linéaire…et où il échoue</h1>
-<p>Qu’est-ce qu’un modèle linéaire ? La régression linéaire est ce que la
-plupart des gens apprennent avant tout en statistiques et est parmi les
-méthodes les plus performantes. Elle nous permet de modéliser une
-variable réponse en fonction de facteurs prédictifs et d’une erreur
-résiduelle. Tel que vu dans l’atelier sur les <a href="https://github.com/QCBSRworkshops/workshop04">modèles
-linéaires</a>, la régression fait cependant
-quatre suppositions importantes :</p>
+<div id="intro-linear-models" class="section level1">
+<h1><span class="header-section-number">Chapitre 3</span> Le modèle linéaire… et où il échoue</h1>
+<p>Que veut-on dire par “modèle linéaire”? La régression est la base des
+statistiques. La régression linéaire est ce que la plupart des gens apprennent avant tout en statistiques et est parmi les méthodes les plus performantes. Elle nous permet de modéliser une variable réponse en fonction de facteurs prédictifs et d’une erreur résiduelle.</p>
+<p>Comme on a vu dans l’<a href="https://r.qcbs.ca/workshops/r-workshop-04/">Atelier 4: Modèles linéaires</a>, le modèle linéaire fait quatre suppositions importantes :</p>
 <ol style="list-style-type: decimal">
-<li>l’erreur est distribuée normalement</li>
-<li>la variance des erreurs est constante</li>
-<li>chaque erreur est indépendante des autres (homoscédasticité)</li>
-<li>la réponse est linéaire: <em>y = β<sub>0</sub> + β<sub>1</sub>x</em></li>
+<li>Relation linéaire entre les variables de réponse et les variables prédicteurs: <span class="math display">\[y_i = \beta_0 + \beta_1 \times x_i + \epsilon_i\]</span></li>
+<li>L’erreur est distribuée normalement: <span class="math display">\[\epsilon_i \sim \mathcal{N}(0,\,\sigma^2)\]</span></li>
+<li>La variance des erreurs est constante</li>
+<li>Chaque erreur est indépendante des autres (homoscédasticité)</li>
 </ol>
-<p>Il n’y a qu’une façon pour qu’un modèle linéaire soit correctement
-appliqué :</p>
-<p><img src="images/graphic0.1.png" width="350" /></p>
-<p>et pourtant tant de façons pour qu’il ne le soit pas :</p>
-<p><img src="images/graphic0.2.png" /></p>
-<p>Alors, comment résoudre ce problème ? Nous devons premièrement savoir ce
-que le modèle de régression cherche à faire :</p>
-<pre><code> * ajuster une ligne qui passe au milieu des données,
- * faire cela sans sur-ajuster les données, c&#39;est-à-dire en passant une ligne entre chaque point.</code></pre>
-<p>Les modèles linéaires le font en trouvant la meilleure ligne droite qui
-passe à travers les données. En revanche, les modèles additifs font cela
-en ajustant une courbe à travers les données, mais tout en contrôlant le
-degré de courbure de la ligne <em>(plus d’information sur cela plus bas)</em>.</p>
+<p>Un modèle linéaire peut parfois s’adapter à certains types de réponses non linéaires (par exemple <span class="math inline">\(x^2\)</span>), mais cette approche repose fortement sur des décisions qui peuvent être soit arbitraires, soit bien informées, et est beaucoup moins flexible que l’utilisation d’un modèle additif. Par exemple, ce modèle linéaire à prédicteurs multiples peut traiter une réponse non linéaire, mais devient rapidement difficile à interpréter et à maîtriser:</p>
+<p><span class="math display">\[y_i = \beta_0 + \beta_1x_{1,i}+\beta_2x_{2,i}+\beta_3x_{3,i}+...+\beta_kx_{k,i} + \epsilon_i\]</span></p>
+<p>Les modèles linéaires fonctionnent très bien dans certains cas spécifiques où tous ces critères sont respectés:</p>
+<p><img src="images/linreg.png" /></p>
+<p>Dans la réalité, il est souvent impossible de respecter ces critères. Cela signifie que, dans de nombreux cas, les modèles linéaires sont inappropriés:</p>
+<p><img src="images/linreg_bad.png" /></p>
+<p>Alors, comment résoudre ce problème ? Pour répondre à cette question, nous devons d’abord considérer ce que le modèle de régression tente de faire. Un modèle linéaire essaye d’ajuster la <strong>meilleure droite</strong> qui passe au milieu des données <em>sans <strong>sur-ajuster</strong></em> les données, ce qui se produirait si nous tracions simplement une ligne entre chaque point et ses voisins.</p>
+<p>En revanche, les modèles additifs (GAM) ajustent une fonction de lissage non-linéaire à travers les données, tout en contrôlant le <strong>degré de courbure</strong> de la ligne our éviter un ajustement excessif. Les modèles additifs peuvent donc capturer des relations non linéaires en ajustant une fonction lisse à travers les données, plutôt qu’une ligne droite. Nous reviendrons plus tard sur le <strong>degré de courbure</strong> de la ligne!</p>
 </div>
 <hr>
 <center> 

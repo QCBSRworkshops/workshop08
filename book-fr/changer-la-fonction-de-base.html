@@ -148,10 +148,11 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li class="part"><span><b>Modèles additifs généralisés en <code>R</code></b></span></li>
 <li class="chapter" data-level="1" data-path="objectifs-dapprentissage.html"><a href="objectifs-dapprentissage.html"><i class="fa fa-check"></i><b>1</b> Objectifs d’apprentissage</a></li>
 <li class="chapter" data-level="2" data-path="préparez-vous-pour-cet-atelier.html"><a href="préparez-vous-pour-cet-atelier.html"><i class="fa fa-check"></i><b>2</b> Préparez-vous pour cet atelier</a></li>
-<li class="chapter" data-level="3" data-path="le-modèle-linéaireet-où-il-échoue.html"><a href="le-modèle-linéaireet-où-il-échoue.html"><i class="fa fa-check"></i><b>3</b> Le modèle linéaire…et où il échoue</a></li>
+<li class="chapter" data-level="3" data-path="intro-linear-models.html"><a href="intro-linear-models.html"><i class="fa fa-check"></i><b>3</b> Le modèle linéaire… et où il échoue</a></li>
 <li class="chapter" data-level="4" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html"><i class="fa fa-check"></i><b>4</b> Introduction aux GAMs</a><ul>
-<li class="chapter" data-level="4.1" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#défi-1"><i class="fa fa-check"></i><b>4.1</b> DÉFI 1</a><ul>
-<li class="chapter" data-level="4.1.1" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#réponse-au-défi-1"><i class="fa fa-check"></i><b>4.1.1</b> Réponse au défi 1</a></li>
+<li class="chapter" data-level="4.1" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#test-de-linéarité"><i class="fa fa-check"></i><b>4.1</b> Test de linéarité</a></li>
+<li class="chapter" data-level="4.2" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#défi-1"><i class="fa fa-check"></i><b>4.2</b> Défi 1</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#défi-1-solution"><i class="fa fa-check"></i><b>4.2.1</b> Défi 1: Solution</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="plusieurs-termes-non-linéaires.html"><a href="plusieurs-termes-non-linéaires.html"><i class="fa fa-check"></i><b>5</b> Plusieurs termes non linéaires</a><ul>
@@ -235,13 +236,13 @@ avec des données cycliques.</p>
 divisées en mesures mensuelles, et que vous voulez déterminer s’il y a
 une tendance de température annuelle. Nous allons utiliser la série
 temporelle de température de Nottingham pour cette section :</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="changer-la-fonction-de-base.html#cb22-1"></a><span class="kw">data</span>(nottem)</span>
-<span id="cb22-2"><a href="changer-la-fonction-de-base.html#cb22-2"></a>n_years &lt;-<span class="st"> </span><span class="kw">length</span>(nottem)<span class="op">/</span><span class="dv">12</span></span>
-<span id="cb22-3"><a href="changer-la-fonction-de-base.html#cb22-3"></a>nottem_month &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">12</span>, <span class="dt">times =</span> n_years)</span>
-<span id="cb22-4"><a href="changer-la-fonction-de-base.html#cb22-4"></a>nottem_year &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1920</span><span class="op">:</span>(<span class="dv">1920</span> <span class="op">+</span><span class="st"> </span>n_years <span class="op">-</span><span class="st"> </span><span class="dv">1</span>), <span class="dt">each =</span> <span class="dv">12</span>)</span>
-<span id="cb22-5"><a href="changer-la-fonction-de-base.html#cb22-5"></a>nottem_plot &lt;-<span class="st"> </span><span class="kw">qplot</span>(nottem_month, nottem, <span class="dt">colour =</span> <span class="kw">factor</span>(nottem_year),</span>
-<span id="cb22-6"><a href="changer-la-fonction-de-base.html#cb22-6"></a>    <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme_bw</span>()</span>
-<span id="cb22-7"><a href="changer-la-fonction-de-base.html#cb22-7"></a><span class="kw">print</span>(nottem_plot)</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="changer-la-fonction-de-base.html#cb31-1"></a><span class="kw">data</span>(nottem)</span>
+<span id="cb31-2"><a href="changer-la-fonction-de-base.html#cb31-2"></a>n_years &lt;-<span class="st"> </span><span class="kw">length</span>(nottem)<span class="op">/</span><span class="dv">12</span></span>
+<span id="cb31-3"><a href="changer-la-fonction-de-base.html#cb31-3"></a>nottem_month &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">12</span>, <span class="dt">times =</span> n_years)</span>
+<span id="cb31-4"><a href="changer-la-fonction-de-base.html#cb31-4"></a>nottem_year &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1920</span><span class="op">:</span>(<span class="dv">1920</span> <span class="op">+</span><span class="st"> </span>n_years <span class="op">-</span><span class="st"> </span><span class="dv">1</span>), <span class="dt">each =</span> <span class="dv">12</span>)</span>
+<span id="cb31-5"><a href="changer-la-fonction-de-base.html#cb31-5"></a>nottem_plot &lt;-<span class="st"> </span><span class="kw">qplot</span>(nottem_month, nottem, <span class="dt">colour =</span> <span class="kw">factor</span>(nottem_year),</span>
+<span id="cb31-6"><a href="changer-la-fonction-de-base.html#cb31-6"></a>    <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme_bw</span>()</span>
+<span id="cb31-7"><a href="changer-la-fonction-de-base.html#cb31-7"></a><span class="kw">print</span>(nottem_plot)</span></code></pre></div>
 <p>En utilisant les données nottem, nous avons créé trois nouveaux
 vecteurs ; <code>n_years</code> correspond au nombre d’années de données (20 ans),
 <code>nottem_month</code> est un codage qualitatif pour les 12 mois de l’année,
@@ -253,9 +254,9 @@ est fournie.</p>
 <p>Pour modéliser cela, nous devons utiliser ce qu’on appelle un spline
 cubique cyclique, ou <code>"cc"</code>, pour modéliser les effets du mois et de
 l’année.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="changer-la-fonction-de-base.html#cb23-1"></a>year_gam &lt;-<span class="st"> </span><span class="kw">gam</span>(nottem <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(nottem_year) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(nottem_month, <span class="dt">bs =</span> <span class="st">&quot;cc&quot;</span>))</span>
-<span id="cb23-2"><a href="changer-la-fonction-de-base.html#cb23-2"></a><span class="kw">summary</span>(year_gam)<span class="op">$</span>s.table</span>
-<span id="cb23-3"><a href="changer-la-fonction-de-base.html#cb23-3"></a><span class="kw">plot</span>(year_gam, <span class="dt">page =</span> <span class="dv">1</span>, <span class="dt">scale =</span> <span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="changer-la-fonction-de-base.html#cb32-1"></a>year_gam &lt;-<span class="st"> </span><span class="kw">gam</span>(nottem <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(nottem_year) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(nottem_month, <span class="dt">bs =</span> <span class="st">&quot;cc&quot;</span>))</span>
+<span id="cb32-2"><a href="changer-la-fonction-de-base.html#cb32-2"></a><span class="kw">summary</span>(year_gam)<span class="op">$</span>s.table</span>
+<span id="cb32-3"><a href="changer-la-fonction-de-base.html#cb32-3"></a><span class="kw">plot</span>(year_gam, <span class="dt">page =</span> <span class="dv">1</span>, <span class="dt">scale =</span> <span class="dv">0</span>)</span></code></pre></div>
 <p><img src="images/graphic4.2.jpg" width="700" /></p>
 <p>Il y a une hausse d’environ 1 - 1,5ºC au cours de la série, mais au
 cours d’une année, il y a une variation d’environ 20ºC. Les données
@@ -284,16 +285,16 @@ tracer soit la surface de réponse (<code>type = "response"</code>) ou les terme
 (<code>type = "terms"</code>) est disponible ci-dessous. Lorsque les termes sont
 sélectionnés, vous obtiendrez la même figure que celle ci-dessus.</p>
 <p>Graphique de contribution vs réponse ajustée:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="changer-la-fonction-de-base.html#cb24-1"></a>pred &lt;-<span class="st"> </span><span class="kw">predict</span>(year_gam, <span class="dt">type =</span> <span class="st">&quot;terms&quot;</span>, <span class="dt">se =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb24-2"><a href="changer-la-fonction-de-base.html#cb24-2"></a>I &lt;-<span class="st"> </span><span class="kw">order</span>(nottem_year)</span>
-<span id="cb24-3"><a href="changer-la-fonction-de-base.html#cb24-3"></a>plusCI &lt;-<span class="st"> </span><span class="kw">I</span>(pred<span class="op">$</span>fit[, <span class="dv">1</span>] <span class="op">+</span><span class="st"> </span><span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>pred<span class="op">$</span>se[, <span class="dv">1</span>])</span>
-<span id="cb24-4"><a href="changer-la-fonction-de-base.html#cb24-4"></a>minusCI &lt;-<span class="st"> </span><span class="kw">I</span>(pred<span class="op">$</span>fit[, <span class="dv">1</span>] <span class="op">-</span><span class="st"> </span><span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>pred<span class="op">$</span>se[, <span class="dv">1</span>])</span>
-<span id="cb24-5"><a href="changer-la-fonction-de-base.html#cb24-5"></a>xx &lt;-<span class="st"> </span><span class="kw">c</span>(nottem_year[I], <span class="kw">rev</span>(nottem_year[I]))</span>
-<span id="cb24-6"><a href="changer-la-fonction-de-base.html#cb24-6"></a>yy &lt;-<span class="st"> </span><span class="kw">c</span>(plusCI[I], <span class="kw">rev</span>(minusCI[I]))</span>
-<span id="cb24-7"><a href="changer-la-fonction-de-base.html#cb24-7"></a><span class="kw">plot</span>(xx, yy, <span class="dt">type =</span> <span class="st">&quot;n&quot;</span>, <span class="dt">cex.axis =</span> <span class="fl">1.2</span>)</span>
-<span id="cb24-8"><a href="changer-la-fonction-de-base.html#cb24-8"></a><span class="kw">polygon</span>(xx, yy, <span class="dt">col =</span> <span class="st">&quot;light grey&quot;</span>, <span class="dt">border =</span> <span class="st">&quot;light grey&quot;</span>)</span>
-<span id="cb24-9"><a href="changer-la-fonction-de-base.html#cb24-9"></a><span class="kw">lines</span>(nottem_year[I], pred<span class="op">$</span>fit[, <span class="dv">1</span>][I], <span class="dt">lty =</span> <span class="dv">1</span>)</span>
-<span id="cb24-10"><a href="changer-la-fonction-de-base.html#cb24-10"></a><span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="changer-la-fonction-de-base.html#cb33-1"></a>pred &lt;-<span class="st"> </span><span class="kw">predict</span>(year_gam, <span class="dt">type =</span> <span class="st">&quot;terms&quot;</span>, <span class="dt">se =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb33-2"><a href="changer-la-fonction-de-base.html#cb33-2"></a>I &lt;-<span class="st"> </span><span class="kw">order</span>(nottem_year)</span>
+<span id="cb33-3"><a href="changer-la-fonction-de-base.html#cb33-3"></a>plusCI &lt;-<span class="st"> </span><span class="kw">I</span>(pred<span class="op">$</span>fit[, <span class="dv">1</span>] <span class="op">+</span><span class="st"> </span><span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>pred<span class="op">$</span>se[, <span class="dv">1</span>])</span>
+<span id="cb33-4"><a href="changer-la-fonction-de-base.html#cb33-4"></a>minusCI &lt;-<span class="st"> </span><span class="kw">I</span>(pred<span class="op">$</span>fit[, <span class="dv">1</span>] <span class="op">-</span><span class="st"> </span><span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>pred<span class="op">$</span>se[, <span class="dv">1</span>])</span>
+<span id="cb33-5"><a href="changer-la-fonction-de-base.html#cb33-5"></a>xx &lt;-<span class="st"> </span><span class="kw">c</span>(nottem_year[I], <span class="kw">rev</span>(nottem_year[I]))</span>
+<span id="cb33-6"><a href="changer-la-fonction-de-base.html#cb33-6"></a>yy &lt;-<span class="st"> </span><span class="kw">c</span>(plusCI[I], <span class="kw">rev</span>(minusCI[I]))</span>
+<span id="cb33-7"><a href="changer-la-fonction-de-base.html#cb33-7"></a><span class="kw">plot</span>(xx, yy, <span class="dt">type =</span> <span class="st">&quot;n&quot;</span>, <span class="dt">cex.axis =</span> <span class="fl">1.2</span>)</span>
+<span id="cb33-8"><a href="changer-la-fonction-de-base.html#cb33-8"></a><span class="kw">polygon</span>(xx, yy, <span class="dt">col =</span> <span class="st">&quot;light grey&quot;</span>, <span class="dt">border =</span> <span class="st">&quot;light grey&quot;</span>)</span>
+<span id="cb33-9"><a href="changer-la-fonction-de-base.html#cb33-9"></a><span class="kw">lines</span>(nottem_year[I], pred<span class="op">$</span>fit[, <span class="dv">1</span>][I], <span class="dt">lty =</span> <span class="dv">1</span>)</span>
+<span id="cb33-10"><a href="changer-la-fonction-de-base.html#cb33-10"></a><span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">0</span>)</span></code></pre></div>
 
 </div>
 <hr>

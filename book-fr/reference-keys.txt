@@ -5,10 +5,11 @@ contributeurs-et-contributrices
 contribuez-à-la-série
 objectifs-dapprentissage
 préparez-vous-pour-cet-atelier
-le-modèle-linéaireet-où-il-échoue
+intro-linear-models
 introduction-aux-gams
+test-de-linéarité
 défi-1
-réponse-au-défi-1
+défi-1-solution
 plusieurs-termes-non-linéaires
 défi-2
 réponse-au-défi-2

@@ -29,10 +29,9 @@ In reality, we often cannot meet these criteria. This means that in many cases, 
 ![](images/linreg_bad.png)
 
 So, how can we fit a better model? To answer this question, we must first consider what the regression model is
-trying to do. The linear model is trying to fit the best __straight line__ that passes through the middle of the data, _without __overfitting___ the data, which is what would happen if we simply drew a line between each point and its neighbours. Linear models do this by finding the best fit straight line that passes
-through the data. 
+trying to do. The linear model is trying to fit the best __straight line__ that passes through the middle of the data, _without __overfitting___ the data, which is what would happen if we simply drew a line between each point and its neighbours. Linear models do this by finding the best fit straight line that passes through the data. 
 
-In the same way, additive models fit a curve through the data, while controlling the ___wiggliness___ of this curve to avoid overfitting. This means additive models like GAMs can capture complex relationships by fitting a non-linear smooth function through the data, rather than a straight line. We will come back to the concept of ___wiggliness___ later!
+In the same way, additive models fit a curve through the data, while controlling the ___wiggliness___ of this curve to avoid overfitting. This means additive models like GAMs can capture non-linear relationships by fitting a smooth function through the data, rather than a straight line. We will come back to the concept of ___wiggliness___ later!
 
 # Introduction to GAMs
 
@@ -76,17 +75,17 @@ Are the assumptions of linear regression listed in [Chapter 2](#intro-linear-mod
 3.  The variance of the error is _not_ homoscedastic.
 4.  The errors are _not_ independent of each other.
 
-As we mentioned briefly in [Chapter 2](#intro-linear-models), we could manually specify a linear model with multiple predictor variables to try to accommodate certain types of non-linear responses. For example, we could try to build this linear model with multiple predictors:
+As we mentioned briefly in [Chapter 2](#intro-linear-models), we could manually specify a linear model with multiple predictor variables to try to accommodate this non-linear response. For example, we could try to build this linear model with multiple predictors:
 
 $$y_i = \beta_0 + \beta_1(x_{1,i}) + \beta_2(x_{2,i}) + ... + \epsilon$$
-However, the fit of this model would be determined manually based on the modeller's decisions, and would quickly become difficult to work with. One big advantage of using an additive model, such as a GAM, over a manual specification of an multiple-predictor regression model is that the fitting method (usually maximum likelihood) automatically determines the optimal shape of the curve fit. This optimal shape is, in other words,  *the degree of smoothness* of $f(x)$.
+However, the fit of this model would be determined manually based on the modeller's decisions, and would quickly become difficult to work with. One big advantage of using an additive model, such as a GAM,  is that the fitting method (usually maximum likelihood) automatically determines the optimal shape of the curve fit for non-linear responses. This optimal shape is, in other words,  *the degree of smoothness* of $f(x)$.
 
 :::explanation
 
-Briefly, GAMs are effectively a nonparametric form of regression where the $\beta x_i$ of a linear regression is replaced by an arbitrary smooth function of the explanatory variables, $f(x_i)$, and the model becomes:
+Briefly, GAMs are effectively a nonparametric form of regression where the $\beta x_i$ of a linear regression is replaced by a smooth function of the explanatory variables, $f(x_i)$, and the model becomes:
 
 $$y_i = f(x_i) + \epsilon_i$$
-where $y_i$ is the response variable, $x_i$ is the predictor variable, and *f* is the smooth function.
+where $y_i$ is the response variable, $x_i$ is the predictor variable, and $f$ is the smooth function.
 
 Importantly, given that the smooth function $f(x_i)$ is non-linear and
 local, the magnitude of the effect of the explanatory variable can vary
@@ -138,7 +137,7 @@ smooth_model <- gam(Sources ~ s(SampleDepth), data = isit2)
 AIC(linear_model, smooth_model)
 ```
 
-Here, the AIC of the nested GAM is lower, which indicates that adding a smoothing function improves model performance. Linearity is therefore not supported by our data.
+Here, the AIC of the smooth GAM is lower, which indicates that adding a smoothing function improves model performance. Linearity is therefore not supported by our data.
 
 :::explanation
 As a brief explanation, the Akaike Information Criterion (AIC) is a comparative metric of model performance, where lower scores indicate that a model is performing "better" compared to other considered models. 
@@ -155,6 +154,10 @@ isit1 <- subset(isit, Season == 1)
 1. Fit a linear and smoothed GAM model to the relation between `SampleDepth` and `Sources`.
 2. Determine if linearity is justified for this data.
 3. How many effective degrees of freedom does the smoothed term have?
+
+:::explanation
+We have not discussed effective degrees of freedom (**EDF**) yet, but these are a key tool to help us interpret the fit of a GAM. Keep this term in mind. More on this in the next sections!
+:::
 
 ### Challenge 1: Solution
 
@@ -188,10 +191,6 @@ AIC(linear_model_s1, smooth_model_s1)
 The lower AIC score indicates that smooth model is performing better than the linear model, which confirms that linearity is not appropriate for our dataset. 
 
 __3.__ How many effective degrees of freedom does the smoothed term have?
-
-:::explanation
-We have not discussed effective degrees of freedom (**EDF**) yet, but these are a key tool to help us interpret the fit of a GAM. More on this in the next sections.
-:::
 
 To get the effective degrees of freedom, we can simply print the model object:
 

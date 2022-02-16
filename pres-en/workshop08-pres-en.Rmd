@@ -99,7 +99,7 @@ install.packages(c('ggplot2', 'itsadug', 'mgcv'))
 
 # Workshop overview
 
-1. The linear model... and where if fails
+1. The linear model... and where it fails
 2. Introduction to GAM
 3. GAM with multiple smooth terms
 4. Interactions
@@ -128,7 +128,7 @@ install.packages(c('ggplot2', 'itsadug', 'mgcv'))
 class: inverse, center, middle
 # 1. The linear model
 
-## ...and where if fails
+## ...and where it fails
 
 ---
 # Linear regression
@@ -153,7 +153,7 @@ As we saw in the [linear models workshop](http://qcbs.ca/wiki/r_workshop4), a li
 $$y_i = \beta_0 + \beta_1x_{1,i}+\beta_2x_{2,i}+\beta_3x_{3,i}+...+\beta_kx_{k,i} + \epsilon_i$$
 
 ???
-- A linear model can easily accomodate certain types of non-linear responses (e.g. $x^2$) but this approach strongly relies on (arbitrary or well-informed) choices, and is less flexible than using and additive model.
+- A linear model can easily accomodate certain types of non-linear responses (e.g. $x^2$) but this approach strongly relies on (arbitrary or well-informed) choices, and is less flexible than using an additive model.
 
 ---
 # Linear regression

@@ -5,8 +5,9 @@ contributors
 contributing
 learning-objectives
 preparing-for-the-workshop
-the-linear-modeland-where-if-fails
+intro-linear-models
 introduction-to-gams
+test-for-linearity
 challenge-1
 challenge-1-solution
 multiple-smooth-terms

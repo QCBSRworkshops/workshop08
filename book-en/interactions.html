@@ -148,10 +148,11 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li class="part"><span><b>Generalized Additive Models in <code>R</code></b></span></li>
 <li class="chapter" data-level="1" data-path="learning-objectives.html"><a href="learning-objectives.html"><i class="fa fa-check"></i><b>1</b> Learning objectives</a></li>
 <li class="chapter" data-level="2" data-path="preparing-for-the-workshop.html"><a href="preparing-for-the-workshop.html"><i class="fa fa-check"></i><b>2</b> Preparing for the workshop</a></li>
-<li class="chapter" data-level="3" data-path="the-linear-modeland-where-if-fails.html"><a href="the-linear-modeland-where-if-fails.html"><i class="fa fa-check"></i><b>3</b> The linear model…and where if fails</a></li>
+<li class="chapter" data-level="3" data-path="intro-linear-models.html"><a href="intro-linear-models.html"><i class="fa fa-check"></i><b>3</b> The linear model…and where it fails</a></li>
 <li class="chapter" data-level="4" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html"><i class="fa fa-check"></i><b>4</b> Introduction to GAMs</a><ul>
-<li class="chapter" data-level="4.1" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html#challenge-1"><i class="fa fa-check"></i><b>4.1</b> Challenge 1</a><ul>
-<li class="chapter" data-level="4.1.1" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html#challenge-1-solution"><i class="fa fa-check"></i><b>4.1.1</b> Challenge 1 Solution</a></li>
+<li class="chapter" data-level="4.1" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html#test-for-linearity"><i class="fa fa-check"></i><b>4.1</b> Test for linearity</a></li>
+<li class="chapter" data-level="4.2" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html#challenge-1"><i class="fa fa-check"></i><b>4.2</b> Challenge 1</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html#challenge-1-solution"><i class="fa fa-check"></i><b>4.2.1</b> Challenge 1: Solution</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="multiple-smooth-terms.html"><a href="multiple-smooth-terms.html"><i class="fa fa-check"></i><b>5</b> Multiple smooth terms</a><ul>
@@ -228,31 +229,31 @@ variable <code>x0</code> and ask whether the non-linear smoother <code>s(x2)</co
 different levels of <code>x0</code>. To determine whether smooth terms differ
 significantly among factor levels, we will use an ANOVA test on the
 interaction term.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="interactions.html#cb20-1"></a>categorical_interact &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>x0 <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x1) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x2, <span class="dt">by =</span> x0),</span>
-<span id="cb20-2"><a href="interactions.html#cb20-2"></a>    <span class="dt">data =</span> gam_data)</span>
-<span id="cb20-3"><a href="interactions.html#cb20-3"></a>categorical_interact_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(categorical_interact)</span>
-<span id="cb20-4"><a href="interactions.html#cb20-4"></a><span class="kw">print</span>(categorical_interact_summary<span class="op">$</span>s.table)</span>
-<span id="cb20-5"><a href="interactions.html#cb20-5"></a><span class="kw">plot</span>(categorical_interact, <span class="dt">page =</span> <span class="dv">1</span>)</span>
-<span id="cb20-6"><a href="interactions.html#cb20-6"></a><span class="co"># or alternatively: plot using vis.gam function, where</span></span>
-<span id="cb20-7"><a href="interactions.html#cb20-7"></a><span class="co"># theta is the degree rotation on the x-y plane</span></span>
-<span id="cb20-8"><a href="interactions.html#cb20-8"></a><span class="kw">vis.gam</span>(categorical_interact, <span class="dt">view =</span> <span class="kw">c</span>(<span class="st">&quot;x2&quot;</span>, <span class="st">&quot;x0&quot;</span>), <span class="dt">theta =</span> <span class="dv">40</span>,</span>
-<span id="cb20-9"><a href="interactions.html#cb20-9"></a>    <span class="dt">n.grid =</span> <span class="dv">500</span>, <span class="dt">border =</span> <span class="ot">NA</span>)</span>
-<span id="cb20-10"><a href="interactions.html#cb20-10"></a><span class="kw">anova</span>(two_smooth_model, categorical_interact, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="interactions.html#cb29-1"></a>categorical_interact &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>x0 <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x1) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x2, <span class="dt">by =</span> x0),</span>
+<span id="cb29-2"><a href="interactions.html#cb29-2"></a>    <span class="dt">data =</span> gam_data)</span>
+<span id="cb29-3"><a href="interactions.html#cb29-3"></a>categorical_interact_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(categorical_interact)</span>
+<span id="cb29-4"><a href="interactions.html#cb29-4"></a><span class="kw">print</span>(categorical_interact_summary<span class="op">$</span>s.table)</span>
+<span id="cb29-5"><a href="interactions.html#cb29-5"></a><span class="kw">plot</span>(categorical_interact, <span class="dt">page =</span> <span class="dv">1</span>)</span>
+<span id="cb29-6"><a href="interactions.html#cb29-6"></a><span class="co"># or alternatively: plot using vis.gam function, where</span></span>
+<span id="cb29-7"><a href="interactions.html#cb29-7"></a><span class="co"># theta is the degree rotation on the x-y plane</span></span>
+<span id="cb29-8"><a href="interactions.html#cb29-8"></a><span class="kw">vis.gam</span>(categorical_interact, <span class="dt">view =</span> <span class="kw">c</span>(<span class="st">&quot;x2&quot;</span>, <span class="st">&quot;x0&quot;</span>), <span class="dt">theta =</span> <span class="dv">40</span>,</span>
+<span id="cb29-9"><a href="interactions.html#cb29-9"></a>    <span class="dt">n.grid =</span> <span class="dv">500</span>, <span class="dt">border =</span> <span class="ot">NA</span>)</span>
+<span id="cb29-10"><a href="interactions.html#cb29-10"></a><span class="kw">anova</span>(two_smooth_model, categorical_interact, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
 <p><img src="images/graphic3.1b.png" width="350" /></p>
 <p>Visually, we see that the shape of smooth terms are comparable among the
 four levels of <code>x0</code>. The ANOVA test confirms this as well (Deviance =
 98.6, <em>p</em> = 0.2347).</p>
 <p>Finally we’ll look at the interactions two smooth terms, <code>x1</code> and <code>x2</code>.
 Here the <code>by</code> argument is dropped (both quantitative variables).</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="interactions.html#cb21-1"></a>smooth_interact &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>x0 <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x1, x2), <span class="dt">data =</span> gam_data)</span>
-<span id="cb21-2"><a href="interactions.html#cb21-2"></a>smooth_interact_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(smooth_interact)</span>
-<span id="cb21-3"><a href="interactions.html#cb21-3"></a><span class="kw">print</span>(smooth_interact_summary<span class="op">$</span>s.table)</span>
-<span id="cb21-4"><a href="interactions.html#cb21-4"></a><span class="kw">plot</span>(smooth_interact, <span class="dt">page =</span> <span class="dv">1</span>, <span class="dt">scheme =</span> <span class="dv">3</span>)</span>
-<span id="cb21-5"><a href="interactions.html#cb21-5"></a><span class="co"># plot(smooth_interact,page=1,scheme=1) will give a similar</span></span>
-<span id="cb21-6"><a href="interactions.html#cb21-6"></a><span class="co"># plot to the vis.gam()</span></span>
-<span id="cb21-7"><a href="interactions.html#cb21-7"></a><span class="kw">vis.gam</span>(smooth_interact, <span class="dt">view =</span> <span class="kw">c</span>(<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>), <span class="dt">theta =</span> <span class="dv">40</span>, <span class="dt">n.grid =</span> <span class="dv">500</span>,</span>
-<span id="cb21-8"><a href="interactions.html#cb21-8"></a>    <span class="dt">border =</span> <span class="ot">NA</span>)</span>
-<span id="cb21-9"><a href="interactions.html#cb21-9"></a><span class="kw">anova</span>(two_smooth_model, smooth_interact, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="interactions.html#cb30-1"></a>smooth_interact &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>x0 <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x1, x2), <span class="dt">data =</span> gam_data)</span>
+<span id="cb30-2"><a href="interactions.html#cb30-2"></a>smooth_interact_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(smooth_interact)</span>
+<span id="cb30-3"><a href="interactions.html#cb30-3"></a><span class="kw">print</span>(smooth_interact_summary<span class="op">$</span>s.table)</span>
+<span id="cb30-4"><a href="interactions.html#cb30-4"></a><span class="kw">plot</span>(smooth_interact, <span class="dt">page =</span> <span class="dv">1</span>, <span class="dt">scheme =</span> <span class="dv">3</span>)</span>
+<span id="cb30-5"><a href="interactions.html#cb30-5"></a><span class="co"># plot(smooth_interact,page=1,scheme=1) will give a similar</span></span>
+<span id="cb30-6"><a href="interactions.html#cb30-6"></a><span class="co"># plot to the vis.gam()</span></span>
+<span id="cb30-7"><a href="interactions.html#cb30-7"></a><span class="kw">vis.gam</span>(smooth_interact, <span class="dt">view =</span> <span class="kw">c</span>(<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>), <span class="dt">theta =</span> <span class="dv">40</span>, <span class="dt">n.grid =</span> <span class="dv">500</span>,</span>
+<span id="cb30-8"><a href="interactions.html#cb30-8"></a>    <span class="dt">border =</span> <span class="ot">NA</span>)</span>
+<span id="cb30-9"><a href="interactions.html#cb30-9"></a><span class="kw">anova</span>(two_smooth_model, smooth_interact, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
 <p><img src="images/graphic3.2b.png" width="350" /></p>
 <p>The interaction between <code>s(x1)</code> and <code>s(x2)</code> is significant and the 2D plot
 nicely illustrates this non-linear interactions, where <code>y</code> is greatest at

@@ -148,10 +148,11 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li class="part"><span><b>Generalized Additive Models in <code>R</code></b></span></li>
 <li class="chapter" data-level="1" data-path="learning-objectives.html"><a href="learning-objectives.html"><i class="fa fa-check"></i><b>1</b> Learning objectives</a></li>
 <li class="chapter" data-level="2" data-path="preparing-for-the-workshop.html"><a href="preparing-for-the-workshop.html"><i class="fa fa-check"></i><b>2</b> Preparing for the workshop</a></li>
-<li class="chapter" data-level="3" data-path="the-linear-modeland-where-if-fails.html"><a href="the-linear-modeland-where-if-fails.html"><i class="fa fa-check"></i><b>3</b> The linear model…and where if fails</a></li>
+<li class="chapter" data-level="3" data-path="intro-linear-models.html"><a href="intro-linear-models.html"><i class="fa fa-check"></i><b>3</b> The linear model…and where it fails</a></li>
 <li class="chapter" data-level="4" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html"><i class="fa fa-check"></i><b>4</b> Introduction to GAMs</a><ul>
-<li class="chapter" data-level="4.1" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html#challenge-1"><i class="fa fa-check"></i><b>4.1</b> Challenge 1</a><ul>
-<li class="chapter" data-level="4.1.1" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html#challenge-1-solution"><i class="fa fa-check"></i><b>4.1.1</b> Challenge 1 Solution</a></li>
+<li class="chapter" data-level="4.1" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html#test-for-linearity"><i class="fa fa-check"></i><b>4.1</b> Test for linearity</a></li>
+<li class="chapter" data-level="4.2" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html#challenge-1"><i class="fa fa-check"></i><b>4.2</b> Challenge 1</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html#challenge-1-solution"><i class="fa fa-check"></i><b>4.2.1</b> Challenge 1: Solution</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="multiple-smooth-terms.html"><a href="multiple-smooth-terms.html"><i class="fa fa-check"></i><b>5</b> Multiple smooth terms</a><ul>
@@ -223,9 +224,9 @@ example that follows uses a dataset where a binomial family distribution
 is needed and a non-linear relationship with the explanatory variable is
 evident. Here, the response variable represents the number of successes
 (event happened) versus failures over the course of an experiment.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="other-distributions.html#cb25-1"></a>gam_data3 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;other_dist.csv&quot;</span>)</span>
-<span id="cb25-2"><a href="other-distributions.html#cb25-2"></a><span class="kw">summary</span>(gam_data3)</span>
-<span id="cb25-3"><a href="other-distributions.html#cb25-3"></a><span class="kw">str</span>(gam_data3)</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="other-distributions.html#cb34-1"></a>gam_data3 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;other_dist.csv&quot;</span>)</span>
+<span id="cb34-2"><a href="other-distributions.html#cb34-2"></a><span class="kw">summary</span>(gam_data3)</span>
+<span id="cb34-3"><a href="other-distributions.html#cb34-3"></a><span class="kw">str</span>(gam_data3)</span></code></pre></div>
 <pre><code>&#39;data.frame&#39;: 514 obs. of  4 variables:
  $ prop : num  1 1 1 1 0 1 1 1 1 1 ...
  $ total: int  4 20 20 18 18 18 20 20 20 20 ...
@@ -247,23 +248,23 @@ successes in comparison to failures as <code>x1</code> increases. We will calcul
 the grand averages of the proportions of successes per time bin (<code>x1</code>)
 given that there are repeated measures per <code>x1</code> value (numerous trials and
 observations per trial).</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="other-distributions.html#cb27-1"></a><span class="kw">emptyPlot</span>(<span class="kw">range</span>(gam_data3<span class="op">$</span>x1), <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="dt">h =</span> <span class="fl">0.5</span>, <span class="dt">main =</span> <span class="st">&quot;Probability of successes&quot;</span>,</span>
-<span id="cb27-2"><a href="other-distributions.html#cb27-2"></a>    <span class="dt">ylab =</span> <span class="st">&quot;Probability&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;x1&quot;</span>)</span>
-<span id="cb27-3"><a href="other-distributions.html#cb27-3"></a></span>
-<span id="cb27-4"><a href="other-distributions.html#cb27-4"></a>avg &lt;-<span class="st"> </span><span class="kw">aggregate</span>(prop <span class="op">~</span><span class="st"> </span>x1, <span class="dt">data =</span> gam_data3, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb27-5"><a href="other-distributions.html#cb27-5"></a><span class="kw">lines</span>(avg<span class="op">$</span>x1, avg<span class="op">$</span>prop, <span class="dt">col =</span> <span class="st">&quot;orange&quot;</span>, <span class="dt">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="other-distributions.html#cb36-1"></a><span class="kw">emptyPlot</span>(<span class="kw">range</span>(gam_data3<span class="op">$</span>x1), <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="dt">h =</span> <span class="fl">0.5</span>, <span class="dt">main =</span> <span class="st">&quot;Probability of successes&quot;</span>,</span>
+<span id="cb36-2"><a href="other-distributions.html#cb36-2"></a>    <span class="dt">ylab =</span> <span class="st">&quot;Probability&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;x1&quot;</span>)</span>
+<span id="cb36-3"><a href="other-distributions.html#cb36-3"></a></span>
+<span id="cb36-4"><a href="other-distributions.html#cb36-4"></a>avg &lt;-<span class="st"> </span><span class="kw">aggregate</span>(prop <span class="op">~</span><span class="st"> </span>x1, <span class="dt">data =</span> gam_data3, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb36-5"><a href="other-distributions.html#cb36-5"></a><span class="kw">lines</span>(avg<span class="op">$</span>x1, avg<span class="op">$</span>prop, <span class="dt">col =</span> <span class="st">&quot;orange&quot;</span>, <span class="dt">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="images/graphic1_otherdist.jpg" width="450" /></p>
 <p>As <code>x1</code> increases, so does the probability of successes. Would you say
 that this trend is linear or non-linear? We will test this using a
 logistic GAM (we use a <code>binomial</code> family distribution given that our
 response is proportion data).</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="other-distributions.html#cb28-1"></a>prop_model &lt;-<span class="st"> </span><span class="kw">gam</span>(prop <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(x1), <span class="dt">data =</span> gam_data3, <span class="dt">weights =</span> total,</span>
-<span id="cb28-2"><a href="other-distributions.html#cb28-2"></a>    <span class="dt">family =</span> <span class="st">&quot;binomial&quot;</span>)</span>
-<span id="cb28-3"><a href="other-distributions.html#cb28-3"></a>prop_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(prop_model)</span>
-<span id="cb28-4"><a href="other-distributions.html#cb28-4"></a><span class="kw">print</span>(prop_summary<span class="op">$</span>p.table)</span>
-<span id="cb28-5"><a href="other-distributions.html#cb28-5"></a><span class="kw">print</span>(prop_summary<span class="op">$</span>s.table)</span>
-<span id="cb28-6"><a href="other-distributions.html#cb28-6"></a></span>
-<span id="cb28-7"><a href="other-distributions.html#cb28-7"></a><span class="kw">plot</span>(prop_model)</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="other-distributions.html#cb37-1"></a>prop_model &lt;-<span class="st"> </span><span class="kw">gam</span>(prop <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(x1), <span class="dt">data =</span> gam_data3, <span class="dt">weights =</span> total,</span>
+<span id="cb37-2"><a href="other-distributions.html#cb37-2"></a>    <span class="dt">family =</span> <span class="st">&quot;binomial&quot;</span>)</span>
+<span id="cb37-3"><a href="other-distributions.html#cb37-3"></a>prop_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(prop_model)</span>
+<span id="cb37-4"><a href="other-distributions.html#cb37-4"></a><span class="kw">print</span>(prop_summary<span class="op">$</span>p.table)</span>
+<span id="cb37-5"><a href="other-distributions.html#cb37-5"></a><span class="kw">print</span>(prop_summary<span class="op">$</span>s.table)</span>
+<span id="cb37-6"><a href="other-distributions.html#cb37-6"></a></span>
+<span id="cb37-7"><a href="other-distributions.html#cb37-7"></a><span class="kw">plot</span>(prop_model)</span></code></pre></div>
 <pre><code>             Estimate  Std. Error  z value   Pr(&gt;|z|)
 (Intercept)  1.173978  0.02709613  43.32641  0
 
@@ -302,17 +303,17 @@ of the experiment.</li>
 <h2><span class="header-section-number">8.1</span> Visualizing the trend over time</h2>
 <p>Lastly, we will see the different ways this relationship could be
 represented graphically.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="other-distributions.html#cb30-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb30-2"><a href="other-distributions.html#cb30-2"></a><span class="kw">plot</span>(prop_model, <span class="dt">select =</span> <span class="dv">1</span>, <span class="dt">scale =</span> <span class="dv">0</span>, <span class="dt">shade =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb30-3"><a href="other-distributions.html#cb30-3"></a><span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">0</span>)</span>
-<span id="cb30-4"><a href="other-distributions.html#cb30-4"></a></span>
-<span id="cb30-5"><a href="other-distributions.html#cb30-5"></a>out &lt;-<span class="st"> </span><span class="kw">plot_smooth</span>(prop_model, <span class="dt">view =</span> <span class="st">&quot;x1&quot;</span>, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>)</span>
-<span id="cb30-6"><a href="other-distributions.html#cb30-6"></a>(diff &lt;-<span class="st"> </span><span class="kw">find_difference</span>(out<span class="op">$</span>fv<span class="op">$</span>fit, out<span class="op">$</span>fv<span class="op">$</span>CI, <span class="dt">xVals =</span> out<span class="op">$</span>fv<span class="op">$</span>x1))</span>
-<span id="cb30-7"><a href="other-distributions.html#cb30-7"></a><span class="kw">addInterval</span>(<span class="dv">0</span>, <span class="dt">lowVals =</span> diff<span class="op">$</span>start, <span class="dt">highVals =</span> diff<span class="op">$</span>end, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>,</span>
-<span id="cb30-8"><a href="other-distributions.html#cb30-8"></a>    <span class="dt">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb30-9"><a href="other-distributions.html#cb30-9"></a><span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">c</span>(diff<span class="op">$</span>start, diff<span class="op">$</span>end), <span class="dt">lty =</span> <span class="dv">3</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span>
-<span id="cb30-10"><a href="other-distributions.html#cb30-10"></a><span class="kw">text</span>(<span class="kw">mean</span>(<span class="kw">c</span>(diff<span class="op">$</span>start, diff<span class="op">$</span>end)), <span class="fl">2.1</span>, <span class="st">&quot;sign. more </span><span class="ch">\n</span><span class="st"> success&quot;</span>,</span>
-<span id="cb30-11"><a href="other-distributions.html#cb30-11"></a>    <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">font =</span> <span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="other-distributions.html#cb39-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb39-2"><a href="other-distributions.html#cb39-2"></a><span class="kw">plot</span>(prop_model, <span class="dt">select =</span> <span class="dv">1</span>, <span class="dt">scale =</span> <span class="dv">0</span>, <span class="dt">shade =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb39-3"><a href="other-distributions.html#cb39-3"></a><span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">0</span>)</span>
+<span id="cb39-4"><a href="other-distributions.html#cb39-4"></a></span>
+<span id="cb39-5"><a href="other-distributions.html#cb39-5"></a>out &lt;-<span class="st"> </span><span class="kw">plot_smooth</span>(prop_model, <span class="dt">view =</span> <span class="st">&quot;x1&quot;</span>, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb39-6"><a href="other-distributions.html#cb39-6"></a>(diff &lt;-<span class="st"> </span><span class="kw">find_difference</span>(out<span class="op">$</span>fv<span class="op">$</span>fit, out<span class="op">$</span>fv<span class="op">$</span>CI, <span class="dt">xVals =</span> out<span class="op">$</span>fv<span class="op">$</span>x1))</span>
+<span id="cb39-7"><a href="other-distributions.html#cb39-7"></a><span class="kw">addInterval</span>(<span class="dv">0</span>, <span class="dt">lowVals =</span> diff<span class="op">$</span>start, <span class="dt">highVals =</span> diff<span class="op">$</span>end, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>,</span>
+<span id="cb39-8"><a href="other-distributions.html#cb39-8"></a>    <span class="dt">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb39-9"><a href="other-distributions.html#cb39-9"></a><span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">c</span>(diff<span class="op">$</span>start, diff<span class="op">$</span>end), <span class="dt">lty =</span> <span class="dv">3</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb39-10"><a href="other-distributions.html#cb39-10"></a><span class="kw">text</span>(<span class="kw">mean</span>(<span class="kw">c</span>(diff<span class="op">$</span>start, diff<span class="op">$</span>end)), <span class="fl">2.1</span>, <span class="st">&quot;sign. more </span><span class="ch">\n</span><span class="st"> success&quot;</span>,</span>
+<span id="cb39-11"><a href="other-distributions.html#cb39-11"></a>    <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">font =</span> <span class="dv">3</span>)</span></code></pre></div>
 <p><img src="images/graphic2_otherdist.jpg" width="800" /></p>
 <p>What do these plots tell us about successes versus failures?</p>
 <ul>
@@ -331,10 +332,10 @@ use the plot to determine at which <code>x1</code> value this occurs.</li>
 <p>Lastly, to help interpret the results, we could transform the summed
 effects back to proportions with the function <code>plot_smooth</code> from the
 <code>itsadug</code> package:</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="other-distributions.html#cb31-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span>
-<span id="cb31-2"><a href="other-distributions.html#cb31-2"></a><span class="kw">plot_smooth</span>(prop_model, <span class="dt">view =</span> <span class="st">&quot;x1&quot;</span>, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">transform =</span> plogis,</span>
-<span id="cb31-3"><a href="other-distributions.html#cb31-3"></a>    <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span>
-<span id="cb31-4"><a href="other-distributions.html#cb31-4"></a><span class="kw">abline</span>(<span class="dt">h =</span> <span class="fl">0.5</span>, <span class="dt">v =</span> diff<span class="op">$</span>start, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="other-distributions.html#cb40-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb40-2"><a href="other-distributions.html#cb40-2"></a><span class="kw">plot_smooth</span>(prop_model, <span class="dt">view =</span> <span class="st">&quot;x1&quot;</span>, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">transform =</span> plogis,</span>
+<span id="cb40-3"><a href="other-distributions.html#cb40-3"></a>    <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span>
+<span id="cb40-4"><a href="other-distributions.html#cb40-4"></a><span class="kw">abline</span>(<span class="dt">h =</span> <span class="fl">0.5</span>, <span class="dt">v =</span> diff<span class="op">$</span>start, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="images/graphic3_otherdist.jpg" width="450" /></p>
 <p>As we already derived from the logit plot, we see that at around <code>x1</code> = 400
 the proportion of successes increases significantly above 0.5.</p>

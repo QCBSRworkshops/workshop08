@@ -29,8 +29,8 @@ list.of.packages <- c("ggplot2", "itsadug", "mgcv")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 
 if(length(new.packages) > 0) {
-  install.packages(new.packages, dependencies = TRUE) 
-  print(paste0("The following package was installed:", new.packages)) 
+  install.packages(new.packages, dependencies = TRUE)
+  print(paste0("The following package was installed:", new.packages))
 } else if(length(new.packages) == 0) {
     print("All packages were already installed previously")
 }
@@ -186,7 +186,7 @@ plot(basic_model, all.terms = TRUE,page = 1)
 
 basic_summary$s.table
 
-two_term_model <- gam(Sources ~ Season + s(SampleDepth) + RelativeDepth, 
+two_term_model <- gam(Sources ~ Season + s(SampleDepth) + RelativeDepth,
                       data = isit, method = "REML")
 two_term_summary <- summary(two_term_model)
 
@@ -196,7 +196,7 @@ two_term_summary$s.table
 
 plot(two_term_model, page=1, all.terms = T)
 
-two_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth), 
+two_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth),
                         data = isit, method = "REML")
 two_smooth_summary <- summary(two_smooth_model)
 
@@ -239,13 +239,13 @@ three_smooth_model <- gam(Sources ~
 three_smooth_summary <- summary(three_smooth_model)
 three_smooth_summary
 
-three_term_model <- gam(Sources ~ 
-                          Season + s(SampleDepth) + s(RelativeDepth) + 
-                          Latitude, 
+three_term_model <- gam(Sources ~
+                          Season + s(SampleDepth) + s(RelativeDepth) +
+                          Latitude,
                         data = isit, method = "REML")
 
-three_smooth_model <- gam(Sources ~ 
-                            Season + s(SampleDepth) + s(RelativeDepth) + 
+three_smooth_model <- gam(Sources ~
+                            Season + s(SampleDepth) + s(RelativeDepth) +
                             s(Latitude),
                           data = isit, method = "REML")
 
@@ -268,9 +268,9 @@ three_smooth_summary$s.table
 AIC(two_smooth_model, three_term_model)
 
 
-factor_interact <- gam(Sources ~ Season + 
-                         s(SampleDepth,by=Season) + 
-                         s(RelativeDepth), 
+factor_interact <- gam(Sources ~ Season +
+                         s(SampleDepth,by=Season) +
+                         s(RelativeDepth),
                        data = isit, method = "REML")
 
 summary(factor_interact)$s.table
@@ -285,18 +285,18 @@ vis.gam(factor_interact, view = c("SampleDepth","Season"), theta = 40, n.grid = 
 
 AIC(two_smooth_model, factor_interact)
 
-smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), 
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth),
                        data = isit, method = "REML")
 summary(smooth_interact)$s.table
 
 plot(smooth_interact, page = 1, scheme = 3)
 
-vis.gam(smooth_interact, view = c("SampleDepth", "RelativeDepth"), 
+vis.gam(smooth_interact, view = c("SampleDepth", "RelativeDepth"),
         cond = list(Season = 1), theta=40, n.grid = 50, color = "cm")
 
 AIC(two_smooth_model, smooth_interact)
 
-smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), 
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth),
                        data = isit, method = "REML")
 
 summary(smooth_interact)$p.table
@@ -305,7 +305,7 @@ summary(smooth_interact)$s.table
 
 k.check(smooth_interact)
 
-smooth_interact_k60 <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+smooth_interact_k60 <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60),
                            data = isit, method = "REML")
 summary(smooth_interact_k60)$p.table
 summary(smooth_interact_k60)$s.table
@@ -323,14 +323,14 @@ gam.check(smooth_interact)
 ?family.mgcv
 
 # Distribution normale
-smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60),
                           data = isit, method = "REML")
 # Tweedie avec log comme fonction de liaison
-smooth_interact_tw <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+smooth_interact_tw <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60),
                           family = tw(link = "log"),
                           data = isit, method = "REML")
 
-smooth_interact_tw <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+smooth_interact_tw <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60),
                           family = tw(link = "log"),
                           data = isit, method = "REML")
 summary(smooth_interact_tw)$p.table
@@ -475,7 +475,7 @@ plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "4"), add = T,
 
 plot(gamm_int_slope, select = 3)
 
-gamm_smooth <- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1), 
+gamm_smooth <- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1),
                    data = gam_data2, method = "REML")
 
 summary(gamm_smooth)$s.table
@@ -520,7 +520,7 @@ abline(h = 0.5)
 avg <- aggregate(prop ~ x1, data=gam_data3, mean)
 lines(avg$x1, avg$prop, col = "orange", lwd = 2)
 
-prop_model <- gam(prop ~ s(x1), data = gam_data3, weights = total, 
+prop_model <- gam(prop ~ s(x1), data = gam_data3, weights = total,
                   family = "binomial", method = "REML")
 prop_summary <- summary(prop_model)
 

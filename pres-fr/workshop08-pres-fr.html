@@ -95,7 +95,7 @@ class: inverse, center, middle
 La régression linéaire est ce que la plupart des gens apprennent avant tout en statistiques et est parmi les méthodes les plus performantes. Elle nous permet de modéliser une variable réponse en fonction de facteurs prédictifs et d'une erreur résiduelle.
 
 --
-Tel que vu dans l'[atelier sur les modèles linéaires](http://qcbs.ca/wiki/r_workshop4), le modèle linéaire fait cependant quatre suppositions importantes :
+Tel que vu dans l'[atelier sur les modèles linéaires](http://qcbs.ca/wiki/r_workshop4), le modèle linéaire fait quatre suppositions importantes :
 
 1. Relation linéaire entre les variables de réponse et les variables prédicteurs:  `$$y_i = \beta_0 + \beta_1 \times x_i + \epsilon_i$$`
 2. L'erreur est distribuée normalement: `$$\epsilon_i \sim \mathcal{N}(0,\,\sigma^2)$$`
@@ -113,7 +113,7 @@ Tel que vu dans l'[atelier sur les modèles linéaires](http://qcbs.ca/wiki/r_wo
 ---
 # La régression linéaire
 
-Il n'y a qu'une façon pour qu'un modèle linéaire soit correctement appliqué :
+Les modèles linéaires fonctionnent très bien dans certains cas spécifiques où tous ces critères sont respectés:
 
 .center[
 ![](images/linreg.png)
@@ -317,7 +317,7 @@ plot(gam_model)
 &lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-15-1.png" width="396" style="display: block; margin: auto;" /&gt;
 
 ---
-#Test de linéarité avec GAM
+# Test de linéarité avec GAM
 
 Nous pouvons utiliser les fonctions `gam()` et `AIC()` pour tester formellement si une hypothèse de linéarité est justifiée. Nous devons simplement le configurer de sorte que notre modèle non-linéaire soit emboîté dans notre modèle linéaire.
 
@@ -339,7 +339,7 @@ AIC(linear_model, nested_gam_model)
 exclude:true
 # Test de linéarité avec GAM
 
-Nous pouvons utiliser les fonctions `gam()` et `anova()` pour tester formellement si une hypothèse de linéarité est justifiée. Nous devons simplement le configurer de sorte que notre modèle non-linéaire soit emboîté dans notre modèle linéaire.
+On peut utiliser `gam()` et `AIC()` pour tester si une supposition de linéarité est justifiée. Ici, on demande si l'ajout d'une fonction lisse au modèle linéaire améliore l'ajustement du modèle à nos données:
 
 
 ```r
@@ -611,7 +611,7 @@ isit$Season &lt;- as.factor(isit$Season)
 
 Nous allons essayer de modéliser la réponse `Sources` avec les prédicteurs `Season` and `SampleDepth` simultanément.
 
-.comment[La variable `Season` doit etre convertie en facteur] 
+.comment[La variable `Season` doit etre convertie en facteur]
 
 ---
 # GAM à plusieurs variables
@@ -741,7 +741,7 @@ Nous pouvons ajouter un second terme, `RelativeDepth`, mais spécifier une relat
 
 
 ```r
-two_term_model &lt;- gam(Sources ~ Season + s(SampleDepth) + RelativeDepth, 
+two_term_model &lt;- gam(Sources ~ Season + s(SampleDepth) + RelativeDepth,
                       data = isit, method = "REML")
 two_term_summary &lt;- summary(two_term_model)
 ```
@@ -787,7 +787,7 @@ Nous pouvons aussi vérifier que la relation entre `Sources` et `RelativeDepth` 
 
 
 ```r
-two_smooth_model &lt;- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth), 
+two_smooth_model &lt;- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth),
                         data = isit, method = "REML")
 two_smooth_summary &lt;- summary(two_smooth_model)
 ```
@@ -929,13 +929,13 @@ exclude:true
 # Défi 2 - Solution ![:cube]()
 
 ```r
-three_term_model &lt;- gam(Sources ~ 
-                          Season + s(SampleDepth) + s(RelativeDepth) + 
-                          Latitude, 
+three_term_model &lt;- gam(Sources ~
+                          Season + s(SampleDepth) + s(RelativeDepth) +
+                          Latitude,
                         data = isit, method = "REML")
 
-three_smooth_model &lt;- gam(Sources ~ 
-                            Season + s(SampleDepth) + s(RelativeDepth) + 
+three_smooth_model &lt;- gam(Sources ~
+                            Season + s(SampleDepth) + s(RelativeDepth) +
                             s(Latitude),
                           data = isit, method = "REML")
 
@@ -1036,9 +1036,9 @@ Nous allons examiner l'effet de l'interaction en utilisant notre variable qualit
 
 
 ```r
-factor_interact &lt;- gam(Sources ~ Season + 
-                         s(SampleDepth,by=Season) + 
-                         s(RelativeDepth), 
+factor_interact &lt;- gam(Sources ~ Season +
+                         s(SampleDepth,by=Season) +
+                         s(RelativeDepth),
                        data = isit, method = "REML")
 
 summary(factor_interact)$s.table
@@ -1104,7 +1104,7 @@ Finalement, nous regardons les interactions entre 2 termes non linéaires, `Samp
 
 
 ```r
-smooth_interact &lt;- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), 
+smooth_interact &lt;- gam(Sources ~ Season + s(SampleDepth, RelativeDepth),
                        data = isit, method = "REML")
 summary(smooth_interact)$s.table
 #                                   edf Ref.df        F p-value
@@ -1122,7 +1122,7 @@ summary(smooth_interact)$s.table
 
 
 ```r
-vis.gam(smooth_interact, view = c("SampleDepth", "RelativeDepth"), 
+vis.gam(smooth_interact, view = c("SampleDepth", "RelativeDepth"),
         cond = list(Season = 1), theta=40, n.grid = 50, color = "cm")
 ```
 
@@ -1188,7 +1188,7 @@ Rappelons le modèle d'interaction pour les données de bioluminescence :
 
 
 ```r
-smooth_interact &lt;- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), 
+smooth_interact &lt;- gam(Sources ~ Season + s(SampleDepth, RelativeDepth),
                        data = isit, method = "REML")
 
 summary(smooth_interact)$p.table
@@ -1228,7 +1228,7 @@ Fonctions incluses dans `mgcv` :
 
 ##### Première étape :
 
-Avons-nous choisi `k` assez grand ? 
+Avons-nous choisi `k` assez grand ?
 
 .comment[Le défaut pour les interactions lisses est `k = 30`].
 
@@ -1236,7 +1236,7 @@ Avons-nous choisi `k` assez grand ?
 ```r
 k.check(smooth_interact)
 #                              k'      edf   k-index p-value
-# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883  0.0475
+# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883    0.08
 ```
 
 --
@@ -1251,7 +1251,7 @@ Refaisons le modèle avec un `k` plus grand :
 
 
 ```r
-smooth_interact_k60 &lt;- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+smooth_interact_k60 &lt;- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60),
                            data = isit, method = "REML")
 summary(smooth_interact_k60)$p.table
 #             Estimate Std. Error   t value     Pr(&gt;|t|)
@@ -1270,7 +1270,7 @@ Est-ce que `k` est assez grand ?
 ```r
 k.check(smooth_interact_k60)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626  0.9025
+# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626  0.8475
 ```
 
 --
@@ -1361,10 +1361,10 @@ Pour en savoir plus sur les familles disponibles dans `mgcv` :
 
 ```r
 # Distribution normale
-smooth_interact &lt;- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+smooth_interact &lt;- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60),
                           data = isit, method = "REML")
 # Tweedie avec log comme fonction de liaison
-smooth_interact_tw &lt;- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+smooth_interact_tw &lt;- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60),
                           family = tw(link = "log"),
                           data = isit, method = "REML")
 ```
@@ -1378,7 +1378,7 @@ Ajuster le modèle :
 
 
 ```r
-smooth_interact_tw &lt;- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+smooth_interact_tw &lt;- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60),
                           family = tw(link = "log"),
                           data = isit, method = "REML")
 summary(smooth_interact_tw)$p.table
@@ -1397,7 +1397,7 @@ Vérifier les dimensions de base :
 ```r
 k.check(smooth_interact_tw)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062   0.815
+# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062   0.835
 ```
 
 ---
@@ -1447,7 +1447,7 @@ class: inverse, center, middle
 
 
 ---
-# Fonctions lisses 
+# Fonctions lisses
 
 Pour modéliser une surface lisse ou non-linéaire, nous pouvons construire des fonctions lisses de différentes manières:
 
@@ -1547,7 +1547,7 @@ Lorsque les observations ne sont pas indépendantes, les GAMs peuvent être util
 ---
 # Modèle avec erreurs autocorrélées
 
-Pour commencer, nous allons jeter un coup d’œil au premier cas; un modèle avec autocorrélation temporelle dans les résidus. 
+Pour commencer, nous allons jeter un coup d’œil au premier cas; un modèle avec autocorrélation temporelle dans les résidus.
 
 Ré-examinons le modèle de la température de Nottingham et vérifions si les résidus sont corrélés en faisant appel à la fonction (partielle) d'autocorrélation.
 
@@ -1574,7 +1574,7 @@ Les graphiques des fonctions d'autocorrélation suggèrent qu'un modèle AR de f
 ---
 # Modèle avec erreurs autocorrélées
 
-Nous pouvons ajouter des structures d'autocorrelation au modèle : 
+Nous pouvons ajouter des structures d'autocorrelation au modèle :
 
 - **AR(1)** : corrélation avec un intervalle de temps décalé, ou
 - **AR(2)** : corrélation à 2 intervalles de temps décalés
@@ -1633,15 +1633,15 @@ gam_data2 &lt;- gamSim(eg = 6)
 # 4 term additive + random effectGu &amp; Wahba 4 term additive model
 str(gam_data2)
 # 'data.frame':	400 obs. of  11 variables:
-#  $ y  : num  9.27 23.25 16.29 18.46 7.96 ...
-#  $ x0 : num  0.0732 0.9254 0.1824 0.4615 0.389 ...
-#  $ x1 : num  0.452 0.901 0.155 0.495 0.225 ...
-#  $ x2 : num  0.74 0.277 0.631 0.411 0.435 ...
-#  $ x3 : num  0.452 0.608 0.9 0.702 0.435 ...
-#  $ f  : num  8.18 20.85 14.76 20.63 9.86 ...
-#  $ f0 : num  0.456 0.464 1.085 1.985 1.88 ...
-#  $ f1 : num  2.47 6.06 1.36 2.69 1.57 ...
-#  $ f2 : num  2.26 8.32 3.31 3.95 3.41 ...
+#  $ y  : num  9.92 23.01 19.86 28.42 15.01 ...
+#  $ x0 : num  0.726 0.211 0.402 0.333 0.886 ...
+#  $ x1 : num  0.9508 0.9406 0.1785 0.9964 0.0494 ...
+#  $ x2 : num  0.0433 0.2182 0.2372 0.5313 0.3856 ...
+#  $ x3 : num  0.0802 0.3277 0.4789 0.3318 0.3808 ...
+#  $ f  : num  11.7 22.7 21.2 23.9 9.5 ...
+#  $ f0 : num  1.518 1.233 1.907 1.731 0.702 ...
+#  $ f1 : num  6.7 6.56 1.43 7.34 1.1 ...
+#  $ f2 : num  0.521 8.864 8.907 2.786 4.697 ...
 #  $ f3 : num  0 0 0 0 0 0 0 0 0 0 ...
 #  $ fac: Factor w/ 4 levels "1","2","3","4": 1 2 3 4 1 2 3 4 1 2 ...
 ```
@@ -1654,9 +1654,9 @@ str(gam_data2)
 ```r
 gamm_intercept &lt;- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2, method = "REML")
 summary(gamm_intercept)$s.table
-#             edf   Ref.df          F   p-value
-# s(x0)  1.727980 2.148163  0.6747091 0.5031703
-# s(fac) 2.968418 3.000000 94.1637046 0.0000000
+#             edf   Ref.df          F      p-value
+# s(x0)  3.034526 3.764812   5.017676 0.0008170679
+# s(fac) 2.972566 3.000000 108.265760 0.0000000000
 plot(gamm_intercept, select = 2)
 ```
 
@@ -1704,9 +1704,9 @@ plot_smooth(gamm_intercept, view="x0", cond = list(fac = "4"), add = T, col = 't
 gamm_slope &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2, method = "REML")
 
 summary(gamm_slope)$s.table
-#                edf   Ref.df          F   p-value
-# s(x0)     1.805932 2.247879  0.6300641 0.4930372
-# s(x0,fac) 2.955607 3.000000 62.7494170 0.0000000
+#                edf   Ref.df         F     p-value
+# s(x0)     2.986088 3.706455  4.121817 0.003497329
+# s(x0,fac) 2.945079 3.000000 56.306474 0.000000000
 ```
 
 
@@ -1745,10 +1745,10 @@ gamm_int_slope &lt;- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
                       data = gam_data2, method = "REML")
 
 summary(gamm_int_slope)$s.table
-#                edf   Ref.df           F   p-value
-# s(x0)     1.793510 2.230669   0.7472798 0.4617752
-# s(fac)    2.923806 3.000000 270.3209598 0.0000000
-# s(fac,x0) 1.431123 3.000000  70.5789010 0.1719725
+#                edf   Ref.df          F     p-value
+# s(x0)     3.003635 3.725804   4.543969 0.001797711
+# s(fac)    2.946467 3.000000 402.375282 0.000000000
+# s(fac,x0) 1.371616 3.000000  73.555379 0.133234194
 ```
 
 ---
@@ -1794,13 +1794,13 @@ plot(gamm_int_slope, select = 3)
 
 
 ```r
-gamm_smooth &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1), 
+gamm_smooth &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1),
                    data = gam_data2, method = "REML")
 
 summary(gamm_smooth)$s.table
-#                edf    Ref.df         F   p-value
-# s(x0)     1.576572  1.852548 0.4616452 0.6380931
-# s(x0,fac) 8.395600 35.000000 8.5536759 0.0000000
+#                edf    Ref.df        F     p-value
+# s(x0)     2.900655  3.559262 3.835432 0.006198029
+# s(x0,fac) 5.892172 35.000000 9.510118 0.000000000
 ```
 
 ---
@@ -1852,10 +1852,10 @@ Tous ces modèles mixtes peuvent être comparés en utilisant la fonction `AIC()
 ```r
 AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
 #                       df      AIC
-# gamm_intercept  7.147817 2200.675
-# gamm_slope      7.247189 2260.358
-# gamm_int_slope  9.363356 2201.050
-# gamm_smooth    15.456236 2202.107
+# gamm_intercept  8.498658 2285.719
+# gamm_slope      8.450640 2382.930
+# gamm_int_slope 10.805609 2286.058
+# gamm_smooth    13.161587 2287.861
 ```
 
 
@@ -1864,9 +1864,9 @@ AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
 
 Cet atelier présente une brève introduction aux concepts de base et aux librairies populaires pour vous aider à estimer, évaluer et visualiser les GAMs dans R, mais il y a beaucoup plus à explorer!
 &lt;br&gt;&lt;br&gt;
-* Le livre [Generalized Additive Models: An Introduction with R](https://www.routledge.com/Generalized-Additive-Models-An-Introduction-with-R-Second-Edition/Wood/p/book/9781498728331) par Simon Wood (auteur de la librairie `mgcv`). 
+* Le livre [Generalized Additive Models: An Introduction with R](https://www.routledge.com/Generalized-Additive-Models-An-Introduction-with-R-Second-Edition/Wood/p/book/9781498728331) par Simon Wood (auteur de la librairie `mgcv`).
 * Le site web de Simon Wood, [maths.ed.ac.uk/~swood34/](https://www.maths.ed.ac.uk/~swood34/).
-* Le blogue de Gavin Simpson, [From the bottom of the heap](https://fromthebottomoftheheap.net/). 
+* Le blogue de Gavin Simpson, [From the bottom of the heap](https://fromthebottomoftheheap.net/).
 * La librairie [`gratia`](https://cran.r-project.org/web/packages/gratia/index.html) de Gavin Simpson for GAM visualisation in `ggplot2`.
 * Le cours [Generalized Additive Models: An Introduction with R](https://noamross.github.io/gams-in-r-course/) de Noam Ross.
 * [Overview GAMM analysis of time series data](https://jacolienvanrij.com/Tutorials/GAMM.html) tutoriel de Jacolien van Rij.
@@ -1932,7 +1932,7 @@ Nous allons tester si cette tendance est linéaire ou non avec un GAM logistique
 
 
 ```r
-prop_model &lt;- gam(prop ~ s(x1), data = gam_data3, weights = total, 
+prop_model &lt;- gam(prop ~ s(x1), data = gam_data3, weights = total,
                   family = "binomial", method = "REML")
 prop_summary &lt;- summary(prop_model)
 ```

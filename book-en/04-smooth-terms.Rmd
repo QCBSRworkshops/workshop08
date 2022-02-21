@@ -1,0 +1,215 @@
+# GAM with multiple terms 
+
+## GAM with linear and smooth terms
+
+GAMs make it easy to include both smooth and linear terms, multiple
+smoothed terms, and smoothed interactions. 
+
+For this section, we will use the `ISIT` dataset again. We will try to model the response `Sources` using the predictors `Season` and `SampleDepth` simultaneously.
+
+:::puzzle
+Remember this dataset from previous sections? The ISIT dataset is comprised of bioluminescence levels (`Sources`) in relation to depth, seasons and different stations.
+:::
+
+First, we need to convert our categorical predictor (`Season`) into a factor variable.
+
+```{r}
+head(isit)
+isit$Season <- as.factor(isit$Season)
+```
+
+Let us start with a basic model, with one smoothed term (`SampleDepth`) and one categorical predictor (`Season`, which has 2 levels).
+
+```{r}
+basic_model <- gam(Sources ~ Season + s(SampleDepth), data = isit, method = "REML")
+basic_summary <- summary(basic_model)
+```
+
+The `p.table` provides information on the linear effects: 
+
+```{r}
+basic_summary$p.table
+```
+
+The `s.table` provides information on the smooth (non-linear) effects:
+
+```{r}
+basic_summary$s.table
+```
+
+:::explanation
+The `edf` shown in the `s.table` are the **effective degrees of freedom** (EDF) of the the smooth term `s(SampleDepth)`. Essentially, more EDF imply more complex, wiggly splines.
+
+When a term has an EDF value that is close to 1, it is close to being a linear term. Higher values indicate that the term's spline is more wiggly, or in other words, highly non-linear.
+:::
+
+In our basic model, the EDF of the smooth function `s(SampleDepth)` are ~9, which suggests a highly non-linear curve.
+
+Let us plot the smoothed (`s(SampleDepth)`) and the linear (`Season`) terms from our fitted model:
+
+```{r}
+plot(basic_model, all.terms = TRUE, page = 1)
+```
+
+:::puzzle
+What do these plots tell us about the relationship between bioluminescence, sample depth, and seasons?
+:::
+
+Bioluminescence varies non-linearly across the `SampleDepth` gradient, with highest levels of bioluminescence at the surface, followed by a second but smaller peak just above a depth of 1500, with declining levels at deeper depths.
+
+There is also a pronounced difference in bioluminescence between the seasons, with high levels during Season 2, compared to Season 1.
+
+## Effective degrees of freedom (EDF) {#edf}
+
+Let us come back to the concept of effective degrees of freedom (EDF).
+
+Effective degrees of freedom give us a lot of information about the relationship between model predictors and response variables. You might recognize the term "degrees of freedom" from previous workshops about linear models, but be careful! The effective degrees of freedom of a GAM are estimated differently from the degrees of freedom in a linear regression, and are interpreted differently.
+
+In linear regression, the *model* degrees of freedom are equivalent to the number of non-redundant free parameters $p$ in the model, and the *residual* degrees of freedom are given by $n-p$.
+
+Because the number of free parameters in GAMs is difficult to define, the **EDF** are instead related to the smoothing parameter $\lambda$, such that the greater the penalty, the smaller the **EDF**.
+
+An upper bound on the **EDF** is determined by the basis dimension $k$ for each smooth function, meaning the **EDF** cannot exceed $k-1$. 
+
+In practice, the exact choice of $k$ is arbitrary, but it should be **large enough** to accommodate a sufficiently complex smooth function. We will talk about choosing $k$ in [SECTION HERE].
+
+:::explanation
+Higher EDF imply more complex, wiggly splines.
+
+When a term has an EDF value that is close to 1, it is close to being a linear term. Higher values indicate that the term is more wiggly, or in other words, more non-linear!
+:::
+
+## GAM with multiple linear and smooth terms
+
+We can add a second term (`RelativeDepth`) to our basic model, but specify a linear relationship with `Sources`.
+
+```{r}
+two_term_model <- gam(Sources ~ Season + s(SampleDepth) + RelativeDepth, 
+                      data = isit, method = "REML")
+two_term_summary <- summary(two_term_model)
+```
+
+The regression coefficient which is estimated for this new linear term, `RelativeDepth`, will appear in the `p.table`. Remember, the `p.table` shows information on the parametric effects (linear terms):
+
+```{r}
+two_term_summary$p.table
+```
+
+In the `s.table`, we will once again find the non-linear smoother, `s(SampleDepth)`, and its wiggleness
+parameter (`edf`). Remember, the `s.table` shows information on the additive effects (non-linear terms):
+
+```{r}
+two_term_summary$s.table
+```
+
+Let us take a look at the relationships between the linear and non-linear predictors and our response variable.
+
+```{r}
+plot(two_term_model, page = 1, all.terms = TRUE)
+```
+
+## GAM with multiple smooth terms
+
+If we want to know whether the relationship between `Sources` and `RelativeDepth` is
+non-linear, we can model `RelativeDepth` as a smooth term instead. In this model, we would have two smooth terms:
+
+```{r}
+two_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth), 
+                        data = isit, method = "REML")
+two_smooth_summary <- summary(two_smooth_model)
+```
+
+The regression coefficient which is estimated for our only linear term, `Season`, will appear in the `p.table`. Remember, the `p.table` shows information on the parametric effects (linear terms):
+
+```{r}
+two_smooth_summary$p.table
+```
+
+In the `s.table`, we will now find two non-linear smoothers, `s(SampleDepth)` and `s(RelativeDepth)`, and their wiggleness parameters (`edf`). Remember, the `s.table` shows information on the additive effects (non-linear terms):
+
+```{r}
+two_smooth_summary$s.table
+```
+
+Let us take a look at the relationships between the linear and non-linear predictors and our response variable. 
+
+```{r}
+plot(two_smooth_model, page = 1, all.terms = TRUE)
+```
+
+:::puzzle
+Do you think that the additional non-linear term improves the performance of our model representing the relationship between bioluminescence and relative depth?
+:::
+
+As before, we can compare our models with AIC to test whether the smoothed term improves our model's performance:
+
+```{r}
+AIC(basic_model, two_term_model, two_smooth_model)
+```
+
+We can see that `two_smooth_model` has the lowest AIC value. The best fit model includes both smooth terms for `SampleDepth` and `RelativeDepth`, and a linear term for `Season`.
+
+## Challenge 2
+
+For our second challenge, we will be building onto our model by adding variables which we think might be ecologically significant predictors to explain bioluminescence. 
+
+1. Create two new models: Add `Latitude` to `two_smooth_model`, first as a linear term, then as a smoothed term.
+2. Is `Latitude` an important term to include? Does `Latitude` have a linear or additive effect? Use plots, coefficient tables, and the `AIC()` function to help you answer this question.
+
+### Challenge 2: Solution
+
+__1.__ Create two new models: Add `Latitude` to `two_smooth_model`, first as a linear term, then as a smoothed term.
+
+```{r}
+# Add Latitude as a linear term
+three_term_model <- gam(Sources ~ 
+                          Season + s(SampleDepth) + s(RelativeDepth) + 
+                          Latitude, 
+                        data = isit, method = "REML")
+(three_term_summary <- summary(three_term_model))
+```
+
+```{r}
+# Add Latitude as a smooth term
+three_smooth_model <- gam(Sources ~ 
+                            Season + s(SampleDepth) + s(RelativeDepth) + 
+                            s(Latitude),
+                          data = isit, method = "REML")
+(three_smooth_summary <- summary(three_smooth_model))
+```
+
+__2.__ Is `Latitude` an important term to include? Does `Latitude` have a linear or additive effect?
+
+Let us begin by plotting the the 4 effects that are now included in each model:
+
+```{r}
+plot(three_term_model, page = 1, all.terms = TRUE)
+```
+
+```{r}
+plot(three_smooth_model, page = 1, all.terms = TRUE)
+```
+
+We should also look at our coefficient tables. What can the EDF tell us about the _wiggliness_ of our predictors' effects?
+
+```{r}
+three_smooth_summary$s.table
+```
+
+The EDF are all quite high for our variables, including `Latitude`. This tells us that `Latitude` is quite _wiggly_, and probably should not be included as a linear term.
+
+Before deciding which model is "best", we should test whether `Latitude` is best included as a linear or as a smooth term, using `AIC()`:
+
+```{r}
+AIC(three_smooth_model, three_term_model)
+```
+
+Our model including Latitude as a _smooth_ term has a lower AIC score, meaning it performs better than our model including Latitude as a _linear_ term. 
+
+But, does adding `Latitude` as a smooth predictor actually improve on our last "best" model (`two_smooth_model`)?
+
+```{r}
+AIC(two_smooth_model, three_smooth_model)
+```
+
+Our `three_smooth_model`, which includes `SampleDepth`, `RelativeDepth`, and `Latitude` as _smooth_ terms, and Season as a linear term, has a lower AIC score than our previous best model, which did not include `Latitude`. This implies that `Latitude` is indeed an informative non-linear predictor of bioluminescence.

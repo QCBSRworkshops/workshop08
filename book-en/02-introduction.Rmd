@@ -1,4 +1,4 @@
-# The linear model...and where it fails {#intro-linear-models}
+# The linear model... and where it fails {#intro-linear-models}
 
 ```{r, eval=TRUE,echo = FALSE}
 library(ggplot2, quietly = TRUE)
@@ -75,7 +75,7 @@ Are the assumptions of linear regression listed in [Chapter 2](#intro-linear-mod
 3.  The variance of the error is _not_ homoscedastic.
 4.  The errors are _not_ independent of each other.
 
-As we mentioned briefly in [Chapter 2](#intro-linear-models), we could manually specify a linear model with multiple predictor variables to try to accommodate this non-linear response. For example, we could try to build this linear model with multiple predictors:
+As we mentioned briefly in [Chapter 4](#intro-linear-models), we could manually specify a linear model with multiple predictor variables to try to accommodate this non-linear response. For example, we could try to build this linear model with multiple predictors:
 
 $$y_i = \beta_0 + \beta_1(x_{1,i}) + \beta_2(x_{2,i}) + ... + \epsilon$$
 However, the fit of this model would be determined manually based on the modeller's decisions, and would quickly become difficult to work with. One big advantage of using an additive model, such as a GAM,  is that the fitting method (usually maximum likelihood) automatically determines the optimal shape of the curve fit for non-linear responses. This optimal shape is, in other words,  *the degree of smoothness* of $f(x)$.
@@ -198,5 +198,5 @@ To get the effective degrees of freedom, we can simply print the model object:
 smooth_model_s1
 ```
 
-The effective degrees of freedom (EDF) are >> 1. Keep this in mind, because we will be coming back to EDF soon!
+The effective degrees of freedom (EDF) are >> 1. Keep this in mind, because we will be coming back to EDF [later](#edf)!
 

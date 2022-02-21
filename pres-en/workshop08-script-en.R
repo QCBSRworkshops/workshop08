@@ -260,10 +260,9 @@ plot(three_smooth_model, page = 1, all.terms = TRUE)
 
 three_smooth_summary$s.table
 
-# edf = 1 therefore term is linear.
+AIC(three_smooth_model, three_term_model)
 
-AIC(two_smooth_model, three_term_model)
-
+AIC(two_smooth_model, three_smooth_model)
 
 three_term_model <- gam(y ~ x0 + s(x1) + s(x2) + x3, data = gam_data)
 three_smooth_model <- gam(y~x0 + s(x1) + s(x2) + s(x3), data = gam_data)

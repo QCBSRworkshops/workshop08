@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 6 GAM with multiple terms | Workshop 8: Generalized additive models in R</title>
+  <meta name="description" content="Generalized additive models in R" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 6 GAM with multiple terms | Workshop 8: Generalized additive models in R" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://github.com/qcbsRworkshops/" />
+  <meta property="og:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
+  <meta property="og:description" content="Generalized additive models in R" />
+  <meta name="github-repo" content="qcbsRworkshops/workshop08" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 6 GAM with multiple terms | Workshop 8: Generalized additive models in R" />
+  
+  <meta name="twitter:description" content="Generalized additive models in R" />
+  <meta name="twitter:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
+
+<meta name="author" content="Developed and maintained by the contributors of the QCBS R Workshop Series" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />
+<link rel="prev" href="a-closer-look.html"/>
+<link rel="next" href="interactions.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #c4a000; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #000000; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #000000; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #000000; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="assets/qcbs-style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="toc-logo"><a href="./"><img src="assets/images/csbq_logo_gray_accueil.png"></a></li>
+<link rel="icon" type="image/png" href="assets/images/favicon.ico"/>
+
+<li class="divider"></li>
+<li class="part"><span><b>QCBS R Workshop Series</b></span></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
+<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#code-of-conduct"><i class="fa fa-check"></i><b>0.1</b> Code of conduct</a><ul>
+<li class="chapter" data-level="0.1.1" data-path="index.html"><a href="index.html#expected-behaviour"><i class="fa fa-check"></i><b>0.1.1</b> Expected behaviour</a></li>
+<li class="chapter" data-level="0.1.2" data-path="index.html"><a href="index.html#unacceptable-behaviour"><i class="fa fa-check"></i><b>0.1.2</b> Unacceptable behaviour</a></li>
+</ul></li>
+<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#contributors"><i class="fa fa-check"></i><b>0.2</b> Contributors</a></li>
+<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#contributing"><i class="fa fa-check"></i><b>0.3</b> Contributing</a></li>
+</ul></li>
+<li class="part"><span><b>Generalized Additive Models in <code>R</code></b></span></li>
+<li class="chapter" data-level="1" data-path="learning-objectives.html"><a href="learning-objectives.html"><i class="fa fa-check"></i><b>1</b> Learning objectives</a></li>
+<li class="chapter" data-level="2" data-path="preparing-for-the-workshop.html"><a href="preparing-for-the-workshop.html"><i class="fa fa-check"></i><b>2</b> Preparing for the workshop</a></li>
+<li class="chapter" data-level="3" data-path="intro-linear-models.html"><a href="intro-linear-models.html"><i class="fa fa-check"></i><b>3</b> The linear model… and where it fails</a></li>
+<li class="chapter" data-level="4" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html"><i class="fa fa-check"></i><b>4</b> Introduction to GAMs</a><ul>
+<li class="chapter" data-level="4.1" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html#test-for-linearity"><i class="fa fa-check"></i><b>4.1</b> Test for linearity</a></li>
+<li class="chapter" data-level="4.2" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html#challenge-1"><i class="fa fa-check"></i><b>4.2</b> Challenge 1</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html#challenge-1-solution"><i class="fa fa-check"></i><b>4.2.1</b> Challenge 1: Solution</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="a-closer-look.html"><a href="a-closer-look.html"><i class="fa fa-check"></i><b>5</b> A closer look at GAMs</a><ul>
+<li class="chapter" data-level="5.1" data-path="a-closer-look.html"><a href="a-closer-look.html#example-a-polynomial-basis"><i class="fa fa-check"></i><b>5.1</b> Example: a polynomial basis</a></li>
+<li class="chapter" data-level="5.2" data-path="a-closer-look.html"><a href="a-closer-look.html#example-a-cubic-spline-basis"><i class="fa fa-check"></i><b>5.2</b> Example: a cubic spline basis</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="a-closer-look.html"><a href="a-closer-look.html#controlling-the-degree-of-smoothing-with-penalized-regression-splines"><i class="fa fa-check"></i><b>5.2.1</b> Controlling the degree of smoothing with penalized regression splines</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="gam-with-multiple-terms.html"><a href="gam-with-multiple-terms.html"><i class="fa fa-check"></i><b>6</b> GAM with multiple terms</a><ul>
+<li class="chapter" data-level="6.1" data-path="gam-with-multiple-terms.html"><a href="gam-with-multiple-terms.html#gam-with-linear-and-smooth-terms"><i class="fa fa-check"></i><b>6.1</b> GAM with linear and smooth terms</a></li>
+<li class="chapter" data-level="6.2" data-path="gam-with-multiple-terms.html"><a href="gam-with-multiple-terms.html#edf"><i class="fa fa-check"></i><b>6.2</b> Effective degrees of freedom (EDF)</a></li>
+<li class="chapter" data-level="6.3" data-path="gam-with-multiple-terms.html"><a href="gam-with-multiple-terms.html#gam-with-multiple-linear-and-smooth-terms"><i class="fa fa-check"></i><b>6.3</b> GAM with multiple linear and smooth terms</a></li>
+<li class="chapter" data-level="6.4" data-path="gam-with-multiple-terms.html"><a href="gam-with-multiple-terms.html#gam-with-multiple-smooth-terms"><i class="fa fa-check"></i><b>6.4</b> GAM with multiple smooth terms</a></li>
+<li class="chapter" data-level="6.5" data-path="gam-with-multiple-terms.html"><a href="gam-with-multiple-terms.html#challenge-2"><i class="fa fa-check"></i><b>6.5</b> Challenge 2</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="gam-with-multiple-terms.html"><a href="gam-with-multiple-terms.html#challenge-2-solution"><i class="fa fa-check"></i><b>6.5.1</b> Challenge 2: Solution</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="interactions.html"><a href="interactions.html"><i class="fa fa-check"></i><b>7</b> Interactions</a></li>
+<li class="part"><span><b>Advanced Concepts</b></span></li>
+<li class="chapter" data-level="8" data-path="changing-the-basis.html"><a href="changing-the-basis.html"><i class="fa fa-check"></i><b>8</b> Changing the Basis</a></li>
+<li class="chapter" data-level="9" data-path="other-distributions.html"><a href="other-distributions.html"><i class="fa fa-check"></i><b>9</b> Other distributions</a><ul>
+<li class="chapter" data-level="9.1" data-path="other-distributions.html"><a href="other-distributions.html#visualizing-the-trend-over-time"><i class="fa fa-check"></i><b>9.1</b> Visualizing the trend over time</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html"><i class="fa fa-check"></i><b>10</b> Quick intro to Generalized Additive Mixed Models (GAMMs)</a><ul>
+<li class="chapter" data-level="10.1" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#dealing-with-non-independence"><i class="fa fa-check"></i><b>10.1</b> Dealing with non-independence</a></li>
+<li class="chapter" data-level="10.2" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#mixed-modelling"><i class="fa fa-check"></i><b>10.2</b> Mixed modelling</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="resources.html"><a href="resources.html"><i class="fa fa-check"></i><b>11</b> Resources</a></li>
+<li class="chapter" data-level="12" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>12</b> References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/qcbsRworkshops" target="blank">QCBS R Workshop Series</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Workshop 8: Generalized additive models in <code>R</code></a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<!------------------------ Hero Image Container --------------------------> 
+
+<head>
+  <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=10.0,initial-scale=1.0">
+  <script src="https://kit.fontawesome.com/6a26f47516.js"></script>
+  <script src="assets/qcbs-hideOutput.js"></script>
+  <link href="assets/qcbs-style.css" rel="stylesheet">
+</head>
+
+
+<!-- 
+<div class="hero-image-container"> 
+  <img class= "hero-image" src="assets/images/jean-philippe-delberghe-75xPHEQBmvA-unsplash_hero_image.jpg">
+</div>
+--!>
+<div id="gam-with-multiple-terms" class="section level1">
+<h1><span class="header-section-number">Chapter 6</span> GAM with multiple terms</h1>
+<div id="gam-with-linear-and-smooth-terms" class="section level2">
+<h2><span class="header-section-number">6.1</span> GAM with linear and smooth terms</h2>
+<p>GAMs make it easy to include both smooth and linear terms, multiple
+smoothed terms, and smoothed interactions.</p>
+<p>For this section, we will use the <code>ISIT</code> dataset again. We will try to model the response <code>Sources</code> using the predictors <code>Season</code> and <code>SampleDepth</code> simultaneously.</p>
+<div class="puzzle">
+<p>Remember this dataset from previous sections? The ISIT dataset is comprised of bioluminescence levels (<code>Sources</code>) in relation to depth, seasons and different stations.</p>
+</div>
+<p>First, we need to convert our categorical predictor (<code>Season</code>) into a factor variable.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="gam-with-multiple-terms.html#cb21-1"></a><span class="kw">head</span>(isit)</span></code></pre></div>
+<pre><code>##   SampleDepth Sources Station Time Latitude Longitude     Xkm    Ykm Month Year
+## 1         517   28.73       1    3  50.1508  -14.4792 -34.106 16.779     4 2001
+## 2         582   27.90       1    3  50.1508  -14.4792 -34.106 16.779     4 2001
+## 3         547   23.44       1    3  50.1508  -14.4792 -34.106 16.779     4 2001
+## 4         614   18.33       1    3  50.1508  -14.4792 -34.106 16.779     4 2001
+## 5        1068   12.38       1    3  50.1508  -14.4792 -34.106 16.779     4 2001
+## 6        1005   11.23       1    3  50.1508  -14.4792 -34.106 16.779     4 2001
+##   BottomDepth Season Discovery RelativeDepth
+## 1        3939      1       252          3422
+## 2        3939      1       252          3357
+## 3        3939      1       252          3392
+## 4        3939      1       252          3325
+## 5        3939      1       252          2871
+## 6        3939      1       252          2934</code></pre>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="gam-with-multiple-terms.html#cb23-1"></a>isit<span class="op">$</span>Season &lt;-<span class="st"> </span><span class="kw">as.factor</span>(isit<span class="op">$</span>Season)</span></code></pre></div>
+<p>Let us start with a basic model, with one smoothed term (<code>SampleDepth</code>) and one categorical predictor (<code>Season</code>, which has 2 levels).</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="gam-with-multiple-terms.html#cb24-1"></a>basic_model &lt;-<span class="st"> </span><span class="kw">gam</span>(Sources <span class="op">~</span><span class="st"> </span>Season <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(SampleDepth), <span class="dt">data =</span> isit,</span>
+<span id="cb24-2"><a href="gam-with-multiple-terms.html#cb24-2"></a>    <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
+<span id="cb24-3"><a href="gam-with-multiple-terms.html#cb24-3"></a>basic_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(basic_model)</span></code></pre></div>
+<p>The <code>p.table</code> provides information on the linear effects:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="gam-with-multiple-terms.html#cb25-1"></a>basic_summary<span class="op">$</span>p.table</span></code></pre></div>
+<pre><code>##             Estimate Std. Error  t value     Pr(&gt;|t|)
+## (Intercept) 7.253273  0.3612666 20.07734 1.430234e-72
+## Season2     6.156130  0.4825491 12.75752 5.525673e-34</code></pre>
+<p>The <code>s.table</code> provides information on the smooth (non-linear) effects:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="gam-with-multiple-terms.html#cb27-1"></a>basic_summary<span class="op">$</span>s.table</span></code></pre></div>
+<pre><code>##                     edf   Ref.df        F p-value
+## s(SampleDepth) 8.706426 8.975172 184.3583       0</code></pre>
+<div class="explanation">
+<p>The <code>edf</code> shown in the <code>s.table</code> are the <strong>effective degrees of freedom</strong> (EDF) of the the smooth term <code>s(SampleDepth)</code>. Essentially, more EDF imply more complex, wiggly splines.</p>
+<p>When a term has an EDF value that is close to 1, it is close to being a linear term. Higher values indicate that the term’s spline is more wiggly, or in other words, highly non-linear.</p>
+</div>
+<p>In our basic model, the EDF of the smooth function <code>s(SampleDepth)</code> are ~9, which suggests a highly non-linear curve.</p>
+<p>Let us plot the smoothed (<code>s(SampleDepth)</code>) and the linear (<code>Season</code>) terms from our fitted model:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="gam-with-multiple-terms.html#cb29-1"></a><span class="kw">plot</span>(basic_model, <span class="dt">all.terms =</span> <span class="ot">TRUE</span>, <span class="dt">page =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p><img src="book-en_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<div class="puzzle">
+<p>What do these plots tell us about the relationship between bioluminescence, sample depth, and seasons?</p>
+</div>
+<p>Bioluminescence varies non-linearly across the <code>SampleDepth</code> gradient, with highest levels of bioluminescence at the surface, followed by a second but smaller peak just above a depth of 1500, with declining levels at deeper depths.</p>
+<p>There is also a pronounced difference in bioluminescence between the seasons, with high levels during Season 2, compared to Season 1.</p>
+</div>
+<div id="edf" class="section level2">
+<h2><span class="header-section-number">6.2</span> Effective degrees of freedom (EDF)</h2>
+<p>Let us come back to the concept of effective degrees of freedom (EDF).</p>
+<p>Effective degrees of freedom give us a lot of information about the relationship between model predictors and response variables. You might recognize the term “degrees of freedom” from previous workshops about linear models, but be careful! The effective degrees of freedom of a GAM are estimated differently from the degrees of freedom in a linear regression, and are interpreted differently.</p>
+<p>In linear regression, the <em>model</em> degrees of freedom are equivalent to the number of non-redundant free parameters <span class="math inline">\(p\)</span> in the model, and the <em>residual</em> degrees of freedom are given by <span class="math inline">\(n-p\)</span>.</p>
+<p>Because the number of free parameters in GAMs is difficult to define, the <strong>EDF</strong> are instead related to the smoothing parameter <span class="math inline">\(\lambda\)</span>, such that the greater the penalty, the smaller the <strong>EDF</strong>.</p>
+<p>An upper bound on the <strong>EDF</strong> is determined by the basis dimension <span class="math inline">\(k\)</span> for each smooth function, meaning the <strong>EDF</strong> cannot exceed <span class="math inline">\(k-1\)</span>.</p>
+<p>In practice, the exact choice of <span class="math inline">\(k\)</span> is arbitrary, but it should be <strong>large enough</strong> to accommodate a sufficiently complex smooth function. We will talk about choosing <span class="math inline">\(k\)</span> in [SECTION HERE].</p>
+<div class="explanation">
+<p>Higher EDF imply more complex, wiggly splines.</p>
+<p>When a term has an EDF value that is close to 1, it is close to being a linear term. Higher values indicate that the term is more wiggly, or in other words, more non-linear!</p>
+</div>
+</div>
+<div id="gam-with-multiple-linear-and-smooth-terms" class="section level2">
+<h2><span class="header-section-number">6.3</span> GAM with multiple linear and smooth terms</h2>
+<p>We can add a second term (<code>RelativeDepth</code>) to our basic model, but specify a linear relationship with <code>Sources</code>.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="gam-with-multiple-terms.html#cb30-1"></a>two_term_model &lt;-<span class="st"> </span><span class="kw">gam</span>(Sources <span class="op">~</span><span class="st"> </span>Season <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(SampleDepth) <span class="op">+</span><span class="st"> </span>RelativeDepth,</span>
+<span id="cb30-2"><a href="gam-with-multiple-terms.html#cb30-2"></a>    <span class="dt">data =</span> isit, <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
+<span id="cb30-3"><a href="gam-with-multiple-terms.html#cb30-3"></a>two_term_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(two_term_model)</span></code></pre></div>
+<p>The regression coefficient which is estimated for this new linear term, <code>RelativeDepth</code>, will appear in the <code>p.table</code>. Remember, the <code>p.table</code> shows information on the parametric effects (linear terms):</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="gam-with-multiple-terms.html#cb31-1"></a>two_term_summary<span class="op">$</span>p.table</span></code></pre></div>
+<pre><code>##                   Estimate   Std. Error   t value     Pr(&gt;|t|)
+## (Intercept)    9.808305503 0.6478741951 15.139213 1.446613e-45
+## Season2        6.041930627 0.4767977508 12.671894 1.380010e-33
+## RelativeDepth -0.001401908 0.0002968443 -4.722705 2.761048e-06</code></pre>
+<p>In the <code>s.table</code>, we will once again find the non-linear smoother, <code>s(SampleDepth)</code>, and its wiggleness
+parameter (<code>edf</code>). Remember, the <code>s.table</code> shows information on the additive effects (non-linear terms):</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="gam-with-multiple-terms.html#cb33-1"></a>two_term_summary<span class="op">$</span>s.table</span></code></pre></div>
+<pre><code>##                     edf  Ref.df        F p-value
+## s(SampleDepth) 8.699146 8.97396 132.4801       0</code></pre>
+<p>Let us take a look at the relationships between the linear and non-linear predictors and our response variable.</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="gam-with-multiple-terms.html#cb35-1"></a><span class="kw">plot</span>(two_term_model, <span class="dt">page =</span> <span class="dv">1</span>, <span class="dt">all.terms =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<p><img src="book-en_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+</div>
+<div id="gam-with-multiple-smooth-terms" class="section level2">
+<h2><span class="header-section-number">6.4</span> GAM with multiple smooth terms</h2>
+<p>If we want to know whether the relationship between <code>Sources</code> and <code>RelativeDepth</code> is
+non-linear, we can model <code>RelativeDepth</code> as a smooth term instead. In this model, we would have two smooth terms:</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="gam-with-multiple-terms.html#cb36-1"></a>two_smooth_model &lt;-<span class="st"> </span><span class="kw">gam</span>(Sources <span class="op">~</span><span class="st"> </span>Season <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(SampleDepth) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(RelativeDepth),</span>
+<span id="cb36-2"><a href="gam-with-multiple-terms.html#cb36-2"></a>    <span class="dt">data =</span> isit, <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
+<span id="cb36-3"><a href="gam-with-multiple-terms.html#cb36-3"></a>two_smooth_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(two_smooth_model)</span></code></pre></div>
+<p>The regression coefficient which is estimated for our only linear term, <code>Season</code>, will appear in the <code>p.table</code>. Remember, the <code>p.table</code> shows information on the parametric effects (linear terms):</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="gam-with-multiple-terms.html#cb37-1"></a>two_smooth_summary<span class="op">$</span>p.table</span></code></pre></div>
+<pre><code>##             Estimate Std. Error  t value     Pr(&gt;|t|)
+## (Intercept) 7.937755  0.3452945 22.98836 1.888513e-89
+## Season2     4.963951  0.4782280 10.37988 1.029016e-23</code></pre>
+<p>In the <code>s.table</code>, we will now find two non-linear smoothers, <code>s(SampleDepth)</code> and <code>s(RelativeDepth)</code>, and their wiggleness parameters (<code>edf</code>). Remember, the <code>s.table</code> shows information on the additive effects (non-linear terms):</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="gam-with-multiple-terms.html#cb39-1"></a>two_smooth_summary<span class="op">$</span>s.table</span></code></pre></div>
+<pre><code>##                       edf   Ref.df         F p-value
+## s(SampleDepth)   8.752103 8.973459 150.37263       0
+## s(RelativeDepth) 8.044197 8.749580  19.97476       0</code></pre>
+<p>Let us take a look at the relationships between the linear and non-linear predictors and our response variable.</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="gam-with-multiple-terms.html#cb41-1"></a><span class="kw">plot</span>(two_smooth_model, <span class="dt">page =</span> <span class="dv">1</span>, <span class="dt">all.terms =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<p><img src="book-en_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+<div class="puzzle">
+<p>Do you think that the additional non-linear term improves the performance of our model representing the relationship between bioluminescence and relative depth?</p>
+</div>
+<p>As before, we can compare our models with AIC to test whether the smoothed term improves our model’s performance:</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="gam-with-multiple-terms.html#cb42-1"></a><span class="kw">AIC</span>(basic_model, two_term_model, two_smooth_model)</span></code></pre></div>
+<pre><code>##                        df      AIC
+## basic_model      11.83374 5208.713
+## two_term_model   12.82932 5188.780
+## two_smooth_model 20.46960 5056.841</code></pre>
+<p>We can see that <code>two_smooth_model</code> has the lowest AIC value. The best fit model includes both smooth terms for <code>SampleDepth</code> and <code>RelativeDepth</code>, and a linear term for <code>Season</code>.</p>
+</div>
+<div id="challenge-2" class="section level2">
+<h2><span class="header-section-number">6.5</span> Challenge 2</h2>
+<p>For our second challenge, we will be building onto our model by adding variables which we think might be ecologically significant predictors to explain bioluminescence.</p>
+<ol style="list-style-type: decimal">
+<li>Create two new models: Add <code>Latitude</code> to <code>two_smooth_model</code>, first as a linear term, then as a smoothed term.</li>
+<li>Is <code>Latitude</code> an important term to include? Does <code>Latitude</code> have a linear or additive effect? Use plots, coefficient tables, and the <code>AIC()</code> function to help you answer this question.</li>
+</ol>
+<div id="challenge-2-solution" class="section level3">
+<h3><span class="header-section-number">6.5.1</span> Challenge 2: Solution</h3>
+<p><strong>1.</strong> Create two new models: Add <code>Latitude</code> to <code>two_smooth_model</code>, first as a linear term, then as a smoothed term.</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="gam-with-multiple-terms.html#cb44-1"></a><span class="co"># Add Latitude as a linear term</span></span>
+<span id="cb44-2"><a href="gam-with-multiple-terms.html#cb44-2"></a>three_term_model &lt;-<span class="st"> </span><span class="kw">gam</span>(Sources <span class="op">~</span><span class="st"> </span>Season <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(SampleDepth) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(RelativeDepth) <span class="op">+</span></span>
+<span id="cb44-3"><a href="gam-with-multiple-terms.html#cb44-3"></a><span class="st">    </span>Latitude, <span class="dt">data =</span> isit, <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
+<span id="cb44-4"><a href="gam-with-multiple-terms.html#cb44-4"></a>(three_term_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(three_term_model))</span></code></pre></div>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## Sources ~ Season + s(SampleDepth) + s(RelativeDepth) + Latitude
+## 
+## Parametric coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -102.7094    40.6913  -2.524  0.01180 *  
+## Season2        6.0345     0.6179   9.766  &lt; 2e-16 ***
+## Latitude       2.2188     0.8159   2.719  0.00669 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##                    edf Ref.df     F p-value    
+## s(SampleDepth)   8.750  8.973 92.84  &lt;2e-16 ***
+## s(RelativeDepth) 8.047  8.751 16.90  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =   0.75   Deviance explained = 75.6%
+## -REML = 2545.7  Scale est. = 34.309    n = 789</code></pre>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="gam-with-multiple-terms.html#cb46-1"></a><span class="co"># Add Latitude as a smooth term</span></span>
+<span id="cb46-2"><a href="gam-with-multiple-terms.html#cb46-2"></a>three_smooth_model &lt;-<span class="st"> </span><span class="kw">gam</span>(Sources <span class="op">~</span><span class="st"> </span>Season <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(SampleDepth) <span class="op">+</span></span>
+<span id="cb46-3"><a href="gam-with-multiple-terms.html#cb46-3"></a><span class="st">    </span><span class="kw">s</span>(RelativeDepth) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(Latitude), <span class="dt">data =</span> isit, <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
+<span id="cb46-4"><a href="gam-with-multiple-terms.html#cb46-4"></a>(three_smooth_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(three_smooth_model))</span></code></pre></div>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## Sources ~ Season + s(SampleDepth) + s(RelativeDepth) + s(Latitude)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   6.7045     0.4716  14.215   &lt;2e-16 ***
+## Season2       7.1120     0.7441   9.557   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##                    edf Ref.df      F p-value    
+## s(SampleDepth)   8.767  8.976 68.951  &lt;2e-16 ***
+## s(RelativeDepth) 8.007  8.731 17.639  &lt;2e-16 ***
+## s(Latitude)      7.431  8.297  8.954  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.771   Deviance explained = 77.8%
+## -REML = 2524.5  Scale est. = 31.487    n = 789</code></pre>
+<p><strong>2.</strong> Is <code>Latitude</code> an important term to include? Does <code>Latitude</code> have a linear or additive effect?</p>
+<p>Let us begin by plotting the the 4 effects that are now included in each model:</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="gam-with-multiple-terms.html#cb48-1"></a><span class="kw">plot</span>(three_term_model, <span class="dt">page =</span> <span class="dv">1</span>, <span class="dt">all.terms =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<p><img src="book-en_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="gam-with-multiple-terms.html#cb49-1"></a><span class="kw">plot</span>(three_smooth_model, <span class="dt">page =</span> <span class="dv">1</span>, <span class="dt">all.terms =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<p><img src="book-en_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
+<p>We should also look at our coefficient tables. What can the EDF tell us about the <em>wiggliness</em> of our predictors’ effects?</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="gam-with-multiple-terms.html#cb50-1"></a>three_smooth_summary<span class="op">$</span>s.table</span></code></pre></div>
+<pre><code>##                       edf   Ref.df         F p-value
+## s(SampleDepth)   8.766891 8.975682 68.950905       0
+## s(RelativeDepth) 8.007411 8.730625 17.639321       0
+## s(Latitude)      7.431116 8.296838  8.954349       0</code></pre>
+<p>The EDF are all quite high for our variables, including <code>Latitude</code>. This tells us that <code>Latitude</code> is quite <em>wiggly</em>, and probably should not be included as a linear term.</p>
+<p>Before deciding which model is “best”, we should test whether <code>Latitude</code> is best included as a linear or as a smooth term, using <code>AIC()</code>:</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="gam-with-multiple-terms.html#cb52-1"></a><span class="kw">AIC</span>(three_smooth_model, three_term_model)</span></code></pre></div>
+<pre><code>##                          df      AIC
+## three_smooth_model 28.20032 4990.546
+## three_term_model   21.47683 5051.415</code></pre>
+<p>Our model including Latitude as a <em>smooth</em> term has a lower AIC score, meaning it performs better than our model including Latitude as a <em>linear</em> term.</p>
+<p>But, does adding <code>Latitude</code> as a smooth predictor actually improve on our last “best” model (<code>two_smooth_model</code>)?</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="gam-with-multiple-terms.html#cb54-1"></a><span class="kw">AIC</span>(two_smooth_model, three_smooth_model)</span></code></pre></div>
+<pre><code>##                          df      AIC
+## two_smooth_model   20.46960 5056.841
+## three_smooth_model 28.20032 4990.546</code></pre>
+<p>Our <code>three_smooth_model</code>, which includes <code>SampleDepth</code>, <code>RelativeDepth</code>, and <code>Latitude</code> as <em>smooth</em> terms, and Season as a linear term, has a lower AIC score than our previous best model, which did not include <code>Latitude</code>. This implies that <code>Latitude</code> is indeed an informative non-linear predictor of bioluminescence.</p>
+
+</div>
+</div>
+</div>
+<hr>
+<center> 
+  <div class="footer">
+      All the content of the workshop series is under a <a href="https://creativecommons.org/licenses/by-nc/2.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+  </div>
+</center>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="a-closer-look.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="interactions.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": false
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

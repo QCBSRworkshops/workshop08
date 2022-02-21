@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 9 Quick intro to Generalized Additive Mixed Models (GAMMs) | Workshop 8: Generalized additive models in R</title>
+  <title>Chapter 10 Quick intro to Generalized Additive Mixed Models (GAMMs) | Workshop 8: Generalized additive models in R</title>
   <meta name="description" content="Generalized additive models in R" />
   <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 9 Quick intro to Generalized Additive Mixed Models (GAMMs) | Workshop 8: Generalized additive models in R" />
+  <meta property="og:title" content="Chapter 10 Quick intro to Generalized Additive Mixed Models (GAMMs) | Workshop 8: Generalized additive models in R" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://github.com/qcbsRworkshops/" />
   <meta property="og:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="qcbsRworkshops/workshop08" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 9 Quick intro to Generalized Additive Mixed Models (GAMMs) | Workshop 8: Generalized additive models in R" />
+  <meta name="twitter:title" content="Chapter 10 Quick intro to Generalized Additive Mixed Models (GAMMs) | Workshop 8: Generalized additive models in R" />
   
   <meta name="twitter:description" content="Generalized additive models in R" />
   <meta name="twitter:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -31,7 +31,7 @@
   
   <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />
 <link rel="prev" href="other-distributions.html"/>
-<link rel="next" href="gams-behind-the-scenes.html"/>
+<link rel="next" href="resources.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -148,35 +148,37 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li class="part"><span><b>Generalized Additive Models in <code>R</code></b></span></li>
 <li class="chapter" data-level="1" data-path="learning-objectives.html"><a href="learning-objectives.html"><i class="fa fa-check"></i><b>1</b> Learning objectives</a></li>
 <li class="chapter" data-level="2" data-path="preparing-for-the-workshop.html"><a href="preparing-for-the-workshop.html"><i class="fa fa-check"></i><b>2</b> Preparing for the workshop</a></li>
-<li class="chapter" data-level="3" data-path="intro-linear-models.html"><a href="intro-linear-models.html"><i class="fa fa-check"></i><b>3</b> The linear model…and where it fails</a></li>
+<li class="chapter" data-level="3" data-path="intro-linear-models.html"><a href="intro-linear-models.html"><i class="fa fa-check"></i><b>3</b> The linear model… and where it fails</a></li>
 <li class="chapter" data-level="4" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html"><i class="fa fa-check"></i><b>4</b> Introduction to GAMs</a><ul>
 <li class="chapter" data-level="4.1" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html#test-for-linearity"><i class="fa fa-check"></i><b>4.1</b> Test for linearity</a></li>
 <li class="chapter" data-level="4.2" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html#challenge-1"><i class="fa fa-check"></i><b>4.2</b> Challenge 1</a><ul>
 <li class="chapter" data-level="4.2.1" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html#challenge-1-solution"><i class="fa fa-check"></i><b>4.2.1</b> Challenge 1: Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="multiple-smooth-terms.html"><a href="multiple-smooth-terms.html"><i class="fa fa-check"></i><b>5</b> Multiple smooth terms</a><ul>
-<li class="chapter" data-level="5.1" data-path="multiple-smooth-terms.html"><a href="multiple-smooth-terms.html#challenge-2"><i class="fa fa-check"></i><b>5.1</b> CHALLENGE 2</a><ul>
-<li class="chapter" data-level="5.1.1" data-path="multiple-smooth-terms.html"><a href="multiple-smooth-terms.html#challenge-2-solution"><i class="fa fa-check"></i><b>5.1.1</b> Challenge 2 solution</a></li>
+<li class="chapter" data-level="5" data-path="a-closer-look.html"><a href="a-closer-look.html"><i class="fa fa-check"></i><b>5</b> A closer look at GAMs</a><ul>
+<li class="chapter" data-level="5.1" data-path="a-closer-look.html"><a href="a-closer-look.html#example-a-polynomial-basis"><i class="fa fa-check"></i><b>5.1</b> Example: a polynomial basis</a></li>
+<li class="chapter" data-level="5.2" data-path="a-closer-look.html"><a href="a-closer-look.html#example-a-cubic-spline-basis"><i class="fa fa-check"></i><b>5.2</b> Example: a cubic spline basis</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="a-closer-look.html"><a href="a-closer-look.html#controlling-the-degree-of-smoothing-with-penalized-regression-splines"><i class="fa fa-check"></i><b>5.2.1</b> Controlling the degree of smoothing with penalized regression splines</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="interactions.html"><a href="interactions.html"><i class="fa fa-check"></i><b>6</b> Interactions</a></li>
+<li class="chapter" data-level="6" data-path="gam-with-multiple-terms.html"><a href="gam-with-multiple-terms.html"><i class="fa fa-check"></i><b>6</b> GAM with multiple terms</a><ul>
+<li class="chapter" data-level="6.1" data-path="gam-with-multiple-terms.html"><a href="gam-with-multiple-terms.html#gam-with-linear-and-smooth-terms"><i class="fa fa-check"></i><b>6.1</b> GAM with linear and smooth terms</a></li>
+<li class="chapter" data-level="6.2" data-path="gam-with-multiple-terms.html"><a href="gam-with-multiple-terms.html#edf"><i class="fa fa-check"></i><b>6.2</b> Effective degrees of freedom (EDF)</a></li>
+<li class="chapter" data-level="6.3" data-path="gam-with-multiple-terms.html"><a href="gam-with-multiple-terms.html#gam-with-multiple-linear-and-smooth-terms"><i class="fa fa-check"></i><b>6.3</b> GAM with multiple linear and smooth terms</a></li>
+<li class="chapter" data-level="6.4" data-path="gam-with-multiple-terms.html"><a href="gam-with-multiple-terms.html#gam-with-multiple-smooth-terms"><i class="fa fa-check"></i><b>6.4</b> GAM with multiple smooth terms</a></li>
+<li class="chapter" data-level="6.5" data-path="gam-with-multiple-terms.html"><a href="gam-with-multiple-terms.html#challenge-2"><i class="fa fa-check"></i><b>6.5</b> Challenge 2</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="gam-with-multiple-terms.html"><a href="gam-with-multiple-terms.html#challenge-2-solution"><i class="fa fa-check"></i><b>6.5.1</b> Challenge 2: Solution</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="interactions.html"><a href="interactions.html"><i class="fa fa-check"></i><b>7</b> Interactions</a></li>
 <li class="part"><span><b>Advanced Concepts</b></span></li>
-<li class="chapter" data-level="7" data-path="changing-the-basis.html"><a href="changing-the-basis.html"><i class="fa fa-check"></i><b>7</b> Changing the Basis</a></li>
-<li class="chapter" data-level="8" data-path="other-distributions.html"><a href="other-distributions.html"><i class="fa fa-check"></i><b>8</b> Other distributions</a><ul>
-<li class="chapter" data-level="8.1" data-path="other-distributions.html"><a href="other-distributions.html#visualizing-the-trend-over-time"><i class="fa fa-check"></i><b>8.1</b> Visualizing the trend over time</a></li>
+<li class="chapter" data-level="8" data-path="changing-the-basis.html"><a href="changing-the-basis.html"><i class="fa fa-check"></i><b>8</b> Changing the Basis</a></li>
+<li class="chapter" data-level="9" data-path="other-distributions.html"><a href="other-distributions.html"><i class="fa fa-check"></i><b>9</b> Other distributions</a><ul>
+<li class="chapter" data-level="9.1" data-path="other-distributions.html"><a href="other-distributions.html#visualizing-the-trend-over-time"><i class="fa fa-check"></i><b>9.1</b> Visualizing the trend over time</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html"><i class="fa fa-check"></i><b>9</b> Quick intro to Generalized Additive Mixed Models (GAMMs)</a><ul>
-<li class="chapter" data-level="9.1" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#dealing-with-non-independence"><i class="fa fa-check"></i><b>9.1</b> Dealing with non-independence</a></li>
-<li class="chapter" data-level="9.2" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#mixed-modelling"><i class="fa fa-check"></i><b>9.2</b> Mixed modelling</a></li>
-</ul></li>
-<li class="chapter" data-level="10" data-path="gams-behind-the-scenes.html"><a href="gams-behind-the-scenes.html"><i class="fa fa-check"></i><b>10</b> GAMs behind the scenes</a><ul>
-<li class="chapter" data-level="10.1" data-path="gams-behind-the-scenes.html"><a href="gams-behind-the-scenes.html#a-simple-example-a-polynomial-basis"><i class="fa fa-check"></i><b>10.1</b> A simple example: a polynomial basis</a></li>
-<li class="chapter" data-level="10.2" data-path="gams-behind-the-scenes.html"><a href="gams-behind-the-scenes.html#another-example-a-cubic-spline-basis"><i class="fa fa-check"></i><b>10.2</b> Another example: a cubic spline basis</a><ul>
-<li class="chapter" data-level="10.2.1" data-path="gams-behind-the-scenes.html"><a href="gams-behind-the-scenes.html#controlling-the-degree-of-smoothing-with-penalized-regression-splines"><i class="fa fa-check"></i><b>10.2.1</b> Controlling the degree of smoothing with penalized regression splines</a></li>
-</ul></li>
-<li class="chapter" data-level="10.3" data-path="gams-behind-the-scenes.html"><a href="gams-behind-the-scenes.html#illustration-of-the-principle-behind-cross-validation"><i class="fa fa-check"></i><b>10.3</b> Illustration of the principle behind cross validation</a></li>
-<li class="chapter" data-level="10.4" data-path="gams-behind-the-scenes.html"><a href="gams-behind-the-scenes.html#brief-note-on-effective-degrees-of-freedom-edf"><i class="fa fa-check"></i><b>10.4</b> Brief note on effective degrees of freedom (edf)</a></li>
+<li class="chapter" data-level="10" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html"><i class="fa fa-check"></i><b>10</b> Quick intro to Generalized Additive Mixed Models (GAMMs)</a><ul>
+<li class="chapter" data-level="10.1" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#dealing-with-non-independence"><i class="fa fa-check"></i><b>10.1</b> Dealing with non-independence</a></li>
+<li class="chapter" data-level="10.2" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#mixed-modelling"><i class="fa fa-check"></i><b>10.2</b> Mixed modelling</a></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="resources.html"><a href="resources.html"><i class="fa fa-check"></i><b>11</b> Resources</a></li>
 <li class="chapter" data-level="12" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>12</b> References</a></li>
@@ -216,9 +218,9 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 </div>
 --!>
 <div id="quick-intro-to-generalized-additive-mixed-models-gamms" class="section level1">
-<h1><span class="header-section-number">Chapter 9</span> Quick intro to Generalized Additive Mixed Models (GAMMs)</h1>
+<h1><span class="header-section-number">Chapter 10</span> Quick intro to Generalized Additive Mixed Models (GAMMs)</h1>
 <div id="dealing-with-non-independence" class="section level2">
-<h2><span class="header-section-number">9.1</span> Dealing with non-independence</h2>
+<h2><span class="header-section-number">10.1</span> Dealing with non-independence</h2>
 <p>When observations are not independent, GAMs can be used to either
 incorporate:</p>
 <ul>
@@ -235,9 +237,9 @@ autocorrelation structure or mixed effects using the <code>gamm()</code> functio
 with temporal autocorrelation in the residuals. We will revisit the
 Nottingham temperature model and test for correlated errors using the
 (partial) autocorrelation function.</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb41-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb41-2"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb41-2"></a><span class="kw">acf</span>(<span class="kw">resid</span>(year_gam), <span class="dt">lag.max =</span> <span class="dv">36</span>, <span class="dt">main =</span> <span class="st">&quot;ACF&quot;</span>)</span>
-<span id="cb41-3"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb41-3"></a><span class="kw">pacf</span>(<span class="kw">resid</span>(year_gam), <span class="dt">lag.max =</span> <span class="dv">36</span>, <span class="dt">main =</span> <span class="st">&quot;pACF&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb68-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb68-2"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb68-2"></a><span class="kw">acf</span>(<span class="kw">resid</span>(year_gam), <span class="dt">lag.max =</span> <span class="dv">36</span>, <span class="dt">main =</span> <span class="st">&quot;ACF&quot;</span>)</span>
+<span id="cb68-3"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb68-3"></a><span class="kw">pacf</span>(<span class="kw">resid</span>(year_gam), <span class="dt">lag.max =</span> <span class="dv">36</span>, <span class="dt">main =</span> <span class="st">&quot;pACF&quot;</span>)</span></code></pre></div>
 <p><img src="images/graphic5.1.jpg" width="700" /></p>
 <p>The autocorrelation function plot (ACF; first panel above) provides the
 cross-correlation of a time series with itself at different points in
@@ -253,14 +255,14 @@ test this by adding AR structures to the Nottingham temperature model,
 one with an <code>AR(1)</code> (correlation at 1 time step) and one with an <code>AR(2)</code>
 (correlation at two times steps), and test for the best-fit model using
 ANOVA.</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb42-1"></a>year_gam &lt;-<span class="st"> </span><span class="kw">gamm</span>(nottem <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(nottem_year) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(nottem_month, <span class="dt">bs =</span> <span class="st">&quot;cc&quot;</span>))</span>
-<span id="cb42-2"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb42-2"></a>year_gam_AR1 &lt;-<span class="st"> </span><span class="kw">gamm</span>(nottem <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(nottem_year) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(nottem_month,</span>
-<span id="cb42-3"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb42-3"></a>    <span class="dt">bs =</span> <span class="st">&quot;cc&quot;</span>), <span class="dt">correlation =</span> <span class="kw">corARMA</span>(<span class="dt">form =</span> <span class="op">~</span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span>nottem_year,</span>
-<span id="cb42-4"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb42-4"></a>    <span class="dt">p =</span> <span class="dv">1</span>))</span>
-<span id="cb42-5"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb42-5"></a>year_gam_AR2 &lt;-<span class="st"> </span><span class="kw">gamm</span>(nottem <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(nottem_year) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(nottem_month,</span>
-<span id="cb42-6"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb42-6"></a>    <span class="dt">bs =</span> <span class="st">&quot;cc&quot;</span>), <span class="dt">correlation =</span> <span class="kw">corARMA</span>(<span class="dt">form =</span> <span class="op">~</span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span>nottem_year,</span>
-<span id="cb42-7"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb42-7"></a>    <span class="dt">p =</span> <span class="dv">2</span>))</span>
-<span id="cb42-8"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb42-8"></a><span class="kw">anova</span>(year_gam<span class="op">$</span>lme, year_gam_AR1<span class="op">$</span>lme, year_gam_AR2<span class="op">$</span>lme)</span></code></pre></div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb69-1"></a>year_gam &lt;-<span class="st"> </span><span class="kw">gamm</span>(nottem <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(nottem_year) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(nottem_month, <span class="dt">bs =</span> <span class="st">&quot;cc&quot;</span>))</span>
+<span id="cb69-2"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb69-2"></a>year_gam_AR1 &lt;-<span class="st"> </span><span class="kw">gamm</span>(nottem <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(nottem_year) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(nottem_month,</span>
+<span id="cb69-3"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb69-3"></a>    <span class="dt">bs =</span> <span class="st">&quot;cc&quot;</span>), <span class="dt">correlation =</span> <span class="kw">corARMA</span>(<span class="dt">form =</span> <span class="op">~</span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span>nottem_year,</span>
+<span id="cb69-4"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb69-4"></a>    <span class="dt">p =</span> <span class="dv">1</span>))</span>
+<span id="cb69-5"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb69-5"></a>year_gam_AR2 &lt;-<span class="st"> </span><span class="kw">gamm</span>(nottem <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(nottem_year) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(nottem_month,</span>
+<span id="cb69-6"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb69-6"></a>    <span class="dt">bs =</span> <span class="st">&quot;cc&quot;</span>), <span class="dt">correlation =</span> <span class="kw">corARMA</span>(<span class="dt">form =</span> <span class="op">~</span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span>nottem_year,</span>
+<span id="cb69-7"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb69-7"></a>    <span class="dt">p =</span> <span class="dv">2</span>))</span>
+<span id="cb69-8"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb69-8"></a><span class="kw">anova</span>(year_gam<span class="op">$</span>lme, year_gam_AR1<span class="op">$</span>lme, year_gam_AR2<span class="op">$</span>lme)</span></code></pre></div>
 <pre><code>                 Model df      AIC      BIC    logLik   Test   L.Ratio p-value
 year_gam$lme         1  5 1109.908 1127.311 -549.9538                         
 year_gam_AR1$lme     2  6 1101.218 1122.102 -544.6092 1 vs 2 10.689206  0.0011
@@ -271,7 +273,7 @@ moving to the <code>AR(2)</code> (LRT = 1.62, <em>p</em> = 0.203). So it is best
 only the <code>AR(1)</code> structure in our model.</p>
 </div>
 <div id="mixed-modelling" class="section level2">
-<h2><span class="header-section-number">9.2</span> Mixed modelling</h2>
+<h2><span class="header-section-number">10.2</span> Mixed modelling</h2>
 <p>As we saw in the previous section, <code>bs</code> specifies the type of underlying
 base function. For random intercepts and linear random slopes we use
 <code>bs=\"re\"</code>, but for random smooths we use <code>bs=\"fs\"</code>.</p>
@@ -292,83 +294,83 @@ shrinkage to the mean.</li>
 will use the <code>gamSim()</code> function to automatically generate a dataset,
 this time with a random effect component generate, then run a model with
 a random intercept using <code>fac</code> as the random factor.</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb44-1"></a><span class="co"># generate and view data</span></span>
-<span id="cb44-2"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb44-2"></a>gam_data2 &lt;-<span class="st"> </span><span class="kw">gamSim</span>(<span class="dt">eg =</span> <span class="dv">6</span>)</span>
-<span id="cb44-3"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb44-3"></a><span class="kw">head</span>(gam_data2)</span>
-<span id="cb44-4"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb44-4"></a></span>
-<span id="cb44-5"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb44-5"></a><span class="co"># run random intercept model</span></span>
-<span id="cb44-6"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb44-6"></a>gamm_intercept &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(x0) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(fac, <span class="dt">bs =</span> <span class="st">&quot;re&quot;</span>), <span class="dt">data =</span> gam_data2)</span>
-<span id="cb44-7"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb44-7"></a></span>
-<span id="cb44-8"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb44-8"></a><span class="co"># examine model output</span></span>
-<span id="cb44-9"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb44-9"></a><span class="kw">summary</span>(gamm_intercept)<span class="op">$</span>s.table</span></code></pre></div>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb71-1"></a><span class="co"># generate and view data</span></span>
+<span id="cb71-2"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb71-2"></a>gam_data2 &lt;-<span class="st"> </span><span class="kw">gamSim</span>(<span class="dt">eg =</span> <span class="dv">6</span>)</span>
+<span id="cb71-3"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb71-3"></a><span class="kw">head</span>(gam_data2)</span>
+<span id="cb71-4"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb71-4"></a></span>
+<span id="cb71-5"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb71-5"></a><span class="co"># run random intercept model</span></span>
+<span id="cb71-6"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb71-6"></a>gamm_intercept &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(x0) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(fac, <span class="dt">bs =</span> <span class="st">&quot;re&quot;</span>), <span class="dt">data =</span> gam_data2)</span>
+<span id="cb71-7"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb71-7"></a></span>
+<span id="cb71-8"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb71-8"></a><span class="co"># examine model output</span></span>
+<span id="cb71-9"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb71-9"></a><span class="kw">summary</span>(gamm_intercept)<span class="op">$</span>s.table</span></code></pre></div>
 <p>Note that there is now a smoother term for the random intercept in the
 summary table. You can plot and view the random intercepts for each
 level of <code>fac</code> as follows:</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb45-1"></a><span class="kw">plot</span>(gamm_intercept, <span class="dt">select =</span> <span class="dv">2</span>)</span>
-<span id="cb45-2"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb45-2"></a><span class="co"># select=2 because the random effect appears as the second</span></span>
-<span id="cb45-3"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb45-3"></a><span class="co"># entry in the summary table.</span></span></code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb72-1"></a><span class="kw">plot</span>(gamm_intercept, <span class="dt">select =</span> <span class="dv">2</span>)</span>
+<span id="cb72-2"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb72-2"></a><span class="co"># select=2 because the random effect appears as the second</span></span>
+<span id="cb72-3"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb72-3"></a><span class="co"># entry in the summary table.</span></span></code></pre></div>
 <p>We can also use the <code>plot_smooth</code> function to visualize the model, which
 in contrast to the default <code>plot.gam</code>, allows us to plot a smooth of the
 summed effects of a GAM (based on predictions) as we saw earlier, but in
 addition, optionally removes the random effects. Here, we will plot the
 summed effects for the <code>x0</code> without random effects, and then plot the
 predictions of all four levels of the random <code>fac</code> effect:</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb46-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="dt">cex =</span> <span class="fl">1.1</span>)</span>
-<span id="cb46-2"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb46-2"></a><span class="kw">plot_smooth</span>(gamm_intercept, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">rm.ranef =</span> <span class="ot">TRUE</span>, <span class="dt">main =</span> <span class="st">&quot;intercept + s(x1)&quot;</span>,</span>
-<span id="cb46-3"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb46-3"></a>    <span class="dt">rug =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb46-4"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb46-4"></a><span class="kw">plot_smooth</span>(gamm_intercept, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;1&quot;</span>),</span>
-<span id="cb46-5"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb46-5"></a>    <span class="dt">main =</span> <span class="st">&quot;... + s(fac)&quot;</span>, <span class="dt">col =</span> <span class="st">&quot;orange&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">8</span>, <span class="dv">21</span>), <span class="dt">rug =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb46-6"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb46-6"></a><span class="kw">plot_smooth</span>(gamm_intercept, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;2&quot;</span>),</span>
-<span id="cb46-7"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb46-7"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span>
-<span id="cb46-8"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb46-8"></a><span class="kw">plot_smooth</span>(gamm_intercept, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;3&quot;</span>),</span>
-<span id="cb46-9"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb46-9"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;purple&quot;</span>)</span>
-<span id="cb46-10"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb46-10"></a><span class="kw">plot_smooth</span>(gamm_intercept, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;4&quot;</span>),</span>
-<span id="cb46-11"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb46-11"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;turquoise&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb73-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="dt">cex =</span> <span class="fl">1.1</span>)</span>
+<span id="cb73-2"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb73-2"></a><span class="kw">plot_smooth</span>(gamm_intercept, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">rm.ranef =</span> <span class="ot">TRUE</span>, <span class="dt">main =</span> <span class="st">&quot;intercept + s(x1)&quot;</span>,</span>
+<span id="cb73-3"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb73-3"></a>    <span class="dt">rug =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb73-4"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb73-4"></a><span class="kw">plot_smooth</span>(gamm_intercept, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;1&quot;</span>),</span>
+<span id="cb73-5"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb73-5"></a>    <span class="dt">main =</span> <span class="st">&quot;... + s(fac)&quot;</span>, <span class="dt">col =</span> <span class="st">&quot;orange&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">8</span>, <span class="dv">21</span>), <span class="dt">rug =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb73-6"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb73-6"></a><span class="kw">plot_smooth</span>(gamm_intercept, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;2&quot;</span>),</span>
+<span id="cb73-7"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb73-7"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb73-8"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb73-8"></a><span class="kw">plot_smooth</span>(gamm_intercept, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;3&quot;</span>),</span>
+<span id="cb73-9"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb73-9"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;purple&quot;</span>)</span>
+<span id="cb73-10"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb73-10"></a><span class="kw">plot_smooth</span>(gamm_intercept, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;4&quot;</span>),</span>
+<span id="cb73-11"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb73-11"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;turquoise&quot;</span>)</span></code></pre></div>
 <p><img src="images/graphic5.3.jpg" width="650" /></p>
 <p>Next we will run and plot a model with random slopes:</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb47-1"></a>gamm_slope &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(x0) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x0, fac, <span class="dt">bs =</span> <span class="st">&quot;re&quot;</span>), <span class="dt">data =</span> gam_data2)</span>
-<span id="cb47-2"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb47-2"></a><span class="kw">summary</span>(gamm_slope)<span class="op">$</span>s.table</span>
-<span id="cb47-3"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb47-3"></a></span>
-<span id="cb47-4"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb47-4"></a><span class="kw">plot_smooth</span>(gamm_slope, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">rm.ranef =</span> <span class="ot">TRUE</span>, <span class="dt">main =</span> <span class="st">&quot;intercept + s(x0)&quot;</span>,</span>
-<span id="cb47-5"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb47-5"></a>    <span class="dt">rug =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb47-6"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb47-6"></a><span class="kw">plot_smooth</span>(gamm_slope, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;1&quot;</span>),</span>
-<span id="cb47-7"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb47-7"></a>    <span class="dt">main =</span> <span class="st">&quot;... + s(fac)&quot;</span>, <span class="dt">col =</span> <span class="st">&quot;orange&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">7</span>, <span class="dv">22</span>), <span class="dt">rug =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb47-8"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb47-8"></a><span class="kw">plot_smooth</span>(gamm_slope, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;2&quot;</span>),</span>
-<span id="cb47-9"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb47-9"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span>
-<span id="cb47-10"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb47-10"></a><span class="kw">plot_smooth</span>(gamm_slope, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;3&quot;</span>),</span>
-<span id="cb47-11"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb47-11"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;purple&quot;</span>)</span>
-<span id="cb47-12"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb47-12"></a><span class="kw">plot_smooth</span>(gamm_slope, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;4&quot;</span>),</span>
-<span id="cb47-13"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb47-13"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;turquoise&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb74-1"></a>gamm_slope &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(x0) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x0, fac, <span class="dt">bs =</span> <span class="st">&quot;re&quot;</span>), <span class="dt">data =</span> gam_data2)</span>
+<span id="cb74-2"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb74-2"></a><span class="kw">summary</span>(gamm_slope)<span class="op">$</span>s.table</span>
+<span id="cb74-3"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb74-3"></a></span>
+<span id="cb74-4"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb74-4"></a><span class="kw">plot_smooth</span>(gamm_slope, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">rm.ranef =</span> <span class="ot">TRUE</span>, <span class="dt">main =</span> <span class="st">&quot;intercept + s(x0)&quot;</span>,</span>
+<span id="cb74-5"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb74-5"></a>    <span class="dt">rug =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb74-6"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb74-6"></a><span class="kw">plot_smooth</span>(gamm_slope, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;1&quot;</span>),</span>
+<span id="cb74-7"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb74-7"></a>    <span class="dt">main =</span> <span class="st">&quot;... + s(fac)&quot;</span>, <span class="dt">col =</span> <span class="st">&quot;orange&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">7</span>, <span class="dv">22</span>), <span class="dt">rug =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb74-8"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb74-8"></a><span class="kw">plot_smooth</span>(gamm_slope, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;2&quot;</span>),</span>
+<span id="cb74-9"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb74-9"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb74-10"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb74-10"></a><span class="kw">plot_smooth</span>(gamm_slope, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;3&quot;</span>),</span>
+<span id="cb74-11"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb74-11"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;purple&quot;</span>)</span>
+<span id="cb74-12"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb74-12"></a><span class="kw">plot_smooth</span>(gamm_slope, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;4&quot;</span>),</span>
+<span id="cb74-13"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb74-13"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;turquoise&quot;</span>)</span></code></pre></div>
 <p><img src="images/graphic5.4.jpg" width="650" /></p>
 <p>We will now include both a random intercept and slope term.</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb48-1"></a>gamm_int_slope &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(x0) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(fac, <span class="dt">bs =</span> <span class="st">&quot;re&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(fac,</span>
-<span id="cb48-2"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb48-2"></a>    x0, <span class="dt">bs =</span> <span class="st">&quot;re&quot;</span>), <span class="dt">data =</span> gam_data2)</span>
-<span id="cb48-3"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb48-3"></a><span class="kw">summary</span>(gamm_int_slope)<span class="op">$</span>s.table</span>
-<span id="cb48-4"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb48-4"></a></span>
-<span id="cb48-5"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb48-5"></a><span class="kw">plot_smooth</span>(gamm_int_slope, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">rm.ranef =</span> <span class="ot">TRUE</span>, <span class="dt">main =</span> <span class="st">&quot;intercept + s(x0)&quot;</span>,</span>
-<span id="cb48-6"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb48-6"></a>    <span class="dt">rug =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb48-7"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb48-7"></a><span class="kw">plot_smooth</span>(gamm_int_slope, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;1&quot;</span>),</span>
-<span id="cb48-8"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb48-8"></a>    <span class="dt">main =</span> <span class="st">&quot;... + s(fac) + s(fac, x0)&quot;</span>, <span class="dt">col =</span> <span class="st">&quot;orange&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">7</span>,</span>
-<span id="cb48-9"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb48-9"></a>        <span class="dv">22</span>), <span class="dt">rug =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb48-10"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb48-10"></a><span class="kw">plot_smooth</span>(gamm_int_slope, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;2&quot;</span>),</span>
-<span id="cb48-11"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb48-11"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">xpd =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb48-12"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb48-12"></a><span class="kw">plot_smooth</span>(gamm_int_slope, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;3&quot;</span>),</span>
-<span id="cb48-13"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb48-13"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;purple&quot;</span>, <span class="dt">xpd =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb48-14"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb48-14"></a><span class="kw">plot_smooth</span>(gamm_int_slope, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;4&quot;</span>),</span>
-<span id="cb48-15"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb48-15"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;turquoise&quot;</span>, <span class="dt">xpd =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb75-1"></a>gamm_int_slope &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(x0) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(fac, <span class="dt">bs =</span> <span class="st">&quot;re&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(fac,</span>
+<span id="cb75-2"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb75-2"></a>    x0, <span class="dt">bs =</span> <span class="st">&quot;re&quot;</span>), <span class="dt">data =</span> gam_data2)</span>
+<span id="cb75-3"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb75-3"></a><span class="kw">summary</span>(gamm_int_slope)<span class="op">$</span>s.table</span>
+<span id="cb75-4"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb75-4"></a></span>
+<span id="cb75-5"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb75-5"></a><span class="kw">plot_smooth</span>(gamm_int_slope, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">rm.ranef =</span> <span class="ot">TRUE</span>, <span class="dt">main =</span> <span class="st">&quot;intercept + s(x0)&quot;</span>,</span>
+<span id="cb75-6"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb75-6"></a>    <span class="dt">rug =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb75-7"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb75-7"></a><span class="kw">plot_smooth</span>(gamm_int_slope, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;1&quot;</span>),</span>
+<span id="cb75-8"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb75-8"></a>    <span class="dt">main =</span> <span class="st">&quot;... + s(fac) + s(fac, x0)&quot;</span>, <span class="dt">col =</span> <span class="st">&quot;orange&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">7</span>,</span>
+<span id="cb75-9"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb75-9"></a>        <span class="dv">22</span>), <span class="dt">rug =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb75-10"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb75-10"></a><span class="kw">plot_smooth</span>(gamm_int_slope, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;2&quot;</span>),</span>
+<span id="cb75-11"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb75-11"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">xpd =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb75-12"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb75-12"></a><span class="kw">plot_smooth</span>(gamm_int_slope, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;3&quot;</span>),</span>
+<span id="cb75-13"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb75-13"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;purple&quot;</span>, <span class="dt">xpd =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb75-14"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb75-14"></a><span class="kw">plot_smooth</span>(gamm_int_slope, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;4&quot;</span>),</span>
+<span id="cb75-15"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb75-15"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;turquoise&quot;</span>, <span class="dt">xpd =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <p><img src="images/graphic5.5.jpg" width="650" /></p>
 <p>Note that the random slope is static in this case:</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb49-1"></a><span class="kw">plot</span>(gamm_int_slope, <span class="dt">select =</span> <span class="dv">3</span>)</span>
-<span id="cb49-2"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb49-2"></a><span class="co"># select=3 because the random slope appears as the third</span></span>
-<span id="cb49-3"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb49-3"></a><span class="co"># entry in your summary table.</span></span></code></pre></div>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb76-1"></a><span class="kw">plot</span>(gamm_int_slope, <span class="dt">select =</span> <span class="dv">3</span>)</span>
+<span id="cb76-2"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb76-2"></a><span class="co"># select=3 because the random slope appears as the third</span></span>
+<span id="cb76-3"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb76-3"></a><span class="co"># entry in your summary table.</span></span></code></pre></div>
 <p>Lastly, we will examine a model with a random smooth.</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb50-1"></a>gamm_smooth &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(x0, fac, <span class="dt">bs =</span> <span class="st">&quot;fs&quot;</span>, <span class="dt">m =</span> <span class="dv">1</span>), <span class="dt">data =</span> gam_data2)</span>
-<span id="cb50-2"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb50-2"></a><span class="kw">summary</span>(gamm_smooth)<span class="op">$</span>s.table</span></code></pre></div>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb77-1"></a>gamm_smooth &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(x0, fac, <span class="dt">bs =</span> <span class="st">&quot;fs&quot;</span>, <span class="dt">m =</span> <span class="dv">1</span>), <span class="dt">data =</span> gam_data2)</span>
+<span id="cb77-2"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb77-2"></a><span class="kw">summary</span>(gamm_smooth)<span class="op">$</span>s.table</span></code></pre></div>
 <p>Here, if the random slope varied along x0, we would see different curves
 for each level:</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb51-1"></a><span class="kw">plot</span>(gamm_smooth, <span class="dt">select =</span> <span class="dv">1</span>)</span>
-<span id="cb51-2"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb51-2"></a><span class="co"># select=1 because the smooth slope appears as the first</span></span>
-<span id="cb51-3"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb51-3"></a><span class="co"># entry in your summary table.</span></span></code></pre></div>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb78-1"></a><span class="kw">plot</span>(gamm_smooth, <span class="dt">select =</span> <span class="dv">1</span>)</span>
+<span id="cb78-2"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb78-2"></a><span class="co"># select=1 because the smooth slope appears as the first</span></span>
+<span id="cb78-3"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb78-3"></a><span class="co"># entry in your summary table.</span></span></code></pre></div>
 <p>All of the above models can in turn be compared using <code>anova()</code> as in
 the previous sections to determine the best fit model.</p>
 
@@ -386,7 +388,7 @@ the previous sections to determine the best fit model.</p>
         </div>
       </div>
 <a href="other-distributions.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="gams-behind-the-scenes.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="resources.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

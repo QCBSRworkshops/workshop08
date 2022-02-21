@@ -61,44 +61,73 @@ AIC(linear_model_s1, smooth_model_s1)
 smooth_model_s1
 
 
-##Section: 03-smooth-terms.R 
+##Section: 03-a-closer-look.R 
 
-gam_data = gamSim(eg=5)
-head(gam_data)
 
-basic_model = gam(y~x0+s(x1), data= gam_data)
-basic_summary = summary(basic_model)
-print(basic_summary$p.table)
-print(basic_summary$s.table)
-plot(basic_model)
 
-two_term_model <- gam(y~x0+s(x1)+x2, data=gam_data)
+
+##Section: 04-smooth-terms.R 
+
+head(isit)
+isit$Season <- as.factor(isit$Season)
+
+basic_model <- gam(Sources ~ Season + s(SampleDepth), data = isit, method = "REML")
+basic_summary <- summary(basic_model)
+
+basic_summary$p.table
+
+basic_summary$s.table
+
+plot(basic_model, all.terms = TRUE, page = 1)
+
+two_term_model <- gam(Sources ~ Season + s(SampleDepth) + RelativeDepth, 
+                      data = isit, method = "REML")
 two_term_summary <- summary(two_term_model)
-print(two_term_summary$p.table)
-print(two_term_summary$s.table)
 
-two_smooth_model <- gam(y~x0+s(x1)+s(x2), data=gam_data)
+two_term_summary$p.table
+
+two_term_summary$s.table
+
+plot(two_term_model, page = 1, all.terms = TRUE)
+
+two_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth), 
+                        data = isit, method = "REML")
 two_smooth_summary <- summary(two_smooth_model)
-print(two_smooth_summary$p.table)
-print(two_smooth_summary$s.table)
-plot(two_smooth_model,page=1)
 
-anova(basic_model,two_term_model,two_smooth_model, test="Chisq")
+two_smooth_summary$p.table
 
-three_term_model <- gam(y~x0+s(x1)+s(x2)+x3, data=gam_data)
-three_smooth_model <- gam(y~x0+s(x1)+s(x2)+s(x3), data=gam_data)
-three_smooth_summary <- summary(three_smooth_model)
+two_smooth_summary$s.table
 
-print(three_smooth_summary$p.table)
-print(three_smooth_summary$s.table)
-plot(three_smooth_model,page=1)
-# edf = 1 therefore term is linear.
+plot(two_smooth_model, page = 1, all.terms = TRUE)
 
-anova(two_smooth_model,three_term_model,test="Chisq")
-# term x3 is not significant
+AIC(basic_model, two_term_model, two_smooth_model)
+
+# Add Latitude as a linear term
+three_term_model <- gam(Sources ~ 
+                          Season + s(SampleDepth) + s(RelativeDepth) + 
+                          Latitude, 
+                        data = isit, method = "REML")
+(three_term_summary <- summary(three_term_model))
+
+# Add Latitude as a smooth term
+three_smooth_model <- gam(Sources ~ 
+                            Season + s(SampleDepth) + s(RelativeDepth) + 
+                            s(Latitude),
+                          data = isit, method = "REML")
+(three_smooth_summary <- summary(three_smooth_model))
+
+plot(three_term_model, page = 1, all.terms = TRUE)
+
+plot(three_smooth_model, page = 1, all.terms = TRUE)
+
+three_smooth_summary$s.table
+
+AIC(three_smooth_model, three_term_model)
+
+AIC(two_smooth_model, three_smooth_model)
 
 
-##Section: 04-interactions.R 
+##Section: 05-interactions.R 
 
 categorical_interact <- gam(y~x0+s(x1)+s(x2,by=x0),data=gam_data)
 categorical_interact_summary <- summary(categorical_interact)
@@ -117,7 +146,7 @@ vis.gam(smooth_interact,view=c("x1","x2"),theta=40,n.grid=500,border=NA)
 anova(two_smooth_model,smooth_interact,test="Chisq")
 
 
-##Section: 05-changing-basis.R 
+##Section: 06-changing-basis.R 
 
 data(nottem)
 n_years <- length(nottem)/12
@@ -144,7 +173,7 @@ lines(nottem_year[I], pred$fit[,1][I],lty=1)
 abline(h=0)
 
 
-##Section: 06-other-distributions.R 
+##Section: 07-other-distributions.R 
 
 gam_data3 <- read.csv("other_dist.csv")
 summary(gam_data3)
@@ -179,7 +208,7 @@ plot_smooth(prop_model, view="x1", main="",
 abline(h=.5, v=diff$start, col='red', lty=2)
 
 
-##Section: 07-GAMMs.R 
+##Section: 08-GAMMs.R 
 
 par(mfrow=c(1,2))
 acf(resid(year_gam), lag.max = 36, main = "ACF")
@@ -242,11 +271,6 @@ summary(gamm_smooth)$s.table
 
 plot(gamm_smooth, select=1)
 # select=1 because the smooth slope appears as the first entry in your summary table.
-
-
-##Section: 08-behind-the-scenes.R 
-
-
 
 
 ##Section: 09-references.R 

@@ -899,8 +899,10 @@ anova(basic_model, two_term_model, two_smooth_model,test='Chisq')
 
 <br>
 
-1. Create 2 new models, by adding `Latitude` to `two_smooth_model` as a linear and smoothed term.
-2. Determine if `Latitude` is an important term to include using plots, coefficient tables and the AIC function.
+For our second challenge, we will be building onto our model by adding variables which we think might be ecologically significant predictors to explain bioluminescence. 
+
+1. Create two new models: Add `Latitude` to `two_smooth_model`, first as a linear term, then as a smooth term.
+2. Is `Latitude` an important term to include? Does `Latitude` have a linear or additive effect? Use plots, coefficient tables, and the `AIC()` function to help you answer this question.
 
 ---
 exclude:true
@@ -914,36 +916,20 @@ exclude:true
 # Challenge 2 - Solution ![:cube]()
 
 <br>
-```{r,eval=FALSE}
+```{r,eval=TRUE}
+# Add Latitude as a linear term
 three_term_model <- gam(Sources ~ 
                           Season + s(SampleDepth) + s(RelativeDepth) + 
                           Latitude, 
                         data = isit, method = "REML")
+three_term_summary <- summary(three_term_model)
 
+# Add Latitude as a smooth term
 three_smooth_model <- gam(Sources ~ 
                             Season + s(SampleDepth) + s(RelativeDepth) + 
                             s(Latitude),
                           data = isit, method = "REML")
-
 three_smooth_summary <- summary(three_smooth_model)
-three_smooth_summary
-```
----
-# Challenge 2 - Solution ![:cube]()
-
-```{r,eval=TRUE,echo=FALSE, output.lines = -c(1,13,14)}
-three_term_model <- gam(Sources ~ 
-                          Season + s(SampleDepth) + s(RelativeDepth) + 
-                          Latitude, 
-                        data = isit, method = "REML")
-
-three_smooth_model <- gam(Sources ~ 
-                            Season + s(SampleDepth) + s(RelativeDepth) + 
-                            s(Latitude),
-                          data = isit, method = "REML")
-
-three_smooth_summary <- summary(three_smooth_model)
-three_smooth_summary
 ```
 
 ---
@@ -955,6 +941,25 @@ exclude:true
 three_term_model <- gam(y ~ x0 + s(x1) + s(x2) + x3, data = gam_data)
 three_smooth_model <- gam(y ~ x0 + s(x1) + s(x2) + s(x3), data = gam_data)
 three_smooth_summary <- summary(three_smooth_model)
+```
+
+---
+# Challenge 2 - Solution ![:cube]()
+
+__2.__ Is `Latitude` an important term to include? Does `Latitude` have a linear or additive effect?
+
+Let us begin by plotting the the 4 effects that are now included in each model.
+
+---
+# Challenge 2 - Solution ![:cube]()
+
+```{r, eval = FALSE}
+plot(three_term_model, page = 1, all.terms = TRUE)
+```
+
+```{r, fig.width = 8, fig.height = 7, echo = FALSE}
+par(mar=c(3.8,3.8,.2,.2))
+plot(three_term_model, page = 1, all.terms = TRUE)
 ```
 
 ---
@@ -972,13 +977,15 @@ plot(three_smooth_model, page = 1, all.terms = TRUE)
 ---
 # Challenge 2 - Solution ![:cube]()
 
+We should also look at our coefficient tables. What can the EDF tell us about the _wiggliness_ of our predictors' effects?
+
 ```{r}
 three_smooth_summary$s.table
 ```
 
 --
 
-The EDF are all quite high for our variables, including `Latitude`. 
+The EDF are all quite high for all of our smooth variables, including `Latitude`. 
 
 This tells us that `Latitude` is quite _wiggly_, and probably should not be included as a linear term.
 

@@ -509,7 +509,7 @@ nested_gam_model_test
 ---
 # A closer look at GAMs
 
-We will now take a few minutes to look at what GAMs are doing behind the scenes. Lets first consider a simple model containing one smooth function $f$ of one covariate, $x$:
+We will now take a few minutes to look at what GAMs are doing behind the scenes. Let us first consider a simple model containing one smooth function $f$ of one covariate, $x$:
 
 $$y_i = f(x_i) + \epsilon_i$$
 
@@ -555,7 +555,7 @@ A cubic spline is a curve constructed from sections of a cubic polynomial joined
 ---
 # Example: a cubic spline basis
 
-Here's a representation of a smooth function using a rank 5 cubic spline basis with knot locations at increments of 0.2:
+Here is a representation of a smooth function using a rank 5 cubic spline basis with knot locations at increments of 0.2:
 
 .center[
 ![:scale 40%](images/cubic_spline5.jpg)
@@ -585,7 +585,7 @@ As $\lambda$ goes to infinity, the model becomes linear.
 
 If $\lambda$ is too high then the data will be over smoothed, and if it is too low then the data will be under smoothed.
 
-Ideally, it would be good to choose $\lambda$ so that the predicted $\hat{f}$ is as close as possible to $f$. A suitable criterion might be to choose $\lambda$ to minimize:
+Ideally, it is best to choose $\lambda$ so that the predicted $\hat{f}$ is as close as possible to $f$. A suitable criterion might be to choose $\lambda$ to minimize:
 
 $$M = 1/n \times \sum_{i=1}^n (\hat{f_i} - f_i)^2$$
 
@@ -593,7 +593,7 @@ Since $f$ is unknown, $M$ must be estimated. The recommend methods for this are 
 
 ---
 exclude:true
-# Principle behind cross validation
+# The principle behind cross validation
 
 .center[
 ![:scale 70%](images/smooth_sel.png)
@@ -645,7 +645,7 @@ We will try to model the response `Sources` using the predictors `Season` and `S
 ---
 # GAM with multiple variables
 
-Let's start with a basic model, with one smoothed term (`SampleDepth`) and one categorical predictor (`Season`, which has 2 levels).
+Let us start with a basic model, with one smoothed term (`SampleDepth`) and one categorical predictor (`Season`, which has 2 levels).
 ```{r,eval=TRUE,echo=FALSE}
 isit$Season <- as.factor(isit$Season)
 ```
@@ -717,6 +717,11 @@ plot(basic_model, all.terms = TRUE,page=1)
 
 There is a pronounced difference in bioluminescence between the seasons.
 
+???
+Bioluminescence varies non-linearly across the `SampleDepth` gradient, with highest levels of bioluminescence at the surface, followed by a second but smaller peak just above a depth of 1500, with declining levels at deeper depths.
+
+There is also a pronounced difference in bioluminescence between the seasons, with high levels during Season 2, compared to Season 1.
+
 ---
 # Effective degrees of freedom (EDF)
 
@@ -728,7 +733,7 @@ The `edf` shown in the `s.table` are the **effective degrees of freedom** (EDF) 
 
 - A value close to 1 tends to be close to a linear term.
 
-- A higher value  means that the spline is non-linear.
+- A higher value means that the spline is more wiggly (non-linear).
 
 > In our basic model the EDF of the smooth function `s(SampleDepth)` are ~9, which suggests a highly non-linear curve.
 
@@ -746,12 +751,12 @@ Because the number of free parameters in GAMs is difficult to define, the **EDF*
 
 An upper bound on the **EDF** is determined by the basis dimension $k$ for each smooth function (the **EDF** cannot exceed $k-1$)
 
-In practice, the exact choice of $k$ is arbitrary, but it should be **large enough** to accomodate a sufficiently complex smooth function.
+In practice, the exact choice of $k$ is arbitrary, but it should be **large enough** to accommodate a sufficiently complex smooth function.
 
 We will talk about choosing $k$ in section 5.
 
 ---
-# GAM with multiple variables
+# GAM with multiple linear and smooth terms
 
 We can add a second term, `RelativeDepth`, but specify a linear relationship with `Sources`
 
@@ -773,11 +778,16 @@ Information on additive effects (non-linear terms):
 two_term_summary$s.table
 ```
 
+???
+The regression coefficient which is estimated for this new linear term, `RelativeDepth`, will appear in the `p.table`. Remember, the `p.table` shows information on the parametric effects (linear terms)
+
+In the `s.table`, we will once again find the non-linear smoother, `s(SampleDepth)`, and its wiggleness parameter (`edf`). Remember, the `s.table` shows information on the additive effects (non-linear terms)
+
 ---
 
 # GAM with multiple variables
 
-We can add a second term, `RelativeDepth`, but specify a linear relationship with `Sources`
+We can add a second term (`RelativeDepth`) to our basic model, but specify a linear relationship with `Sources`.
 
 ```{r,fig.width=10,fig.height=6}
 plot(two_term_model, page = 1, all.terms = TRUE)
@@ -786,7 +796,8 @@ plot(two_term_model, page = 1, all.terms = TRUE)
 ---
 # GAM with multiple variables
 
-We can also explore whether the relationship between `Sources` and `RelativeDepth` is non-linear
+If we want to know whether the relationship between `Sources` and `RelativeDepth` is
+non-linear, we can model `RelativeDepth` as a smooth term instead.
 
 ```{r}
 two_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth), 
@@ -809,8 +820,6 @@ two_smooth_summary$s.table
 ---
 # GAM with multiple variables
 
-We can also explore whether the relationship between `Sources` and `RelativeDepth` is non-linear
-
 ```{r,fig.width=10,fig.height=6}
 plot(two_smooth_model, page = 1, all.terms = TRUE)
 ```
@@ -818,7 +827,7 @@ plot(two_smooth_model, page = 1, all.terms = TRUE)
 ---
 # GAM with multiple variables
 
-As before, we can perform an AIC to test if the smoothed term is necessary
+As before, we can compare our models with AIC to test whether the smoothed term improves our model's performance.
 
 ```{r}
 AIC(basic_model, two_term_model, two_smooth_model)
@@ -965,12 +974,41 @@ plot(three_smooth_model, page = 1, all.terms = TRUE)
 
 ```{r}
 three_smooth_summary$s.table
-
-# edf = 1 therefore term is linear.
-
-AIC(two_smooth_model, three_term_model)
-
 ```
+
+--
+
+The EDF are all quite high for our variables, including `Latitude`. 
+
+This tells us that `Latitude` is quite _wiggly_, and probably should not be included as a linear term.
+
+---
+# Challenge 2 - Solution ![:cube]()
+
+Before deciding which model is "best", we should test whether `Latitude` is best included as a linear or as a smooth term, using `AIC()`:
+
+```{r}
+AIC(three_smooth_model, three_term_model)
+```
+
+--
+Our model including Latitude as a _smooth_ term has a lower AIC score, meaning it performs better than our model including Latitude as a _linear_ term. 
+
+--
+But, does adding `Latitude` as a smooth predictor actually improve on our last "best" model (`two_smooth_model`)?
+
+---
+# Challenge 2 - Solution ![:cube]()
+
+```{r}
+AIC(two_smooth_model, three_smooth_model)
+```
+
+Our `three_smooth_model` has a lower AIC score than our previous best model (`two_smooth_model`), which did not include `Latitude`. 
+
+--
+
+This implies that `Latitude` is indeed an informative non-linear predictor of bioluminescence.
 
 
 ---

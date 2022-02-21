@@ -223,35 +223,28 @@ plot(two_smooth_model, page = 1)
 
 anova(basic_model, two_term_model, two_smooth_model,test='Chisq')
 
-three_term_model <- gam(Sources ~
-                          Season + s(SampleDepth) + s(RelativeDepth) +
-                          Latitude,
-                        data = isit, method = "REML")
-
-three_smooth_model <- gam(Sources ~
-                            Season + s(SampleDepth) + s(RelativeDepth) +
-                            s(Latitude),
-                          data = isit, method = "REML")
-
-three_smooth_summary <- summary(three_smooth_model)
-three_smooth_summary
-
+# Add Latitude as a linear term
 three_term_model <- gam(Sources ~ 
                           Season + s(SampleDepth) + s(RelativeDepth) + 
                           Latitude, 
                         data = isit, method = "REML")
+three_term_summary <- summary(three_term_model)
 
+# Add Latitude as a smooth term
 three_smooth_model <- gam(Sources ~ 
                             Season + s(SampleDepth) + s(RelativeDepth) + 
                             s(Latitude),
                           data = isit, method = "REML")
-
 three_smooth_summary <- summary(three_smooth_model)
-three_smooth_summary
 
 three_term_model <- gam(y ~ x0 + s(x1) + s(x2) + x3, data = gam_data)
 three_smooth_model <- gam(y ~ x0 + s(x1) + s(x2) + s(x3), data = gam_data)
 three_smooth_summary <- summary(three_smooth_model)
+
+plot(three_term_model, page = 1, all.terms = TRUE)
+
+par(mar=c(3.8,3.8,.2,.2))
+plot(three_term_model, page = 1, all.terms = TRUE)
 
 plot(three_smooth_model, page = 1, all.terms = TRUE)
 

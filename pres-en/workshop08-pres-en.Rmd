@@ -507,7 +507,7 @@ nested_gam_model_test
 **Answer** Yes non-linearity is justified. The estimated degrees of freedom (**edf**) are >> 1 (we'll get back to this soon).
 
 ---
-# A closer look at GAMs
+# How GAMs work
 
 We will now take a few minutes to look at what GAMs are doing behind the scenes. Let us first consider a simple model containing one smooth function $f$ of one covariate, $x$:
 

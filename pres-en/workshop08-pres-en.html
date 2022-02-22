@@ -471,7 +471,7 @@ nested_gam_model_test
 **Answer** Yes non-linearity is justified. The estimated degrees of freedom (**edf**) are &gt;&gt; 1 (we'll get back to this soon).
 
 ---
-# A closer look at GAMs
+# How GAMs work
 
 We will now take a few minutes to look at what GAMs are doing behind the scenes. Let us first consider a simple model containing one smooth function `\(f\)` of one covariate, `\(x\)`:
 
@@ -1328,7 +1328,7 @@ Have we chosen `k` large enough?
 ```r
 k.check(smooth_interact)
 #                              k'      edf   k-index p-value
-# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883  0.0525
+# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883   0.075
 ```
 
 --
@@ -1362,7 +1362,7 @@ Is `k` large enough this time?
 ```r
 k.check(smooth_interact_k60)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626  0.8875
+# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626  0.9025
 ```
 
 --
@@ -1491,7 +1491,7 @@ Check the basis dimension:
 ```r
 k.check(smooth_interact_tw)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062  0.8275
+# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062   0.815
 ```
 
 ---
@@ -1727,15 +1727,15 @@ gam_data2 &lt;- gamSim(eg = 6)
 # 4 term additive + random effectGu &amp; Wahba 4 term additive model
 str(gam_data2)
 # 'data.frame':	400 obs. of  11 variables:
-#  $ y  : num  8.69 18.07 20.67 23.27 5.91 ...
-#  $ x0 : num  0.7486 0.3109 0.1477 0.4949 0.0567 ...
-#  $ x1 : num  0.277 0.323 0.4 0.605 0.161 ...
-#  $ x2 : num  0.698 0.116 0.208 0.259 0.771 ...
-#  $ x3 : num  0.91 0.716 0.623 0.189 0.474 ...
-#  $ f  : num  9.08 14.11 20.85 26.04 6.38 ...
-#  $ f0 : num  1.42 1.657 0.895 2 0.354 ...
-#  $ f1 : num  1.74 1.91 2.22 3.35 1.38 ...
-#  $ f2 : num  2.92 4.54 8.73 8.69 1.65 ...
+#  $ y  : num  4.53 17.92 8.94 14.11 9.11 ...
+#  $ x0 : num  0.953 0.643 0.8 0.49 0.676 ...
+#  $ x1 : num  0.242 0.8638 0.051 0.4033 0.0638 ...
+#  $ x2 : num  0.0193 0.3525 0.9603 0.953 0.4902 ...
+#  $ x3 : num  0.876 0.091 0.345 0.571 0.155 ...
+#  $ f  : num  4.98 19.25 11.28 16.24 8.61 ...
+#  $ f0 : num  0.296 1.8 1.173 1.999 1.703 ...
+#  $ f1 : num  1.62 5.63 1.11 2.24 1.14 ...
+#  $ f2 : num  0.058981 5.826287 0.000504 0.001267 2.775534 ...
 #  $ f3 : num  0 0 0 0 0 0 0 0 0 0 ...
 #  $ fac: Factor w/ 4 levels "1","2","3","4": 1 2 3 4 1 2 3 4 1 2 ...
 ```
@@ -1749,8 +1749,8 @@ str(gam_data2)
 gamm_intercept &lt;- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2, method = "REML")
 summary(gamm_intercept)$s.table
 #             edf   Ref.df         F      p-value
-# s(x0)  3.169776 3.942465  5.372264 0.0003791687
-# s(fac) 2.968853 3.000000 94.575943 0.0000000000
+# s(x0)  2.869296 3.563269  5.200213 0.0008917016
+# s(fac) 2.969315 3.000000 97.005313 0.0000000000
 plot(gamm_intercept, select = 2)
 ```
 
@@ -1799,8 +1799,8 @@ gamm_slope &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2, method
 
 summary(gamm_slope)$s.table
 #                edf   Ref.df         F     p-value
-# s(x0)     2.864501 3.569701  4.283693 0.003567133
-# s(x0,fac) 2.953144 3.000000 61.333530 0.000000000
+# s(x0)     2.732776 3.395125  4.056392 0.005602625
+# s(x0,fac) 2.948317 3.000000 57.471093 0.000000000
 ```
 
 
@@ -1839,10 +1839,10 @@ gamm_int_slope &lt;- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
                       data = gam_data2, method = "REML")
 
 summary(gamm_int_slope)$s.table
-#                edf   Ref.df          F      p-value
-# s(x0)     3.163859 3.934786   5.326862 0.0004180679
-# s(fac)    2.918943 3.000000 480.030892 0.0000000000
-# s(fac,x0) 1.703659 3.000000 214.387360 0.0369622462
+#                   edf   Ref.df            F      p-value
+# s(x0)     2.869292480 3.563265 5.200050e+00 0.0008919241
+# s(fac)    2.969282062 3.000000 9.710865e+01 0.0000000000
+# s(fac,x0) 0.001068504 3.000000 2.318787e-04 0.6129499575
 ```
 
 ---
@@ -1892,9 +1892,9 @@ gamm_smooth &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1),
                    data = gam_data2, method = "REML")
 
 summary(gamm_smooth)$s.table
-#                edf    Ref.df        F     p-value
-# s(x0)     3.104764  3.821737 4.518016 0.001906507
-# s(x0,fac) 6.088047 35.000000 8.362214 0.000000000
+#                edf    Ref.df        F      p-value
+# s(x0)     2.869288  3.563257 5.200105 0.0008918592
+# s(x0,fac) 2.969641 35.000000 8.314750 0.0000000000
 ```
 
 ---
@@ -1945,11 +1945,11 @@ All of the mixed models from this section can be compared using `AIC()` to deter
 
 ```r
 AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
-#                       df      AIC
-# gamm_intercept  8.599078 2235.202
-# gamm_slope      8.228066 2298.818
-# gamm_int_slope 11.287898 2234.831
-# gamm_smooth    13.489832 2236.641
+#                      df      AIC
+# gamm_intercept 8.188771 2218.147
+# gamm_slope     8.083191 2293.857
+# gamm_int_slope 8.193390 2218.155
+# gamm_smooth    8.190314 2218.150
 ```
 
 

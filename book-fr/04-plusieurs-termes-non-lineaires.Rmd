@@ -1,4 +1,6 @@
-# Plusieurs termes non linéaires
+# GAM avec plusieurs termes
+
+## GAM with linear and smooth terms
 
 Avec les GAMs, il est facile d'ajouter des termes non linéaires et
 linéaires dans un seul modèle, plusieurs termes non linéaires ou même
@@ -51,6 +53,27 @@ ce qui indique une courbe non linéaire. Le graphique du modèle illustre
 bien la forme de ce terme non linéaire :
 
 ![](images//graphic2.2.jpg){width="425"}
+
+## Degrés de liberté effectifs (edf)
+
+Combien de degrés de liberté a un GAM ?
+
+Au lieu de fournir la sortie de la validation croisée en termes de
+*λ* (un paramètre qui détermine la complexité de
+l'ajustement), la fonction `gam()` utilise un terme appelé les degrés
+de liberté effectifs (edf), de manière cohérente à quantifier la
+complexité du modèle (pour justifier notre intuition que les degrés de
+liberté offrent une manière cohérente de quantifier la complexité du
+modèle). Parce que le nombre de paramètres libres des splines de lissage
+(tel que les GAMs) est souvent difficile à définir, les edf sont liés à
+*λ*, où l'effet de la pénalité est de réduire les degrés
+de libertés. Donc, si le nombre de noeuds est arbitrairement réglé à *k =
+10*, *k-1* définit la limite supérieure des degrés de libertés associés à
+un terme de lissage. Ce nombre diminue alors que la pénalité lambda
+augmente jusqu'à ce que le meilleur modèle soit trouvé par validation
+croisée.
+
+## GAM with multiple linear and smooth terms
 
 Nous pouvons ajouter un second terme `x2`, mais spécifier une relation
 linéaire avec Y (*i.e.* les GAMs peuvent inclure à la fois des termes
@@ -109,6 +132,7 @@ anova(basic_model,two_term_model,two_smooth_model, test="Chisq")
 
 Le meilleur modèle est le modèle avec deux fonctions non linéaires pour
 `x1` et pour `x2`.
+
 
 ## DÉFI 2
 

@@ -61,7 +61,7 @@ AIC(linear_model_s1, smooth_model_s1)
 smooth_model_s1
 
 
-##Section: 03-a-closer-look.R 
+##Section: 03-how-gams-work.R 
 
 
 

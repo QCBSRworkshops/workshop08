@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 5 A closer look at GAMs | Workshop 8: Generalized additive models in R</title>
+  <title>Chapter 5 How GAMs work | Workshop 8: Generalized additive models in R</title>
   <meta name="description" content="Generalized additive models in R" />
   <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 5 A closer look at GAMs | Workshop 8: Generalized additive models in R" />
+  <meta property="og:title" content="Chapter 5 How GAMs work | Workshop 8: Generalized additive models in R" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://github.com/qcbsRworkshops/" />
   <meta property="og:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="qcbsRworkshops/workshop08" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 5 A closer look at GAMs | Workshop 8: Generalized additive models in R" />
+  <meta name="twitter:title" content="Chapter 5 How GAMs work | Workshop 8: Generalized additive models in R" />
   
   <meta name="twitter:description" content="Generalized additive models in R" />
   <meta name="twitter:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -155,10 +155,10 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.2.1" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html#challenge-1-solution"><i class="fa fa-check"></i><b>4.2.1</b> Challenge 1: Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="a-closer-look.html"><a href="a-closer-look.html"><i class="fa fa-check"></i><b>5</b> A closer look at GAMs</a><ul>
-<li class="chapter" data-level="5.1" data-path="a-closer-look.html"><a href="a-closer-look.html#example-a-polynomial-basis"><i class="fa fa-check"></i><b>5.1</b> Example: a polynomial basis</a></li>
-<li class="chapter" data-level="5.2" data-path="a-closer-look.html"><a href="a-closer-look.html#example-a-cubic-spline-basis"><i class="fa fa-check"></i><b>5.2</b> Example: a cubic spline basis</a><ul>
-<li class="chapter" data-level="5.2.1" data-path="a-closer-look.html"><a href="a-closer-look.html#controlling-the-degree-of-smoothing-with-penalized-regression-splines"><i class="fa fa-check"></i><b>5.2.1</b> Controlling the degree of smoothing with penalized regression splines</a></li>
+<li class="chapter" data-level="5" data-path="how-gams-work.html"><a href="how-gams-work.html"><i class="fa fa-check"></i><b>5</b> How GAMs work</a><ul>
+<li class="chapter" data-level="5.1" data-path="how-gams-work.html"><a href="how-gams-work.html#example-a-polynomial-basis"><i class="fa fa-check"></i><b>5.1</b> Example: a polynomial basis</a></li>
+<li class="chapter" data-level="5.2" data-path="how-gams-work.html"><a href="how-gams-work.html#example-a-cubic-spline-basis"><i class="fa fa-check"></i><b>5.2</b> Example: a cubic spline basis</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="how-gams-work.html"><a href="how-gams-work.html#controlling-the-degree-of-smoothing-with-penalized-regression-splines"><i class="fa fa-check"></i><b>5.2.1</b> Controlling the degree of smoothing with penalized regression splines</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="gam-with-multiple-terms.html"><a href="gam-with-multiple-terms.html"><i class="fa fa-check"></i><b>6</b> GAM with multiple terms</a><ul>
@@ -217,8 +217,8 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
   <img class= "hero-image" src="assets/images/jean-philippe-delberghe-75xPHEQBmvA-unsplash_hero_image.jpg">
 </div>
 --!>
-<div id="a-closer-look" class="section level1">
-<h1><span class="header-section-number">Chapter 5</span> A closer look at GAMs</h1>
+<div id="how-gams-work" class="section level1">
+<h1><span class="header-section-number">Chapter 5</span> How GAMs work</h1>
 <p>We will now take a few minutes to look at what GAMs are doing behind the
 scenes. Let us first consider a simple model containing one smooth function <span class="math inline">\(f\)</span> of one covariate, <span class="math inline">\(x\)</span>:</p>
 <p><span class="math display">\[y_i = f(x_i) + \epsilon_i\]</span></p>
@@ -259,7 +259,7 @@ control the model’s smoothness by adding a “wiggleness” penalty.</p>
 <p><span class="math display">\[||y - XB||^{2} + \lambda \int_0^1[f^{&#39;&#39;}(x)]^2dx\]</span></p>
 <p>Where, as <span class="math inline">\(\lambda\)</span> goes to <span class="math inline">\(\infty\)</span>, the model becomes linear.</p>
 <p>The selection of the best fit smoothing parameter, <span class="math inline">\(\lambda\)</span>, makes use of a cross-validation approach. If <span class="math inline">\(\lambda\)</span>
-is too high then the data will be over smoothed, and if it is too low, the data will be under smoothed. Ideally, it is best to choose <span class="math inline">\(\lambda\)</span> so that the <span class="math inline">\(predicted f\)</span> is as close as possible to <span class="math inline">\(f\)</span>. A suitable criterion might be to choose <span class="math inline">\(\lambda\)</span> to minimize:</p>
+is too high then the data will be over smoothed, and if it is too low, the data will be under smoothed. Ideally, it is best to choose <span class="math inline">\(\lambda\)</span> so that the <span class="math inline">\(\hat{f}\)</span> is as close as possible to <span class="math inline">\(f\)</span>. A suitable criterion might be to choose <span class="math inline">\(\lambda\)</span> to minimize:</p>
 <p><span class="math display">\[M = 1/n \times \sum_{i=1}^n (\hat{f_i} - f_i)^2\]</span></p>
 <p>Since <span class="math inline">\(f\)</span> is unknown, <span class="math inline">\(M\)</span> must be estimated. The recommend methods for this are maximum likelihood (<em>ML</em>) or restricted maximum likelihood estimation (<em>REML</em>). Generalized cross validation (<em>GCV</em>) is another possibility, which is a technique that leaves out each datum from the data in turn and considers the average predictive ability of models fitted to the remaining data to predict the removed datum. For further details on these methods, see <span class="citation">(Wood <a href="#ref-wood_2006" role="doc-biblioref">2006</a>)</span>.</p>
 <div class="explanation">

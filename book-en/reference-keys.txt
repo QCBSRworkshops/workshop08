@@ -10,7 +10,7 @@ introduction-to-gams
 test-for-linearity
 challenge-1
 challenge-1-solution
-a-closer-look
+how-gams-work
 example-a-polynomial-basis
 example-a-cubic-spline-basis
 controlling-the-degree-of-smoothing-with-penalized-regression-splines

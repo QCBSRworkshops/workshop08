@@ -66,7 +66,7 @@ data_plot <- ggplot(data = isit2, aes(y = Sources, x = SampleDepth)) +
 data_plot
 ```
 
-Les suppositions de la régression linéaire énumérées dans le [Chapitre 2](#intro-linear-models) sont-elles satisfaites dans ce cas? Comme vous l'avez peut-être remarqué, nous ne respectons pas les conditions du modèle linéaire:
+Les suppositions de la régression linéaire énumérées dans le [Chapitre 4](#intro-linear-models) sont-elles satisfaites dans ce cas? Comme vous l'avez peut-être remarqué, nous ne respectons pas les conditions du modèle linéaire:
 
 1.  Il existe une forte relation _non linéaire_ entre `Sources` et `SampleDepth`.
 2.  L'erreur n'est _pas_ normalement distribuée.

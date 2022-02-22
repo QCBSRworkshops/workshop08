@@ -18,7 +18,7 @@ always_allow_html: yes
 url: 'https\://github.com/qcbsRworkshops/'
 config:
   edit:
-    link: https://github.com/qcbsRworkshops/workshop09/edit/main/book-fr/%s
+    link: https://github.com/qcbsRworkshops/workshop08/edit/main/book-fr/%s
     text: "Suggest changes"
 ---
 # (PART\*) Série d'ateliers R du CSBQ {-}
@@ -88,7 +88,7 @@ En construction.
 ```{r include=FALSE}
 library(knitr)
 opts_chunk$set(tidy.opts = list(width.cutoff = 60),
-               tidy = TRUE)
+               tidy = TRUE, fig.align = 'center')
 
 options(repos=structure(c(CRAN = "http://cran.r-project.org")))
 ```

@@ -264,7 +264,7 @@ smoothed terms, and smoothed interactions.</p>
 <p>In our basic model, the EDF of the smooth function <code>s(SampleDepth)</code> are ~9, which suggests a highly non-linear curve.</p>
 <p>Let us plot the smoothed (<code>s(SampleDepth)</code>) and the linear (<code>Season</code>) terms from our fitted model:</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="gam-with-multiple-terms.html#cb29-1"></a><span class="kw">plot</span>(basic_model, <span class="dt">all.terms =</span> <span class="ot">TRUE</span>, <span class="dt">page =</span> <span class="dv">1</span>)</span></code></pre></div>
-<p><img src="book-en_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p><img src="book-en_files/figure-html/unnamed-chunk-22-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="puzzle">
 <p>What do these plots tell us about the relationship between bioluminescence, sample depth, and seasons?</p>
 </div>
@@ -303,7 +303,7 @@ parameter (<code>edf</code>). Remember, the <code>s.table</code> shows informati
 ## s(SampleDepth) 8.699146 8.97396 132.4801       0</code></pre>
 <p>Let us take a look at the relationships between the linear and non-linear predictors and our response variable.</p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="gam-with-multiple-terms.html#cb35-1"></a><span class="kw">plot</span>(two_term_model, <span class="dt">page =</span> <span class="dv">1</span>, <span class="dt">all.terms =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
-<p><img src="book-en_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<p><img src="book-en_files/figure-html/unnamed-chunk-26-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="gam-with-multiple-smooth-terms" class="section level2">
 <h2><span class="header-section-number">6.4</span> GAM with multiple smooth terms</h2>
@@ -324,7 +324,7 @@ non-linear, we can model <code>RelativeDepth</code> as a smooth term instead. In
 ## s(RelativeDepth) 8.044197 8.749580  19.97476       0</code></pre>
 <p>Let us take a look at the relationships between the linear and non-linear predictors and our response variable.</p>
 <div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="gam-with-multiple-terms.html#cb41-1"></a><span class="kw">plot</span>(two_smooth_model, <span class="dt">page =</span> <span class="dv">1</span>, <span class="dt">all.terms =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
-<p><img src="book-en_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+<p><img src="book-en_files/figure-html/unnamed-chunk-30-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="puzzle">
 <p>Do you think that the additional non-linear term improves the performance of our model representing the relationship between bioluminescence and relative depth?</p>
 </div>
@@ -405,9 +405,9 @@ non-linear, we can model <code>RelativeDepth</code> as a smooth term instead. In
 <p><strong>2.</strong> Is <code>Latitude</code> an important term to include? Does <code>Latitude</code> have a linear or additive effect?</p>
 <p>Let us begin by plotting the the 4 effects that are now included in each model:</p>
 <div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="gam-with-multiple-terms.html#cb48-1"></a><span class="kw">plot</span>(three_term_model, <span class="dt">page =</span> <span class="dv">1</span>, <span class="dt">all.terms =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
-<p><img src="book-en_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
+<p><img src="book-en_files/figure-html/unnamed-chunk-34-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="gam-with-multiple-terms.html#cb49-1"></a><span class="kw">plot</span>(three_smooth_model, <span class="dt">page =</span> <span class="dv">1</span>, <span class="dt">all.terms =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
-<p><img src="book-en_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
+<p><img src="book-en_files/figure-html/unnamed-chunk-35-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>We should also look at our coefficient tables. What can the EDF tell us about the <em>wiggliness</em> of our predictors’ effects?</p>
 <div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="gam-with-multiple-terms.html#cb50-1"></a>three_smooth_summary<span class="op">$</span>s.table</span></code></pre></div>
 <pre><code>##                       edf   Ref.df         F p-value

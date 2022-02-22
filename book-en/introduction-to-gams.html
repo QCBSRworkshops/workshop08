@@ -264,7 +264,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb7-2"><a href="introduction-to-gams.html#cb7-2"></a><span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> <span class="kw">fitted</span>(linear_model)), <span class="dt">colour =</span> <span class="st">&quot;red&quot;</span>,</span>
 <span id="cb7-3"><a href="introduction-to-gams.html#cb7-3"></a>    <span class="dt">size =</span> <span class="fl">1.2</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme_bw</span>()</span>
 <span id="cb7-4"><a href="introduction-to-gams.html#cb7-4"></a>data_plot</span></code></pre></div>
-<p><img src="book-en_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="book-en_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Are the assumptions of linear regression listed in <a href="intro-linear-models.html#intro-linear-models">Chapter 2</a> met in this case? As you may have noticed, we are violating the assumptions of the linear model:</p>
 <ol style="list-style-type: decimal">
 <li>There is a strong <em>non-linear</em> relationship between <code>Sources</code> and <code>SampleDepth</code>.</li>
@@ -314,13 +314,13 @@ The degree of smoothness (or wiggliness) of <span class="math inline">\(f\)</spa
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="introduction-to-gams.html#cb10-1"></a>data_plot &lt;-<span class="st"> </span>data_plot <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> <span class="kw">fitted</span>(gam_model)),</span>
 <span id="cb10-2"><a href="introduction-to-gams.html#cb10-2"></a>    <span class="dt">colour =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">size =</span> <span class="fl">1.2</span>)</span>
 <span id="cb10-3"><a href="introduction-to-gams.html#cb10-3"></a>data_plot</span></code></pre></div>
-<p><img src="book-en_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="book-en_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="explanation">
 <p>Recall: As opposed to one fixed coefficient <span class="math inline">\(\beta\)</span> in a linear model, the function <span class="math inline">\(f\)</span> can vary across the range of <span class="math inline">\(x_i\)</span>.</p>
 </div>
 <p>The <code>mgcv</code> package also includes a default plot to look at the smooths:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="introduction-to-gams.html#cb11-1"></a><span class="kw">plot</span>(gam_model)</span></code></pre></div>
-<p><img src="book-en_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p><img src="book-en_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div id="test-for-linearity" class="section level2">
 <h2><span class="header-section-number">4.1</span> Test for linearity</h2>
 <p>How do we test whether the non-linear model offers a significant improvement over the linear model?</p>
@@ -359,7 +359,7 @@ The degree of smoothness (or wiggliness) of <span class="math inline">\(f\)</spa
 <span id="cb16-2"><a href="introduction-to-gams.html#cb16-2"></a><span class="st">    </span><span class="kw">geom_line</span>(<span class="dt">colour =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="fl">1.2</span>, <span class="kw">aes</span>(<span class="dt">y =</span> <span class="kw">fitted</span>(linear_model_s1))) <span class="op">+</span></span>
 <span id="cb16-3"><a href="introduction-to-gams.html#cb16-3"></a><span class="st">    </span><span class="kw">geom_line</span>(<span class="dt">colour =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">size =</span> <span class="fl">1.2</span>, <span class="kw">aes</span>(<span class="dt">y =</span> <span class="kw">fitted</span>(smooth_model_s1))) <span class="op">+</span></span>
 <span id="cb16-4"><a href="introduction-to-gams.html#cb16-4"></a><span class="st">    </span><span class="kw">theme_bw</span>()</span></code></pre></div>
-<p><img src="book-en_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p><img src="book-en_files/figure-html/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>We can supplement this with a quantitative comparison of model performance using <code>AIC()</code>.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="introduction-to-gams.html#cb17-1"></a><span class="kw">AIC</span>(linear_model_s1, smooth_model_s1)</span></code></pre></div>
 <pre><code>##                       df      AIC

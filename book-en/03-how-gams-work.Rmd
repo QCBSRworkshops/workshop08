@@ -1,4 +1,4 @@
-# A closer look at GAMs {#a-closer-look}
+# How GAMs work {#how-gams-work}
 
 We will now take a few minutes to look at what GAMs are doing behind the
 scenes. Let us first consider a simple model containing one smooth function $f$ of one covariate, $x$:
@@ -64,7 +64,7 @@ $$||y - XB||^{2} + \lambda \int_0^1[f^{''}(x)]^2dx$$
 Where, as $\lambda$ goes to $\infty$, the model becomes linear.
 
 The selection of the best fit smoothing parameter, $\lambda$, makes use of a cross-validation approach. If $\lambda$
-is too high then the data will be over smoothed, and if it is too low, the data will be under smoothed. Ideally, it is best to choose $\lambda$ so that the $predicted f$ is as close as possible to $f$. A suitable criterion might be to choose $\lambda$ to minimize:
+is too high then the data will be over smoothed, and if it is too low, the data will be under smoothed. Ideally, it is best to choose $\lambda$ so that the $\hat{f}$ is as close as possible to $f$. A suitable criterion might be to choose $\lambda$ to minimize:
 
 $$M = 1/n \times \sum_{i=1}^n (\hat{f_i} - f_i)^2$$
 

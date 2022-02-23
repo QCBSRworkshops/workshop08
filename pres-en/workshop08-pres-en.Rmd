@@ -76,15 +76,24 @@ lapply(list.of.packages, require, character.only = TRUE, quietly = TRUE)
 ```
 
 # About this workshop
-[![badge](https://img.shields.io/static/v1?style=for-the-badge&label=repo&message=dev&color=6f42c1&logo=github)](https://github.com/QCBSRworkshops/workshop08)
-[![badge](https://img.shields.io/static/v1?style=for-the-badge&label=wiki&message=08&logo=wikipedia)](https://wiki.qcbs.ca/r_workshop8)
-[![badge](https://img.shields.io/static/v1?style=for-the-badge&label=Slides&message=08&color=red&logo=html5)](https://qcbsrworkshops.github.io/workshop08/workshop08-en/workshop08-en.html)
-[![badge](https://img.shields.io/static/v1?style=for-the-badge&label=Slides&message=08&color=red&logo=adobe-acrobat-reader)](https://qcbsrworkshops.github.io/workshop08/workshop08-en/workshop08-en.pdf)
-[![badge](https://img.shields.io/static/v1?style=for-the-badge&label=script&message=08&color=2a50b8&logo=r)](https://qcbsrworkshops.github.io/workshop08/workshop08-en/workshop08-en.R)
+
+[![badge](https://img.shields.io/static/v1?style=for-the-badge&label=Slides&message=08&color=BF616A)](https://r.qcbs.ca/workshop08/pres-en/workshop08-pres-en.html)    [![badge](https://img.shields.io/static/v1?style=for-the-badge&label=Script&message=08&color=D08770&logo=r)](https://r.qcbs.ca/workshop08/book-en/workshop08-script-en.R) 
+[![badge](https://img.shields.io/static/v1?style=for-the-badge&label=Book&message=08&color=EBCB8B)](https://r.qcbs.ca/workshop08/book-en/index.html)
+[![badge](https://img.shields.io/static/v1?style=for-the-badge&label=Site&message=r.qcbs.ca&color=A3BE8C)](https://r.qcbs.ca/workshops/r-workshop-08/)
+[![badge](https://img.shields.io/static/v1?style=for-the-badge&label=GitHub&message=08&color=B48EAD&logo=github)](https://github.com/QCBSRworkshops/workshop08) 
 
 ---
 
-# Required packages
+# Required packages and datasets
+
+For this workshop, we will be working with the following datasets:
+
+* [ISIT.csv](https://r.qcbs.ca/workshop08/pres-en/data/ISIT.csv) 
+* [other_dist.csv](https://r.qcbs.ca/workshop08/pres-en/data/other_dist.csv) 
+
+<br>
+
+You should also make sure you have downloaded, installed, and loaded the following packages:
 
 * [ggplot2](https://cran.r-project.org/package=ggplot2)
 * [itsadug](https://cran.r-project.org/package=itsadug)
@@ -95,6 +104,16 @@ lapply(list.of.packages, require, character.only = TRUE, quietly = TRUE)
 ```R
 install.packages(c('ggplot2', 'itsadug', 'mgcv'))
 ```
+
+---
+
+# Prerequisites
+
+To follow this workshop, we recommend:
+
++ Enough previous experience in R to run scripts and to examine data and R objects;
++ A basic knowledge of linear regression.
+
 ---
 
 # Workshop overview
@@ -117,12 +136,6 @@ install.packages(c('ggplot2', 'itsadug', 'mgcv'))
 4. Include smooth interactions between variables,
 5. Understand the idea of a basis function, and why it makes GAMs so powerful,
 6. Account for dependence in data (autocorrelation, hierarchical structure) using GAMMs.
-
----
-# Prerequisites
-
-> Some experience in R (enough to be able to run a script and examine data and R objects)
-> a basic knowledge of linear regression.
 
 ---
 class: inverse, center, middle

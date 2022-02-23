@@ -31,15 +31,24 @@ class: inverse, center, middle
 
 
 # About this workshop
-[![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=repo&amp;message=dev&amp;color=6f42c1&amp;logo=github)](https://github.com/QCBSRworkshops/workshop08)
-[![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=wiki&amp;message=08&amp;logo=wikipedia)](https://wiki.qcbs.ca/r_workshop8)
-[![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=Slides&amp;message=08&amp;color=red&amp;logo=html5)](https://qcbsrworkshops.github.io/workshop08/workshop08-en/workshop08-en.html)
-[![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=Slides&amp;message=08&amp;color=red&amp;logo=adobe-acrobat-reader)](https://qcbsrworkshops.github.io/workshop08/workshop08-en/workshop08-en.pdf)
-[![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=script&amp;message=08&amp;color=2a50b8&amp;logo=r)](https://qcbsrworkshops.github.io/workshop08/workshop08-en/workshop08-en.R)
+
+[![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=Slides&amp;message=08&amp;color=BF616A)](https://r.qcbs.ca/workshop08/pres-en/workshop08-pres-en.html)    [![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=Script&amp;message=08&amp;color=D08770&amp;logo=r)](https://r.qcbs.ca/workshop08/book-en/workshop08-script-en.R) 
+[![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=Book&amp;message=08&amp;color=EBCB8B)](https://r.qcbs.ca/workshop08/book-en/index.html)
+[![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=Site&amp;message=r.qcbs.ca&amp;color=A3BE8C)](https://r.qcbs.ca/workshops/r-workshop-08/)
+[![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=GitHub&amp;message=08&amp;color=B48EAD&amp;logo=github)](https://github.com/QCBSRworkshops/workshop08) 
 
 ---
 
-# Required packages
+# Required packages and datasets
+
+For this workshop, we will be working with the following datasets:
+
+* [ISIT.csv](https://r.qcbs.ca/workshop08/pres-en/data/ISIT.csv) 
+* [other_dist.csv](https://r.qcbs.ca/workshop08/pres-en/data/other_dist.csv) 
+
+&lt;br&gt;
+
+You should also make sure you have downloaded, installed, and loaded the following packages:
 
 * [ggplot2](https://cran.r-project.org/package=ggplot2)
 * [itsadug](https://cran.r-project.org/package=itsadug)
@@ -50,6 +59,16 @@ class: inverse, center, middle
 ```R
 install.packages(c('ggplot2', 'itsadug', 'mgcv'))
 ```
+
+---
+
+# Prerequisites
+
+To follow this workshop, we recommend:
+
++ Enough previous experience in R to run scripts and to examine data and R objects;
++ A basic knowledge of linear regression.
+
 ---
 
 # Workshop overview
@@ -72,12 +91,6 @@ install.packages(c('ggplot2', 'itsadug', 'mgcv'))
 4. Include smooth interactions between variables,
 5. Understand the idea of a basis function, and why it makes GAMs so powerful,
 6. Account for dependence in data (autocorrelation, hierarchical structure) using GAMMs.
-
----
-# Prerequisites
-
-&gt; Some experience in R (enough to be able to run a script and examine data and R objects)
-&gt; a basic knowledge of linear regression.
 
 ---
 class: inverse, center, middle
@@ -1330,7 +1343,7 @@ Have we chosen `k` large enough?
 ```r
 k.check(smooth_interact)
 #                              k'      edf   k-index p-value
-# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883   0.055
+# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883    0.06
 ```
 
 --
@@ -1364,7 +1377,7 @@ Is `k` large enough this time?
 ```r
 k.check(smooth_interact_k60)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626  0.8925
+# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626  0.8725
 ```
 
 --
@@ -1493,7 +1506,7 @@ Check the basis dimension:
 ```r
 k.check(smooth_interact_tw)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062    0.81
+# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062  0.8575
 ```
 
 ---
@@ -1729,15 +1742,15 @@ gam_data2 &lt;- gamSim(eg = 6)
 # 4 term additive + random effectGu &amp; Wahba 4 term additive model
 str(gam_data2)
 # 'data.frame':	400 obs. of  11 variables:
-#  $ y  : num  6.61 12.11 22.21 19.28 14.42 ...
-#  $ x0 : num  0.322 0.523 0.318 0.499 0.307 ...
-#  $ x1 : num  0.748 0.244 0.979 0.834 0.825 ...
-#  $ x2 : num  0.8672 0.5927 0.6929 0.0324 0.3031 ...
-#  $ x3 : num  0.8037 0.0971 0.411 0.7687 0.3778 ...
-#  $ f  : num  9.38 12.78 20.75 19.54 17.42 ...
-#  $ f0 : num  1.69 1.99 1.68 2 1.64 ...
-#  $ f1 : num  4.46 1.63 7.08 5.3 5.2 ...
-#  $ f2 : num  0.229 3.157 2.99 0.245 7.57 ...
+#  $ y  : num  10.2 18.7 20.17 18.69 5.49 ...
+#  $ x0 : num  0.6312 0.4038 0.1453 0.2547 0.0834 ...
+#  $ x1 : num  0.2055 0.2931 0.0597 0.3318 0.5102 ...
+#  $ x2 : num  0.578 0.392 0.257 0.674 0.893 ...
+#  $ x3 : num  0.9887 0.0563 0.5552 0.1437 0.5416 ...
+#  $ f  : num  9.41 14.19 19.73 18.55 6.38 ...
+#  $ f0 : num  1.832 1.909 0.881 1.435 0.518 ...
+#  $ f1 : num  1.51 1.8 1.13 1.94 2.77 ...
+#  $ f2 : num  3.0654 4.4859 8.7186 3.1708 0.0878 ...
 #  $ f3 : num  0 0 0 0 0 0 0 0 0 0 ...
 #  $ fac: Factor w/ 4 levels "1","2","3","4": 1 2 3 4 1 2 3 4 1 2 ...
 ```
@@ -1750,9 +1763,9 @@ str(gam_data2)
 ```r
 gamm_intercept &lt;- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2, method = "REML")
 summary(gamm_intercept)$s.table
-#             edf   Ref.df          F   p-value
-# s(x0)  1.914776 2.385637   1.368419 0.2727416
-# s(fac) 2.973595 3.000000 112.703655 0.0000000
+#             edf  Ref.df         F     p-value
+# s(x0)  2.861700 3.56642   3.87756 0.007287244
+# s(fac) 2.974901 3.00000 118.34949 0.000000000
 plot(gamm_intercept, select = 2)
 ```
 
@@ -1800,9 +1813,9 @@ plot_smooth(gamm_intercept, view="x0", cond = list(fac = "4"), add = T, col = 't
 gamm_slope &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2, method = "REML")
 
 summary(gamm_slope)$s.table
-#                edf   Ref.df         F   p-value
-# s(x0)     2.221392 2.760953  1.640112 0.1576433
-# s(x0,fac) 2.953123 3.000000 60.148127 0.0000000
+#                edf   Ref.df         F    p-value
+# s(x0)     3.458881 4.297706  3.167002 0.01016779
+# s(x0,fac) 2.960992 3.000000 72.770615 0.00000000
 ```
 
 
@@ -1841,10 +1854,10 @@ gamm_int_slope &lt;- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
                       data = gam_data2, method = "REML")
 
 summary(gamm_int_slope)$s.table
-#                   edf   Ref.df            F   p-value
-# s(x0)     1.914770364 2.385624 1.368114e+00 0.2728299
-# s(fac)    2.973543694 3.000000 1.129192e+02 0.0000000
-# s(fac,x0) 0.002197389 3.000000 5.352643e-04 0.5886516
+#                edf   Ref.df         F     p-value
+# s(x0)     2.884104 3.592259   3.67101 0.009883592
+# s(fac)    2.936702 3.000000 406.10776 0.000000000
+# s(fac,x0) 1.427699 3.000000  74.27779 0.206779542
 ```
 
 ---
@@ -1894,9 +1907,9 @@ gamm_smooth &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1),
                    data = gam_data2, method = "REML")
 
 summary(gamm_smooth)$s.table
-#                edf    Ref.df        F   p-value
-# s(x0)     1.914528  2.385156 1.366971 0.2731697
-# s(x0,fac) 2.985806 35.000000 9.660855 0.0000000
+#                edf    Ref.df         F    p-value
+# s(x0)     2.780894  3.419197  3.129741 0.02431282
+# s(x0,fac) 6.153428 35.000000 10.417899 0.00000000
 ```
 
 ---
@@ -1947,11 +1960,11 @@ All of the mixed models from this section can be compared using `AIC()` to deter
 
 ```r
 AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
-#                      df      AIC
-# gamm_intercept 7.385361 2228.375
-# gamm_slope     7.760149 2324.528
-# gamm_int_slope 7.389632 2228.380
-# gamm_smooth    7.409065 2228.401
+#                       df      AIC
+# gamm_intercept  8.451648 2207.753
+# gamm_slope      9.297146 2287.447
+# gamm_int_slope 10.724088 2208.017
+# gamm_smooth    13.637262 2209.915
 ```
 
 

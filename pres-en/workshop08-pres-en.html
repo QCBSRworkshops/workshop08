@@ -915,7 +915,9 @@ anova(basic_model, two_term_model, two_smooth_model,test='Chisq')
 For our second challenge, we will be building onto our model by adding variables which we think might be ecologically significant predictors to explain bioluminescence. 
 
 1. Create two new models: Add `Latitude` to `two_smooth_model`, first as a linear term, then as a smooth term.
-2. Is `Latitude` an important term to include? Does `Latitude` have a linear or additive effect? Use plots, coefficient tables, and the `AIC()` function to help you answer this question.
+2. Is `Latitude` an important term to include? Does `Latitude` have a linear or additive effect? 
+
+Use plots, coefficient tables, and the `AIC()` function to help you answer this question.
 
 ---
 exclude:true
@@ -1328,7 +1330,7 @@ Have we chosen `k` large enough?
 ```r
 k.check(smooth_interact)
 #                              k'      edf   k-index p-value
-# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883   0.075
+# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883   0.055
 ```
 
 --
@@ -1362,7 +1364,7 @@ Is `k` large enough this time?
 ```r
 k.check(smooth_interact_k60)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626  0.9025
+# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626  0.8925
 ```
 
 --
@@ -1491,7 +1493,7 @@ Check the basis dimension:
 ```r
 k.check(smooth_interact_tw)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062   0.815
+# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062    0.81
 ```
 
 ---
@@ -1727,15 +1729,15 @@ gam_data2 &lt;- gamSim(eg = 6)
 # 4 term additive + random effectGu &amp; Wahba 4 term additive model
 str(gam_data2)
 # 'data.frame':	400 obs. of  11 variables:
-#  $ y  : num  4.53 17.92 8.94 14.11 9.11 ...
-#  $ x0 : num  0.953 0.643 0.8 0.49 0.676 ...
-#  $ x1 : num  0.242 0.8638 0.051 0.4033 0.0638 ...
-#  $ x2 : num  0.0193 0.3525 0.9603 0.953 0.4902 ...
-#  $ x3 : num  0.876 0.091 0.345 0.571 0.155 ...
-#  $ f  : num  4.98 19.25 11.28 16.24 8.61 ...
-#  $ f0 : num  0.296 1.8 1.173 1.999 1.703 ...
-#  $ f1 : num  1.62 5.63 1.11 2.24 1.14 ...
-#  $ f2 : num  0.058981 5.826287 0.000504 0.001267 2.775534 ...
+#  $ y  : num  6.61 12.11 22.21 19.28 14.42 ...
+#  $ x0 : num  0.322 0.523 0.318 0.499 0.307 ...
+#  $ x1 : num  0.748 0.244 0.979 0.834 0.825 ...
+#  $ x2 : num  0.8672 0.5927 0.6929 0.0324 0.3031 ...
+#  $ x3 : num  0.8037 0.0971 0.411 0.7687 0.3778 ...
+#  $ f  : num  9.38 12.78 20.75 19.54 17.42 ...
+#  $ f0 : num  1.69 1.99 1.68 2 1.64 ...
+#  $ f1 : num  4.46 1.63 7.08 5.3 5.2 ...
+#  $ f2 : num  0.229 3.157 2.99 0.245 7.57 ...
 #  $ f3 : num  0 0 0 0 0 0 0 0 0 0 ...
 #  $ fac: Factor w/ 4 levels "1","2","3","4": 1 2 3 4 1 2 3 4 1 2 ...
 ```
@@ -1748,9 +1750,9 @@ str(gam_data2)
 ```r
 gamm_intercept &lt;- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2, method = "REML")
 summary(gamm_intercept)$s.table
-#             edf   Ref.df         F      p-value
-# s(x0)  2.869296 3.563269  5.200213 0.0008917016
-# s(fac) 2.969315 3.000000 97.005313 0.0000000000
+#             edf   Ref.df          F   p-value
+# s(x0)  1.914776 2.385637   1.368419 0.2727416
+# s(fac) 2.973595 3.000000 112.703655 0.0000000
 plot(gamm_intercept, select = 2)
 ```
 
@@ -1798,9 +1800,9 @@ plot_smooth(gamm_intercept, view="x0", cond = list(fac = "4"), add = T, col = 't
 gamm_slope &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2, method = "REML")
 
 summary(gamm_slope)$s.table
-#                edf   Ref.df         F     p-value
-# s(x0)     2.732776 3.395125  4.056392 0.005602625
-# s(x0,fac) 2.948317 3.000000 57.471093 0.000000000
+#                edf   Ref.df         F   p-value
+# s(x0)     2.221392 2.760953  1.640112 0.1576433
+# s(x0,fac) 2.953123 3.000000 60.148127 0.0000000
 ```
 
 
@@ -1839,10 +1841,10 @@ gamm_int_slope &lt;- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
                       data = gam_data2, method = "REML")
 
 summary(gamm_int_slope)$s.table
-#                   edf   Ref.df            F      p-value
-# s(x0)     2.869292480 3.563265 5.200050e+00 0.0008919241
-# s(fac)    2.969282062 3.000000 9.710865e+01 0.0000000000
-# s(fac,x0) 0.001068504 3.000000 2.318787e-04 0.6129499575
+#                   edf   Ref.df            F   p-value
+# s(x0)     1.914770364 2.385624 1.368114e+00 0.2728299
+# s(fac)    2.973543694 3.000000 1.129192e+02 0.0000000
+# s(fac,x0) 0.002197389 3.000000 5.352643e-04 0.5886516
 ```
 
 ---
@@ -1892,9 +1894,9 @@ gamm_smooth &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1),
                    data = gam_data2, method = "REML")
 
 summary(gamm_smooth)$s.table
-#                edf    Ref.df        F      p-value
-# s(x0)     2.869288  3.563257 5.200105 0.0008918592
-# s(x0,fac) 2.969641 35.000000 8.314750 0.0000000000
+#                edf    Ref.df        F   p-value
+# s(x0)     1.914528  2.385156 1.366971 0.2731697
+# s(x0,fac) 2.985806 35.000000 9.660855 0.0000000
 ```
 
 ---
@@ -1946,10 +1948,10 @@ All of the mixed models from this section can be compared using `AIC()` to deter
 ```r
 AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
 #                      df      AIC
-# gamm_intercept 8.188771 2218.147
-# gamm_slope     8.083191 2293.857
-# gamm_int_slope 8.193390 2218.155
-# gamm_smooth    8.190314 2218.150
+# gamm_intercept 7.385361 2228.375
+# gamm_slope     7.760149 2324.528
+# gamm_int_slope 7.389632 2228.380
+# gamm_smooth    7.409065 2228.401
 ```
 
 

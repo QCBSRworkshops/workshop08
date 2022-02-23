@@ -902,7 +902,9 @@ anova(basic_model, two_term_model, two_smooth_model,test='Chisq')
 For our second challenge, we will be building onto our model by adding variables which we think might be ecologically significant predictors to explain bioluminescence. 
 
 1. Create two new models: Add `Latitude` to `two_smooth_model`, first as a linear term, then as a smooth term.
-2. Is `Latitude` an important term to include? Does `Latitude` have a linear or additive effect? Use plots, coefficient tables, and the `AIC()` function to help you answer this question.
+2. Is `Latitude` an important term to include? Does `Latitude` have a linear or additive effect? 
+
+Use plots, coefficient tables, and the `AIC()` function to help you answer this question.
 
 ---
 exclude:true

@@ -77,11 +77,8 @@ lapply(list.of.packages, require, character.only = TRUE, quietly = TRUE)
 ```
 
 # À propos de cet atelier
-[![badge](https://img.shields.io/static/v1?style=for-the-badge&label=repo&message=dev&color=6f42c1&logo=github)](https://github.com/QCBSRworkshops/workshop08)
-[![badge](https://img.shields.io/static/v1?style=for-the-badge&label=wiki&message=08&logo=wikipedia)](https://wiki.qcbs.ca/r_atelier8)
-[![badge](https://img.shields.io/static/v1?style=for-the-badge&label=Diapos&message=08&color=red&logo=html5)](https://qcbsrworkshops.github.io/workshop08/pres-fr/workshop08-pres-fr.html)
-[![badge](https://img.shields.io/static/v1?style=for-the-badge&label=Diapos&message=08&color=red&logo=adobe-acrobat-reader)](https://qcbsrworkshops.github.io/workshop08/workshop08-fr/workshop08-fr.pdf)
-[![badge](https://img.shields.io/static/v1?style=for-the-badge&label=script&message=08&color=2a50b8&logo=r)](https://qcbsrworkshops.github.io/workshop08/workshop08-fr/workshop08-fr.R)
+
+[![badge](https://img.shields.io/static/v1?style=flat-square&label=Diapos&message=08&color=red&logo=html5)](https://r.qcbs.ca/workshop08/pres-fr/workshop08-pres-fr.html)  [![badge](https://img.shields.io/static/v1?style=flat-square&label=livre&message=08&logo=github)](https://r.qcbs.ca/workshop08/book-fr/index.html)  [![badge](https://img.shields.io/static/v1?style=flat-square&label=script&message=08&color=2a50b8&logo=r)](https://r.qcbs.ca/workshop08/book-fr/workshop08-script-fr.R)  [![badge](https://img.shields.io/static/v1?style=flat-square&label=repo&message=dev&color=6f42c1&logo=github)](https://github.com/QCBSRworkshops/workshop08) 
 
 ---
 

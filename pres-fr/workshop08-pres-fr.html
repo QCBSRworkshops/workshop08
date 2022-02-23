@@ -31,20 +31,29 @@ class: inverse, center, middle
 
 
 # À propos de cet atelier
-[![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=repo&amp;message=dev&amp;color=6f42c1&amp;logo=github)](https://github.com/QCBSRworkshops/workshop08)
-[![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=wiki&amp;message=08&amp;logo=wikipedia)](https://wiki.qcbs.ca/r_atelier8)
-[![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=Diapos&amp;message=08&amp;color=red&amp;logo=html5)](https://qcbsrworkshops.github.io/workshop08/pres-fr/workshop08-pres-fr.html)
-[![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=Diapos&amp;message=08&amp;color=red&amp;logo=adobe-acrobat-reader)](https://qcbsrworkshops.github.io/workshop08/workshop08-fr/workshop08-fr.pdf)
-[![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=script&amp;message=08&amp;color=2a50b8&amp;logo=r)](https://qcbsrworkshops.github.io/workshop08/workshop08-fr/workshop08-fr.R)
+
+[![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=Présentation&amp;message=08&amp;color=BF616A)](https://r.qcbs.ca/workshop08/pres-fr/workshop08-pres-fr.html)    [![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=Script&amp;message=08&amp;color=D08770&amp;logo=r)](https://r.qcbs.ca/workshop08/book-fr/workshop08-script-fr.R) 
+[![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=Livre&amp;message=08&amp;color=EBCB8B)](https://r.qcbs.ca/workshop08/book-fr/index.html)
+[![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=Site&amp;message=r.qcbs.ca&amp;color=A3BE8C)](https://r.qcbs.ca/fr/workshops/r-workshop-08/)
+[![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=GitHub&amp;message=08&amp;color=B48EAD&amp;logo=github)](https://github.com/QCBSRworkshops/workshop08) 
+
 
 ---
 
-# Packages requis
+# Librairies et jeux de données 
+
+Pour cet atelier, nous travaillerons avec les jeux de données suivants :
+
+* [ISIT.csv](https://r.qcbs.ca/workshop08/pres-en/data/ISIT.csv) 
+* [other_dist.csv](https://r.qcbs.ca/workshop08/pres-en/data/other_dist.csv) 
+
+&lt;br&gt;
+
+Vous devriez également vous assurer que vous avez téléchargé, installé et chargé les librairies R suivants:
 
 * [ggplot2](https://cran.r-project.org/package=ggplot2)
 * [itsadug](https://cran.r-project.org/package=itsadug)
 * [mgcv](https://cran.r-project.org/package=mgcv)
-
 &lt;br&gt;
 
 ```R
@@ -52,9 +61,15 @@ install.packages(c('ggplot2', 'itsadug', 'mgcv'))
 ```
 
 ---
+# Prérequis
 
+Pour suivre cet atelier, nous recommandons:
 
-# Aperçu
++ Assez d'expérience avec le logiciel R pour être en mesure d'exécuter un script et d'examiner les données et les objets R;
++ Une connaissance de base de la régression linéaire.
+
+---
+# Aperçu de l'atelier
 
 1. Le modèle linéaire ... et où il échoue
 2. Introduction aux GAMs
@@ -73,13 +88,6 @@ install.packages(c('ggplot2', 'itsadug', 'mgcv'))
 4. Ajouter des interactions non linéaires entre les variables explicatives,
 5. Comprendre l'idée d'une fonction de base (basis function) et la raison pour laquelle ça rend les GAMs si puissants !,
 6. Comment modéliser la dépendance dans les données (autocorrélation, structure hiérarchique) en utilisant les GAMMs.
-
----
-# Prérequis
-
-&gt; Expérience du logiciel R (assez pour être en mesure d'exécuter un script et d'examiner les données et les objets dans R).
-
-&gt; Une connaissance de base de la régression linéaire.
 
 ---
 class: inverse, center, middle
@@ -1284,7 +1292,7 @@ Avons-nous choisi `k` assez grand ?
 ```r
 k.check(smooth_interact)
 #                              k'      edf   k-index p-value
-# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883   0.055
+# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883  0.0575
 ```
 
 --
@@ -1318,7 +1326,7 @@ Est-ce que `k` est assez grand ?
 ```r
 k.check(smooth_interact_k60)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626   0.905
+# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626  0.8925
 ```
 
 --
@@ -1445,7 +1453,7 @@ Vérifier les dimensions de base :
 ```r
 k.check(smooth_interact_tw)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062  0.8475
+# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062  0.8425
 ```
 
 ---
@@ -1681,15 +1689,15 @@ gam_data2 &lt;- gamSim(eg = 6)
 # 4 term additive + random effectGu &amp; Wahba 4 term additive model
 str(gam_data2)
 # 'data.frame':	400 obs. of  11 variables:
-#  $ y  : num  8.03 11.93 22.44 23.52 11.35 ...
-#  $ x0 : num  0.111 0.752 0.455 0.958 0.45 ...
-#  $ x1 : num  0.3549 0.2396 0.8521 0.0158 0.1478 ...
-#  $ x2 : num  0.828 0.092 0.384 0.203 0.655 ...
-#  $ x3 : num  0.108 0.865 0.811 0.271 0.296 ...
-#  $ f  : num  6.37 11.99 21.21 21.94 9.6 ...
-#  $ f0 : num  0.683 1.404 1.98 0.266 1.976 ...
-#  $ f1 : num  2.03 1.61 5.5 1.03 1.34 ...
-#  $ f2 : num  0.65 2.97 4.73 8.64 3.28 ...
+#  $ y  : num  11.94 10.75 13.28 18.35 9.17 ...
+#  $ x0 : num  0.51 0.233 0.924 0.787 0.215 ...
+#  $ x1 : num  0.347 0.842 0.279 0.523 0.867 ...
+#  $ x2 : num  0.116284 0.000876 0.589668 0.980535 0.0355 ...
+#  $ x3 : num  0.0273 0.9552 0.9076 0.7301 0.5248 ...
+#  $ f  : num  11.6 12.7 14.4 16.1 10.2 ...
+#  $ f0 : num  1.999 1.335 0.475 1.242 1.248 ...
+#  $ f1 : num  2 5.39 1.75 2.85 5.66 ...
+#  $ f2 : num  4.57 6.67e-06 3.14 8.76e-06 3.12e-01 ...
 #  $ f3 : num  0 0 0 0 0 0 0 0 0 0 ...
 #  $ fac: Factor w/ 4 levels "1","2","3","4": 1 2 3 4 1 2 3 4 1 2 ...
 ```
@@ -1702,9 +1710,9 @@ str(gam_data2)
 ```r
 gamm_intercept &lt;- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2, method = "REML")
 summary(gamm_intercept)$s.table
-#             edf   Ref.df         F  p-value
-# s(x0)  1.941991 2.427264  1.086143 0.294817
-# s(fac) 2.969321 3.000000 96.603993 0.000000
+#             edf   Ref.df          F   p-value
+# s(x0)  1.922766 2.395078   1.364183 0.2704683
+# s(fac) 2.973268 3.000000 111.090473 0.0000000
 plot(gamm_intercept, select = 2)
 ```
 
@@ -1752,9 +1760,9 @@ plot_smooth(gamm_intercept, view="x0", cond = list(fac = "4"), add = T, col = 't
 gamm_slope &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2, method = "REML")
 
 summary(gamm_slope)$s.table
-#                edf   Ref.df           F   p-value
-# s(x0)     1.005025 1.010032  0.08810443 0.7696836
-# s(x0,fac) 2.951658 3.000000 62.47630405 0.0000000
+#                edf   Ref.df          F   p-value
+# s(x0)     1.913643 2.384052  0.9918185 0.3966177
+# s(x0,fac) 2.951019 3.000000 60.3175042 0.0000000
 ```
 
 
@@ -1793,10 +1801,10 @@ gamm_int_slope &lt;- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
                       data = gam_data2, method = "REML")
 
 summary(gamm_int_slope)$s.table
-#                    edf   Ref.df            F   p-value
-# s(x0)     1.9419893171 2.427261 1.086045e+00 0.2948499
-# s(fac)    2.9692942849 3.000000 9.668629e+01 0.0000000
-# s(fac,x0) 0.0008880209 3.000000 9.253175e-05 0.8298992
+#                   edf   Ref.df            F   p-value
+# s(x0)     1.922764280 2.395075 1.363989e+00 0.2705244
+# s(fac)    2.973240313 3.000000 1.112086e+02 0.0000000
+# s(fac,x0) 0.001177246 3.000000 2.071416e-04 0.6968754
 ```
 
 ---
@@ -1847,8 +1855,8 @@ gamm_smooth &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1),
 
 summary(gamm_smooth)$s.table
 #                edf    Ref.df        F   p-value
-# s(x0)     1.941962  2.427206 1.085964 0.2948811
-# s(x0,fac) 2.970993 35.000000 8.280364 0.0000000
+# s(x0)     1.922730  2.395008 1.363878 0.2705566
+# s(x0,fac) 2.975419 35.000000 9.522107 0.0000000
 ```
 
 ---
@@ -1900,10 +1908,10 @@ Tous ces modèles mixtes peuvent être comparés en utilisant la fonction `AIC()
 ```r
 AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
 #                      df      AIC
-# gamm_intercept 7.426922 2245.633
-# gamm_slope     6.009251 2308.917
-# gamm_int_slope 7.428640 2245.636
-# gamm_smooth    7.430181 2245.638
+# gamm_intercept 7.394817 2192.987
+# gamm_slope     7.383185 2286.426
+# gamm_int_slope 7.397112 2192.991
+# gamm_smooth    7.399015 2192.993
 ```
 
 

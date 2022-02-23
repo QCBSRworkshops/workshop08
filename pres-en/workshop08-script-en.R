@@ -287,7 +287,7 @@ summary(factor_interact)$s.table
 
 plot(factor_interact, page = 1)
 
-vis.gam(factor_interact, view = c("x2","x0"), theta = 40, n.grid = 500, border = NA)
+vis.gam(factor_interact, theta = 120, n.grid = 50, lwd = .4)
 
 AIC(two_smooth_model, factor_interact)
 
@@ -295,7 +295,7 @@ smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth),
                        data = isit, method = "REML")
 summary(smooth_interact)$s.table
 
-plot(smooth_interact, page = 1, scheme = 3)
+plot(smooth_interact, page = 1, scheme = 2)
 
 smooth_interact <- gam(y~x0 + s(x1, x2), data = gam_data)
 summary(smooth_interact)$s.table
@@ -303,7 +303,7 @@ summary(smooth_interact)$s.table
 plot(smooth_interact, page = 1, scheme = 3)
 
 vis.gam(smooth_interact, view = c("SampleDepth", "RelativeDepth"), 
-        cond = list(Season = 1), theta=40, n.grid = 50, color = "cm")
+        theta = 50, n.grid = 50, lwd = .4)
 
 AIC(two_smooth_model, smooth_interact)
 

@@ -1113,19 +1113,24 @@ class: inverse, center, middle
 
 ---
 # GAM with interaction terms
+&lt;br&gt;
 
-There are 2 ways to include interactions between variables:
+There are two ways to include interactions between variables:
+&lt;br&gt;&lt;br&gt;
 
-- for 2 smoothed variables : `s(x1, x2)`
-- for one smoothed variable and one linear variable (either factor or continuous): use the `by` argument `s(x1, by = x2)`
+- for __two smoothed variables__ : `s(x1, x2)`
+&lt;br&gt;&lt;br&gt;
+
+- for __one smoothed variable and one linear variable__ (either factor or continuous): use the `by` argument `s(x1, by = x2)`
   - When `x2` is a factor, you have a smooth term that vary between different levels of `x2`
   - When `x2` is continuous, the linear effect of `x2` varies smoothly with `x1`
   - When `x2` is a factor, the factor needs to be added as a main effect in the model
 
 ---
-# GAM with interaction terms
+# Interaction: smoothed and factor variables
 
-We will examine interaction effect using our categorical variable `Season` and ask whether the non-linear smoother `s(SampleDepth)` varies across different levels of `Season`.
+We will examine interaction effects to determine whether the non-linear smoother `s(SampleDepth)` varies across different levels of `Season`.
+&lt;br&gt;&lt;br&gt;
 
 
 ```r
@@ -1155,7 +1160,7 @@ summary(factor_interact)$s.table
 ```
 
 ---
-# GAM with interaction terms
+# Interaction: smoothed and factor variables
 
 
 ```r
@@ -1164,21 +1169,36 @@ plot(factor_interact, page = 1)
 
 &lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-65-1.png" width="720" style="display: block; margin: auto;" /&gt;
 
----
-exclude:true
-# GAM with interaction terms
+???
+The first two panels show the interaction effect of the `SampleDepth` smooth and each level of our factor variable, `Season`. 
 
-We can also visualise our model in 3D using `vis.gam`, where `theta` is the degree rotation on the x-y plane
+A good question to ask participants: Do you see a difference between the two smooth curves?
+
+The plots show some differences between the shape of the smooth terms among the two levels of `Season`. The most notable difference is the peak in the second panel, which tells us that there is an effect of `SampleDepth` between 1000 and 2000 that is important in Season 2, but does not occur in Season 1.
+
+This hints that the interaction effect could be important to include in our model.
+
+---
+# Interaction: smoothed and factor variables
+
+We can also visualise our model in 3D using `vis.gam()`, where `theta` is the degree rotation on the x-y plane.
 
 
 ```r
-vis.gam(factor_interact, view = c("x2","x0"), theta = 40, n.grid = 500, border = NA)
+vis.gam(factor_interact, theta = 120, n.grid = 50, lwd = .4)
 ```
 
----
-# GAM with interaction terms
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-66-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
-Let's perform a model comparison using AIC to determine if the interaction term is necessary
+???
+When we plot the interaction terms, we saw differences in the shape of the `SampleDepth` smooth among the two levels of `Season`. This hints that the interaction effect could be important to include in our model.
+
+---
+# Interaction: smoothed and factor variables
+
+These plots hint that the interaction effect could be important to include in our model.
+
+We will perform a model comparison using AIC to determine whether the interaction term improves our model's performance.
 
 
 ```r
@@ -1188,12 +1208,16 @@ AIC(two_smooth_model, factor_interact)
 # factor_interact  26.99693 4878.631
 ```
 
-From the plots, we saw that the shape of the smooth terms were comparable among the 2 levels of `Season`. The AIC confirms this as well.
+The AIC of our model with a factor interaction between the `SampleDepth` smooth and `Season` has a lower AIC score. 
+
+&lt;br&gt;
+&gt; Together, the AIC and the plots confirm that including this interaction improves our model's performance.
+
 
 ---
-# GAM with interaction terms
+# Interaction: two smoothed variables
 
-Finally we'll look at the interactions between 2 smoothed terms, `SampleDepth` and `RelativeDepth`.
+Next, we'll look at the interactions between two smoothed terms, `SampleDepth` and `RelativeDepth`.
 
 
 ```r
@@ -1225,20 +1249,29 @@ summary(smooth_interact)$s.table
 
 ---
 
-# GAM with interaction terms
+# Interaction: two smoothed variables
 
 
 
 ```r
 vis.gam(smooth_interact, view = c("SampleDepth", "RelativeDepth"), 
-        cond = list(Season = 1), theta=40, n.grid = 50, color = "cm")
+        theta = 50, n.grid = 50, lwd = .4)
 ```
 
 &lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-72-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
+???
+We can see a non-linear interaction clearly, where `Sources` is lowest at high values of `SampleDepth` and `RelativeDepth`, but increases with `RelativeDepth` while `SampleDepth` is low.
+
+Remember, this plot can be rotated by changing the value of the `theta` argument.
+You can change the colour of the 3D plot using the `color` argument. Try specifying `color = "cm"` in `vis.gam()` above!
 
 ---
-# GAM with interaction terms
+# Interaction: two smoothed variables
+
+So, we can see an interaction effect between these smooth terms in these plots. 
+
+Does including the interaction between `s(SampleDepth)` and `s(RelativeDepth)` improve our `two_smooth_model` model?
 
 
 ```r
@@ -1248,9 +1281,9 @@ AIC(two_smooth_model, smooth_interact)
 # smooth_interact  30.33625 4943.890
 ```
 
-The model with the interaction between `s(SampleDepth)` and `s(RelativeDepth)` has a lower AIC and the plots nicely illustrate the non-linear interaction, where `Sources` is lower at high values of `SampleDepth` but increases with `RelativeDepth`.
+The model with the interaction between `s(SampleDepth)` and `s(RelativeDepth)` has a lower AIC.
 
-
+&gt; This means that the non-linear interaction improves our model's performance, and our ability to understand the drivers of bioluminescence!
 
 ---
 class: inverse, center, middle
@@ -1343,7 +1376,7 @@ Have we chosen `k` large enough?
 ```r
 k.check(smooth_interact)
 #                              k'      edf   k-index p-value
-# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883    0.06
+# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883   0.065
 ```
 
 --
@@ -1377,7 +1410,7 @@ Is `k` large enough this time?
 ```r
 k.check(smooth_interact_k60)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626  0.8725
+# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626    0.88
 ```
 
 --
@@ -1506,7 +1539,7 @@ Check the basis dimension:
 ```r
 k.check(smooth_interact_tw)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062  0.8575
+# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062   0.795
 ```
 
 ---
@@ -1742,15 +1775,15 @@ gam_data2 &lt;- gamSim(eg = 6)
 # 4 term additive + random effectGu &amp; Wahba 4 term additive model
 str(gam_data2)
 # 'data.frame':	400 obs. of  11 variables:
-#  $ y  : num  10.2 18.7 20.17 18.69 5.49 ...
-#  $ x0 : num  0.6312 0.4038 0.1453 0.2547 0.0834 ...
-#  $ x1 : num  0.2055 0.2931 0.0597 0.3318 0.5102 ...
-#  $ x2 : num  0.578 0.392 0.257 0.674 0.893 ...
-#  $ x3 : num  0.9887 0.0563 0.5552 0.1437 0.5416 ...
-#  $ f  : num  9.41 14.19 19.73 18.55 6.38 ...
-#  $ f0 : num  1.832 1.909 0.881 1.435 0.518 ...
-#  $ f1 : num  1.51 1.8 1.13 1.94 2.77 ...
-#  $ f2 : num  3.0654 4.4859 8.7186 3.1708 0.0878 ...
+#  $ y  : num  11.25 15.46 22.08 19.69 7.89 ...
+#  $ x0 : num  0.535 0.372 0.866 0.122 0.808 ...
+#  $ x1 : num  0.193 0.643 0.945 0.828 0.204 ...
+#  $ x2 : num  0.505 0.677 0.59 0.551 0.499 ...
+#  $ x3 : num  0.0889 0.8801 0.3119 0.5059 0.4905 ...
+#  $ f  : num  9.2 14.6 19.58 20.88 8.39 ...
+#  $ f0 : num  1.988 1.839 0.819 0.749 1.135 ...
+#  $ f1 : num  1.47 3.62 6.63 5.24 1.5 ...
+#  $ f2 : num  2.74 3.15 3.14 2.89 2.75 ...
 #  $ f3 : num  0 0 0 0 0 0 0 0 0 0 ...
 #  $ fac: Factor w/ 4 levels "1","2","3","4": 1 2 3 4 1 2 3 4 1 2 ...
 ```
@@ -1763,9 +1796,9 @@ str(gam_data2)
 ```r
 gamm_intercept &lt;- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2, method = "REML")
 summary(gamm_intercept)$s.table
-#             edf  Ref.df         F     p-value
-# s(x0)  2.861700 3.56642   3.87756 0.007287244
-# s(fac) 2.974901 3.00000 118.34949 0.000000000
+#             edf   Ref.df         F     p-value
+# s(x0)  2.994516 3.722819  4.318179 0.002774605
+# s(fac) 2.969598 3.000000 98.381074 0.000000000
 plot(gamm_intercept, select = 2)
 ```
 
@@ -1814,8 +1847,8 @@ gamm_slope &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2, method
 
 summary(gamm_slope)$s.table
 #                edf   Ref.df         F    p-value
-# s(x0)     3.458881 4.297706  3.167002 0.01016779
-# s(x0,fac) 2.960992 3.000000 72.770615 0.00000000
+# s(x0)     2.788530 3.467529  3.120509 0.02012496
+# s(x0,fac) 2.950294 3.000000 60.614892 0.00000000
 ```
 
 
@@ -1854,10 +1887,10 @@ gamm_int_slope &lt;- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
                       data = gam_data2, method = "REML")
 
 summary(gamm_int_slope)$s.table
-#                edf   Ref.df         F     p-value
-# s(x0)     2.884104 3.592259   3.67101 0.009883592
-# s(fac)    2.936702 3.000000 406.10776 0.000000000
-# s(fac,x0) 1.427699 3.000000  74.27779 0.206779542
+#                 edf   Ref.df          F     p-value
+# s(x0)     2.9903524 3.717107   4.286695 0.002921657
+# s(fac)    2.9494465 3.000000 184.327472 0.000000000
+# s(fac,x0) 0.6501342 3.000000   9.226875 0.370944013
 ```
 
 ---
@@ -1907,9 +1940,9 @@ gamm_smooth &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1),
                    data = gam_data2, method = "REML")
 
 summary(gamm_smooth)$s.table
-#                edf    Ref.df         F    p-value
-# s(x0)     2.780894  3.419197  3.129741 0.02431282
-# s(x0,fac) 6.153428 35.000000 10.417899 0.00000000
+#                edf   Ref.df        F     p-value
+# s(x0)     2.979778  3.69723 4.159780 0.003624544
+# s(x0,fac) 3.665924 35.00000 8.471367 0.000000000
 ```
 
 ---
@@ -1961,10 +1994,10 @@ All of the mixed models from this section can be compared using `AIC()` to deter
 ```r
 AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
 #                       df      AIC
-# gamm_intercept  8.451648 2207.753
-# gamm_slope      9.297146 2287.447
-# gamm_int_slope 10.724088 2208.017
-# gamm_smooth    13.637262 2209.915
+# gamm_intercept  8.452614 2226.418
+# gamm_slope      8.332058 2298.303
+# gamm_int_slope  9.841458 2227.708
+# gamm_smooth    10.012606 2228.070
 ```
 
 

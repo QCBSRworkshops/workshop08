@@ -1,4 +1,4 @@
-# GAM with multiple terms 
+# GAM with multiple smooth terms 
 
 ## GAM with linear and smooth terms
 
@@ -198,7 +198,7 @@ three_smooth_summary$s.table
 
 The EDF are all quite high for our variables, including `Latitude`. This tells us that `Latitude` is quite _wiggly_, and probably should not be included as a linear term.
 
-Before deciding which model is "best", we should test whether `Latitude` is best included as a linear or as a smooth term, using `AIC()`:
+Before deciding which model is "best", we should test whether the effect of `Latitude` is best included as a linear or as a smooth term, using `AIC()`:
 
 ```{r}
 AIC(three_smooth_model, three_term_model)
@@ -212,4 +212,6 @@ But, does adding `Latitude` as a smooth predictor actually improve on our last "
 AIC(two_smooth_model, three_smooth_model)
 ```
 
-Our `three_smooth_model`, which includes `SampleDepth`, `RelativeDepth`, and `Latitude` as _smooth_ terms, and Season as a linear term, has a lower AIC score than our previous best model, which did not include `Latitude`. This implies that `Latitude` is indeed an informative non-linear predictor of bioluminescence.
+Our `three_smooth_model`, which includes `SampleDepth`, `RelativeDepth`, and `Latitude` as _smooth_ terms, and Season as a linear term, has a lower AIC score than our previous best model, which did not include `Latitude`. 
+
+This implies that `Latitude` is indeed an informative non-linear predictor of bioluminescence.

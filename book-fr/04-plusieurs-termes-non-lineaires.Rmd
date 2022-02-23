@@ -1,159 +1,222 @@
-# GAM avec plusieurs termes
+# GAM avec plusieurs termes non-linéaires
 
-## GAM with linear and smooth terms
+## GAM à plusieurs variables
 
-Avec les GAMs, il est facile d'ajouter des termes non linéaires et
-linéaires dans un seul modèle, plusieurs termes non linéaires ou même
-des interactions non linéaires. Dans cette section, nous allons utiliser
-un ensemble de données générées automatiquement par `mgcv`.
+Avec les GAMs, il est facile d'ajouter des termes non-linéaires et linéaires dans un seul modèle, plusieurs termes non-linéaires ou même des interactions non-linéaires.
 
-```{r, echo = TRUE, eval = FALSE}
-gam_data = gamSim(eg=5)
-head(gam_data) 
+Dans cette section, nous allons utiliser les données de `ISIT` de nouveau. Nous allons essayer de modéliser la réponse `Sources` avec les prédicteurs `Season` and `SampleDepth` simultanément.
+
+:::puzzle
+Rappelez-vous de ce jeu de données présenté dans les sections précédentes? Le jeu de données ISIT est composé des niveaux de bioluminescence (`Sources`) en fonction de la profondeur, des saisons et des différentes stations.
+:::
+
+Tout d'abord, nous devons convertir notre prédicteur qualitatif (`Season`) en facteur.
+
+```{r}
+head(isit)
+isit$Season <- as.factor(isit$Season)
 ```
 
-Nous allons voir comment nous pouvons prédire la variable réponse `y` en
-fonction des autres variables. Commençons par un modèle de base
-comprenant un terme non linéaire (`x1`) et un facteur qualitatif (`X0` avec
-4 niveaux).
+Commençons par un modèle de base comprenant un terme non-linéaire (`SampleDepth`) et un facteur qualitatif (`Season` avec 2 niveaux).
 
-```{r, echo = TRUE, eval = FALSE}
-basic_model = gam(y~x0+s(x1), data= gam_data)
-basic_summary = summary(basic_model)
-print(basic_summary$p.table)
-print(basic_summary$s.table)
-plot(basic_model)
+```{r}
+basic_model <- gam(Sources ~ Season + s(SampleDepth), data = isit, method = "REML")
+basic_summary <- summary(basic_model)
 ```
 
-Ici, la sortie de `p.table` fournit le tableau de résultats pour chaque
-terme paramétrique et le tableau `s.table` nous donne les résultats du
-terme non linéaire. Notez que pour le second tableau, la courbure du
-terme non linéaire `s(X1)` est indiquée par le paramètre edf (degrés de
-libertés effectifs); plus la valeur de l'edf est élevée, plus la
-non-linéarité est forte. Une valeur élevée (8-10 ou plus) signifie que
-la courbe est fortement non linéaire, alors qu'une courbe avec un edf
-égal à 1 est une ligne droite. En revanche, dans la régression linéaire,
-les degrés de libertés du *modèle* sont équivalents au nombre de
-paramètres libres non redondants *p* dans le modèle (et les degrés de
-libertés *résiduels* sont égaux à *n-p*). Nous reviendrons plus tard sur
-le concept d'edf.
+La sortie de `p.table` donne des informations sur les termes paramétriques :
 
-     print(basic_summary$p.table)
-                 Estimate Std. Error   t value     Pr(>|t|)
-     (Intercept) 8.550030  0.3655849 23.387258 1.717989e-76
-     x02         2.418682  0.5165515  4.682364 3.908046e-06
-     x03         4.486193  0.5156501  8.700072 9.124666e-17
-     x04         6.528518  0.5204234 12.544629 1.322632e-30
-     > print(basic_summary$s.table)
-                edf   Ref.df        F      p-value
-     s(x1) 1.923913 2.406719 42.84268 1.076396e-19
+```{r}
+basic_summary$p.table
+```
 
-Dans notre modèle de base, l'edf du terme non linéaire `s(x1)` est \~ 2,
-ce qui indique une courbe non linéaire. Le graphique du modèle illustre
-bien la forme de ce terme non linéaire :
+Le tableau `s.table` nous donne donne des informations sur le terme non-linéaire :
 
-![](images//graphic2.2.jpg){width="425"}
+```{r}
+basic_summary$s.table
+```
+
+:::explanation
+Les `edf` indiqués dans le `s.table` sont les **degrés effectifs de liberté** (EDF) du terme lisse `s(SampleDepth)`. Plus le nombre de degrés de liberté est élevé, plus les splines sont complexes et ondulées.
+
+Lorsqu'un terme a une valeur EDF proche de 1, il est sur le point d'être un terme linéaire. Des valeurs plus élevées indiquent que la courbe spline du terme est plus ondulée, ou en d'autres termes, fortement non-linéaire.
+:::
+
+Dans notre modèle de base, les EDF de la fonction lisse `s(SampleDepth)` sont ~9, ce qui suggère une courbe fortement non-linéaire.
+
+Traçons les termes lissés (`s(SampleDepth)`) et linéaires (`Season`) de notre modèle ajusté:
+
+```{r}
+plot(basic_model, all.terms = TRUE, page = 1)
+```
+
+:::puzzle
+Que nous montrent ces graphiques sur la relation entre la bioluminescence, la profondeur de l'échantillon et les saisons?
+:::
+
+La bioluminescence varie de manière non-linéaire sur le gradient `SampleDepth`, avec des niveaux de bioluminescence les plus élevés à la surface, suivis d'un second maximum plus petit, juste au-dessus d'une profondeur de 1500, avec des niveaux décroissants à des profondeurs plus basses.
+
+Il y a également une différence prononcée dans la bioluminescence entre les saisons, avec des niveaux élevés pendant la saison 2, par rapport à la saison 1.
 
 ## Degrés de liberté effectifs (edf)
 
-Combien de degrés de liberté a un GAM ?
+Revenons sur le concept de degrés de liberté effectifs (EDF).
 
-Au lieu de fournir la sortie de la validation croisée en termes de
-*λ* (un paramètre qui détermine la complexité de
-l'ajustement), la fonction `gam()` utilise un terme appelé les degrés
-de liberté effectifs (edf), de manière cohérente à quantifier la
-complexité du modèle (pour justifier notre intuition que les degrés de
-liberté offrent une manière cohérente de quantifier la complexité du
-modèle). Parce que le nombre de paramètres libres des splines de lissage
-(tel que les GAMs) est souvent difficile à définir, les edf sont liés à
-*λ*, où l'effet de la pénalité est de réduire les degrés
-de libertés. Donc, si le nombre de noeuds est arbitrairement réglé à *k =
-10*, *k-1* définit la limite supérieure des degrés de libertés associés à
-un terme de lissage. Ce nombre diminue alors que la pénalité lambda
-augmente jusqu'à ce que le meilleur modèle soit trouvé par validation
-croisée.
+Les degrés de liberté effectifs nous donnent beaucoup d'informations sur la relation entre les prédicteurs du modèle et les variables de réponse. Vous reconnaissez peut-être le terme "degrés de liberté" suite à des ateliers précédents sur les modèles linéaires, mais attention ! Les degrés de liberté effectifs d'un GAM sont estimés différemment des degrés de liberté d'une régression linéaire, et sont interprétés différemment.
 
-## GAM with multiple linear and smooth terms
+Dans la régression linéaire, les degrés de liberté du *modèle* sont équivalents au nombre de paramètres libres non redondants, $p$, dans le modèle (et les degrés de liberté *résiduels* sont égaux à $n-p$).
 
-Nous pouvons ajouter un second terme `x2`, mais spécifier une relation
-linéaire avec Y (*i.e.* les GAMs peuvent inclure à la fois des termes
-linéaires et non linéaires dans le même modèle). Ce nouveau terme
-linéaire `x2` sera présenté dans le tableau `p.table`, pour lequel une
-estimation du coefficient de régression sera indiquée. Dans le tableau
-`s.table`, nous retrouvons encore une fois le terme non linéaire `s(x1)`
-et son paramètre de courbure.
+Parce que le nombre de paramètres libres des splines de lissage (tel que les GAMs) est souvent difficile à définir, les **EDF** sont liés à $\lambda$, où l'effet de la pénalité est de réduire les degrés de liberté.
 
-```{r, echo = TRUE, eval = FALSE}
-two_term_model <- gam(y~x0+s(x1)+x2, data=gam_data)
+La limite supérieure d'**EDF** est déterminée par les dimensions de base $k$ de la fonction lisse (les **EDF** ne peut pas dépasser $k-1$)
+
+En pratique, le choix exact de $k$ est arbitraire, mais il devrait être **suffisamment grand** pour permettre une fonction lisse suffisamment complexe.
+
+Nous discuterons du choix de $k$ dans la section [SECTION HERE].
+
+:::explanation
+Des EDF plus élevés impliquent des splines plus complexes et plus ondulées.
+
+Lorsqu'un terme a une valeur EDF proche de 1, il est sur le point d'être un terme linéaire. Des valeurs plus élevées indiquent que le terme est plus ondulé, ou en d'autres termes, plus non-linéaire!
+:::
+
+
+## GAM à plusieurs variables linéaires et lisses
+
+Nous pouvons ajouter un second terme, `RelativeDepth`, mais spécifier une relation linéaire avec `Sources`.
+
+```{r}
+two_term_model <- gam(Sources ~ Season + s(SampleDepth) + RelativeDepth,
+                      data = isit, method = "REML")
 two_term_summary <- summary(two_term_model)
-print(two_term_summary$p.table)
-print(two_term_summary$s.table)
 ```
 
-Pour évaluer si la relation entre `y` et `x2` est non linéaire, on peut
-modéliser `x2` avec une fonction non linéaire. Tel que vu auparavant, nous
-pouvons utiliser une ANOVA pour tester si le terme non linéaire est
-nécessaire.
+L'estimation du coefficient de régression pour ce nouveau terme linéaire, `RelativeDepth`, sera présenté dans le tableau `p.table`. Rappelez-vous, le tableau `p.table` montre des informations sur les effets paramétriques (termes linéaires) :
 
-```{r, echo = TRUE, eval = FALSE}
-two_smooth_model <- gam(y~x0+s(x1)+s(x2), data=gam_data)
+```{r}
+two_term_summary$p.table
+```
+
+Dans `s.table`, nous trouverons encore une fois le terme non-linéaire, `s(SampleDepth)`, et son paramètre de courbure (`edf`). Rappelez-vous, le tableau `s.table` montre des informations sur les effets additifs (termes non-linéaires):
+
+```{r}
+two_term_summary$s.table
+```
+
+Regardons les relations entre les prédicteurs linéaires et non-linéaires et notre variable réponse.
+
+```{r}
+plot(two_term_model, page = 1, all.terms = TRUE)
+```
+
+## GAM à plusieurs variables
+
+Si nous voulons vérifier que la relation entre `Sources` et `RelativeDepth` est non-linéaire, on peut modéliser `RelativeDepth` avec une fonction non-linéaire. Dans ce modèle, nous aurions deux termes lisses:
+
+```{r}
+two_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth), 
+                        data = isit, method = "REML")
 two_smooth_summary <- summary(two_smooth_model)
-print(two_smooth_summary$p.table)
-print(two_smooth_summary$s.table)
-plot(two_smooth_model,page=1)
 ```
 
-![](images//graphic2.4.jpg){width="600"}
+L'estimation du coefficient de régression pour le seul terme linéaire, `Season`, sera présenté dans le tableau `p.table`. Rappelez-vous, le tableau `p.table` montre des informations sur les effets paramétriques (termes linéaires) :
 
-Lorsqu'il y a plus d'une variable d'incluse dans le modèle, comme
-ci-dessus, la réponse ajustée peut-être partitionnée entre les
-contributions de chaque variable. Ici, nous pouvons évaluer l'effet de
-chaque variable où l'axe des ordonnées représente la contribution
-(effet) de chaque covariable à la réponse ajustée centrée sur 0. Si
-l'intervalle de confiance chevauche zéro pour certaines valeurs de *x*,
-cela indique que l'effet est non significatif. Lorsque la contribution
-varie selon l'axe *x*, un changement de cette variable cause un
-changement de la variable réponse.
-
-```{r, echo = TRUE, eval = FALSE}
-anova(basic_model,two_term_model,two_smooth_model, test="Chisq")
+```{r}
+two_smooth_summary$p.table
 ```
 
-      Analysis of Deviance Table
-      Model 1: y ~ x0 + s(x1)
-      Model 2: y ~ x0 + s(x1) + x2
-      Model 3: y ~ x0 + s(x1) + s(x2)
-        Resid. Df Resid. Dev      Df Deviance  Pr(>Chi)    
-      1    394.08     5231.6                               
-      2    393.10     4051.3 0.97695   1180.2 < 2.2e-16 ***
-      3    385.73     1839.5 7.37288   2211.8 < 2.2e-16 ***
-      ---
-      Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Dans `s.table`, nous trouverons maintenant deux termes non-linéaires, `s(SampleDepth)` et `s(RelativeDepth)`, et leurs paramètres de courbure (`edf`). Rappelez-vous, le tableau `s.table` montre des informations sur les effets additifs (termes non-linéaires):
 
-Le meilleur modèle est le modèle avec deux fonctions non linéaires pour
-`x1` et pour `x2`.
-
-
-## DÉFI 2
-
-Créez deux nouveaux modèles avec la variable `x3` : un modèle avec `x3`
-comme paramètre linéaire et un autre modèle avec `x3` avec un paramètre
-non linéaire. Utilisez des graphiques, les tables des coefficients et la
-fonction `anova()` afin de déterminer s'il est nécessaire d'inclure `x3`
-dans le modèle.
-
-### Réponse au défi 2
-
-```{r, echo = TRUE, eval = FALSE}
-three_term_model <- gam(y~x0+s(x1)+s(x2)+x3, data=gam_data)
-three_smooth_model <- gam(y~x0+s(x1)+s(x2)+s(x3), data=gam_data)
-three_smooth_summary <- summary(three_smooth_model)
-
-print(three_smooth_summary$p.table)
-print(three_smooth_summary$s.table)
-plot(three_smooth_model,page=1)
-# edf = 1 -> le terme est donc linéaire.
-
-anova(two_smooth_model,three_term_model,test="Chisq")
-# le terme x3 n'est pas significatif
+```{r}
+two_smooth_summary$s.table
 ```
+
+Regardons les relations entre les prédicteurs linéaires et non-linéaires et notre variable réponse.
+
+```{r}
+plot(two_smooth_model, page = 1, all.terms = TRUE)
+```
+
+:::puzzle
+Pensez-vous que la performance de notre modèle est amélioré par l'ajout de ce nouveau terme non-linéaire, pour mieux représenter la relation entre la bioluminescence et la profondeur relative?
+:::
+
+Comme précédemment, nous pouvons comparer nos modèles avec AIC pour tester si le terme non-linéaire améliore la performance de notre modèle:
+
+```{r}
+AIC(basic_model, two_term_model, two_smooth_model)
+```
+
+On peut voir que `two_smooth_model` a la plus petite valeur AIC. Le modèle le mieux ajusté comprend donc deux fonctions non-linéaires pour `SampleDepth` et `RelativeDepth`, et un terme linéaire pour `Season`.
+
+
+## Défi 2
+
+Pour notre deuxième défi, nous allons développer notre modèle en ajoutant des variables qui, selon nous, pourraient être des prédicteurs écologiquement significatifs pour expliquer la bioluminescence. 
+
+__1.__ Créez deux nouveaux modèles: Ajoutez la variable `Latitude` à `two_smooth_model`, premièrement comme paramètre linéaire, et ensuite comme fonction non-linéaire.
+
+__2.__ Est-ce que `Latitude` est un terme important à inclure dans le modèle? La `Latitude` a-t-elle un effet linéaire ou non-linéaire? 
+
+Utilisez des graphiques, les tables des coefficients et la fonction `AIC()` pour répondre à ces questions.
+
+### Défi 2: Solution
+
+__1.__ Créez deux nouveaux modèles: Ajoutez la variable `Latitude` à `two_smooth_model`, premièrement comme paramètre linéaire, et ensuite comme fonction non-linéaire.
+
+```{r}
+# Ajouter Latitude comme terme linéaire
+three_term_model <- gam(Sources ~ 
+                          Season + s(SampleDepth) + s(RelativeDepth) + 
+                          Latitude, 
+                        data = isit, method = "REML")
+(three_term_summary <- summary(three_term_model))
+```
+
+```{r}
+# Ajouter Latitude comme terme non-linéaire
+three_smooth_model <- gam(Sources ~ 
+                            Season + s(SampleDepth) + s(RelativeDepth) + 
+                            s(Latitude),
+                          data = isit, method = "REML")
+(three_smooth_summary <- summary(three_smooth_model))
+```
+
+
+__2.__ Est-ce que `Latitude` est un terme important à inclure dans le modèle? La `Latitude` a-t-elle un effet linéaire ou non-linéaire?
+
+Commençons par visualiser les 4 effets qui sont maintenant inclus dans chaque modèle:
+
+```{r}
+plot(three_term_model, page = 1, all.terms = TRUE)
+```
+
+```{r}
+plot(three_smooth_model, page = 1, all.terms = TRUE)
+```
+
+Nous devrions également examiner nos tableaux de coefficients. Qu'est-ce que les EDF nous disent à propos de _l'ondulation_, ou la non-linéarité, des effets de nos prédicteurs?
+
+```{r}
+three_smooth_summary$s.table
+```
+
+Les EDF sont tous élevés pour nos variables, y compris `Latitude`. Cela nous indique que `Latitude` est assez _ondulée_, et qu'elle ne devrait probablement pas être incluse comme terme linéaire.
+
+Avant de décider quel modèle est le "meilleur", nous devrions tester si l'effet `Latitude` est plus approprié comme terme linéaire ou lisse, en utilisant `AIC()`:
+
+```{r}
+AIC(three_smooth_model, three_term_model)
+```
+
+Notre modèle incluant la `Latitude` comme terme _non-linéaire_ a un score AIC inférieur, ce qui signifie qu'il est plus performant que notre modèle incluant la `Latitude` comme terme _linéaire_. 
+
+Mais, est-ce que l'ajout de `Latitude` comme prédicteur non-linéaire améliore réellement notre "meilleur" modèle (`two_smooth_model`)?
+
+```{r}
+AIC(two_smooth_model, three_smooth_model)
+```
+
+Notre `three_smooth_model`, qui inclut `SampleDepth`, `RelativeDepth`, et `Latitude` comme termes lisses, et Season comme terme linéaire, a un score AIC inférieur à notre meilleur modèle précédent (`two_smooth_model`), qui n'incluait pas `Latitude`. 
+
+Ceci implique que `Latitude` est en effet un prédicteur informatif non-linéaire de la bioluminescence.

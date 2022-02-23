@@ -1089,19 +1089,24 @@ class: inverse, center, middle
 
 ---
 # GAM with interaction terms
+<br>
 
-There are 2 ways to include interactions between variables:
+There are two ways to include interactions between variables:
+<br><br>
 
-- for 2 smoothed variables : `s(x1, x2)`
-- for one smoothed variable and one linear variable (either factor or continuous): use the `by` argument `s(x1, by = x2)`
+- for __two smoothed variables__ : `s(x1, x2)`
+<br><br>
+
+- for __one smoothed variable and one linear variable__ (either factor or continuous): use the `by` argument `s(x1, by = x2)`
   - When `x2` is a factor, you have a smooth term that vary between different levels of `x2`
   - When `x2` is continuous, the linear effect of `x2` varies smoothly with `x1`
   - When `x2` is a factor, the factor needs to be added as a main effect in the model
 
 ---
-# GAM with interaction terms
+# Interaction: smoothed and factor variables
 
-We will examine interaction effect using our categorical variable `Season` and ask whether the non-linear smoother `s(SampleDepth)` varies across different levels of `Season`.
+We will examine interaction effects to determine whether the non-linear smoother `s(SampleDepth)` varies across different levels of `Season`.
+<br><br>
 
 ```{r}
 factor_interact <- gam(Sources ~ Season + 
@@ -1125,37 +1130,54 @@ summary(factor_interact)$s.table
 ```
 
 ---
-# GAM with interaction terms
+# Interaction: smoothed and factor variables
 
 ```{r, fig.width = 10,fig.height=6.5}
 plot(factor_interact, page = 1)
 ```
 
+???
+The first two panels show the interaction effect of the `SampleDepth` smooth and each level of our factor variable, `Season`. 
+
+A good question to ask participants: Do you see a difference between the two smooth curves?
+
+The plots show some differences between the shape of the smooth terms among the two levels of `Season`. The most notable difference is the peak in the second panel, which tells us that there is an effect of `SampleDepth` between 1000 and 2000 that is important in Season 2, but does not occur in Season 1.
+
+This hints that the interaction effect could be important to include in our model.
+
 ---
-exclude:true
-# GAM with interaction terms
+# Interaction: smoothed and factor variables
 
-We can also visualise our model in 3D using `vis.gam`, where `theta` is the degree rotation on the x-y plane
+We can also visualise our model in 3D using `vis.gam()`, where `theta` is the degree rotation on the x-y plane.
 
-```{r,fig.width=6, fig.height=6,eval=FALSE}
-vis.gam(factor_interact, view = c("x2","x0"), theta = 40, n.grid = 500, border = NA)
+```{r, fig.width = 6, fig.height = 6}
+vis.gam(factor_interact, theta = 120, n.grid = 50, lwd = .4)
 ```
 
----
-# GAM with interaction terms
+???
+When we plot the interaction terms, we saw differences in the shape of the `SampleDepth` smooth among the two levels of `Season`. This hints that the interaction effect could be important to include in our model.
 
-Let's perform a model comparison using AIC to determine if the interaction term is necessary
+---
+# Interaction: smoothed and factor variables
+
+These plots hint that the interaction effect could be important to include in our model.
+
+We will perform a model comparison using AIC to determine whether the interaction term improves our model's performance.
 
 ```{r}
 AIC(two_smooth_model, factor_interact)
 ```
 
-From the plots, we saw that the shape of the smooth terms were comparable among the 2 levels of `Season`. The AIC confirms this as well.
+The AIC of our model with a factor interaction between the `SampleDepth` smooth and `Season` has a lower AIC score. 
+
+<br>
+> Together, the AIC and the plots confirm that including this interaction improves our model's performance.
+
 
 ---
-# GAM with interaction terms
+# Interaction: two smoothed variables
 
-Finally we'll look at the interactions between 2 smoothed terms, `SampleDepth` and `RelativeDepth`.
+Next, we'll look at the interactions between two smoothed terms, `SampleDepth` and `RelativeDepth`.
 
 ```{r}
 smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), 
@@ -1166,7 +1188,7 @@ summary(smooth_interact)$s.table
 --
 
 ```{r, fig.width=7, fig.height=5.5,echo=FALSE}
-plot(smooth_interact, page = 1, scheme = 3)
+plot(smooth_interact, page = 1, scheme = 2)
 ```
 
 ---
@@ -1187,25 +1209,34 @@ plot(smooth_interact, page = 1, scheme = 3)
 
 ---
 
-# GAM with interaction terms
+# Interaction: two smoothed variables
 
 
 ```{r, fig.width=8, fig.height=8}
 vis.gam(smooth_interact, view = c("SampleDepth", "RelativeDepth"), 
-        cond = list(Season = 1), theta=40, n.grid = 50, color = "cm")
+        theta = 50, n.grid = 50, lwd = .4)
 ```
 
+???
+We can see a non-linear interaction clearly, where `Sources` is lowest at high values of `SampleDepth` and `RelativeDepth`, but increases with `RelativeDepth` while `SampleDepth` is low.
+
+Remember, this plot can be rotated by changing the value of the `theta` argument.
+You can change the colour of the 3D plot using the `color` argument. Try specifying `color = "cm"` in `vis.gam()` above!
 
 ---
-# GAM with interaction terms
+# Interaction: two smoothed variables
+
+So, we can see an interaction effect between these smooth terms in these plots. 
+
+Does including the interaction between `s(SampleDepth)` and `s(RelativeDepth)` improve our `two_smooth_model` model?
 
 ```{r}
 AIC(two_smooth_model, smooth_interact)
 ```
 
-The model with the interaction between `s(SampleDepth)` and `s(RelativeDepth)` has a lower AIC and the plots nicely illustrate the non-linear interaction, where `Sources` is lower at high values of `SampleDepth` but increases with `RelativeDepth`.
+The model with the interaction between `s(SampleDepth)` and `s(RelativeDepth)` has a lower AIC.
 
-
+> This means that the non-linear interaction improves our model's performance, and our ability to understand the drivers of bioluminescence!
 
 ---
 class: inverse, center, middle

@@ -78,16 +78,28 @@ lapply(list.of.packages, require, character.only = TRUE, quietly = TRUE)
 
 # À propos de cet atelier
 
-[![badge](https://img.shields.io/static/v1?style=flat-square&label=Diapos&message=08&color=red&logo=html5)](https://r.qcbs.ca/workshop08/pres-fr/workshop08-pres-fr.html)  [![badge](https://img.shields.io/static/v1?style=flat-square&label=livre&message=08&logo=github)](https://r.qcbs.ca/workshop08/book-fr/index.html)  [![badge](https://img.shields.io/static/v1?style=flat-square&label=script&message=08&color=2a50b8&logo=r)](https://r.qcbs.ca/workshop08/book-fr/workshop08-script-fr.R)  [![badge](https://img.shields.io/static/v1?style=flat-square&label=repo&message=dev&color=6f42c1&logo=github)](https://github.com/QCBSRworkshops/workshop08) 
+[![badge](https://img.shields.io/static/v1?style=for-the-badge&label=Présentation&message=08&color=BF616A)](https://r.qcbs.ca/workshop08/pres-fr/workshop08-pres-fr.html)    [![badge](https://img.shields.io/static/v1?style=for-the-badge&label=Script&message=08&color=D08770&logo=r)](https://r.qcbs.ca/workshop08/book-fr/workshop08-script-fr.R) 
+[![badge](https://img.shields.io/static/v1?style=for-the-badge&label=Livre&message=08&color=EBCB8B)](https://r.qcbs.ca/workshop08/book-fr/index.html)
+[![badge](https://img.shields.io/static/v1?style=for-the-badge&label=Site&message=r.qcbs.ca&color=A3BE8C)](https://r.qcbs.ca/fr/workshops/r-workshop-08/)
+[![badge](https://img.shields.io/static/v1?style=for-the-badge&label=GitHub&message=08&color=B48EAD&logo=github)](https://github.com/QCBSRworkshops/workshop08) 
+
 
 ---
 
-# Packages requis
+# Librairies et jeux de données 
+
+Pour cet atelier, nous travaillerons avec les jeux de données suivants :
+
+* [ISIT.csv](https://r.qcbs.ca/workshop08/pres-en/data/ISIT.csv) 
+* [other_dist.csv](https://r.qcbs.ca/workshop08/pres-en/data/other_dist.csv) 
+
+<br>
+
+Vous devriez également vous assurer que vous avez téléchargé, installé et chargé les librairies R suivants:
 
 * [ggplot2](https://cran.r-project.org/package=ggplot2)
 * [itsadug](https://cran.r-project.org/package=itsadug)
 * [mgcv](https://cran.r-project.org/package=mgcv)
-
 <br>
 
 ```R
@@ -95,9 +107,15 @@ install.packages(c('ggplot2', 'itsadug', 'mgcv'))
 ```
 
 ---
+# Prérequis
 
+Pour suivre cet atelier, nous recommandons:
 
-# Aperçu
++ Assez d'expérience avec le logiciel R pour être en mesure d'exécuter un script et d'examiner les données et les objets R;
++ Une connaissance de base de la régression linéaire.
+
+---
+# Aperçu de l'atelier
 
 1. Le modèle linéaire ... et où il échoue
 2. Introduction aux GAMs
@@ -116,13 +134,6 @@ install.packages(c('ggplot2', 'itsadug', 'mgcv'))
 4. Ajouter des interactions non linéaires entre les variables explicatives,
 5. Comprendre l'idée d'une fonction de base (basis function) et la raison pour laquelle ça rend les GAMs si puissants !,
 6. Comment modéliser la dépendance dans les données (autocorrélation, structure hiérarchique) en utilisant les GAMMs.
-
----
-# Prérequis
-
-> Expérience du logiciel R (assez pour être en mesure d'exécuter un script et d'examiner les données et les objets dans R).
-
-> Une connaissance de base de la régression linéaire.
 
 ---
 class: inverse, center, middle

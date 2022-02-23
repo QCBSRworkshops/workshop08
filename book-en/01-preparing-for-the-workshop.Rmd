@@ -29,7 +29,7 @@ More specifically, this workshop will cover how to:
 
 All workshop materials are found at [r.qcbs.ca/workshops/r-workshop-08](https://r.qcbs.ca/workshops/r-workshop-08/). This includes an [R script](https://r.qcbs.ca/workshop08/book-en/workshop08-script-en.R) which contains all code chunks shown in this book.
 
-For this workshop, we will be working with the following dataset:
+For this workshop, we will be working with the following datasets:
 
 * [ISIT.csv](https://r.qcbs.ca/workshop08/pres-en/data/ISIT.csv) 
 * [other_dist.csv](https://r.qcbs.ca/workshop08/pres-en/data/other_dist.csv) 

@@ -21,8 +21,10 @@ gam-with-multiple-linear-and-smooth-terms
 gam-with-multiple-smooth-terms-1
 challenge-2
 challenge-2-solution
-interactions
-changing-the-basis
+gam-with-interaction-terms
+interaction-between-smoothed-and-factor-variables
+interaction-between-smoothed-variables
+changing-the-basis-function
 other-distributions
 visualizing-the-trend-over-time
 quick-intro-to-generalized-additive-mixed-models-gamms

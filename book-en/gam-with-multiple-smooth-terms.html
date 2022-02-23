@@ -31,7 +31,7 @@
   
   <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />
 <link rel="prev" href="how-gams-work.html"/>
-<link rel="next" href="interactions.html"/>
+<link rel="next" href="gam-with-interaction-terms.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -170,9 +170,11 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.5.1" data-path="gam-with-multiple-smooth-terms.html"><a href="gam-with-multiple-smooth-terms.html#challenge-2-solution"><i class="fa fa-check"></i><b>6.5.1</b> Challenge 2: Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="interactions.html"><a href="interactions.html"><i class="fa fa-check"></i><b>7</b> Interactions</a></li>
-<li class="part"><span><b>Advanced Concepts</b></span></li>
-<li class="chapter" data-level="8" data-path="changing-the-basis.html"><a href="changing-the-basis.html"><i class="fa fa-check"></i><b>8</b> Changing the Basis</a></li>
+<li class="chapter" data-level="7" data-path="gam-with-interaction-terms.html"><a href="gam-with-interaction-terms.html"><i class="fa fa-check"></i><b>7</b> GAM with interaction terms</a><ul>
+<li class="chapter" data-level="7.1" data-path="gam-with-interaction-terms.html"><a href="gam-with-interaction-terms.html#interaction-between-smoothed-and-factor-variables"><i class="fa fa-check"></i><b>7.1</b> Interaction between smoothed and factor variables</a></li>
+<li class="chapter" data-level="7.2" data-path="gam-with-interaction-terms.html"><a href="gam-with-interaction-terms.html#interaction-between-smoothed-variables"><i class="fa fa-check"></i><b>7.2</b> Interaction between smoothed variables</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="changing-the-basis-function.html"><a href="changing-the-basis-function.html"><i class="fa fa-check"></i><b>8</b> Changing the basis function</a></li>
 <li class="chapter" data-level="9" data-path="other-distributions.html"><a href="other-distributions.html"><i class="fa fa-check"></i><b>9</b> Other distributions</a><ul>
 <li class="chapter" data-level="9.1" data-path="other-distributions.html"><a href="other-distributions.html#visualizing-the-trend-over-time"><i class="fa fa-check"></i><b>9.1</b> Visualizing the trend over time</a></li>
 </ul></li>
@@ -278,7 +280,7 @@ smoothed terms, and smoothed interactions.</p>
 <p>In linear regression, the <em>model</em> degrees of freedom are equivalent to the number of non-redundant free parameters <span class="math inline">\(p\)</span> in the model, and the <em>residual</em> degrees of freedom are given by <span class="math inline">\(n-p\)</span>.</p>
 <p>Because the number of free parameters in GAMs is difficult to define, the <strong>EDF</strong> are instead related to the smoothing parameter <span class="math inline">\(\lambda\)</span>, such that the greater the penalty, the smaller the <strong>EDF</strong>.</p>
 <p>An upper bound on the <strong>EDF</strong> is determined by the basis dimension <span class="math inline">\(k\)</span> for each smooth function, meaning the <strong>EDF</strong> cannot exceed <span class="math inline">\(k-1\)</span>.</p>
-<p>In practice, the exact choice of <span class="math inline">\(k\)</span> is arbitrary, but it should be <strong>large enough</strong> to accommodate a sufficiently complex smooth function. We will talk about choosing <span class="math inline">\(k\)</span> in [SECTION HERE].</p>
+<p>In practice, the exact choice of <span class="math inline">\(k\)</span> is arbitrary, but it should be <strong>large enough</strong> to accommodate a sufficiently complex smooth function. We will talk about choosing <span class="math inline">\(k\)</span> in <a href="#model-checking">Chapter 6</a>.</p>
 <div class="explanation">
 <p>Higher EDF imply more complex, wiggly splines.</p>
 <p>When a term has an EDF value that is close to 1, it is close to being a linear term. Higher values indicate that the term is more wiggly, or in other words, more non-linear!</p>
@@ -444,7 +446,7 @@ non-linear, we can model <code>RelativeDepth</code> as a smooth term instead. In
         </div>
       </div>
 <a href="how-gams-work.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="interactions.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="gam-with-interaction-terms.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

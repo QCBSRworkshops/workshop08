@@ -129,24 +129,33 @@ AIC(two_smooth_model, three_smooth_model)
 
 ##Section: 05-interactions.R 
 
-categorical_interact <- gam(y~x0+s(x1)+s(x2,by=x0),data=gam_data)
-categorical_interact_summary <- summary(categorical_interact)
-print(categorical_interact_summary$s.table)
-plot(categorical_interact,page=1)
-# or alternatively: plot using vis.gam function, where theta is the degree rotation on the x-y plane
-vis.gam(categorical_interact,view=c("x2","x0"),theta=40,n.grid=500,border=NA)
-anova(two_smooth_model, categorical_interact,test="Chisq")
+factor_interact <- gam(Sources ~ Season + 
+                         s(SampleDepth, by=Season) + 
+                         s(RelativeDepth), 
+                       data = isit, method = "REML")
 
-smooth_interact <- gam(y~x0+s(x1,x2),data=gam_data)
-smooth_interact_summary <- summary(smooth_interact)
-print(smooth_interact_summary$s.table)
-plot(smooth_interact,page=1,scheme=3)
-# plot(smooth_interact,page=1,scheme=1) will give a similar plot to the vis.gam()
-vis.gam(smooth_interact,view=c("x1","x2"),theta=40,n.grid=500,border=NA)
-anova(two_smooth_model,smooth_interact,test="Chisq")
+summary(factor_interact)$s.table
+
+plot(factor_interact, page = 1)
+
+vis.gam(factor_interact, theta = 120, n.grid = 50, lwd = .4)
+
+AIC(two_smooth_model, factor_interact)
+
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), 
+                       data = isit, method = "REML")
+summary(smooth_interact)$s.table
+
+plot(smooth_interact, page = 1, scheme = 2)
+
+vis.gam(smooth_interact, 
+        view = c("SampleDepth", "RelativeDepth"), 
+        theta = 50, n.grid = 50, lwd = .4)
+
+AIC(two_smooth_model, smooth_interact)
 
 
-##Section: 06-changing-basis.R 
+##Section: 07-changing-basis.R 
 
 data(nottem)
 n_years <- length(nottem)/12

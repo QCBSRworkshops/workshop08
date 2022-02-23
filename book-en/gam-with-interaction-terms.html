@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 7 Interactions | Workshop 8: Generalized additive models in R</title>
+  <title>Chapter 7 GAM with interaction terms | Workshop 8: Generalized additive models in R</title>
   <meta name="description" content="Generalized additive models in R" />
   <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 7 Interactions | Workshop 8: Generalized additive models in R" />
+  <meta property="og:title" content="Chapter 7 GAM with interaction terms | Workshop 8: Generalized additive models in R" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://github.com/qcbsRworkshops/" />
   <meta property="og:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="qcbsRworkshops/workshop08" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 7 Interactions | Workshop 8: Generalized additive models in R" />
+  <meta name="twitter:title" content="Chapter 7 GAM with interaction terms | Workshop 8: Generalized additive models in R" />
   
   <meta name="twitter:description" content="Generalized additive models in R" />
   <meta name="twitter:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -31,7 +31,7 @@
   
   <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />
 <link rel="prev" href="gam-with-multiple-smooth-terms.html"/>
-<link rel="next" href="changing-the-basis.html"/>
+<link rel="next" href="changing-the-basis-function.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -170,9 +170,11 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.5.1" data-path="gam-with-multiple-smooth-terms.html"><a href="gam-with-multiple-smooth-terms.html#challenge-2-solution"><i class="fa fa-check"></i><b>6.5.1</b> Challenge 2: Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="interactions.html"><a href="interactions.html"><i class="fa fa-check"></i><b>7</b> Interactions</a></li>
-<li class="part"><span><b>Advanced Concepts</b></span></li>
-<li class="chapter" data-level="8" data-path="changing-the-basis.html"><a href="changing-the-basis.html"><i class="fa fa-check"></i><b>8</b> Changing the Basis</a></li>
+<li class="chapter" data-level="7" data-path="gam-with-interaction-terms.html"><a href="gam-with-interaction-terms.html"><i class="fa fa-check"></i><b>7</b> GAM with interaction terms</a><ul>
+<li class="chapter" data-level="7.1" data-path="gam-with-interaction-terms.html"><a href="gam-with-interaction-terms.html#interaction-between-smoothed-and-factor-variables"><i class="fa fa-check"></i><b>7.1</b> Interaction between smoothed and factor variables</a></li>
+<li class="chapter" data-level="7.2" data-path="gam-with-interaction-terms.html"><a href="gam-with-interaction-terms.html#interaction-between-smoothed-variables"><i class="fa fa-check"></i><b>7.2</b> Interaction between smoothed variables</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="changing-the-basis-function.html"><a href="changing-the-basis-function.html"><i class="fa fa-check"></i><b>8</b> Changing the basis function</a></li>
 <li class="chapter" data-level="9" data-path="other-distributions.html"><a href="other-distributions.html"><i class="fa fa-check"></i><b>9</b> Other distributions</a><ul>
 <li class="chapter" data-level="9.1" data-path="other-distributions.html"><a href="other-distributions.html#visualizing-the-trend-over-time"><i class="fa fa-check"></i><b>9.1</b> Visualizing the trend over time</a></li>
 </ul></li>
@@ -217,56 +219,76 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
   <img class= "hero-image" src="assets/images/jean-philippe-delberghe-75xPHEQBmvA-unsplash_hero_image.jpg">
 </div>
 --!>
-<div id="interactions" class="section level1">
-<h1><span class="header-section-number">Chapter 7</span> Interactions</h1>
+<div id="gam-with-interaction-terms" class="section level1">
+<h1><span class="header-section-number">Chapter 7</span> GAM with interaction terms</h1>
 <p>There are two ways to include interactions between variables:</p>
 <ul>
-<li>if one variable is smoothed, and the other isn’t: using the <code>by</code>
-argument,</li>
-<li>fully smoothing both variables.</li>
+<li>For two smoothed variables, the syntax would be: <code>s(x1, x2)</code></li>
+<li>For one smoothed variable and one linear variable (either factor or continuous), the syntax would use the <code>by</code> argument <code>s(x1, by = x2)</code>:
+<ul>
+<li>When <code>x2</code> is a factor, you have a smooth term that vary between different levels of <code>x2</code>;</li>
+<li>When <code>x2</code> is continuous, the linear effect of <code>x2</code> varies smoothly with <code>x1</code>;</li>
+<li>When <code>x2</code> is a factor, the factor needs to be added as a main effect in the model.</li>
+</ul></li>
 </ul>
-<p>Where the <code>by</code> argument lets you have a smooth term vary between
-different levels of a factor. We will examine this using our categorical
-variable <code>x0</code> and ask whether the non-linear smoother <code>s(x2)</code> varies across
-different levels of <code>x0</code>. To determine whether smooth terms differ
-significantly among factor levels, we will use an ANOVA test on the
-interaction term.</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="interactions.html#cb56-1"></a>categorical_interact &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>x0 <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x1) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x2, <span class="dt">by =</span> x0),</span>
-<span id="cb56-2"><a href="interactions.html#cb56-2"></a>    <span class="dt">data =</span> gam_data)</span>
-<span id="cb56-3"><a href="interactions.html#cb56-3"></a>categorical_interact_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(categorical_interact)</span>
-<span id="cb56-4"><a href="interactions.html#cb56-4"></a><span class="kw">print</span>(categorical_interact_summary<span class="op">$</span>s.table)</span>
-<span id="cb56-5"><a href="interactions.html#cb56-5"></a><span class="kw">plot</span>(categorical_interact, <span class="dt">page =</span> <span class="dv">1</span>)</span>
-<span id="cb56-6"><a href="interactions.html#cb56-6"></a><span class="co"># or alternatively: plot using vis.gam function, where</span></span>
-<span id="cb56-7"><a href="interactions.html#cb56-7"></a><span class="co"># theta is the degree rotation on the x-y plane</span></span>
-<span id="cb56-8"><a href="interactions.html#cb56-8"></a><span class="kw">vis.gam</span>(categorical_interact, <span class="dt">view =</span> <span class="kw">c</span>(<span class="st">&quot;x2&quot;</span>, <span class="st">&quot;x0&quot;</span>), <span class="dt">theta =</span> <span class="dv">40</span>,</span>
-<span id="cb56-9"><a href="interactions.html#cb56-9"></a>    <span class="dt">n.grid =</span> <span class="dv">500</span>, <span class="dt">border =</span> <span class="ot">NA</span>)</span>
-<span id="cb56-10"><a href="interactions.html#cb56-10"></a><span class="kw">anova</span>(two_smooth_model, categorical_interact, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
-<p><img src="images/graphic3.1b.png" width="350" /></p>
-<p>Visually, we see that the shape of smooth terms are comparable among the
-four levels of <code>x0</code>. The ANOVA test confirms this as well (Deviance =
-98.6, <em>p</em> = 0.2347).</p>
-<p>Finally we’ll look at the interactions two smooth terms, <code>x1</code> and <code>x2</code>.
-Here the <code>by</code> argument is dropped (both quantitative variables).</p>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="interactions.html#cb57-1"></a>smooth_interact &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>x0 <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x1, x2), <span class="dt">data =</span> gam_data)</span>
-<span id="cb57-2"><a href="interactions.html#cb57-2"></a>smooth_interact_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(smooth_interact)</span>
-<span id="cb57-3"><a href="interactions.html#cb57-3"></a><span class="kw">print</span>(smooth_interact_summary<span class="op">$</span>s.table)</span>
-<span id="cb57-4"><a href="interactions.html#cb57-4"></a><span class="kw">plot</span>(smooth_interact, <span class="dt">page =</span> <span class="dv">1</span>, <span class="dt">scheme =</span> <span class="dv">3</span>)</span>
-<span id="cb57-5"><a href="interactions.html#cb57-5"></a><span class="co"># plot(smooth_interact,page=1,scheme=1) will give a similar</span></span>
-<span id="cb57-6"><a href="interactions.html#cb57-6"></a><span class="co"># plot to the vis.gam()</span></span>
-<span id="cb57-7"><a href="interactions.html#cb57-7"></a><span class="kw">vis.gam</span>(smooth_interact, <span class="dt">view =</span> <span class="kw">c</span>(<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>), <span class="dt">theta =</span> <span class="dv">40</span>, <span class="dt">n.grid =</span> <span class="dv">500</span>,</span>
-<span id="cb57-8"><a href="interactions.html#cb57-8"></a>    <span class="dt">border =</span> <span class="ot">NA</span>)</span>
-<span id="cb57-9"><a href="interactions.html#cb57-9"></a><span class="kw">anova</span>(two_smooth_model, smooth_interact, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
-<p><img src="images/graphic3.2b.png" width="350" /></p>
-<p>The interaction between <code>s(x1)</code> and <code>s(x2)</code> is significant and the 2D plot
-nicely illustrates this non-linear interactions, where <code>y</code> is greatest at
-high values of <code>x1</code> but low to mid-values of <code>x2</code>. Try playing around with
-<code>theta</code> to rotate the figure around. If you plan to run a lot of these,
-delete the argument <code>n.grid=500</code> to make the plots run faster.</p>
+<div id="interaction-between-smoothed-and-factor-variables" class="section level2">
+<h2><span class="header-section-number">7.1</span> Interaction between smoothed and factor variables</h2>
+<p>We will examine interaction effects to determine whether the non-linear smoother <code>s(SampleDepth)</code> varies across different levels of <code>Season</code>.</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="gam-with-interaction-terms.html#cb56-1"></a>factor_interact &lt;-<span class="st"> </span><span class="kw">gam</span>(Sources <span class="op">~</span><span class="st"> </span>Season <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(SampleDepth, <span class="dt">by =</span> Season) <span class="op">+</span></span>
+<span id="cb56-2"><a href="gam-with-interaction-terms.html#cb56-2"></a><span class="st">    </span><span class="kw">s</span>(RelativeDepth), <span class="dt">data =</span> isit, <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
+<span id="cb56-3"><a href="gam-with-interaction-terms.html#cb56-3"></a></span>
+<span id="cb56-4"><a href="gam-with-interaction-terms.html#cb56-4"></a><span class="kw">summary</span>(factor_interact)<span class="op">$</span>s.table</span></code></pre></div>
+<pre><code>##                             edf   Ref.df          F p-value
+## s(SampleDepth):Season1 6.839386 7.552045  95.119422       0
+## s(SampleDepth):Season2 8.744574 8.966290 154.474325       0
+## s(RelativeDepth)       6.987223 8.055898   6.821074       0</code></pre>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="gam-with-interaction-terms.html#cb58-1"></a><span class="kw">plot</span>(factor_interact, <span class="dt">page =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p><img src="book-en_files/figure-html/unnamed-chunk-40-1.png" width="960" style="display: block; margin: auto;" /></p>
+<div class="explanation">
+<p>The first two panels show the interaction effect of the <code>SampleDepth</code> smooth and each level of our factor variable, <code>Season</code>. Do you see a difference between the two smooth curves?</p>
+</div>
+<p>The plots show some differences between the shape of the smooth terms among the two levels of <code>Season</code>. The most notable difference is the peak in the second panel, which tells us that there is an effect of <code>SampleDepth</code> between 1000 and 2000 that is important in Season 2, but does not occur in Season 1. This hints that the interaction effect could be important to include in our model.</p>
+<p>We can also plot the interaction effect in 3D on a single plot, using <code>vis.gam()</code>.</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="gam-with-interaction-terms.html#cb59-1"></a><span class="kw">vis.gam</span>(factor_interact, <span class="dt">theta =</span> <span class="dv">120</span>, <span class="dt">n.grid =</span> <span class="dv">50</span>, <span class="dt">lwd =</span> <span class="fl">0.4</span>)</span></code></pre></div>
+<p><img src="book-en_files/figure-html/unnamed-chunk-41-1.png" width="672" style="display: block; margin: auto;" />
+&gt; This plot can be rotated by changing the value of the <code>theta</code> argument.</p>
+<p>To test our idea that this interaction is important, we will perform a model comparison using AIC to determine whether the interaction term improves our model’s performance.</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="gam-with-interaction-terms.html#cb60-1"></a><span class="kw">AIC</span>(two_smooth_model, factor_interact)</span></code></pre></div>
+<pre><code>##                        df      AIC
+## two_smooth_model 20.46960 5056.841
+## factor_interact  26.99693 4878.631</code></pre>
+<p>The AIC of our model with a factor interaction between the <code>SampleDepth</code> smooth and <code>Season</code> has a lower AIC score, which tells us this model performs better than <code>two_smooth_model</code>. Including this interaction seems to improve our model’s performance.</p>
+</div>
+<div id="interaction-between-smoothed-variables" class="section level2">
+<h2><span class="header-section-number">7.2</span> Interaction between smoothed variables</h2>
+<p>Next, we’ll look at the interactions between two smoothed terms, <code>SampleDepth</code> and <code>RelativeDepth</code>.</p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="gam-with-interaction-terms.html#cb62-1"></a>smooth_interact &lt;-<span class="st"> </span><span class="kw">gam</span>(Sources <span class="op">~</span><span class="st"> </span>Season <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(SampleDepth, RelativeDepth),</span>
+<span id="cb62-2"><a href="gam-with-interaction-terms.html#cb62-2"></a>    <span class="dt">data =</span> isit, <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
+<span id="cb62-3"><a href="gam-with-interaction-terms.html#cb62-3"></a><span class="kw">summary</span>(smooth_interact)<span class="op">$</span>s.table</span></code></pre></div>
+<pre><code>##                                   edf Ref.df        F p-value
+## s(SampleDepth,RelativeDepth) 27.12521  28.77 93.91722       0</code></pre>
+<p>In the previous section, we were able to visualise an interaction effect between a smooth and a factor term by plotting a different smooth function of <code>SampleDepth</code> for each level of <code>Season</code>.</p>
+<p>In this model, we have two smoothed terms, which means that the effect of <code>SampleDepth</code> varies smoothly with <code>RelativeDepth</code>, and vice-versa. When we visualise this interaction, we instead get a gradient between two continuous smooth functions:</p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="gam-with-interaction-terms.html#cb64-1"></a><span class="kw">plot</span>(smooth_interact, <span class="dt">page =</span> <span class="dv">1</span>, <span class="dt">scheme =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="book-en_files/figure-html/unnamed-chunk-44-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>We can also plot this interaction on a 3D surface:</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="gam-with-interaction-terms.html#cb65-1"></a><span class="kw">vis.gam</span>(smooth_interact, <span class="dt">view =</span> <span class="kw">c</span>(<span class="st">&quot;SampleDepth&quot;</span>, <span class="st">&quot;RelativeDepth&quot;</span>),</span>
+<span id="cb65-2"><a href="gam-with-interaction-terms.html#cb65-2"></a>    <span class="dt">theta =</span> <span class="dv">50</span>, <span class="dt">n.grid =</span> <span class="dv">50</span>, <span class="dt">lwd =</span> <span class="fl">0.4</span>)</span></code></pre></div>
+<p><img src="book-en_files/figure-html/unnamed-chunk-45-1.png" width="672" style="display: block; margin: auto;" />
+&gt; Remember, this plot can be rotated by changing the value of the <code>theta</code> argument.</p>
+<div class="explanation">
+<p>You can change the colour of the 3D plot using the <code>color</code> argument. Try specifying <code>color = "cm"</code> in <code>vis.gam()</code> above, and check <code>?vis.gam</code> for more color options.</p>
+</div>
+<p>The plots do illustrate a non-linear interaction effect, where <code>Sources</code> is lowest at high values of <code>SampleDepth</code> and <code>RelativeDepth</code>, but increases with <code>RelativeDepth</code> while <code>SampleDepth</code> is low.</p>
+<p>So, there does seem to be an interaction effect between these smooth terms. Does including the interaction between <code>s(SampleDepth)</code> and <code>s(RelativeDepth)</code> improve our <code>two_smooth_model</code> model?</p>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="gam-with-interaction-terms.html#cb66-1"></a><span class="kw">AIC</span>(two_smooth_model, smooth_interact)</span></code></pre></div>
+<pre><code>##                        df      AIC
+## two_smooth_model 20.46960 5056.841
+## smooth_interact  30.33625 4943.890</code></pre>
+<p>The model with the interaction between <code>s(SampleDepth)</code> and <code>s(RelativeDepth)</code> has a lower AIC, which means including this interaction improves our model’s performance, and our ability to understand the drivers of bioluminescence.</p>
 
 </div>
-
-
-
+</div>
 <hr>
 <center> 
   <div class="footer">
@@ -279,7 +301,7 @@ delete the argument <code>n.grid=500</code> to make the plots run faster.</p>
         </div>
       </div>
 <a href="gam-with-multiple-smooth-terms.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="changing-the-basis.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="changing-the-basis-function.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

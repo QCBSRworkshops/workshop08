@@ -1,6 +1,4 @@
-# (PART\*) Advanced Concepts {-}
-
-# Changing the Basis
+# Changing the basis function
 
 We won't go too much further into this in this workshop, but you should
 know you can expand on the basic model we've looked at today with:

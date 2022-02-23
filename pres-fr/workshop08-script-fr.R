@@ -226,31 +226,29 @@ plot(two_smooth_model, page = 1, all.terms = TRUE)
 
 AIC(basic_model, two_term_model, two_smooth_model)
 
-three_term_model <- gam(Sources ~
-                          Season + s(SampleDepth) + s(RelativeDepth) +
-                          Latitude,
+# Ajouter Latitude comme terme linéaire
+three_term_model <- gam(Sources ~ 
+                          Season + s(SampleDepth) + s(RelativeDepth) + 
+                          Latitude, 
                         data = isit, method = "REML")
+three_term_summary <- summary(three_term_model)
 
-three_smooth_model <- gam(Sources ~
-                            Season + s(SampleDepth) + s(RelativeDepth) +
+# Ajouter Latitude comme terme non-linéaire
+three_smooth_model <- gam(Sources ~ 
+                            Season + s(SampleDepth) + s(RelativeDepth) + 
                             s(Latitude),
                           data = isit, method = "REML")
-
 three_smooth_summary <- summary(three_smooth_model)
-three_smooth_summary
 
-three_term_model <- gam(Sources ~
-                          Season + s(SampleDepth) + s(RelativeDepth) +
-                          Latitude,
-                        data = isit, method = "REML")
+plot(three_term_model, page = 1, all.terms = TRUE)
 
-three_smooth_model <- gam(Sources ~
-                            Season + s(SampleDepth) + s(RelativeDepth) +
-                            s(Latitude),
-                          data = isit, method = "REML")
+par(mar=c(3.8,3.8,.2,.2))
+plot(three_term_model, page = 1, all.terms = TRUE)
 
-three_smooth_summary <- summary(three_smooth_model)
-three_smooth_summary
+plot(three_smooth_model, page = 1, all.terms = TRUE)
+
+par(mar=c(3.8,3.8,.2,.2))
+plot(three_smooth_model, page = 1, all.terms = TRUE)
 
 three_term_model <- gam(y ~ x0 + s(x1) + s(x2) + x3, data = gam_data)
 three_smooth_model <- gam(y~x0 + s(x1) + s(x2) + s(x3), data = gam_data)
@@ -263,10 +261,9 @@ plot(three_smooth_model, page = 1,all.terms = TRUE)
 
 three_smooth_summary$s.table
 
-# edf = 1 donc le terme est linéaire.
+AIC(three_smooth_model, three_term_model)
 
-AIC(two_smooth_model, three_term_model)
-
+AIC(two_smooth_model, three_smooth_model)
 
 factor_interact <- gam(Sources ~ Season +
                          s(SampleDepth,by=Season) +

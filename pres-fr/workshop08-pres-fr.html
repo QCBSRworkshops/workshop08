@@ -485,7 +485,7 @@ nested_gam_model_test
 **Réponse** Oui la non-linéarité est justifiée. Les degrés de liberté effectifs (**EDF**) sont &gt;&gt; 1 (on reviendra la dessus bientôt).
 
 ---
-# Un regard plus approfondi sur les GAMs
+# Le fonctionnement des GAMs
 
 Nous allons maintenant prendre quelques minutes pour regarder comment fonctionnent les GAMs. Commençons en considérant d'abord un modèle qui contient une fonction lisse `\(f\)` d'une covariable, `\(x\)` :
 
@@ -550,7 +550,7 @@ Au lieu de contrôler le lissage (non linéarité) en modifiant le nombre de nœ
 
 `$$||y - XB||^{2}$$`
 
-Il peut être modélisé en minimisant :
+Le modèle peut être ajusté en minimisant:
 
 `$$||y - XB||^{2} + \lambda \int_0^1[f^{''}(x)]^2dx$$`
 
@@ -559,7 +559,7 @@ Quand `\(\lambda\)` tend vers `\(∞\)`, le modèle devient linéaire.
 ---
 # Contrôler le degré de lissage avec des splines de régression pénalisés
 
-Si `\(λ\)` est trop élevé, les données seront trop lissées et si elle est trop faible, les données ne seront pas assez lissées. Idéalement, il serait bon de choisir une valeur `\(λ\)` de sorte que le `\(\hat{f}\)` prédit est aussi proche que possible du `\(f\)` observé. Un critère approprié pourrait être de choisir `\(λ\)` pour minimiser :
+Si `\(\lambda\)` est trop élevé, les données seront trop lissées et si elle est trop faible, les données ne seront pas assez lissées. Idéalement, il serait bon de choisir une valeur `\(\lambda\)` de sorte que le `\(\hat{f}\)` prédit est aussi proche que possible du `\(f\)` observé. Un critère approprié pourrait être de choisir `\(\lambda\)` pour minimiser :
 
 `$$M = 1/n \times \sum_{i=1}^n (\hat{f_i} - f_i)^2$$`
 
@@ -735,7 +735,7 @@ Nous discuterons du choix de `\(k\)` dans la section 5.
 
 ---
 
-# GAM à plusieurs variables
+# GAM à plusieurs variables linéaires et lisses
 
 Nous pouvons ajouter un second terme, `RelativeDepth`, mais spécifier une relation linéaire avec `Sources`
 
@@ -830,7 +830,7 @@ plot(two_smooth_model, page = 1, all.terms = TRUE)
 # GAM à plusieurs variables
 
 
-Comme auparavant, nous pouvons utiliser un AIC pour tester si le lissage de la variable est nécessaire.
+Comme précédemment, nous pouvons comparer nos modèles avec AIC pour tester si le terme non-linéaire améliore la performance de notre modèle:
 
 
 ```r
@@ -907,14 +907,25 @@ Comme avant, nous pouvons faire une AIC pour tester si le terme non-linéaire es
 AIC(basic_model, two_term_model, two_smooth_model)
 ```
 
-.alert[Le meilleur modèle est le modèle avec deux fonctions non linéaires.]
+--
+
+On peut voir que `two_smooth_model` a la plus petite valeur AIC.
+
+.alert[Le modèle le mieux ajusté comprend donc deux fonctions non-linéaires pour `SampleDepth` et `RelativeDepth`, et un terme linéaire pour `Season`.]
+
 ---
 # Défi 2 ![:cube]()
 
 &lt;br&gt;
 
-1. Créez deux nouveaux modèles en ajoutant la variable `Latitude` comme paramètre linéaire et non linéaire au modèle précédent.
-2. Utilisez des graphiques, les tables des coefficients et la fonction `AIC()` afin de déterminer s'il est nécessaire d'inclure `Latitude` dans le modèle.
+Pour notre deuxième défi, nous allons développer notre modèle en ajoutant des variables qui, selon nous, pourraient être des prédicteurs écologiquement significatifs pour expliquer la bioluminescence. 
+
+1. Créez deux nouveaux modèles: Ajoutez la variable `Latitude` à `two_smooth_model`, premièrement comme paramètre linéaire, et ensuite comme fonction non-linéaire.
+
+2. Est-ce que `Latitude` est un terme important à inclure dans le modèle? La `Latitude` a-t-elle un effet linéaire ou non-linéaire? 
+
+Utilisez des graphiques, les tables des coefficients et la fonction `AIC()` pour répondre à ces questions.
+
 
 ---
 exclude:true
@@ -928,49 +939,48 @@ exclude:true
 ---
 # Défi 2 - Solution ![:cube]()
 
-```r
-three_term_model &lt;- gam(Sources ~
-                          Season + s(SampleDepth) + s(RelativeDepth) +
-                          Latitude,
-                        data = isit, method = "REML")
 
-three_smooth_model &lt;- gam(Sources ~
-                            Season + s(SampleDepth) + s(RelativeDepth) +
+```r
+# Ajouter Latitude comme terme linéaire
+three_term_model &lt;- gam(Sources ~ 
+                          Season + s(SampleDepth) + s(RelativeDepth) + 
+                          Latitude, 
+                        data = isit, method = "REML")
+three_term_summary &lt;- summary(three_term_model)
+
+# Ajouter Latitude comme terme non-linéaire
+three_smooth_model &lt;- gam(Sources ~ 
+                            Season + s(SampleDepth) + s(RelativeDepth) + 
                             s(Latitude),
                           data = isit, method = "REML")
-
 three_smooth_summary &lt;- summary(three_smooth_model)
-three_smooth_summary
 ```
 
 ---
 # Défi 2 - Solution ![:cube]()
 
+__2.__ Est-ce que `Latitude` est un terme important à inclure dans le modèle? 
+
+Commençons par visualiser les 4 effets qui sont maintenant inclus dans chaque modèle. 
+---
+# Défi 2 - Solution ![:cube]()
+
+
+```r
+plot(three_term_model, page = 1, all.terms = TRUE)
 ```
-...
-# Family: gaussian 
-# Link function: identity 
-# 
-# Formula:
-# Sources ~ Season + s(SampleDepth) + s(RelativeDepth) + s(Latitude)
-# 
-# Parametric coefficients:
-#             Estimate Std. Error t value Pr(&gt;|t|)    
-# (Intercept)   6.7045     0.4716  14.215   &lt;2e-16 ***
-# Season2       7.1120     0.7441   9.557   &lt;2e-16 ***
-# ---
-# Approximate significance of smooth terms:
-#                    edf Ref.df      F p-value    
-# s(SampleDepth)   8.767  8.976 68.951  &lt;2e-16 ***
-# s(RelativeDepth) 8.007  8.731 17.639  &lt;2e-16 ***
-# s(Latitude)      7.431  8.297  8.954  &lt;2e-16 ***
-# ---
-# Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-# 
-# R-sq.(adj) =  0.771   Deviance explained = 77.8%
-# -REML = 2524.5  Scale est. = 31.487    n = 789
-...
+
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-53-1.png" width="576" style="display: block; margin: auto;" /&gt;
+
+---
+# Défi 2 - Solution ![:cube]()
+
+
+```r
+plot(three_smooth_model, page = 1, all.terms = TRUE)
 ```
+
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-55-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 ---
 exclude:true
@@ -992,10 +1002,12 @@ three_smooth_summary &lt;- summary(three_smooth_model)
 plot(three_smooth_model, page = 1, all.terms = TRUE)
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-55-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-58-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 ---
 # Défi 2 - Solution ![:cube]()
+
+Nous devrions également examiner nos tableaux de coefficients. Qu'est-ce que les EDF nous disent à propos de _l'ondulation_, ou la non-linéarité, des effets de nos prédicteurs?
 
 
 ```r
@@ -1004,15 +1016,51 @@ three_smooth_summary$s.table
 # s(SampleDepth)   8.766891 8.975682 68.950905       0
 # s(RelativeDepth) 8.007411 8.730625 17.639321       0
 # s(Latitude)      7.431116 8.296838  8.954349       0
-
-# edf = 1 donc le terme est linéaire.
-
-AIC(two_smooth_model, three_term_model)
-#                        df      AIC
-# two_smooth_model 20.46960 5056.841
-# three_term_model 21.47683 5051.415
 ```
 
+--
+
+Les EDF sont tous élevés pour nos variables, y compris `Latitude`. 
+
+Cela nous indique que `Latitude` est assez _ondulée_, et qu'elle ne devrait probablement pas être incluse comme terme linéaire.
+
+---
+# Défi 2 - Solution ![:cube]()
+
+Avant de décider quel modèle est le "meilleur", nous devrions tester si l'effet `Latitude` est plus approprié comme terme linéaire ou lisse, en utilisant `AIC()`:
+
+
+```r
+AIC(three_smooth_model, three_term_model)
+#                          df      AIC
+# three_smooth_model 28.20032 4990.546
+# three_term_model   21.47683 5051.415
+```
+
+--
+
+Notre modèle incluant la `Latitude` comme terme _non-linéaire_ a un score AIC inférieur, ce qui signifie qu'il est plus performant que notre modèle incluant la `Latitude` comme terme _linéaire_. 
+
+--
+
+Mais, est-ce que l'ajout de `Latitude` comme prédicteur non-linéaire améliore réellement notre "meilleur" modèle (`two_smooth_model`)?
+
+---
+# Défi 2 - Solution ![:cube]()
+
+
+```r
+AIC(two_smooth_model, three_smooth_model)
+#                          df      AIC
+# two_smooth_model   20.46960 5056.841
+# three_smooth_model 28.20032 4990.546
+```
+
+Notre `three_smooth_model` a un score AIC inférieur à notre meilleur modèle précédent (`two_smooth_model`), qui n'incluait pas `Latitude`. 
+
+--
+
+Ceci implique que `Latitude` est en effet un prédicteur informatif non-linéaire de la bioluminescence.
 
 ---
 class: inverse, center, middle
@@ -1069,7 +1117,7 @@ summary(factor_interact)$s.table
 plot(factor_interact, page = 1)
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-59-1.png" width="720" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-64-1.png" width="720" style="display: block; margin: auto;" /&gt;
 
 ---
 exclude:true
@@ -1113,7 +1161,7 @@ summary(smooth_interact)$s.table
 
 --
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-63-1.png" width="504" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-68-1.png" width="504" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -1126,7 +1174,7 @@ vis.gam(smooth_interact, view = c("SampleDepth", "RelativeDepth"),
         cond = list(Season = 1), theta=40, n.grid = 50, color = "cm")
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-64-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-69-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAM avec des termes d'interaction
@@ -1236,7 +1284,7 @@ Avons-nous choisi `k` assez grand ?
 ```r
 k.check(smooth_interact)
 #                              k'      edf   k-index p-value
-# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883    0.08
+# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883   0.055
 ```
 
 --
@@ -1270,7 +1318,7 @@ Est-ce que `k` est assez grand ?
 ```r
 k.check(smooth_interact_k60)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626  0.8475
+# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626   0.905
 ```
 
 --
@@ -1302,7 +1350,7 @@ gam.check(smooth_interact)
 
 # Validation d'un GAM
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-72-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-77-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 --
 &lt;br&gt;
@@ -1397,7 +1445,7 @@ Vérifier les dimensions de base :
 ```r
 k.check(smooth_interact_tw)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062   0.835
+# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062  0.8475
 ```
 
 ---
@@ -1413,7 +1461,7 @@ gam.check(smooth_interact_tw)
 ```
 
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-78-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-83-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 
 ???
@@ -1503,7 +1551,7 @@ qplot(nottem_month, nottem, colour = factor(nottem_year), geom = "line") +
 ---
 # Exemple avec des données cycliques
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-81-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-86-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 ---
 # Exemple avec des données cycliques
@@ -1527,7 +1575,7 @@ summary(year_gam)$s.table
 plot(year_gam, page = 1, scale = 0)
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-83-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-88-1.png" width="576" style="display: block; margin: auto;" /&gt;
 Il y a une hausse d'environ 1-1.5 degrés au cours de la série, mais au cours d'une année, il y a une variation d'environ 20 degrés. Les données réelles varient autour de ces valeurs prédites et ceci représente donc la variance inexpliquée.
 
 
@@ -1561,7 +1609,7 @@ pacf(resid(year_gam), lag.max = 36, main = "pACF")
 ---
 # Modèle avec erreurs autocorrélées
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-85-1.png" width="612" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-90-1.png" width="612" style="display: block; margin: auto;" /&gt;
 
 .comment[ACF donne la corrélation croisée et pACF la corrélation partielle d'une série temporelle avec elle-même à différent décalage de temps.]
 
@@ -1633,15 +1681,15 @@ gam_data2 &lt;- gamSim(eg = 6)
 # 4 term additive + random effectGu &amp; Wahba 4 term additive model
 str(gam_data2)
 # 'data.frame':	400 obs. of  11 variables:
-#  $ y  : num  9.92 23.01 19.86 28.42 15.01 ...
-#  $ x0 : num  0.726 0.211 0.402 0.333 0.886 ...
-#  $ x1 : num  0.9508 0.9406 0.1785 0.9964 0.0494 ...
-#  $ x2 : num  0.0433 0.2182 0.2372 0.5313 0.3856 ...
-#  $ x3 : num  0.0802 0.3277 0.4789 0.3318 0.3808 ...
-#  $ f  : num  11.7 22.7 21.2 23.9 9.5 ...
-#  $ f0 : num  1.518 1.233 1.907 1.731 0.702 ...
-#  $ f1 : num  6.7 6.56 1.43 7.34 1.1 ...
-#  $ f2 : num  0.521 8.864 8.907 2.786 4.697 ...
+#  $ y  : num  8.03 11.93 22.44 23.52 11.35 ...
+#  $ x0 : num  0.111 0.752 0.455 0.958 0.45 ...
+#  $ x1 : num  0.3549 0.2396 0.8521 0.0158 0.1478 ...
+#  $ x2 : num  0.828 0.092 0.384 0.203 0.655 ...
+#  $ x3 : num  0.108 0.865 0.811 0.271 0.296 ...
+#  $ f  : num  6.37 11.99 21.21 21.94 9.6 ...
+#  $ f0 : num  0.683 1.404 1.98 0.266 1.976 ...
+#  $ f1 : num  2.03 1.61 5.5 1.03 1.34 ...
+#  $ f2 : num  0.65 2.97 4.73 8.64 3.28 ...
 #  $ f3 : num  0 0 0 0 0 0 0 0 0 0 ...
 #  $ fac: Factor w/ 4 levels "1","2","3","4": 1 2 3 4 1 2 3 4 1 2 ...
 ```
@@ -1654,13 +1702,13 @@ str(gam_data2)
 ```r
 gamm_intercept &lt;- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2, method = "REML")
 summary(gamm_intercept)$s.table
-#             edf   Ref.df          F      p-value
-# s(x0)  3.034526 3.764812   5.017676 0.0008170679
-# s(fac) 2.972566 3.000000 108.265760 0.0000000000
+#             edf   Ref.df         F  p-value
+# s(x0)  1.941991 2.427264  1.086143 0.294817
+# s(fac) 2.969321 3.000000 96.603993 0.000000
 plot(gamm_intercept, select = 2)
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-89-1.png" width="396" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-94-1.png" width="396" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM avec un intercepte aléatoire
@@ -1689,7 +1737,7 @@ plot_smooth(gamm_intercept, view="x0", cond = list(fac = "4"), add = T, col = 't
 
 &lt;br&gt;
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-91-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-96-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 .pull-right[
 &amp;nbsp; &lt;font color="orange"&gt;fac1&lt;/font&gt; &amp;nbsp; &lt;font color="red"&gt;fac2&lt;/font&gt; &amp;nbsp; &lt;font color="purple"&gt;fac3&lt;/font&gt; &amp;nbsp; &lt;font color="turquoise"&gt;fac4&lt;/font&gt;
@@ -1704,9 +1752,9 @@ plot_smooth(gamm_intercept, view="x0", cond = list(fac = "4"), add = T, col = 't
 gamm_slope &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2, method = "REML")
 
 summary(gamm_slope)$s.table
-#                edf   Ref.df         F     p-value
-# s(x0)     2.986088 3.706455  4.121817 0.003497329
-# s(x0,fac) 2.945079 3.000000 56.306474 0.000000000
+#                edf   Ref.df           F   p-value
+# s(x0)     1.005025 1.010032  0.08810443 0.7696836
+# s(x0,fac) 2.951658 3.000000 62.47630405 0.0000000
 ```
 
 
@@ -1734,7 +1782,7 @@ plot_smooth(gamm_slope, view = "x0", cond = list(fac = "4"), add = T, col = 'tur
 
 &lt;br&gt;
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-94-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-99-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM avec un intercepte et une pente aléatoire
@@ -1745,10 +1793,10 @@ gamm_int_slope &lt;- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
                       data = gam_data2, method = "REML")
 
 summary(gamm_int_slope)$s.table
-#                edf   Ref.df          F     p-value
-# s(x0)     3.003635 3.725804   4.543969 0.001797711
-# s(fac)    2.946467 3.000000 402.375282 0.000000000
-# s(fac,x0) 1.371616 3.000000  73.555379 0.133234194
+#                    edf   Ref.df            F   p-value
+# s(x0)     1.9419893171 2.427261 1.086045e+00 0.2948499
+# s(fac)    2.9692942849 3.000000 9.668629e+01 0.0000000
+# s(fac,x0) 0.0008880209 3.000000 9.253175e-05 0.8298992
 ```
 
 ---
@@ -1775,7 +1823,7 @@ plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "4"), add = T, col = 
 
 &lt;br&gt;
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-97-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-102-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM avec un intercepte et une pente aléatoire
@@ -1787,7 +1835,7 @@ Notez que la pente aléatoire est statique dans ce cas :
 plot(gamm_int_slope, select = 3)
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-98-1.png" width="360" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-103-1.png" width="360" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM avec une surface lisse aléatoire
@@ -1798,9 +1846,9 @@ gamm_smooth &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1),
                    data = gam_data2, method = "REML")
 
 summary(gamm_smooth)$s.table
-#                edf    Ref.df        F     p-value
-# s(x0)     2.900655  3.559262 3.835432 0.006198029
-# s(x0,fac) 5.892172 35.000000 9.510118 0.000000000
+#                edf    Ref.df        F   p-value
+# s(x0)     1.941962  2.427206 1.085964 0.2948811
+# s(x0,fac) 2.970993 35.000000 8.280364 0.0000000
 ```
 
 ---
@@ -1813,7 +1861,7 @@ Ici, si les pentes aléatoires variaient selon `x0`, nous aurons des courbes var
 plot(gamm_smooth, select = 1)
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-100-1.png" width="360" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-105-1.png" width="360" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM avec une surface lisse aléatoire
@@ -1839,7 +1887,7 @@ plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "4"), add = T, col = 'tu
 
 &lt;br&gt;
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-102-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-107-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 .comment[Ici, si la pente aléatoire varie selon `x0`, nous aurons des courbes variables pour chaque niveau.]
 
@@ -1851,11 +1899,11 @@ Tous ces modèles mixtes peuvent être comparés en utilisant la fonction `AIC()
 
 ```r
 AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
-#                       df      AIC
-# gamm_intercept  8.498658 2285.719
-# gamm_slope      8.450640 2382.930
-# gamm_int_slope 10.805609 2286.058
-# gamm_smooth    13.161587 2287.861
+#                      df      AIC
+# gamm_intercept 7.426922 2245.633
+# gamm_slope     6.009251 2308.917
+# gamm_int_slope 7.428640 2245.636
+# gamm_smooth    7.430181 2245.638
 ```
 
 
@@ -1923,7 +1971,7 @@ avg &lt;- aggregate(prop ~ x1, data=gam_data3, mean)
 lines(avg$x1, avg$prop, col = "orange", lwd = 2)
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-105-1.png" width="288" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-110-1.png" width="288" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAM avec d'autres distributions
@@ -2007,7 +2055,7 @@ Cela représente comment le ratio de succès vs échecs change sur l'échelle de
 plot(prop_model)
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-112-1.png" width="309.6" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-117-1.png" width="309.6" style="display: block; margin: auto;" /&gt;
 
 ---
 # Visualiser la tendance au fil du temps
@@ -2023,7 +2071,7 @@ Il y a différente façon de représenter cette relation graphiquement :
 
 Que nous disent ces graphes sur les succès et échecs?
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-113-1.png" width="648" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-118-1.png" width="648" style="display: block; margin: auto;" /&gt;
 
 
 

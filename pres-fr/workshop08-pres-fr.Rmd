@@ -521,7 +521,7 @@ nested_gam_model_test
 **Réponse** Oui la non-linéarité est justifiée. Les degrés de liberté effectifs (**EDF**) sont >> 1 (on reviendra la dessus bientôt).
 
 ---
-# Un regard plus approfondi sur les GAMs
+# Le fonctionnement des GAMs
 
 Nous allons maintenant prendre quelques minutes pour regarder comment fonctionnent les GAMs. Commençons en considérant d'abord un modèle qui contient une fonction lisse $f$ d'une covariable, $x$ :
 
@@ -586,7 +586,7 @@ Au lieu de contrôler le lissage (non linéarité) en modifiant le nombre de nœ
 
 $$||y - XB||^{2}$$
 
-Il peut être modélisé en minimisant :
+Le modèle peut être ajusté en minimisant:
 
 $$||y - XB||^{2} + \lambda \int_0^1[f^{''}(x)]^2dx$$
 
@@ -595,7 +595,7 @@ Quand $\lambda$ tend vers $∞$, le modèle devient linéaire.
 ---
 # Contrôler le degré de lissage avec des splines de régression pénalisés
 
-Si $λ$ est trop élevé, les données seront trop lissées et si elle est trop faible, les données ne seront pas assez lissées. Idéalement, il serait bon de choisir une valeur $λ$ de sorte que le $\hat{f}$ prédit est aussi proche que possible du $f$ observé. Un critère approprié pourrait être de choisir $λ$ pour minimiser :
+Si $\lambda$ est trop élevé, les données seront trop lissées et si elle est trop faible, les données ne seront pas assez lissées. Idéalement, il serait bon de choisir une valeur $\lambda$ de sorte que le $\hat{f}$ prédit est aussi proche que possible du $f$ observé. Un critère approprié pourrait être de choisir $\lambda$ pour minimiser :
 
 $$M = 1/n \times \sum_{i=1}^n (\hat{f_i} - f_i)^2$$
 
@@ -756,7 +756,7 @@ Nous discuterons du choix de $k$ dans la section 5.
 
 ---
 
-# GAM à plusieurs variables
+# GAM à plusieurs variables linéaires et lisses
 
 Nous pouvons ajouter un second terme, `RelativeDepth`, mais spécifier une relation linéaire avec `Sources`
 
@@ -827,7 +827,7 @@ plot(two_smooth_model, page = 1, all.terms = TRUE)
 # GAM à plusieurs variables
 
 
-Comme auparavant, nous pouvons utiliser un AIC pour tester si le lissage de la variable est nécessaire.
+Comme précédemment, nous pouvons comparer nos modèles avec AIC pour tester si le terme non-linéaire améliore la performance de notre modèle:
 
 ```{r}
 AIC(basic_model, two_term_model, two_smooth_model)
@@ -894,14 +894,25 @@ Comme avant, nous pouvons faire une AIC pour tester si le terme non-linéaire es
 AIC(basic_model, two_term_model, two_smooth_model)
 ```
 
-.alert[Le meilleur modèle est le modèle avec deux fonctions non linéaires.]
+--
+
+On peut voir que `two_smooth_model` a la plus petite valeur AIC.
+
+.alert[Le modèle le mieux ajusté comprend donc deux fonctions non-linéaires pour `SampleDepth` et `RelativeDepth`, et un terme linéaire pour `Season`.]
+
 ---
 # Défi 2 ![:cube]()
 
 <br>
 
-1. Créez deux nouveaux modèles en ajoutant la variable `Latitude` comme paramètre linéaire et non linéaire au modèle précédent.
-2. Utilisez des graphiques, les tables des coefficients et la fonction `AIC()` afin de déterminer s'il est nécessaire d'inclure `Latitude` dans le modèle.
+Pour notre deuxième défi, nous allons développer notre modèle en ajoutant des variables qui, selon nous, pourraient être des prédicteurs écologiquement significatifs pour expliquer la bioluminescence. 
+
+1. Créez deux nouveaux modèles: Ajoutez la variable `Latitude` à `two_smooth_model`, premièrement comme paramètre linéaire, et ensuite comme fonction non-linéaire.
+
+2. Est-ce que `Latitude` est un terme important à inclure dans le modèle? La `Latitude` a-t-elle un effet linéaire ou non-linéaire? 
+
+Utilisez des graphiques, les tables des coefficients et la fonction `AIC()` pour répondre à ces questions.
+
 
 ---
 exclude:true
@@ -914,36 +925,51 @@ exclude:true
 
 ---
 # Défi 2 - Solution ![:cube]()
-```{r,eval=FALSE}
-three_term_model <- gam(Sources ~
-                          Season + s(SampleDepth) + s(RelativeDepth) +
-                          Latitude,
-                        data = isit, method = "REML")
 
-three_smooth_model <- gam(Sources ~
-                            Season + s(SampleDepth) + s(RelativeDepth) +
+```{r, eval=TRUE}
+# Ajouter Latitude comme terme linéaire
+three_term_model <- gam(Sources ~ 
+                          Season + s(SampleDepth) + s(RelativeDepth) + 
+                          Latitude, 
+                        data = isit, method = "REML")
+three_term_summary <- summary(three_term_model)
+
+# Ajouter Latitude comme terme non-linéaire
+three_smooth_model <- gam(Sources ~ 
+                            Season + s(SampleDepth) + s(RelativeDepth) + 
                             s(Latitude),
                           data = isit, method = "REML")
-
 three_smooth_summary <- summary(three_smooth_model)
-three_smooth_summary
 ```
 
 ---
 # Défi 2 - Solution ![:cube]()
-```{r,eval=TRUE,echo=FALSE, output.lines = -c(1,13,14)}
-three_term_model <- gam(Sources ~
-                          Season + s(SampleDepth) + s(RelativeDepth) +
-                          Latitude,
-                        data = isit, method = "REML")
 
-three_smooth_model <- gam(Sources ~
-                            Season + s(SampleDepth) + s(RelativeDepth) +
-                            s(Latitude),
-                          data = isit, method = "REML")
+__2.__ Est-ce que `Latitude` est un terme important à inclure dans le modèle? 
 
-three_smooth_summary <- summary(three_smooth_model)
-three_smooth_summary
+Commençons par visualiser les 4 effets qui sont maintenant inclus dans chaque modèle. 
+---
+# Défi 2 - Solution ![:cube]()
+
+```{r, eval = FALSE}
+plot(three_term_model, page = 1, all.terms = TRUE)
+```
+
+```{r, fig.width = 8, fig.height = 7, echo = FALSE}
+par(mar=c(3.8,3.8,.2,.2))
+plot(three_term_model, page = 1, all.terms = TRUE)
+```
+
+---
+# Défi 2 - Solution ![:cube]()
+
+```{r, eval = FALSE}
+plot(three_smooth_model, page = 1, all.terms = TRUE)
+```
+
+```{r, fig.width = 8, fig.height = 7, echo = FALSE}
+par(mar=c(3.8,3.8,.2,.2))
+plot(three_smooth_model, page = 1, all.terms = TRUE)
 ```
 
 ---
@@ -972,15 +998,47 @@ plot(three_smooth_model, page = 1,all.terms = TRUE)
 ---
 # Défi 2 - Solution ![:cube]()
 
+Nous devrions également examiner nos tableaux de coefficients. Qu'est-ce que les EDF nous disent à propos de _l'ondulation_, ou la non-linéarité, des effets de nos prédicteurs?
+
 ```{r}
 three_smooth_summary$s.table
-
-# edf = 1 donc le terme est linéaire.
-
-AIC(two_smooth_model, three_term_model)
-
 ```
 
+--
+
+Les EDF sont tous élevés pour nos variables, y compris `Latitude`. 
+
+Cela nous indique que `Latitude` est assez _ondulée_, et qu'elle ne devrait probablement pas être incluse comme terme linéaire.
+
+---
+# Défi 2 - Solution ![:cube]()
+
+Avant de décider quel modèle est le "meilleur", nous devrions tester si l'effet `Latitude` est plus approprié comme terme linéaire ou lisse, en utilisant `AIC()`:
+
+```{r}
+AIC(three_smooth_model, three_term_model)
+```
+
+--
+
+Notre modèle incluant la `Latitude` comme terme _non-linéaire_ a un score AIC inférieur, ce qui signifie qu'il est plus performant que notre modèle incluant la `Latitude` comme terme _linéaire_. 
+
+--
+
+Mais, est-ce que l'ajout de `Latitude` comme prédicteur non-linéaire améliore réellement notre "meilleur" modèle (`two_smooth_model`)?
+
+---
+# Défi 2 - Solution ![:cube]()
+
+```{r}
+AIC(two_smooth_model, three_smooth_model)
+```
+
+Notre `three_smooth_model` a un score AIC inférieur à notre meilleur modèle précédent (`two_smooth_model`), qui n'incluait pas `Latitude`. 
+
+--
+
+Ceci implique que `Latitude` est en effet un prédicteur informatif non-linéaire de la bioluminescence.
 
 ---
 class: inverse, center, middle

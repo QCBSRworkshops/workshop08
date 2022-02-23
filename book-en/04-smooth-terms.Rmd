@@ -71,7 +71,7 @@ Because the number of free parameters in GAMs is difficult to define, the **EDF*
 
 An upper bound on the **EDF** is determined by the basis dimension $k$ for each smooth function, meaning the **EDF** cannot exceed $k-1$. 
 
-In practice, the exact choice of $k$ is arbitrary, but it should be **large enough** to accommodate a sufficiently complex smooth function. We will talk about choosing $k$ in [SECTION HERE].
+In practice, the exact choice of $k$ is arbitrary, but it should be **large enough** to accommodate a sufficiently complex smooth function. We will talk about choosing $k$ in [Chapter 6](#model-checking).
 
 :::explanation
 Higher EDF imply more complex, wiggly splines.

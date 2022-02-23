@@ -14,11 +14,11 @@ how-gams-work
 example-a-polynomial-basis
 example-a-cubic-spline-basis
 controlling-the-degree-of-smoothing-with-penalized-regression-splines
-gam-with-multiple-terms
+gam-with-multiple-smooth-terms
 gam-with-linear-and-smooth-terms
 edf
 gam-with-multiple-linear-and-smooth-terms
-gam-with-multiple-smooth-terms
+gam-with-multiple-smooth-terms-1
 challenge-2
 challenge-2-solution
 interactions

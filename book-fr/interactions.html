@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapitre 6 Interactions | Atelier 8 : Modèles additifs généralisés en R</title>
+  <title>Chapitre 7 Interactions | Atelier 8 : Modèles additifs généralisés en R</title>
   <meta name="description" content="Modèles additifs généralisés en R" />
   <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapitre 6 Interactions | Atelier 8 : Modèles additifs généralisés en R" />
+  <meta property="og:title" content="Chapitre 7 Interactions | Atelier 8 : Modèles additifs généralisés en R" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://github.com/qcbsRworkshops/" />
   <meta property="og:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="qcbsRworkshops/workshop08" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapitre 6 Interactions | Atelier 8 : Modèles additifs généralisés en R" />
+  <meta name="twitter:title" content="Chapitre 7 Interactions | Atelier 8 : Modèles additifs généralisés en R" />
   
   <meta name="twitter:description" content="Modèles additifs généralisés en R" />
   <meta name="twitter:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -30,7 +30,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />
-<link rel="prev" href="plusieurs-termes-non-linéaires.html"/>
+<link rel="prev" href="gam-avec-plusieurs-termes-non-linéaires.html"/>
 <link rel="next" href="changer-la-fonction-de-base.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -155,28 +155,30 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.2.1" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#défi-1-solution"><i class="fa fa-check"></i><b>4.2.1</b> Défi 1: Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="plusieurs-termes-non-linéaires.html"><a href="plusieurs-termes-non-linéaires.html"><i class="fa fa-check"></i><b>5</b> Plusieurs termes non linéaires</a><ul>
-<li class="chapter" data-level="5.1" data-path="plusieurs-termes-non-linéaires.html"><a href="plusieurs-termes-non-linéaires.html#défi-2"><i class="fa fa-check"></i><b>5.1</b> DÉFI 2</a><ul>
-<li class="chapter" data-level="5.1.1" data-path="plusieurs-termes-non-linéaires.html"><a href="plusieurs-termes-non-linéaires.html#réponse-au-défi-2"><i class="fa fa-check"></i><b>5.1.1</b> Réponse au défi 2</a></li>
+<li class="chapter" data-level="5" data-path="fonctionnement.html"><a href="fonctionnement.html"><i class="fa fa-check"></i><b>5</b> Le fonctionnement des GAMs</a><ul>
+<li class="chapter" data-level="5.1" data-path="fonctionnement.html"><a href="fonctionnement.html#exemple-une-base-polynomiale"><i class="fa fa-check"></i><b>5.1</b> Exemple: une base polynomiale</a></li>
+<li class="chapter" data-level="5.2" data-path="fonctionnement.html"><a href="fonctionnement.html#exemple-une-base-de-spline-cubique"><i class="fa fa-check"></i><b>5.2</b> Exemple: une base de spline cubique</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="fonctionnement.html"><a href="fonctionnement.html#contrôler-le-degré-de-lissage-avec-des-splines-de-régression-pénalisés"><i class="fa fa-check"></i><b>5.2.1</b> Contrôler le degré de lissage avec des splines de régression pénalisés</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="interactions.html"><a href="interactions.html"><i class="fa fa-check"></i><b>6</b> Interactions</a></li>
+<li class="chapter" data-level="6" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html"><i class="fa fa-check"></i><b>6</b> GAM avec plusieurs termes non-linéaires</a><ul>
+<li class="chapter" data-level="6.1" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables"><i class="fa fa-check"></i><b>6.1</b> GAM à plusieurs variables</a></li>
+<li class="chapter" data-level="6.2" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#degrés-de-liberté-effectifs-edf"><i class="fa fa-check"></i><b>6.2</b> Degrés de liberté effectifs (edf)</a></li>
+<li class="chapter" data-level="6.3" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables-linéaires-et-lisses"><i class="fa fa-check"></i><b>6.3</b> GAM à plusieurs variables linéaires et lisses</a></li>
+<li class="chapter" data-level="6.4" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables-1"><i class="fa fa-check"></i><b>6.4</b> GAM à plusieurs variables</a></li>
+<li class="chapter" data-level="6.5" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#défi-2"><i class="fa fa-check"></i><b>6.5</b> Défi 2</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#défi-2-solution"><i class="fa fa-check"></i><b>6.5.1</b> Défi 2: Solution</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="interactions.html"><a href="interactions.html"><i class="fa fa-check"></i><b>7</b> Interactions</a></li>
 <li class="part"><span><b>Concepts Avancés</b></span></li>
-<li class="chapter" data-level="7" data-path="changer-la-fonction-de-base.html"><a href="changer-la-fonction-de-base.html"><i class="fa fa-check"></i><b>7</b> Changer la fonction de base</a></li>
-<li class="chapter" data-level="8" data-path="autres-distributions.html"><a href="autres-distributions.html"><i class="fa fa-check"></i><b>8</b> Autres distributions</a><ul>
-<li class="chapter" data-level="8.1" data-path="autres-distributions.html"><a href="autres-distributions.html#visualiser-la-tendance-au-fil-du-temps"><i class="fa fa-check"></i><b>8.1</b> Visualiser la tendance au fil du temps</a></li>
+<li class="chapter" data-level="8" data-path="changer-la-fonction-de-base.html"><a href="changer-la-fonction-de-base.html"><i class="fa fa-check"></i><b>8</b> Changer la fonction de base</a></li>
+<li class="chapter" data-level="9" data-path="autres-distributions.html"><a href="autres-distributions.html"><i class="fa fa-check"></i><b>9</b> Autres distributions</a><ul>
+<li class="chapter" data-level="9.1" data-path="autres-distributions.html"><a href="autres-distributions.html#visualiser-la-tendance-au-fil-du-temps"><i class="fa fa-check"></i><b>9.1</b> Visualiser la tendance au fil du temps</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><i class="fa fa-check"></i><b>9</b> Intro rapide aux modèles additifs généralisés à effets mixtes (GAMMs)</a><ul>
-<li class="chapter" data-level="9.1" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#la-non-indépendance-des-données"><i class="fa fa-check"></i><b>9.1</b> La non-indépendance des données</a></li>
-<li class="chapter" data-level="9.2" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#modélisation-avec-effets-mixtes"><i class="fa fa-check"></i><b>9.2</b> Modélisation avec effets mixtes</a></li>
-</ul></li>
-<li class="chapter" data-level="10" data-path="les-gams-en-coulisse.html"><a href="les-gams-en-coulisse.html"><i class="fa fa-check"></i><b>10</b> Les GAMs en coulisse</a><ul>
-<li class="chapter" data-level="10.1" data-path="les-gams-en-coulisse.html"><a href="les-gams-en-coulisse.html#un-exemple-simple-une-base-polynomiale"><i class="fa fa-check"></i><b>10.1</b> Un exemple simple : une base polynomiale</a></li>
-<li class="chapter" data-level="10.2" data-path="les-gams-en-coulisse.html"><a href="les-gams-en-coulisse.html#un-autre-exemple-une-base-de-spline-cubique"><i class="fa fa-check"></i><b>10.2</b> Un autre exemple : une base de spline cubique</a><ul>
-<li class="chapter" data-level="10.2.1" data-path="les-gams-en-coulisse.html"><a href="les-gams-en-coulisse.html#contrôler-le-degré-de-lissage-avec-des-splines-de-régression-pénalisés"><i class="fa fa-check"></i><b>10.2.1</b> Contrôler le degré de lissage avec des splines de régression pénalisés</a></li>
-</ul></li>
-<li class="chapter" data-level="10.3" data-path="les-gams-en-coulisse.html"><a href="les-gams-en-coulisse.html#illustration-du-principe-de-validation-croisée"><i class="fa fa-check"></i><b>10.3</b> Illustration du principe de validation croisée</a></li>
-<li class="chapter" data-level="10.4" data-path="les-gams-en-coulisse.html"><a href="les-gams-en-coulisse.html#note-supplémentaire-sur-les-degrés-de-liberté-effectifs-edf"><i class="fa fa-check"></i><b>10.4</b> Note supplémentaire sur les degrés de liberté effectifs (edf)</a></li>
+<li class="chapter" data-level="10" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><i class="fa fa-check"></i><b>10</b> Intro rapide aux modèles additifs généralisés à effets mixtes (GAMMs)</a><ul>
+<li class="chapter" data-level="10.1" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#la-non-indépendance-des-données"><i class="fa fa-check"></i><b>10.1</b> La non-indépendance des données</a></li>
+<li class="chapter" data-level="10.2" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#modélisation-avec-effets-mixtes"><i class="fa fa-check"></i><b>10.2</b> Modélisation avec effets mixtes</a></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="ressources.html"><a href="ressources.html"><i class="fa fa-check"></i><b>11</b> Ressources</a></li>
 <li class="chapter" data-level="12" data-path="réferences.html"><a href="réferences.html"><i class="fa fa-check"></i><b>12</b> Réferences</a></li>
@@ -216,7 +218,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 </div>
 --!>
 <div id="interactions" class="section level1">
-<h1><span class="header-section-number">Chapitre 6</span> Interactions</h1>
+<h1><span class="header-section-number">Chapitre 7</span> Interactions</h1>
 <p>Il y a deux façons de modéliser une interaction entre deux variables:</p>
 <ul>
 <li>si une variable est quantitative et l’autre est qualitative, on
@@ -230,16 +232,16 @@ notre variable qualitative <code>x0</code> et examiner si la non-linérité de
 <code>s(x2)</code> varie selon les différents niveaux de <code>x0</code>. Pour déterminer si
 les courbes diffèrent significativement entre les niveaux du facteur,
 nous allons utiliser une ANOVA sur l’interaction.</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="interactions.html#cb29-1"></a>categorical_interact &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>x0 <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x1) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x2, <span class="dt">by =</span> x0),</span>
-<span id="cb29-2"><a href="interactions.html#cb29-2"></a>    <span class="dt">data =</span> gam_data)</span>
-<span id="cb29-3"><a href="interactions.html#cb29-3"></a>categorical_interact_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(categorical_interact)</span>
-<span id="cb29-4"><a href="interactions.html#cb29-4"></a><span class="kw">print</span>(categorical_interact_summary<span class="op">$</span>s.table)</span>
-<span id="cb29-5"><a href="interactions.html#cb29-5"></a><span class="kw">plot</span>(categorical_interact, <span class="dt">page =</span> <span class="dv">1</span>)</span>
-<span id="cb29-6"><a href="interactions.html#cb29-6"></a><span class="co"># ou nous pouvons utiliser la fonction vis.gam où theta</span></span>
-<span id="cb29-7"><a href="interactions.html#cb29-7"></a><span class="co"># représente la rotation du plan x-y</span></span>
-<span id="cb29-8"><a href="interactions.html#cb29-8"></a><span class="kw">vis.gam</span>(categorical_interact, <span class="dt">view =</span> <span class="kw">c</span>(<span class="st">&quot;x2&quot;</span>, <span class="st">&quot;x0&quot;</span>), <span class="dt">theta =</span> <span class="dv">40</span>,</span>
-<span id="cb29-9"><a href="interactions.html#cb29-9"></a>    <span class="dt">n.grid =</span> <span class="dv">500</span>, <span class="dt">border =</span> <span class="ot">NA</span>)</span>
-<span id="cb29-10"><a href="interactions.html#cb29-10"></a><span class="kw">anova</span>(two_smooth_model, categorical_interact, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="interactions.html#cb56-1"></a>categorical_interact &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>x0 <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x1) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x2, <span class="dt">by =</span> x0),</span>
+<span id="cb56-2"><a href="interactions.html#cb56-2"></a>    <span class="dt">data =</span> gam_data)</span>
+<span id="cb56-3"><a href="interactions.html#cb56-3"></a>categorical_interact_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(categorical_interact)</span>
+<span id="cb56-4"><a href="interactions.html#cb56-4"></a><span class="kw">print</span>(categorical_interact_summary<span class="op">$</span>s.table)</span>
+<span id="cb56-5"><a href="interactions.html#cb56-5"></a><span class="kw">plot</span>(categorical_interact, <span class="dt">page =</span> <span class="dv">1</span>)</span>
+<span id="cb56-6"><a href="interactions.html#cb56-6"></a><span class="co"># ou nous pouvons utiliser la fonction vis.gam où theta</span></span>
+<span id="cb56-7"><a href="interactions.html#cb56-7"></a><span class="co"># représente la rotation du plan x-y</span></span>
+<span id="cb56-8"><a href="interactions.html#cb56-8"></a><span class="kw">vis.gam</span>(categorical_interact, <span class="dt">view =</span> <span class="kw">c</span>(<span class="st">&quot;x2&quot;</span>, <span class="st">&quot;x0&quot;</span>), <span class="dt">theta =</span> <span class="dv">40</span>,</span>
+<span id="cb56-9"><a href="interactions.html#cb56-9"></a>    <span class="dt">n.grid =</span> <span class="dv">500</span>, <span class="dt">border =</span> <span class="ot">NA</span>)</span>
+<span id="cb56-10"><a href="interactions.html#cb56-10"></a><span class="kw">anova</span>(two_smooth_model, categorical_interact, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
 <p><img src="images/graphic3.1b.png" width="350" /></p>
 <p>Nous pouvons constater à partir du graphique que les formes des termes
 non linéaires sont comparables entre les quatre niveaux de <code>x0</code>.
@@ -247,15 +249,15 @@ L’ANOVA le confirme également (déviance = 98,6, <em>p</em> = 0,2347).</p>
 <p>Ensuite, nous allons examiner l’interaction non linéaire entre deux
 termes quantitatifs, <code>x1</code> et <code>x2</code>. Cette fois-ci, l’argument <code>by</code> est
 supprimé.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="interactions.html#cb30-1"></a>smooth_interact &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>x0 <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x1, x2), <span class="dt">data =</span> gam_data)</span>
-<span id="cb30-2"><a href="interactions.html#cb30-2"></a>smooth_interact_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(smooth_interact)</span>
-<span id="cb30-3"><a href="interactions.html#cb30-3"></a><span class="kw">print</span>(smooth_interact_summary<span class="op">$</span>s.table)</span>
-<span id="cb30-4"><a href="interactions.html#cb30-4"></a><span class="kw">plot</span>(smooth_interact, <span class="dt">page =</span> <span class="dv">1</span>, <span class="dt">scheme =</span> <span class="dv">3</span>)</span>
-<span id="cb30-5"><a href="interactions.html#cb30-5"></a><span class="co"># plot(smooth_interact,page=1,scheme=1) donne un graphique</span></span>
-<span id="cb30-6"><a href="interactions.html#cb30-6"></a><span class="co"># comparable à vis.gam()</span></span>
-<span id="cb30-7"><a href="interactions.html#cb30-7"></a><span class="kw">vis.gam</span>(smooth_interact, <span class="dt">view =</span> <span class="kw">c</span>(<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>), <span class="dt">theta =</span> <span class="dv">40</span>, <span class="dt">n.grid =</span> <span class="dv">500</span>,</span>
-<span id="cb30-8"><a href="interactions.html#cb30-8"></a>    <span class="dt">border =</span> <span class="ot">NA</span>)</span>
-<span id="cb30-9"><a href="interactions.html#cb30-9"></a><span class="kw">anova</span>(two_smooth_model, smooth_interact, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="interactions.html#cb57-1"></a>smooth_interact &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>x0 <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x1, x2), <span class="dt">data =</span> gam_data)</span>
+<span id="cb57-2"><a href="interactions.html#cb57-2"></a>smooth_interact_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(smooth_interact)</span>
+<span id="cb57-3"><a href="interactions.html#cb57-3"></a><span class="kw">print</span>(smooth_interact_summary<span class="op">$</span>s.table)</span>
+<span id="cb57-4"><a href="interactions.html#cb57-4"></a><span class="kw">plot</span>(smooth_interact, <span class="dt">page =</span> <span class="dv">1</span>, <span class="dt">scheme =</span> <span class="dv">3</span>)</span>
+<span id="cb57-5"><a href="interactions.html#cb57-5"></a><span class="co"># plot(smooth_interact,page=1,scheme=1) donne un graphique</span></span>
+<span id="cb57-6"><a href="interactions.html#cb57-6"></a><span class="co"># comparable à vis.gam()</span></span>
+<span id="cb57-7"><a href="interactions.html#cb57-7"></a><span class="kw">vis.gam</span>(smooth_interact, <span class="dt">view =</span> <span class="kw">c</span>(<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>), <span class="dt">theta =</span> <span class="dv">40</span>, <span class="dt">n.grid =</span> <span class="dv">500</span>,</span>
+<span id="cb57-8"><a href="interactions.html#cb57-8"></a>    <span class="dt">border =</span> <span class="ot">NA</span>)</span>
+<span id="cb57-9"><a href="interactions.html#cb57-9"></a><span class="kw">anova</span>(two_smooth_model, smooth_interact, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
 <p><img src="images/graphic3.2b.png" width="350" /></p>
 <p>L’interaction entre <code>s(x1)</code> et <code>s(x2)</code> est significative et le
 graphique en deux dimensions illustre très bien cette interaction non
@@ -280,7 +282,7 @@ des calculs intensifs et ralentit R.</p>
           </div>
         </div>
       </div>
-<a href="plusieurs-termes-non-linéaires.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="gam-avec-plusieurs-termes-non-linéaires.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="changer-la-fonction-de-base.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>

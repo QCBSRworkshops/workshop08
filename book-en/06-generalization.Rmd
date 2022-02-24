@@ -1,0 +1,207 @@
+# (PART\*) Generalization of additive models {-}
+
+The basic additive model can be extended in the following ways:
+
+1. Using other **distributions** for the response variable with the `family` argument (just as in a GLM),
+2. Using different kinds of **basis functions**,
+3. Using different kinds of **random effects** to fit mixed effect models.
+
+We will now go over these aspects.
+
+# GAM model checking {#gam-model-checking}
+
+So far, we have worked with simple (Gaussian) additive models, the non-linear equivalent to a linear model. 
+
+However, ecological datasets often do not fit the assumptions rof Gaussian models. So, what can we do if the observations of the response variable do **not follow a Normal distribution**? Or if the **variance is not constant** (heteroscedasticity)?
+
+Just like generalized linear models (GLM), we can formulate **generalized** additive models to deal with these issues.
+
+Let us return to our smooth interaction model for the bioluminescence data:
+
+```{r}
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), 
+                       data = isit, method = "REML")
+
+summary(smooth_interact)$p.table
+
+summary(smooth_interact)$s.table
+```
+
+As with a GLM, it is essential to check whether the model is correctly specified, especially in regards to the *distribution* of the response variable. We need to verify:
+
+1. The choice of our basis dimension, $k$.
+2. The distribution of the model residuals, just as we do for a GLM (see [Workshop 6](https://r.qcbs.ca/workshops/r-workshop-06/)).
+
+Luckily, `mgcv` includes helpful functions for model checking:
+
+- `k.check()` performs a basis dimension check.
+- `gam.check()` produces residual plots (and also calls `k.check()`).
+
+## Selecting $k$
+
+In [Chapter 5](#how-gams-work), we discussed the role of the smoothing parameter $\lambda$ in controlling the _wiggliness_ of our smoothing functions. This _wiggliness_ is further controlled by the basis dimension $k$, which sets the number of basis functions used to create a smooth function. 
+
+Each smooth in a GAM essentially the weighted sum of many smaller functions, called basis functions. The more basis functions used to build a smooth function, the more _wiggly_ the smooth. As you can see below, a smooth with a small $k$ basis dimension will be less wiggly than a smooth with a high $k$ basis dimension.
+
+```{r, out.width = '33%', echo = FALSE, fig.height = 8}
+k_plot <- function(k_value){
+    data("eeg")
+    m <- mgcv::gam(Ampl ~ s(Time, k = k_value), data = eeg)
+     p <- ggplot(eeg, aes(x = Time, y = Ampl)) +
+     geom_point(alpha = .1, size = 3) + 
+     geom_line(aes(y = predict(m)),
+               lwd = 2, col = "black") +
+         labs(title = paste("k =", k_value), x = "", y = "") +
+         theme_classic() + 
+         theme(text = element_text(size = 30), 
+               axis.text = element_blank(),
+               plot.title = element_text(face = "bold", hjust = 0.5))  
+    return(p)
+}
+k_plot(3)
+k_plot(6)
+k_plot(10)
+```
+
+
+Throughout this workshop, we have been working towards improving the fit of our model, meaning we have been trying to build the best possible GAM to capture relationships in our dataset. The key to getting a good model fit is to __balance__ the trade-off between two things:
+
++ The smoothing parameter $\lambda$, which _penalizes wiggliness_;
++ The basis dimension $k$, which allows the model to _wiggle_ according to our data.
+
+:::puzzle
+Have we optimized the tradeoff between smoothness ($\lambda$) and _wiggliness_ ($k$) in our model?
+:::
+
+### Is our model wiggly enough? 
+
+Although we have not yet specified a $k$ value in our model, we know that the default for smooth interactions in `gam()` is `k = 30`.
+
+Is $k$ large enough?
+
+```{r}
+k.check(smooth_interact)
+```
+
+The **EDF are very close to** `k`. This means the _wiggliness_ of the model is being overly constrained by the default `k = 30`, and could fit the data better with greater wiggliness. In other words, the tradeoff between smoothness and wiggliness is not balanced.
+
+We can refit the model with a larger `k`:
+
+```{r}
+smooth_interact_k60 <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+                           data = isit, method = "REML")
+```
+
+Is `k` large enough this time?
+
+```{r}
+k.check(smooth_interact_k60)
+```
+
+The EDF are much smaller than `k`, which means this model fits the data better with additional wiggliness. We can replace our previous model with this wigglier version:
+
+```{r}
+smooth_interact <- smooth_interact_k60
+```
+
+
+### Is our model actually Normal? 
+
+As with any Normal model, we must check some model assumptions before continuing. We can evaluate the distribution of the model residuals to verify these assumptions, just as we would do for a GLM (see [Workshop 6](https://r.qcbs.ca/workshops/r-workshop-06/)).
+
+We can look at the residual plots with `gam.check()`:
+
+```{r, out.width='50%', out.height = '50%'}
+gam.check(smooth_interact)
+```
+
+> In addition to the plots, `gam.check()` also provides the output of `k.check()`.
+
+:::explanation
+If you would like more in-depth explanations of how to interpret residual plots, we recommend consulting [Workshop 4](https://r.qcbs.ca/workshops/r-workshop-04/) and [Workshop 6](https://r.qcbs.ca/workshops/r-workshop-06/).
+:::
+
+These residual plots highlight some problems:
+
+- Panel 2: The variance of the error is _not_ constant (heteroscedasticity).
+- Panels 1 and 4: There are a few strong outliers in this dataset.
+
+:::noway
+It seems that our response variable should not be modelled with a Normal distribution!
+:::
+
+# Other distributions {#other-distributions}
+
+We need a probability distribution that allows the **variance to increase with the mean**.
+
+One family of distributions that has this property and that works well in a GAM is the **Tweedie** family. A common link function for *Tweedie* distributions is the $log$.
+
+As in a GLM, we can use the `family = ` argument in `gam()` to fit models with other distributions (including distributions such as `binomial`, `poisson`, `gamma` etc.).
+
+To get an overview of families available in `mgcv`:
+```{r, eval = FALSE}
+?family.mgcv
+```
+
+
+## Challenge 3
+
+1. Fit a new model `smooth_interact_tw` with the same formula as the `smooth_interact` model, but with a distribution from the *Tweedie* family (instead of the Normal distribution) and `log` link function. You can do so by using `family = tw(link = "log")` inside `gam()`.
+2. Check the choice of `k` and the residual plots for the new model.
+3. Compare `smooth_interact_tw` with `smooth_interact`. Which one would you choose?
+
+As a reminder, here is our `smooth_interact` model:
+
+```{r}
+# Hint!
+# Because the Normal distribution is the default setting, 
+# we have not specified the distribution in this workshop yet.
+
+# Here is how we would write the model to specify the Normal distribution:
+
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+                       family = gaussian(link = "identity"), 
+                       data = isit, method = "REML")
+```
+
+### Challenge 3: Solution
+
+__1.__ First, let us fit a new model with the _Tweedie_ distribution and a `log` link function.
+
+```{r}
+smooth_interact_tw <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+                          family = tw(link = "log"),
+                          data = isit, method = "REML")
+summary(smooth_interact_tw)$p.table
+summary(smooth_interact_tw)$s.table
+```
+
+
+__2.__ Check the choice of `k` and the residual plots for the new model.
+
+Next, we should check the basis dimension:
+
+```{r}
+k.check(smooth_interact_tw)
+```
+
+We should also verify the residual plots, to verify whether the Tweedie distribution is appropriate:
+
+```{r, out.width='50%', out.height = '50%'}
+gam.check(smooth_interact_tw)
+```
+
+The residual plots do look much better, but it is clear that something is missing from the model. This could be a spatial affect (longtitude and latitude), or a random effect (e.g. based on `Station`).
+
+
+__3.__ Compare `smooth_interact_tw` with `smooth_interact`. Which one would you choose?
+
+```{r}
+AIC(smooth_interact, smooth_interact_tw)
+```
+
+:::explanation
+AIC allows us to compare models that are based on different distributions
+:::
+
+The AIC score for `smooth_interact_tw` is _much_ smaller than the AIC score for the `smooth_interact`. Using a *Tweedie* instead of a *Normal* distribution greatly improves our model!

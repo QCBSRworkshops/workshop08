@@ -75,15 +75,15 @@ Have we optimized the tradeoff between smoothness ($\lambda$) and _wiggliness_ (
 
 ### Is our model wiggly enough? 
 
-Although we have not yet specified a $k$ value in our model, we know that the default for smooth interactions in `gam()` is `k = 30`.
+We have not yet specified a $k$ value in our model, but `gam()` sets a default $k$ depending on the number of variables on which the smooth is built.
 
-Is $k$ large enough?
+Is the $k$ large enough?
 
 ```{r}
 k.check(smooth_interact)
 ```
 
-The **EDF are very close to** `k`. This means the _wiggliness_ of the model is being overly constrained by the default `k = 30`, and could fit the data better with greater wiggliness. In other words, the tradeoff between smoothness and wiggliness is not balanced.
+The **EDF are very close to** `k`. This means the _wiggliness_ of the model is being overly constrained by the default `k`, and could fit the data better with greater wiggliness. In other words, the tradeoff between smoothness and wiggliness is not balanced.
 
 We can refit the model with a larger `k`:
 

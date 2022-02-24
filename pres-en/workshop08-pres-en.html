@@ -1376,7 +1376,7 @@ Have we chosen a `k` that is large enough?
 ```r
 k.check(smooth_interact)
 #                              k'      edf   k-index p-value
-# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883    0.08
+# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883   0.095
 ```
 
 --
@@ -1410,7 +1410,7 @@ Is `k` large enough this time?
 ```r
 k.check(smooth_interact_k60)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626  0.8975
+# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626   0.875
 ```
 
 --
@@ -1539,7 +1539,7 @@ Check the basis dimension:
 ```r
 k.check(smooth_interact_tw)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062  0.8075
+# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062  0.7975
 ```
 
 ---
@@ -1585,7 +1585,7 @@ Using a *Tweedie* instead of a *normal* distribution greatly improves our model!
 ---
 class: inverse, center, middle
 
-## 6. Changing basis
+## 6. Changing the basis
 
 
 ---
@@ -1593,23 +1593,22 @@ class: inverse, center, middle
 
 To model a non-linear smooth variable or surface, smooth functions can be built in different ways:
 
-`s()` ![:faic](arrow-right) for modeling a 1-dimensional smooth or for modeling interactions among variables measured using the same unit and the same scale
+`s()` ![:faic](arrow-right) for modelling a 1-dimensional smooth or for modeling interactions among variables measured using the same unit and the same scale
 
-`te()` ![:faic](arrow-right)  for modeling 2- or n-dimensional interaction surfaces of variables that are not on the same scale. Includes main effects.
+`te()` ![:faic](arrow-right)  for modelling 2- or n-dimensional interaction surfaces of variables that are not on the same scale. Includes main effects.
 
-`ti()` ![:faic](arrow-right) for modeling 2- or n-dimensional interaction surfaces that do not include the main effects.
+`ti()` ![:faic](arrow-right) for modelling 2- or n-dimensional interaction surfaces that do not include the main effects.
 
 ---
 # Parameters of smooth functions
 
-The smooth functions have several parameters that can be set to change their behavior. The most often-used parameters are :
+The smooth functions have several parameters that can be set to change their behaviour. The most common parameters are :
 
 `k` ![:faic](arrow-right) basis dimension
   - determines the upper bound of the number of base functions used to build the curve.
   - constrains the wigglyness of a smooth.
-  - the default `\(k\)` is 10 for `s()`, and 5 for `te()` and `ti()`.
   - k should be &lt; the number of unique data points.
-  - the comlexity (i.e. non-linearity) of a smooth function in a fitted model is reflected by its effective degrees of freedom (**EDF**).
+  - the complexity (i.e. non-linearity) of a smooth function in a fitted model is reflected by its effective degrees of freedom (**EDF**).
 
 
 ---
@@ -1617,11 +1616,11 @@ The smooth functions have several parameters that can be set to change their beh
 
 The smooth functions have several parameters that can be set to change their behavior. The most often-used parameters are :
 
+`bs` ![:faic](arrow-right) specifies the type of basis functions.
+  - the default for `s()` is `tp` (thin plate regression spline) and for `te()` and `ti()` is `cr` (cubic regression spline).
+
 `d` ![:faic](arrow-right) specifies that predictors in the interaction are on the same scale or dimension (only used in `te()` and `ti()`).
   - For example, in `te(Time, width, height, d=c(1,2))`, indicates that `width` and `height` are one the same scale, but not `Time`.
-
-`bs` ![:faic](arrow-right) specifies the type of underlying base functions.
-  - the default for `s()` is `tp` (thin plate regression spline) and for `te()` and `ti()` is `cr` (cubic regression spline).
 
 &lt;!--last 2 slides were a copy-paste from this websites: http://www.sfs.uni-tuebingen.de/~jvanrij/Tutorial/GAMM.html. However, as I'm not a specialist of GAM, I let them asis, but we should modify them or at least site the website--&gt;
 
@@ -1646,6 +1645,14 @@ qplot(nottem_month, nottem, colour = factor(nottem_year), geom = "line") +
 # Example smooth for cyclical data
 
 &lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-89-1.png" width="864" style="display: block; margin: auto;" /&gt;
+
+???
+
+Using the nottem data, we have created three new vectors: 
+- `n_years` corresponds to the number of years of data (20 years)
+- `nottem_month` is a categorical variable coding for the 12 months of the year, for every
+year sampled (so, a sequence 1 to 12 repeated for 20 years).
+- `nottem_year` is a variable containing the year corresponding to each month in nottem_month.
 
 ---
 # Example smooth for cyclical data
@@ -1673,7 +1680,9 @@ plot(year_gam, page = 1, scale = 0)
 
 There is about 1-1.5 degree rise in temperature over the period, but within a given year there is about 20 degrees variation in temperature, on average. The actual data vary around these values and that is the unexplained variance.
 
+???
 
+Here we can see one of the very interesting bonuses of using GAMs. We can either plot the response surface (fitted values) or the terms (contribution of each covariate) as shown here. You can imagine these as plots of the changing regression coefficients, and how their contribution (or effect size) varies over time. In the first plot, we see that positive contributions of temperature occurred post-1930.
 
 ---
 class: inverse, center, middle
@@ -1752,9 +1761,9 @@ AR(1) provides a better fit over the naive model. But there is little improvemen
 
 
 ---
-# Mixed modelling
+# Random effects
 
-As we saw in the section changing basis, `bs` specifies the type of underlying base function. For random intercepts and linear random slopes we use `bs = "re"`, but for random smooths we use `bs = "fs"`.
+As we saw in the section about changing the basis, `bs` specifies the type of underlying base function. For random intercepts and linear random slopes we use `bs = "re"`, but for random smooths we use `bs = "fs"`.
 
 --
 
@@ -1767,7 +1776,7 @@ As we saw in the section changing basis, `bs` specifies the type of underlying b
 ---
 # GAMM with a random intercept
 
-As before, we will use the `gamSim()` function to generate a dataset, here with a random effect, then run a model with a random intercept using `fac` as the random factor.
+We will use the `gamSim()` function to generate a dataset with a random effect, then run a model with a random intercept using `fac` as the random factor.
 
 
 ```r
@@ -1775,15 +1784,15 @@ gam_data2 &lt;- gamSim(eg = 6)
 # 4 term additive + random effectGu &amp; Wahba 4 term additive model
 str(gam_data2)
 # 'data.frame':	400 obs. of  11 variables:
-#  $ y  : num  8.56 9.79 13.3 22.68 8.05 ...
-#  $ x0 : num  0.863 0.812 0.324 0.143 0.952 ...
-#  $ x1 : num  0.539 0.602 0.346 0.953 0.206 ...
-#  $ x2 : num  0.65 0.527 0.804 0.608 0.326 ...
-#  $ x3 : num  0.359 0.748 0.214 0.533 0.19 ...
-#  $ f  : num  10.1 13.2 13.7 22.8 11.6 ...
-#  $ f0 : num  0.833 1.113 1.702 0.869 0.299 ...
-#  $ f1 : num  2.94 3.33 2 6.72 1.51 ...
-#  $ f2 : num  3.29 2.77 1.03 3.24 6.78 ...
+#  $ y  : num  12.3 9.72 18.71 21.77 8.05 ...
+#  $ x0 : num  0.3375 0.0818 0.5092 0.3238 0.8837 ...
+#  $ x1 : num  0.541 0.886 0.294 0.259 0.544 ...
+#  $ x2 : num  0.342 0.949 0.367 0.122 0.536 ...
+#  $ x3 : num  0.208 0.751 0.524 0.399 0.397 ...
+#  $ f  : num  13.9 12.39 18.11 20.29 9.49 ...
+#  $ f0 : num  1.745 0.508 1.999 1.701 0.715 ...
+#  $ f1 : num  2.95 5.88 1.8 1.68 2.97 ...
+#  $ f2 : num  6.20734 0.00188 5.31134 4.9122 2.80795 ...
 #  $ f3 : num  0 0 0 0 0 0 0 0 0 0 ...
 #  $ fac: Factor w/ 4 levels "1","2","3","4": 1 2 3 4 1 2 3 4 1 2 ...
 ```
@@ -1796,9 +1805,9 @@ str(gam_data2)
 ```r
 gamm_intercept &lt;- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2, method = "REML")
 summary(gamm_intercept)$s.table
-#             edf   Ref.df          F     p-value
-# s(x0)  3.489060 4.319646   3.608928 0.005529659
-# s(fac) 2.973324 3.000000 112.051843 0.000000000
+#             edf   Ref.df         F      p-value
+# s(x0)  5.228150 6.351297  4.415429 0.0001945784
+# s(fac) 2.969619 3.000000 97.425346 0.0000000000
 plot(gamm_intercept, select = 2)
 ```
 
@@ -1813,17 +1822,23 @@ We can plot the summed effects for the `x0` without random effects, and then plo
 ```r
 par(mfrow = c(1,2), cex = 1.1)
 
-plot_smooth(gamm_intercept, view = "x0", rm.ranef = T,
+# Plot the summed effect of x0 (without random effects)
+plot_smooth(gamm_intercept, view = "x0", rm.ranef = TRUE, 
             main = "intercept + s(x1)")
 
-plot_smooth(gamm_intercept, view = "x0", cond = list(fac="1"),
-            main = "... + s(fac)", col = 'orange', ylim = c(8,21))
-
-plot_smooth(gamm_intercept, view = "x0", cond = list(fac = "2"), add = T, col = 'red')
-
-plot_smooth(gamm_intercept, view="x0", cond = list(fac = "3"), add = T, col = 'purple')
-
-plot_smooth(gamm_intercept, view="x0", cond = list(fac = "4"), add = T, col = 'turquoise')
+# Plot each level of the random effect
+plot_smooth(gamm_intercept, view = "x0", rm.ranef = FALSE,
+            cond = list(fac="1"),
+            main = "... + s(fac)", col = 'orange', ylim = c(0,25))
+plot_smooth(gamm_intercept, view = "x0", rm.ranef = FALSE,
+            cond = list(fac = "2"), 
+            add = TRUE, col = 'red')
+plot_smooth(gamm_intercept, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "3"), 
+            add = TRUE, col = 'purple')
+plot_smooth(gamm_intercept, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "4"), 
+            add = TRUE, col = 'turquoise')
 ```
 
 ---
@@ -1841,14 +1856,16 @@ plot_smooth(gamm_intercept, view="x0", cond = list(fac = "4"), add = T, col = 't
 ---
 # GAMM with a random slope
 
+Next, we will run and plot a model with a random slope:
+
 
 ```r
 gamm_slope &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2, method = "REML")
 
 summary(gamm_slope)$s.table
-#                edf  Ref.df         F    p-value
-# s(x0)     3.034244 3.76658  2.964267 0.02497788
-# s(x0,fac) 2.949964 3.00000 62.613425 0.00000000
+#                edf   Ref.df         F    p-value
+# s(x0)     3.426411 4.254388  2.647463 0.04104034
+# s(x0,fac) 2.946275 3.000000 52.963456 0.00000000
 ```
 
 
@@ -1859,16 +1876,23 @@ summary(gamm_slope)$s.table
 ```r
 par(mfrow = c(1,2), cex = 1.1)
 
-plot_smooth(gamm_slope, view = "x0", rm.ranef = TRUE, main = "intercept + s(x0)")
+# Plot the summed effect of x0 (without random effects)
+plot_smooth(gamm_slope, view = "x0", rm.ranef = TRUE, 
+            main = "intercept + s(x1)")
 
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "1"),
-            main = "... + s(fac)", col = 'orange', ylim = c(7,22))
-
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "2"), add = T, col = 'red')
-
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "3"), add = T, col = 'purple')
-
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "4"), add = T, col = 'turquoise')
+# Plot each level of the random effect
+plot_smooth(gamm_slope, view = "x0", rm.ranef = FALSE,
+            cond = list(fac="1"),
+            main = "... + s(fac)", col = 'orange', ylim = c(0,25))
+plot_smooth(gamm_slope, view = "x0", rm.ranef = FALSE,
+            cond = list(fac = "2"), 
+            add = TRUE, col = 'red')
+plot_smooth(gamm_slope, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "3"), 
+            add = TRUE, col = 'purple')
+plot_smooth(gamm_slope, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "4"), 
+            add = TRUE, col = 'turquoise')
 ```
 
 ---
@@ -1887,10 +1911,10 @@ gamm_int_slope &lt;- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
                       data = gam_data2, method = "REML")
 
 summary(gamm_int_slope)$s.table
-#                    edf   Ref.df            F     p-value
-# s(x0)     3.4890583045 4.319643 3.608916e+00 0.005529787
-# s(fac)    2.9732997612 3.000000 1.121647e+02 0.000000000
-# s(fac,x0) 0.0008947967 3.000000 1.572215e-04 0.677646112
+#                  edf   Ref.df            F      p-value
+# s(x0)     5.22814212 6.351286 4.415487e+00 0.0001945518
+# s(fac)    2.96958505 3.000000 9.754059e+01 0.0000000000
+# s(fac,x0) 0.00130522 3.000000 2.163445e-04 0.7030025229
 ```
 
 ---
@@ -1900,16 +1924,23 @@ summary(gamm_int_slope)$s.table
 ```r
 par(mfrow = c(1,2), cex = 1.1)
 
-plot_smooth(gamm_int_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)")
+# Plot the summed effect of x0 (without random effects)
+plot_smooth(gamm_int_slope, view = "x0", rm.ranef = TRUE, 
+            main = "intercept + s(x1)")
 
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "1"),
-            main="... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(7,22))
-
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "2"), add = T, col='red')
-
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "3"), add = T, col = 'purple')
-
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "4"), add = T, col = 'turquoise')
+# Plot each level of the random effect
+plot_smooth(gamm_int_slope, view = "x0", rm.ranef = FALSE,
+            cond = list(fac="1"),
+            main = "... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(0,25))
+plot_smooth(gamm_int_slope, view = "x0", rm.ranef = FALSE,
+            cond = list(fac = "2"), 
+            add = TRUE, col = 'red')
+plot_smooth(gamm_int_slope, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "3"), 
+            add = TRUE, col = 'purple')
+plot_smooth(gamm_int_slope, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "4"), 
+            add = TRUE, col = 'turquoise')
 ```
 
 ---
@@ -1934,15 +1965,17 @@ plot(gamm_int_slope, select = 3)
 ---
 # GAMM with a random smooth
 
+Lastly, we will examine a model with a random smooth.
+
 
 ```r
 gamm_smooth &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1), 
                    data = gam_data2, method = "REML")
 
 summary(gamm_smooth)$s.table
-#                edf    Ref.df        F     p-value
-# s(x0)     3.488983  4.319501 3.608168 0.005537546
-# s(x0,fac) 2.978307 35.000000 9.604642 0.000000000
+#                edf    Ref.df        F      p-value
+# s(x0)     5.229122  6.351492 4.402772 0.0002007885
+# s(x0,fac) 3.076758 35.000000 8.355972 0.0000000000
 ```
 
 ---
@@ -1964,16 +1997,23 @@ plot(gamm_smooth, select = 1)
 ```r
 par(mfrow = c(1,2), cex = 1.1)
 
-plot_smooth(gamm_smooth, view = "x0", rm.ranef = T, main = "intercept + s(x0)")
+# Plot the summed effect of x0 (without random effects)
+plot_smooth(gamm_smooth, view = "x0", rm.ranef = TRUE, 
+            main = "intercept + s(x1)")
 
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "1"),
-            main="... + s(x0, fac)", col = 'orange', ylim = c(7,22))
-
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "2"), add = T, col='red')
-
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "3"), add = T, col = 'purple')
-
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "4"), add = T, col = 'turquoise')
+# Plot each level of the random effect
+plot_smooth(gamm_smooth, view = "x0", rm.ranef = FALSE,
+            cond = list(fac="1"),
+            main = "... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(0,25))
+plot_smooth(gamm_smooth, view = "x0", rm.ranef = FALSE,
+            cond = list(fac = "2"), 
+            add = TRUE, col = 'red')
+plot_smooth(gamm_smooth, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "3"), 
+            add = TRUE, col = 'purple')
+plot_smooth(gamm_smooth, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "4"), 
+            add = TRUE, col = 'turquoise')
 ```
 
 ---
@@ -1994,12 +2034,14 @@ All of the mixed models from this section can be compared using `AIC()` to deter
 ```r
 AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
 #                      df      AIC
-# gamm_intercept 9.319347 2194.232
-# gamm_slope     8.765616 2284.841
-# gamm_int_slope 9.321083 2194.235
-# gamm_smooth    9.329086 2194.243
+# gamm_intercept 11.35091 2214.424
+# gamm_slope      9.25334 2305.251
+# gamm_int_slope 11.35344 2214.428
+# gamm_smooth    11.56241 2214.622
 ```
 
+???
+The best model among those we have built here would be a GAMM with a random effect on the intercept.
 
 ---
 # Resources

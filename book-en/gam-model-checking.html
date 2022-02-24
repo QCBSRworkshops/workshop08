@@ -186,16 +186,21 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9.1.1" data-path="other-distributions.html"><a href="other-distributions.html#challenge-3-solution"><i class="fa fa-check"></i><b>9.1.1</b> Challenge 3: Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="changing-the-basis-function.html"><a href="changing-the-basis-function.html"><i class="fa fa-check"></i><b>10</b> Changing the basis function</a></li>
-<li class="chapter" data-level="11" data-path="other-distributions-1.html"><a href="other-distributions-1.html"><i class="fa fa-check"></i><b>11</b> Other distributions</a><ul>
-<li class="chapter" data-level="11.1" data-path="other-distributions-1.html"><a href="other-distributions-1.html#visualizing-the-trend-over-time"><i class="fa fa-check"></i><b>11.1</b> Visualizing the trend over time</a></li>
+<li class="chapter" data-level="10" data-path="changing-the-basis.html"><a href="changing-the-basis.html"><i class="fa fa-check"></i><b>10</b> Changing the basis</a><ul>
+<li class="chapter" data-level="10.1" data-path="changing-the-basis.html"><a href="changing-the-basis.html#example-cyclical-data"><i class="fa fa-check"></i><b>10.1</b> Example: Cyclical data</a></li>
 </ul></li>
-<li class="chapter" data-level="12" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html"><i class="fa fa-check"></i><b>12</b> Quick intro to Generalized Additive Mixed Models (GAMMs)</a><ul>
-<li class="chapter" data-level="12.1" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#dealing-with-non-independence"><i class="fa fa-check"></i><b>12.1</b> Dealing with non-independence</a></li>
-<li class="chapter" data-level="12.2" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#mixed-modelling"><i class="fa fa-check"></i><b>12.2</b> Mixed modelling</a></li>
+<li class="chapter" data-level="11" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html"><i class="fa fa-check"></i><b>11</b> Quick intro to Generalized Additive Mixed Models (GAMMs)</a><ul>
+<li class="chapter" data-level="11.1" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#residual-autocorrelation"><i class="fa fa-check"></i><b>11.1</b> Residual autocorrelation</a></li>
+<li class="chapter" data-level="11.2" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#random-effects"><i class="fa fa-check"></i><b>11.2</b> Random effects</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#gamm-with-a-random-intercept"><i class="fa fa-check"></i><b>11.2.1</b> GAMM with a random intercept</a></li>
+<li class="chapter" data-level="11.2.2" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#gamm-with-a-random-slope"><i class="fa fa-check"></i><b>11.2.2</b> GAMM with a random slope</a></li>
+<li class="chapter" data-level="11.2.3" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#gamm-with-a-random-intercept-and-slope"><i class="fa fa-check"></i><b>11.2.3</b> GAMM with a random intercept and slope</a></li>
+<li class="chapter" data-level="11.2.4" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#gamm-with-a-random-smooth"><i class="fa fa-check"></i><b>11.2.4</b> GAMM with a random smooth</a></li>
+<li class="chapter" data-level="11.2.5" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#gamm-model-comparison"><i class="fa fa-check"></i><b>11.2.5</b> GAMM model comparison</a></li>
 </ul></li>
-<li class="chapter" data-level="13" data-path="resources.html"><a href="resources.html"><i class="fa fa-check"></i><b>13</b> Resources</a></li>
-<li class="chapter" data-level="14" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>14</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="resources.html"><a href="resources.html"><i class="fa fa-check"></i><b>12</b> Resources</a></li>
+<li class="chapter" data-level="13" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>13</b> References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/qcbsRworkshops" target="blank">QCBS R Workshop Series</a></li>
 
@@ -272,19 +277,19 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="is-our-model-wiggly-enough" class="section level3">
 <h3><span class="header-section-number">8.1.1</span> Is our model wiggly enough?</h3>
-<p>Although we have not yet specified a <span class="math inline">\(k\)</span> value in our model, we know that the default for smooth interactions in <code>gam()</code> is <code>k = 30</code>.</p>
-<p>Is <span class="math inline">\(k\)</span> large enough?</p>
+<p>We have not yet specified a <span class="math inline">\(k\)</span> value in our model, but <code>gam()</code> sets a default <span class="math inline">\(k\)</span> depending on the number of variables on which the smooth is built.</p>
+<p>Is the <span class="math inline">\(k\)</span> large enough?</p>
 <div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="gam-model-checking.html#cb72-1"></a><span class="kw">k.check</span>(smooth_interact)</span></code></pre></div>
 <pre><code>##                              k&#39;      edf   k-index p-value
-## s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883    0.06</code></pre>
-<p>The <strong>EDF are very close to</strong> <code>k</code>. This means the <em>wiggliness</em> of the model is being overly constrained by the default <code>k = 30</code>, and could fit the data better with greater wiggliness. In other words, the tradeoff between smoothness and wiggliness is not balanced.</p>
+## s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883  0.0625</code></pre>
+<p>The <strong>EDF are very close to</strong> <code>k</code>. This means the <em>wiggliness</em> of the model is being overly constrained by the default <code>k</code>, and could fit the data better with greater wiggliness. In other words, the tradeoff between smoothness and wiggliness is not balanced.</p>
 <p>We can refit the model with a larger <code>k</code>:</p>
 <div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="gam-model-checking.html#cb74-1"></a>smooth_interact_k60 &lt;-<span class="st"> </span><span class="kw">gam</span>(Sources <span class="op">~</span><span class="st"> </span>Season <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(SampleDepth,</span>
 <span id="cb74-2"><a href="gam-model-checking.html#cb74-2"></a>    RelativeDepth, <span class="dt">k =</span> <span class="dv">60</span>), <span class="dt">data =</span> isit, <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span></code></pre></div>
 <p>Is <code>k</code> large enough this time?</p>
 <div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="gam-model-checking.html#cb75-1"></a><span class="kw">k.check</span>(smooth_interact_k60)</span></code></pre></div>
 <pre><code>##                              k&#39;      edf  k-index p-value
-## s(SampleDepth,RelativeDepth) 59 46.03868 1.048626    0.91</code></pre>
+## s(SampleDepth,RelativeDepth) 59 46.03868 1.048626  0.8725</code></pre>
 <p>The EDF are much smaller than <code>k</code>, which means this model fits the data better with additional wiggliness. We can replace our previous model with this wigglier version:</p>
 <div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="gam-model-checking.html#cb77-1"></a>smooth_interact &lt;-<span class="st"> </span>smooth_interact_k60</span></code></pre></div>
 </div>
@@ -306,7 +311,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 ## indicate that k is too low, especially if edf is close to k&#39;.
 ## 
 ##                              k&#39; edf k-index p-value
-## s(SampleDepth,RelativeDepth) 59  46    1.05     0.9</code></pre>
+## s(SampleDepth,RelativeDepth) 59  46    1.05    0.91</code></pre>
 <blockquote>
 <p>In addition to the plots, <code>gam.check()</code> also provides the output of <code>k.check()</code>.</p>
 </blockquote>

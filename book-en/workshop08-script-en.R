@@ -220,129 +220,165 @@ AIC(smooth_interact, smooth_interact_tw)
 
 ##Section: 07-changing-basis.R 
 
+# Nottingham temperature time series
 data(nottem)
+
+# the number of years of data (20 years)
 n_years <- length(nottem)/12
-nottem_month <- rep(1:12, times=n_years)
-nottem_year <- rep(1920:(1920+n_years-1),each=12)
-nottem_plot <- qplot(nottem_month,nottem,
-                    colour=factor(nottem_year),
-                    geom="line") + theme_bw()
-print(nottem_plot)
 
-year_gam <- gam(nottem~s(nottem_year)+s(nottem_month, bs="cc"))
+# categorical variable coding for the 12 months of the year, for every
+# year sampled (so, a sequence 1 to 12 repeated for 20 years).
+nottem_month <- rep(1:12, times = n_years)
+
+# the year corresponding to each month in nottem_month
+nottem_year <- rep(1920:(1920 + n_years - 1), each = 12)
+
+# Plot the time series
+qplot(x = nottem_month, y = nottem, 
+      colour = factor(nottem_year), 
+      geom = "line") +
+  theme_bw()
+
+year_gam <- gam(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"), method = "REML")
 summary(year_gam)$s.table
-plot(year_gam,page=1, scale=0)
 
-pred<-predict(year_gam, type = "terms", se = TRUE)
-I<-order(nottem_year)
-plusCI<-I(pred$fit[,1] + 1.96*pred$se[,1])
-minusCI<-I(pred$fit[,1] - 1.96*pred$se[,1])
-xx <- c(nottem_year[I],rev(nottem_year[I]))
-yy <- c(plusCI[I],rev(minusCI[I]))
-plot(xx,yy,type="n",cex.axis=1.2)
-polygon(xx,yy,col="light grey",border="light grey")
-lines(nottem_year[I], pred$fit[,1][I],lty=1)
-abline(h=0)
-
-
-##Section: 07-other-distributions.R 
-
-gam_data3 <- read.csv("other_dist.csv")
-summary(gam_data3)
-str(gam_data3)
-
-emptyPlot(range(gam_data3$x1), c(0,1), h=.5,
-          main="Probability of successes", ylab="Probability",xlab="x1")
-
-avg <- aggregate(prop ~ x1, data=gam_data3, mean, na.rm=TRUE)
-lines(avg$x1, avg$prop, col="orange",lwd=2)
-
-prop_model <- gam(prop~ s(x1), data=gam_data3, weights=total, family="binomial")
-prop_summary <- summary(prop_model)
-print(prop_summary$p.table)
-print(prop_summary$s.table)
-
-plot(prop_model)
-
-par(mfrow=c(1,2))
-plot(prop_model, select=1, scale=0, shade=TRUE)
-abline(h=0)
-
-out <- plot_smooth(prop_model, view="x1",main="")
-(diff <- find_difference(out$fv$fit, out$fv$CI, xVals=out$fv$x1))
-addInterval(0, lowVals=diff$start, highVals = diff$end, col='red', lwd=2)
-abline(v=c(diff$start, diff$end), lty=3, col='red')
-text(mean(c(diff$start, diff$end)), 2.1, "sign. more \n success", col='red', font=3)
-
-par(mfrow=c(1,1))
-plot_smooth(prop_model, view="x1", main="",
-            transform=plogis, ylim=c(0,1))
-abline(h=.5, v=diff$start, col='red', lty=2)
+plot(year_gam, page = 1, scale = 0)
 
 
 ##Section: 08-GAMMs.R 
 
-par(mfrow=c(1,2))
+par(mfrow =c (1,2))
 acf(resid(year_gam), lag.max = 36, main = "ACF")
 pacf(resid(year_gam), lag.max = 36, main = "pACF")
 
-year_gam <- gamm(nottem~s(nottem_year)+s(nottem_month, bs="cc"))
-year_gam_AR1 <- gamm(nottem~s(nottem_year)+s(nottem_month, bs="cc"),
-                     correlation = corARMA(form = ~ 1|nottem_year, p = 1))
-year_gam_AR2 <- gamm(nottem~s(nottem_year)+s(nottem_month, bs="cc"),
-                     correlation = corARMA(form = ~ 1|nottem_year, p = 2))
-anova(year_gam$lme,year_gam_AR1$lme,year_gam_AR2$lme)
+df <- data.frame(nottem, nottem_year, nottem_month)
+
+year_gam <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"), data = df)
+
+year_gam_AR1 <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"),
+                     correlation = corARMA(form = ~ 1|nottem_year, p = 1),
+                     data = df)
+
+year_gam_AR2 <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"),
+                     correlation = corARMA(form = ~ 1|nottem_year, p = 2),
+                     data = df)
+
+AIC(year_gam$lme, year_gam_AR1$lme, year_gam_AR2$lme)
 
 # generate and view data
-gam_data2 <- gamSim(eg=6)
+gam_data2 <- gamSim(eg = 6)
 head(gam_data2)
 
 # run random intercept model
-gamm_intercept <- gam(y ~ s(x0) + s(fac, bs="re"), data=gam_data2)
+gamm_intercept <- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2, method = "REML")
 
 # examine model output
 summary(gamm_intercept)$s.table
 
-plot(gamm_intercept, select=2)
-# select=2 because the random effect appears as the second entry in the summary table.
+plot(gamm_intercept, select = 2) 
+# select = 2 because the random effect appears as the second entry in the summary table.
 
-par(mfrow=c(1,2), cex=1.1)
-plot_smooth(gamm_intercept, view="x0", rm.ranef=TRUE, main="intercept + s(x1)", rug=FALSE)
-plot_smooth(gamm_intercept, view="x0", cond=list(fac="1"),
-            main="... + s(fac)", col='orange', ylim=c(8,21), rug=FALSE)
-plot_smooth(gamm_intercept, view="x0", cond=list(fac="2"), add=TRUE, col='red')
-plot_smooth(gamm_intercept, view="x0", cond=list(fac="3"), add=TRUE, col='purple')
-plot_smooth(gamm_intercept, view="x0", cond=list(fac="4"), add=TRUE, col='turquoise')
+par(mfrow = c(1,2), cex = 1.1)
 
-gamm_slope <- gam(y ~ s(x0) + s(x0, fac, bs="re"), data=gam_data2)
+# Plot the summed effect of x0 (without random effects)
+plot_smooth(gamm_intercept, view = "x0", rm.ranef = TRUE, 
+            main = "intercept + s(x1)")
+
+# Plot each level of the random effect
+plot_smooth(gamm_intercept, view = "x0", rm.ranef = FALSE,
+            cond = list(fac="1"),
+            main = "... + s(fac)", col = 'orange', ylim = c(0,25))
+plot_smooth(gamm_intercept, view = "x0", rm.ranef = FALSE,
+            cond = list(fac = "2"), 
+            add = TRUE, col = 'red')
+plot_smooth(gamm_intercept, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "3"), 
+            add = TRUE, col = 'purple')
+plot_smooth(gamm_intercept, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "4"), 
+            add = TRUE, col = 'turquoise')
+
+gamm_slope <- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2, method = "REML")
+
 summary(gamm_slope)$s.table
 
-plot_smooth(gamm_slope, view="x0", rm.ranef=TRUE, main="intercept + s(x0)", rug=FALSE)
-plot_smooth(gamm_slope, view="x0", cond=list(fac="1"),
-            main="... + s(fac)", col='orange',ylim=c(7,22), rug=FALSE)
-plot_smooth(gamm_slope, view="x0", cond=list(fac="2"), add=TRUE, col='red')
-plot_smooth(gamm_slope, view="x0", cond=list(fac="3"), add=TRUE, col='purple')
-plot_smooth(gamm_slope, view="x0", cond=list(fac="4"), add=TRUE, col='turquoise')
+par(mfrow = c(1,2), cex = 1.1)
 
-gamm_int_slope <- gam(y ~ s(x0) + s(fac, bs="re")
-                      + s(fac, x0, bs="re"), data=gam_data2)
+# Plot the summed effect of x0 (without random effects)
+plot_smooth(gamm_slope, view = "x0", rm.ranef = TRUE, 
+            main = "intercept + s(x1)")
+
+# Plot each level of the random effect
+plot_smooth(gamm_slope, view = "x0", rm.ranef = FALSE,
+            cond = list(fac="1"),
+            main = "... + s(fac, x0)", col = 'orange', ylim = c(0,25))
+plot_smooth(gamm_slope, view = "x0", rm.ranef = FALSE,
+            cond = list(fac = "2"), 
+            add = TRUE, col = 'red')
+plot_smooth(gamm_slope, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "3"), 
+            add = TRUE, col = 'purple')
+plot_smooth(gamm_slope, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "4"), 
+            add = TRUE, col = 'turquoise')
+
+gamm_int_slope <- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
+                      data = gam_data2, method = "REML")
+
 summary(gamm_int_slope)$s.table
 
-plot_smooth(gamm_int_slope, view="x0", rm.ranef=TRUE, main="intercept + s(x0)", rug=FALSE)
-plot_smooth(gamm_int_slope, view="x0", cond=list(fac="1"),
-            main="... + s(fac) + s(fac, x0)", col='orange', ylim=c(7,22), rug=FALSE)
-plot_smooth(gamm_int_slope, view="x0", cond=list(fac="2"), add=TRUE, col='red', xpd=TRUE)
-plot_smooth(gamm_int_slope, view="x0", cond=list(fac="3"), add=TRUE, col='purple', xpd=TRUE)
-plot_smooth(gamm_int_slope, view="x0", cond=list(fac="4"), add=TRUE, col='turquoise', xpd=TRUE)
+par(mfrow = c(1,2), cex = 1.1)
 
-plot(gamm_int_slope, select=3)
-# select=3 because the random slope appears as the third entry in your summary table.
+# Plot the summed effect of x0 (without random effects)
+plot_smooth(gamm_int_slope, view = "x0", rm.ranef = TRUE, 
+            main = "intercept + s(x1)")
 
-gamm_smooth <- gam(y ~ s(x0, fac, bs="fs", m=1), data=gam_data2)
+# Plot each level of the random effect
+plot_smooth(gamm_int_slope, view = "x0", rm.ranef = FALSE,
+            cond = list(fac="1"),
+            main = "... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(0,25))
+plot_smooth(gamm_int_slope, view = "x0", rm.ranef = FALSE,
+            cond = list(fac = "2"), 
+            add = TRUE, col = 'red')
+plot_smooth(gamm_int_slope, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "3"), 
+            add = TRUE, col = 'purple')
+plot_smooth(gamm_int_slope, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "4"), 
+            add = TRUE, col = 'turquoise')
+
+plot(gamm_int_slope, select=3) 
+# select = 3 because the random slope appears as the third entry in your summary table.
+
+gamm_smooth <- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1), 
+                   data = gam_data2, method = "REML")
+
 summary(gamm_smooth)$s.table
 
 plot(gamm_smooth, select=1)
-# select=1 because the smooth slope appears as the first entry in your summary table.
+# select = 1 because the smooth slope appears as the first entry in your summary table.
+
+par(mfrow = c(1,2), cex = 1.1)
+
+# Plot the summed effect of x0 (without random effects)
+plot_smooth(gamm_smooth, view = "x0", rm.ranef = TRUE, 
+            main = "intercept + s(x1)")
+
+# Plot each level of the random effect
+plot_smooth(gamm_smooth, view = "x0", rm.ranef = FALSE,
+            cond = list(fac="1"),
+            main = "... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(0,25))
+plot_smooth(gamm_smooth, view = "x0", rm.ranef = FALSE,
+            cond = list(fac = "2"), 
+            add = TRUE, col = 'red')
+plot_smooth(gamm_smooth, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "3"), 
+            add = TRUE, col = 'purple')
+plot_smooth(gamm_smooth, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "4"), 
+            add = TRUE, col = 'turquoise')
+
+AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
 
 
 ##Section: 09-references.R 

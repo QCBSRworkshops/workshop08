@@ -24,8 +24,15 @@ challenge-2-solution
 gam-with-interaction-terms
 interaction-between-smoothed-and-factor-variables
 interaction-between-smoothed-variables
-changing-the-basis-function
+gam-model-checking
+selecting-k
+is-our-model-wiggly-enough
+is-our-model-actually-normal
 other-distributions
+challenge-3
+challenge-3-solution
+changing-the-basis-function
+other-distributions-1
 visualizing-the-trend-over-time
 quick-intro-to-generalized-additive-mixed-models-gamms
 dealing-with-non-independence

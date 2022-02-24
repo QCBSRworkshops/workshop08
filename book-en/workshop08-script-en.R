@@ -155,6 +155,69 @@ vis.gam(smooth_interact,
 AIC(two_smooth_model, smooth_interact)
 
 
+##Section: 06-generalization.R 
+
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), 
+                       data = isit, method = "REML")
+
+summary(smooth_interact)$p.table
+
+summary(smooth_interact)$s.table
+
+k_plot <- function(k_value){
+    data("eeg")
+    m <- mgcv::gam(Ampl ~ s(Time, k = k_value), data = eeg)
+     p <- ggplot(eeg, aes(x = Time, y = Ampl)) +
+     geom_point(alpha = .1, size = 3) + 
+     geom_line(aes(y = predict(m)),
+               lwd = 2, col = "black") +
+         labs(title = paste("k =", k_value), x = "", y = "") +
+         theme_classic() + 
+         theme(text = element_text(size = 30), 
+               axis.text = element_blank(),
+               plot.title = element_text(face = "bold", hjust = 0.5))  
+    return(p)
+}
+k_plot(3)
+k_plot(6)
+k_plot(10)
+
+k.check(smooth_interact)
+
+smooth_interact_k60 <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+                           data = isit, method = "REML")
+
+k.check(smooth_interact_k60)
+
+smooth_interact <- smooth_interact_k60
+
+gam.check(smooth_interact)
+
+?family.mgcv
+
+# Hint!
+# Because the Normal distribution is the default setting, 
+# we have not specified the distribution in this workshop yet.
+
+# Here is how we would write the model to specify the Normal distribution:
+
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+                       family = gaussian(link = "identity"), 
+                       data = isit, method = "REML")
+
+smooth_interact_tw <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+                          family = tw(link = "log"),
+                          data = isit, method = "REML")
+summary(smooth_interact_tw)$p.table
+summary(smooth_interact_tw)$s.table
+
+k.check(smooth_interact_tw)
+
+gam.check(smooth_interact_tw)
+
+AIC(smooth_interact, smooth_interact_tw)
+
+
 ##Section: 07-changing-basis.R 
 
 data(nottem)

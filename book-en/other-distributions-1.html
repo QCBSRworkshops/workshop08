@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 3 The linear model… and where it fails | Workshop 8: Generalized additive models in R</title>
+  <title>Chapter 11 Other distributions | Workshop 8: Generalized additive models in R</title>
   <meta name="description" content="Generalized additive models in R" />
   <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 3 The linear model… and where it fails | Workshop 8: Generalized additive models in R" />
+  <meta property="og:title" content="Chapter 11 Other distributions | Workshop 8: Generalized additive models in R" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://github.com/qcbsRworkshops/" />
   <meta property="og:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="qcbsRworkshops/workshop08" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 3 The linear model… and where it fails | Workshop 8: Generalized additive models in R" />
+  <meta name="twitter:title" content="Chapter 11 Other distributions | Workshop 8: Generalized additive models in R" />
   
   <meta name="twitter:description" content="Generalized additive models in R" />
   <meta name="twitter:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />
-<link rel="prev" href="preparing-for-the-workshop.html"/>
-<link rel="next" href="introduction-to-gams.html"/>
+<link rel="prev" href="changing-the-basis-function.html"/>
+<link rel="next" href="quick-intro-to-generalized-additive-mixed-models-gamms.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -231,29 +231,132 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
   <img class= "hero-image" src="assets/images/jean-philippe-delberghe-75xPHEQBmvA-unsplash_hero_image.jpg">
 </div>
 --!>
-<div id="intro-linear-models" class="section level1">
-<h1><span class="header-section-number">Chapter 3</span> The linear model… and where it fails</h1>
-<p>What do we mean by the linear model? Regression is the workhorse of
-statistics. It allows us to model a response variable as a function of
-predictors plus error. Linear regression is what most people first
-encounter in statistics. As we saw in Workshop 4: <a href="https://github.com/QCBSRworkshops/workshop04">Linear
-models</a>, linear regression relies on four
-major assumptions:</p>
-<ol style="list-style-type: decimal">
-<li>There is a linear relationship between response and predictor variables: <span class="math inline">\(y_i = \beta_0 + \beta_1 \times x_i + \epsilon_i\)</span></li>
-<li>The error is normally distributed: <span class="math inline">\(\epsilon_i \sim \mathcal{N}(0,\,\sigma^2)\)</span></li>
-<li>The variance of the error is homogeneous (homoscedastic)</li>
-<li>The errors are independent of each other</li>
-</ol>
-<p>A linear model can sometimes accommodate certain types of non-linear responses (e.g. <span class="math inline">\(x^2\)</span>), but this approach strongly relies on decisions that can be either arbitrary or well-informed, and is much less flexible than using an additive model. For example, this linear model with multiple predictors can handle a non-linear response, but quickly becomes difficult to interpret and manage:</p>
-<p><span class="math display">\[y_i = \beta_0 + \beta_1x_{1,i}+\beta_2x_{2,i}+\beta_3x_{3,i}+...+\beta_kx_{k,i} + \epsilon_i\]</span>
-Linear models work very well in certain specific cases where all these criteria are met:</p>
-<p><img src="images/linreg.png" /></p>
-<p>In reality, we often cannot meet these criteria. This means that in many cases, linear models are inappropriate:</p>
-<p><img src="images/linreg_bad.png" /></p>
-<p>So, how can we fit a better model? To answer this question, we must first consider what the regression model is
-trying to do. The linear model is trying to fit the best <strong>straight line</strong> that passes through the middle of the data, <em>without <strong>overfitting</strong></em> the data, which is what would happen if we simply drew a line between each point and its neighbours. Linear models do this by finding the best fit straight line that passes through the data.</p>
-<p>In the same way, additive models fit a curve through the data, while controlling the <strong><em>wiggliness</em></strong> of this curve to avoid overfitting. This means additive models like GAMs can capture non-linear relationships by fitting a smooth function through the data, rather than a straight line. We will come back to the concept of <strong><em>wiggliness</em></strong> later!</p>
+<div id="other-distributions-1" class="section level1">
+<h1><span class="header-section-number">Chapter 11</span> Other distributions</h1>
+<p>To provide a brief overview on how to use GAMs when the response
+variable does not follow a normal distributions and is either count or
+proportion data (e.g., Gamma, binomial, Poisson, negative binomial), the
+example that follows uses a dataset where a binomial family distribution
+is needed and a non-linear relationship with the explanatory variable is
+evident. Here, the response variable represents the number of successes
+(event happened) versus failures over the course of an experiment.</p>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="other-distributions-1.html#cb95-1"></a>gam_data3 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;other_dist.csv&quot;</span>)</span>
+<span id="cb95-2"><a href="other-distributions-1.html#cb95-2"></a><span class="kw">summary</span>(gam_data3)</span>
+<span id="cb95-3"><a href="other-distributions-1.html#cb95-3"></a><span class="kw">str</span>(gam_data3)</span></code></pre></div>
+<pre><code>&#39;data.frame&#39;: 514 obs. of  4 variables:
+ $ prop : num  1 1 1 1 0 1 1 1 1 1 ...
+ $ total: int  4 20 20 18 18 18 20 20 20 20 ...
+ $ x1   : int  550 650 750 850 950 650 750 850 950 550 ...
+ $ fac  : Factor w/ 4 levels &quot;f1&quot;,&quot;f2&quot;,&quot;f3&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+<p><code>prop</code> is the response variable, and is equal to the proportion of
+<em>successes / (successes + failures)</em>. Note that there are numerous cases
+where the proportion equals 1 or 0 which indicates that the outcomes
+were always successes or failures, respectively, at a given time point
+in the experiment.</p>
+<p><code>x1</code> is the time since the start of experiment (our explanatory
+variable).</p>
+<p><code>total</code> represents the number of <em>successes + failures</em> observed at any
+time point of the experiment.</p>
+<p><code>fac</code> is a factor coding for trials 1 through 4 of the experiment (we
+will not use this variable in this section).</p>
+<p>Let’s start by visualizing the data. We are interested in the number of
+successes in comparison to failures as <code>x1</code> increases. We will calculate
+the grand averages of the proportions of successes per time bin (<code>x1</code>)
+given that there are repeated measures per <code>x1</code> value (numerous trials and
+observations per trial).</p>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="other-distributions-1.html#cb97-1"></a><span class="kw">emptyPlot</span>(<span class="kw">range</span>(gam_data3<span class="op">$</span>x1), <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="dt">h =</span> <span class="fl">0.5</span>, <span class="dt">main =</span> <span class="st">&quot;Probability of successes&quot;</span>,</span>
+<span id="cb97-2"><a href="other-distributions-1.html#cb97-2"></a>    <span class="dt">ylab =</span> <span class="st">&quot;Probability&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;x1&quot;</span>)</span>
+<span id="cb97-3"><a href="other-distributions-1.html#cb97-3"></a></span>
+<span id="cb97-4"><a href="other-distributions-1.html#cb97-4"></a>avg &lt;-<span class="st"> </span><span class="kw">aggregate</span>(prop <span class="op">~</span><span class="st"> </span>x1, <span class="dt">data =</span> gam_data3, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb97-5"><a href="other-distributions-1.html#cb97-5"></a><span class="kw">lines</span>(avg<span class="op">$</span>x1, avg<span class="op">$</span>prop, <span class="dt">col =</span> <span class="st">&quot;orange&quot;</span>, <span class="dt">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="images/graphic1_otherdist.jpg" width="450" /></p>
+<p>As <code>x1</code> increases, so does the probability of successes. Would you say
+that this trend is linear or non-linear? We will test this using a
+logistic GAM (we use a <code>binomial</code> family distribution given that our
+response is proportion data).</p>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="other-distributions-1.html#cb98-1"></a>prop_model &lt;-<span class="st"> </span><span class="kw">gam</span>(prop <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(x1), <span class="dt">data =</span> gam_data3, <span class="dt">weights =</span> total,</span>
+<span id="cb98-2"><a href="other-distributions-1.html#cb98-2"></a>    <span class="dt">family =</span> <span class="st">&quot;binomial&quot;</span>)</span>
+<span id="cb98-3"><a href="other-distributions-1.html#cb98-3"></a>prop_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(prop_model)</span>
+<span id="cb98-4"><a href="other-distributions-1.html#cb98-4"></a><span class="kw">print</span>(prop_summary<span class="op">$</span>p.table)</span>
+<span id="cb98-5"><a href="other-distributions-1.html#cb98-5"></a><span class="kw">print</span>(prop_summary<span class="op">$</span>s.table)</span>
+<span id="cb98-6"><a href="other-distributions-1.html#cb98-6"></a></span>
+<span id="cb98-7"><a href="other-distributions-1.html#cb98-7"></a><span class="kw">plot</span>(prop_model)</span></code></pre></div>
+<pre><code>             Estimate  Std. Error  z value   Pr(&gt;|z|)
+(Intercept)  1.173978  0.02709613  43.32641  0
+
+        edf       Ref.df    Chi.sq     p-value
+s(x1)   4.591542  5.615235  798.9407   2.027751e-164</code></pre>
+<p>What does the intercept represent in this model?</p>
+<ul>
+<li>Recall that the model uses the count outcomes to calculate the
+<em>logit</em>, which is the log odds ratio between successes and failures:</li>
+</ul>
+<p><span class="math display">\[logit = log(\frac{N_{success}}{N_{failures}})\]</span></p>
+<ul>
+<li>If successes = failures, the ratio is 1 and the logit is 0 (i.e., log(1) =
+0).</li>
+<li>If successes have a larger count than failures, the ratio is greater
+than 1 and the logit has a positive value (e.g., log(2) = 0.69).</li>
+<li>If successes have a smaller count than failures, the ratio is lower
+than 1 and the logit has a negative value (e.g., log(0.5) = -0.69).</li>
+</ul>
+<p>Thus, the intercept is the log odds ratio of successes to failures
+(logit), and indicates whether on average there are more successes than
+failures. Here, the estimated intercept coefficient is positive, which
+means that there are more successes than failures overall.</p>
+<p>What does the smooth term indicate?</p>
+<ul>
+<li>This represents how the log odds of successes vs failures changes
+over <code>x1</code> (time in this example). So, we see that since the <em>edf&gt;1</em>,
+the proportion of successes increases faster over time. If, for
+example, the response represents the count of species A versus
+species B and nutrient concentrations are increased over time,
+these results would indicate that species A is increasingly observed
+as nutrient concentrations approach its niche optima over the course
+of the experiment.</li>
+</ul>
+<div id="visualizing-the-trend-over-time" class="section level2">
+<h2><span class="header-section-number">11.1</span> Visualizing the trend over time</h2>
+<p>Lastly, we will see the different ways this relationship could be
+represented graphically.</p>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="other-distributions-1.html#cb100-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb100-2"><a href="other-distributions-1.html#cb100-2"></a><span class="kw">plot</span>(prop_model, <span class="dt">select =</span> <span class="dv">1</span>, <span class="dt">scale =</span> <span class="dv">0</span>, <span class="dt">shade =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb100-3"><a href="other-distributions-1.html#cb100-3"></a><span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">0</span>)</span>
+<span id="cb100-4"><a href="other-distributions-1.html#cb100-4"></a></span>
+<span id="cb100-5"><a href="other-distributions-1.html#cb100-5"></a>out &lt;-<span class="st"> </span><span class="kw">plot_smooth</span>(prop_model, <span class="dt">view =</span> <span class="st">&quot;x1&quot;</span>, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb100-6"><a href="other-distributions-1.html#cb100-6"></a>(diff &lt;-<span class="st"> </span><span class="kw">find_difference</span>(out<span class="op">$</span>fv<span class="op">$</span>fit, out<span class="op">$</span>fv<span class="op">$</span>CI, <span class="dt">xVals =</span> out<span class="op">$</span>fv<span class="op">$</span>x1))</span>
+<span id="cb100-7"><a href="other-distributions-1.html#cb100-7"></a><span class="kw">addInterval</span>(<span class="dv">0</span>, <span class="dt">lowVals =</span> diff<span class="op">$</span>start, <span class="dt">highVals =</span> diff<span class="op">$</span>end, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>,</span>
+<span id="cb100-8"><a href="other-distributions-1.html#cb100-8"></a>    <span class="dt">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb100-9"><a href="other-distributions-1.html#cb100-9"></a><span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">c</span>(diff<span class="op">$</span>start, diff<span class="op">$</span>end), <span class="dt">lty =</span> <span class="dv">3</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb100-10"><a href="other-distributions-1.html#cb100-10"></a><span class="kw">text</span>(<span class="kw">mean</span>(<span class="kw">c</span>(diff<span class="op">$</span>start, diff<span class="op">$</span>end)), <span class="fl">2.1</span>, <span class="st">&quot;sign. more </span><span class="ch">\n</span><span class="st"> success&quot;</span>,</span>
+<span id="cb100-11"><a href="other-distributions-1.html#cb100-11"></a>    <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">font =</span> <span class="dv">3</span>)</span></code></pre></div>
+<p><img src="images/graphic2_otherdist.jpg" width="800" /></p>
+<p>What do these plots tell us about successes versus failures?</p>
+<ul>
+<li>Left plot: contribution/ partial effect (if we had more than one
+explanatory variable). Over time the log odds increases, so over
+time successes increase and failures decrease.</li>
+<li>Right plot: fitted values, intercept included (summed effect if we
+had more than one explanatory variable included in the model). Here
+we see that the log odds ratio is estimated around zero at the start
+of the experiment; this means there are equal amounts of successes
+and failures. Gradually successes increase, and at around <code>x1</code> = 400
+there are significantly more successes than failures (the smooth is
+significantly different from zero). We also illustrated how we could
+use the plot to determine at which <code>x1</code> value this occurs.</li>
+</ul>
+<p>Lastly, to help interpret the results, we could transform the summed
+effects back to proportions with the function <code>plot_smooth</code> from the
+<code>itsadug</code> package:</p>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="other-distributions-1.html#cb101-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb101-2"><a href="other-distributions-1.html#cb101-2"></a><span class="kw">plot_smooth</span>(prop_model, <span class="dt">view =</span> <span class="st">&quot;x1&quot;</span>, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">transform =</span> plogis,</span>
+<span id="cb101-3"><a href="other-distributions-1.html#cb101-3"></a>    <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span>
+<span id="cb101-4"><a href="other-distributions-1.html#cb101-4"></a><span class="kw">abline</span>(<span class="dt">h =</span> <span class="fl">0.5</span>, <span class="dt">v =</span> diff<span class="op">$</span>start, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="images/graphic3_otherdist.jpg" width="450" /></p>
+<p>As we already derived from the logit plot, we see that at around <code>x1</code> = 400
+the proportion of successes increases significantly above 0.5.</p>
+
+</div>
 </div>
 <hr>
 <center> 
@@ -266,8 +369,8 @@ trying to do. The linear model is trying to fit the best <strong>straight line</
           </div>
         </div>
       </div>
-<a href="preparing-for-the-workshop.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="introduction-to-gams.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="changing-the-basis-function.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="quick-intro-to-generalized-additive-mixed-models-gamms.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

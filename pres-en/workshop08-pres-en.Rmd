@@ -1247,7 +1247,7 @@ class: inverse, center, middle
 
 # Generalization of the additive model
 
-The basic additive model can be extended in the following way:
+The basic additive model can be extended in the following ways:
 
 1. Using other **distributions** for the response variable with the `family` argument (just as in a GLM),
 2. Using different kinds of **basis functions**,
@@ -1263,7 +1263,7 @@ We have so far worked with simple (Gaussian) additive models, the non-linear equ
 
 --
 
-But what can we do if:
+But, what can we do if:
 - the observations of the response variable do **not follow a normal distribution**?
 - the **variance is not constant**? (heteroscedasticity)
 
@@ -1278,7 +1278,7 @@ Just like generalized linear models (GLM), we can formulate **generalized** addi
 # Generalized additive models
 
 
-Lets recall the interaction model for the bioluminescence data:
+Let us return to our smooth interaction model for the bioluminescence data:
 
 ```{r}
 smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), 
@@ -1293,9 +1293,9 @@ summary(smooth_interact)$s.table
 
 # GAM model checking
 
-As for a GLM, it is essential to check whether we correctly specifified the model, especially the *distribution* for the response.
+As with a GLM, it is essential to check whether the model is correctly specified, especially in regards to the *distribution* of the response variable.
 
-**We have to verify:**
+We need to verify:
 
 1. The choice of basis dimension `k`.
 2. The residuals plots (just as for a GLM).
@@ -1315,7 +1315,7 @@ Useful functions included in `mgcv`:
 
 ##### First step:
 
-Have we chosen `k` large enough? 
+Have we chosen a `k` that is large enough? 
 
 .comment[The default for smooth interactions is `k = 30`]
 

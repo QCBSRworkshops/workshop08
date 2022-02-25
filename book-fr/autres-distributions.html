@@ -165,7 +165,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.1" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables"><i class="fa fa-check"></i><b>6.1</b> GAM à plusieurs variables</a></li>
 <li class="chapter" data-level="6.2" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#degrés-de-liberté-effectifs-edf"><i class="fa fa-check"></i><b>6.2</b> Degrés de liberté effectifs (edf)</a></li>
 <li class="chapter" data-level="6.3" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables-linéaires-et-lisses"><i class="fa fa-check"></i><b>6.3</b> GAM à plusieurs variables linéaires et lisses</a></li>
-<li class="chapter" data-level="6.4" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables-1"><i class="fa fa-check"></i><b>6.4</b> GAM à plusieurs variables</a></li>
+<li class="chapter" data-level="6.4" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables-non-linéaires"><i class="fa fa-check"></i><b>6.4</b> GAM à plusieurs variables non linéaires</a></li>
 <li class="chapter" data-level="6.5" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#défi-2"><i class="fa fa-check"></i><b>6.5</b> Défi 2</a><ul>
 <li class="chapter" data-level="6.5.1" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#défi-2-solution"><i class="fa fa-check"></i><b>6.5.1</b> Défi 2: Solution</a></li>
 </ul></li>
@@ -178,8 +178,8 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8" data-path="validation-gam.html"><a href="validation-gam.html"><i class="fa fa-check"></i><b>8</b> Validation d’un GAM</a><ul>
 <li class="chapter" data-level="8.1" data-path="validation-gam.html"><a href="validation-gam.html#choisir-k"><i class="fa fa-check"></i><b>8.1</b> Choisir <span class="math inline">\(k\)</span></a><ul>
 <li class="chapter" data-level="8.1.1" data-path="validation-gam.html"><a href="validation-gam.html#est-ce-que-notre-module-est-assez-flexible"><i class="fa fa-check"></i><b>8.1.1</b> Est-ce que notre module est assez flexible?</a></li>
-<li class="chapter" data-level="8.1.2" data-path="validation-gam.html"><a href="validation-gam.html#est-ce-que-notre-modèle-est-réellement-normal"><i class="fa fa-check"></i><b>8.1.2</b> Est-ce que notre modèle est réellement Normal?</a></li>
 </ul></li>
+<li class="chapter" data-level="8.2" data-path="validation-gam.html"><a href="validation-gam.html#choisir-une-distribution"><i class="fa fa-check"></i><b>8.2</b> Choisir une distribution</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="autres-distributions.html"><a href="autres-distributions.html"><i class="fa fa-check"></i><b>9</b> Autres distributions</a><ul>
 <li class="chapter" data-level="9.1" data-path="autres-distributions.html"><a href="autres-distributions.html#défi-3"><i class="fa fa-check"></i><b>9.1</b> Défi 3</a><ul>
@@ -200,7 +200,8 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul></li>
 <li class="part"><span><b>Ressources &amp; Références</b></span></li>
-<li class="chapter" data-level="12" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>12</b> References</a></li>
+<li class="chapter" data-level="12" data-path="ressources.html"><a href="ressources.html"><i class="fa fa-check"></i><b>12</b> Ressources</a></li>
+<li class="chapter" data-level="13" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>13</b> References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/qcbsRworkshops" target="blank">QCBS R Workshop Series</a></li>
 
@@ -277,7 +278,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <p>Ensuite, on devrait vérifier le choix des dimensions de bases <code>k</code>:</p>
 <div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="autres-distributions.html#cb86-1"></a><span class="kw">k.check</span>(smooth_interact_tw)</span></code></pre></div>
 <pre><code>##                              k&#39;      edf  k-index p-value
-## s(SampleDepth,RelativeDepth) 59 43.23949 1.015062    0.78</code></pre>
+## s(SampleDepth,RelativeDepth) 59 43.23949 1.015062   0.835</code></pre>
 <p>Ainsi que la visualisation des résidus, pour valider que la distribution Tweedie est appropriée:</p>
 <div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="autres-distributions.html#cb88-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
 <span id="cb88-2"><a href="autres-distributions.html#cb88-2"></a><span class="kw">gam.check</span>(smooth_interact_tw)</span></code></pre></div>
@@ -294,7 +295,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 ## indicate that k is too low, especially if edf is close to k&#39;.
 ## 
 ##                                k&#39;  edf k-index p-value
-## s(SampleDepth,RelativeDepth) 59.0 43.2    1.02    0.73</code></pre>
+## s(SampleDepth,RelativeDepth) 59.0 43.2    1.02    0.83</code></pre>
 <p>Les résidus semblent mieux distribués, mais il est évident que le modèle manque encore quelque chose. Il pourrait s’agir d’un effet spatial (longitude et latitude), ou d’un effet aléatoire (par exemple basé sur <code>Station</code>).</p>
 <p><strong>3.</strong> Comparer <code>smooth_interact_tw</code> avec <code>smooth_interact</code>. Lequel est meilleur?</p>
 <div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="autres-distributions.html#cb90-1"></a><span class="kw">AIC</span>(smooth_interact, smooth_interact_tw)</span></code></pre></div>

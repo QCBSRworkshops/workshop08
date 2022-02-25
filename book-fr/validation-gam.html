@@ -165,7 +165,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.1" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables"><i class="fa fa-check"></i><b>6.1</b> GAM à plusieurs variables</a></li>
 <li class="chapter" data-level="6.2" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#degrés-de-liberté-effectifs-edf"><i class="fa fa-check"></i><b>6.2</b> Degrés de liberté effectifs (edf)</a></li>
 <li class="chapter" data-level="6.3" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables-linéaires-et-lisses"><i class="fa fa-check"></i><b>6.3</b> GAM à plusieurs variables linéaires et lisses</a></li>
-<li class="chapter" data-level="6.4" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables-1"><i class="fa fa-check"></i><b>6.4</b> GAM à plusieurs variables</a></li>
+<li class="chapter" data-level="6.4" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables-non-linéaires"><i class="fa fa-check"></i><b>6.4</b> GAM à plusieurs variables non linéaires</a></li>
 <li class="chapter" data-level="6.5" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#défi-2"><i class="fa fa-check"></i><b>6.5</b> Défi 2</a><ul>
 <li class="chapter" data-level="6.5.1" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#défi-2-solution"><i class="fa fa-check"></i><b>6.5.1</b> Défi 2: Solution</a></li>
 </ul></li>
@@ -178,8 +178,8 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8" data-path="validation-gam.html"><a href="validation-gam.html"><i class="fa fa-check"></i><b>8</b> Validation d’un GAM</a><ul>
 <li class="chapter" data-level="8.1" data-path="validation-gam.html"><a href="validation-gam.html#choisir-k"><i class="fa fa-check"></i><b>8.1</b> Choisir <span class="math inline">\(k\)</span></a><ul>
 <li class="chapter" data-level="8.1.1" data-path="validation-gam.html"><a href="validation-gam.html#est-ce-que-notre-module-est-assez-flexible"><i class="fa fa-check"></i><b>8.1.1</b> Est-ce que notre module est assez flexible?</a></li>
-<li class="chapter" data-level="8.1.2" data-path="validation-gam.html"><a href="validation-gam.html#est-ce-que-notre-modèle-est-réellement-normal"><i class="fa fa-check"></i><b>8.1.2</b> Est-ce que notre modèle est réellement Normal?</a></li>
 </ul></li>
+<li class="chapter" data-level="8.2" data-path="validation-gam.html"><a href="validation-gam.html#choisir-une-distribution"><i class="fa fa-check"></i><b>8.2</b> Choisir une distribution</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="autres-distributions.html"><a href="autres-distributions.html"><i class="fa fa-check"></i><b>9</b> Autres distributions</a><ul>
 <li class="chapter" data-level="9.1" data-path="autres-distributions.html"><a href="autres-distributions.html#défi-3"><i class="fa fa-check"></i><b>9.1</b> Défi 3</a><ul>
@@ -200,7 +200,8 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul></li>
 <li class="part"><span><b>Ressources &amp; Références</b></span></li>
-<li class="chapter" data-level="12" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>12</b> References</a></li>
+<li class="chapter" data-level="12" data-path="ressources.html"><a href="ressources.html"><i class="fa fa-check"></i><b>12</b> Ressources</a></li>
+<li class="chapter" data-level="13" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>13</b> References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/qcbsRworkshops" target="blank">QCBS R Workshop Series</a></li>
 
@@ -238,11 +239,14 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 --!>
 <div id="validation-gam" class="section level1">
 <h1><span class="header-section-number">Chapitre 8</span> Validation d’un GAM</h1>
+<p>Le modèle additif de base peut être étendu de plusieurs façons :</p>
+<ol style="list-style-type: decimal">
+<li>Utiliser d’autres distributions pour la variable de réponse avec l’argument <code>family</code> (comme dans un GLM),</li>
+<li>Utiliser de différents types de fonctions de base,</li>
+<li>Utilisation de différents types d’effets aléatoires pour ajuster des modèles à effets mixtes.</li>
+</ol>
+<p>Nous allons maintenant examiner ces aspects.</p>
 <p>Jusqu’à présent, nous avons utilisé des modèles additifs Gaussiens (distribution Normale), l’équivalent non linéaire d’un modèle linéaire.</p>
-<p>Mais que pouvons-nous faire si :
-- les observations de la variable de réponse ne <strong>suivent pas une distribution Normale</strong> ?
-- la <strong>variance n’est pas constante</strong> ? (hétéroscédasticité)</p>
-<p>Tout comme les modèles linéaires généralisés (GLM), nous pouvons formuler des modèles additifs <strong>généralisés</strong> pour répondre à ces problèmes.</p>
 <p>Cependant, les jeux de données en écologie ne respectent souvent pas les conditions des modèles Gaussiens. Donc, que pouvons-nous faire si les observations de la variable de réponse <strong>ne suivent pas une distribution normale</strong> ? Ou si la <strong>variance n’est pas constante</strong> (hétéroscédasticité) ?</p>
 <p>Tout comme les modèles linéaires généralisés (GLM), nous pouvons formuler des modèles additifs <strong>généralisés</strong> pour répondre à ces problèmes.</p>
 <p>Rappelons le modèle d’interaction pour les données de bioluminescence:</p>
@@ -285,7 +289,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <p>Est-ce que le <code>k</code> est assez grand?</p>
 <div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="validation-gam.html#cb72-1"></a><span class="kw">k.check</span>(smooth_interact)</span></code></pre></div>
 <pre><code>##                              k&#39;      edf   k-index p-value
-## s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883  0.0475</code></pre>
+## s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883  0.0675</code></pre>
 <p>Les <strong>EDF se rapprochent beaucoup de</strong> <code>k</code>. Ceci signifie que la <em>flexibilité</em> du modèle est restreint par le <code>k</code> utilisé par défaut, et que notre modèle pourrait mieux s’ajuster aux données si on permettait plus d’ondulations. En d’autres mots, nousn n’avons pas un compromis équilibré entre le lissage et l’ondulation du modèle.</p>
 <p>Recommençons le modèle avec un <code>k</code> plus élevé:</p>
 <div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="validation-gam.html#cb74-1"></a>smooth_interact_k60 &lt;-<span class="st"> </span><span class="kw">gam</span>(Sources <span class="op">~</span><span class="st"> </span>Season <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(SampleDepth,</span>
@@ -293,12 +297,13 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <p>Est-ce que le <code>k</code> est assez grand maintenant?</p>
 <div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="validation-gam.html#cb75-1"></a><span class="kw">k.check</span>(smooth_interact_k60)</span></code></pre></div>
 <pre><code>##                              k&#39;      edf  k-index p-value
-## s(SampleDepth,RelativeDepth) 59 46.03868 1.048626   0.905</code></pre>
+## s(SampleDepth,RelativeDepth) 59 46.03868 1.048626  0.9125</code></pre>
 <p>Les EDF sont beaucoup plus petits que <code>k</code>, donc notre modèle s’adjuste mieux aux données avec plus d’ondulations. On peut donc remplacer notre modèle avec cette version plus flexible:</p>
 <div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="validation-gam.html#cb77-1"></a>smooth_interact &lt;-<span class="st"> </span>smooth_interact_k60</span></code></pre></div>
 </div>
-<div id="est-ce-que-notre-modèle-est-réellement-normal" class="section level3">
-<h3><span class="header-section-number">8.1.2</span> Est-ce que notre modèle est réellement Normal?</h3>
+</div>
+<div id="choisir-une-distribution" class="section level2">
+<h2><span class="header-section-number">8.2</span> Choisir une distribution</h2>
 <p>Comme pour tout modèle Normal, nous devons vérifier certaines conditions avant de continuer. Nous pouvons évaluer la distribution des résidus du modèle pour vérifier ces conditions, tout comme nous le ferions pour un GLM (voir <a href="https://r.qcbs.ca/fr/workshops/r-workshop-06/">Atelier 6</a>).</p>
 <p>On peut visualiser les résidus du modèle avec <code>gam.check()</code>:</p>
 <div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="validation-gam.html#cb78-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
@@ -316,7 +321,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 ## indicate that k is too low, especially if edf is close to k&#39;.
 ## 
 ##                              k&#39; edf k-index p-value
-## s(SampleDepth,RelativeDepth) 59  46    1.05    0.87</code></pre>
+## s(SampleDepth,RelativeDepth) 59  46    1.05    0.91</code></pre>
 <blockquote>
 <p>En plus des graphiques, <code>gam.check()</code> fournit également la sortie de <code>k.check()</code>.</p>
 </blockquote>
@@ -330,7 +335,6 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 </ul>
 <div class="noway">
 <p>Il semble qu’une distribution Normale est inappropriée pour modéliser notre variable réponse!</p>
-</div>
 </div>
 </div>
 </div>

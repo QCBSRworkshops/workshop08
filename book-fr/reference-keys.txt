@@ -18,7 +18,7 @@ gam-avec-plusieurs-termes-non-linéaires
 gam-à-plusieurs-variables
 degrés-de-liberté-effectifs-edf
 gam-à-plusieurs-variables-linéaires-et-lisses
-gam-à-plusieurs-variables-1
+gam-à-plusieurs-variables-non-linéaires
 défi-2
 défi-2-solution
 gam-avec-des-termes-dinteraction
@@ -27,7 +27,7 @@ interaction-entre-variables-non-linéaires
 validation-gam
 choisir-k
 est-ce-que-notre-module-est-assez-flexible
-est-ce-que-notre-modèle-est-réellement-normal
+choisir-une-distribution
 autres-distributions
 défi-3
 défi-3-solution
@@ -41,4 +41,5 @@ gamm-avec-une-pente-aléatoire
 gamm-avec-un-intercept-et-une-pente-aléatoire
 gamm-avec-une-surface-lisse-aléatoire
 comparaison-de-gamm
+ressources
 references

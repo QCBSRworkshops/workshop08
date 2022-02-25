@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapitre 2 Préparez-vous pour cet atelier | Atelier 8 : Modèles additifs généralisés en R</title>
+  <title>Chapitre 12 Ressources | Atelier 8 : Modèles additifs généralisés en R</title>
   <meta name="description" content="Modèles additifs généralisés en R" />
   <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapitre 2 Préparez-vous pour cet atelier | Atelier 8 : Modèles additifs généralisés en R" />
+  <meta property="og:title" content="Chapitre 12 Ressources | Atelier 8 : Modèles additifs généralisés en R" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://github.com/qcbsRworkshops/" />
   <meta property="og:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="qcbsRworkshops/workshop08" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapitre 2 Préparez-vous pour cet atelier | Atelier 8 : Modèles additifs généralisés en R" />
+  <meta name="twitter:title" content="Chapitre 12 Ressources | Atelier 8 : Modèles additifs généralisés en R" />
   
   <meta name="twitter:description" content="Modèles additifs généralisés en R" />
   <meta name="twitter:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />
-<link rel="prev" href="objectifs-dapprentissage.html"/>
-<link rel="next" href="intro-linear-models.html"/>
+<link rel="prev" href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"/>
+<link rel="next" href="references.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -237,27 +237,21 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
   <img class= "hero-image" src="assets/images/jean-philippe-delberghe-75xPHEQBmvA-unsplash_hero_image.jpg">
 </div>
 --!>
-<div id="préparez-vous-pour-cet-atelier" class="section level1">
-<h1><span class="header-section-number">Chapitre 2</span> Préparez-vous pour cet atelier</h1>
-<p>Tout le matériel de l’atelier se trouve sur <a href="https://r.qcbs.ca/fr/workshops/r-workshop-08/">r.qcbs.ca/fr/workshops/r-workshop-08/</a>. Cela inclut un <a href="https://r.qcbs.ca/workshop08/book-fr/workshop08-script-fr.R">script R</a> qui rassemble tous les morceaux de code présentés dans ce livre.</p>
-<p>Pour cet atelier, nous travaillerons avec les jeux de données suivants :</p>
+<div id="ressources" class="section level1">
+<h1><span class="header-section-number">Chapitre 12</span> Ressources</h1>
+<p>Cet atelier présente une brève introduction aux concepts de base et aux packages populaires pour vous aider à estimer, évaluer et visualiser les GAMs dans R, mais les GAMs offrent bien d’autres possibilités!</p>
+<p>Nous avons quelques ressources à vous suggérer si vous souhaitez approfondir le sujet des GAMs et comment les implémenter dans R. Beaucoup de ces ressources ont inspiré et contribué au contenu de cet atelier. Il ne s’agit pas d’une liste exhaustive, mais de quelques pistes très utiles.</p>
 <ul>
-<li><a href="https://r.qcbs.ca/workshop08/pres-en/data/ISIT.csv">ISIT.csv</a></li>
+<li>Le livre <a href="https://www.routledge.com/Generalized-Additive-Models-An-Introduction-with-R-Second-Edition/Wood/p/book/9781498728331">Generalized Additive Models: An Introduction with R</a> de Simon Wood (l’auteur du paquet <code>mgcv</code>) est probablement la ressource la plus complète que vous pouvez trouver sur les GAMs.</li>
+<li>Le blogue de Gavin Simpson, <a href="https://fromthebottomoftheheap.net/">From the bottom of the heap</a>, discute de nombreux aspects des GAMs et de leur implémentation dans R.</li>
+<li>Le paquet de Gavin Simpson, <a href="https://cran.r-project.org/web/packages/gratia/index.html"><code>gratia</code></a>, est une réimplémentation utile des outils de visualisation des GAMs dans <code>ggplot2</code>.</li>
+<li><a href="https://noamross.github.io/gams-in-r-course/">Generalized Additive Models: An Introduction with R</a> par Noam Ross est un cours bien conçu, interactif et gratuit qui couvre les GAMs plus en détail.</li>
+<li><a href="https://jacolienvanrij.com/Tutorials/GAMM.html">Overview GAMM analysis of time series data</a> par Jacolien van Rij est un tutoriel utile et approfondi sur les GAMM qui a largement inspiré la section GAMM de cet atelier.</li>
+<li>Simon Wood catalogue également des conférences et des notes sur les GAMM sur son site Web (<a href="https://www.maths.ed.ac.uk/~swood34/">maths.ed.ac.uk/~swood34/</a>).</li>
+<li><a href="https://peerj.com/articles/6876/">Hierarchical generalized additive models in ecology: an introduction with mgcv</a> de Pedersen et al. (2019) est une excellente introduction aux GAM hiérarchiques, à la façon de les concevoir et à leur mise en œuvre dans R.</li>
 </ul>
-<p>Vous devriez également vous assurer que vous avez téléchargé, installé et chargé les librairies R suivants:</p>
-<ul>
-<li><a href="https://cran.r-project.org/package=ggplot2">ggplot2</a></li>
-<li><a href="https://cran.r-project.org/package=itsadug">itsadug</a></li>
-<li><a href="https://cran.r-project.org/package=mgcv">mgcv</a></li>
-</ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="préparez-vous-pour-cet-atelier.html#cb1-1"></a><span class="kw">install.packages</span>(<span class="st">&quot;ggplot2&quot;</span>)</span>
-<span id="cb1-2"><a href="préparez-vous-pour-cet-atelier.html#cb1-2"></a><span class="kw">install.packages</span>(<span class="st">&quot;mgcv&quot;</span>)</span>
-<span id="cb1-3"><a href="préparez-vous-pour-cet-atelier.html#cb1-3"></a><span class="kw">install.packages</span>(<span class="st">&quot;itsadug&quot;</span>)</span>
-<span id="cb1-4"><a href="préparez-vous-pour-cet-atelier.html#cb1-4"></a></span>
-<span id="cb1-5"><a href="préparez-vous-pour-cet-atelier.html#cb1-5"></a><span class="kw">library</span>(ggplot2)</span>
-<span id="cb1-6"><a href="préparez-vous-pour-cet-atelier.html#cb1-6"></a><span class="kw">library</span>(mgcv)</span>
-<span id="cb1-7"><a href="préparez-vous-pour-cet-atelier.html#cb1-7"></a><span class="kw">library</span>(itsadug)</span></code></pre></div>
-
+<p>Enfin, les pages d’aide, disponibles via <code>?gam</code> dans R, constituent toujours une excellente
+ressource.</p>
 </div>
 <hr>
 <center> 
@@ -270,8 +264,8 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="objectifs-dapprentissage.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="intro-linear-models.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

@@ -192,26 +192,7 @@ summary(smooth_interact)$p.table
 
 summary(smooth_interact)$s.table
 
-par(mfrow=c(1,3))
-install.packages("patchwork", quiet = TRUE)
-library(patchwork)
 
-k_plot <- function(k_value){
-    data("eeg")
-    m <- mgcv::gam(Ampl ~ s(Time, k = k_value), data = eeg)
-     p <- ggplot(eeg, aes(x = Time, y = Ampl)) +
-     geom_point(alpha = .1, size = 1) + 
-     geom_line(aes(y = predict(m)),
-               lwd = 2, col = "black") +
-         labs(title = paste("k =", k_value), x = "", y = "") +
-         theme_classic() + 
-         theme(text = element_text(size = 15), 
-               axis.text = element_blank(),
-               plot.title = element_text(face = "bold", hjust = 0.5))  
-    return(p)
-}
-
-k_plot(3) + k_plot(6) + k_plot(10)
 
 k.check(smooth_interact)
 

@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 10 Changing the basis | Workshop 8: Generalized additive models in R</title>
+  <title>Chapter 10 Changing the basis function | Workshop 8: Generalized additive models in R</title>
   <meta name="description" content="Generalized additive models in R" />
   <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 10 Changing the basis | Workshop 8: Generalized additive models in R" />
+  <meta property="og:title" content="Chapter 10 Changing the basis function | Workshop 8: Generalized additive models in R" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://github.com/qcbsRworkshops/" />
   <meta property="og:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="qcbsRworkshops/workshop08" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 10 Changing the basis | Workshop 8: Generalized additive models in R" />
+  <meta name="twitter:title" content="Chapter 10 Changing the basis function | Workshop 8: Generalized additive models in R" />
   
   <meta name="twitter:description" content="Generalized additive models in R" />
   <meta name="twitter:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -175,8 +175,8 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.2" data-path="gam-with-interaction-terms.html"><a href="gam-with-interaction-terms.html#interaction-between-smoothed-variables"><i class="fa fa-check"></i><b>7.2</b> Interaction between smoothed variables</a></li>
 </ul></li>
 <li class="part"><span><b>Generalization of additive models</b></span></li>
-<li class="chapter" data-level="8" data-path="gam-model-checking.html"><a href="gam-model-checking.html"><i class="fa fa-check"></i><b>8</b> GAM model checking</a><ul>
-<li class="chapter" data-level="8.1" data-path="gam-model-checking.html"><a href="gam-model-checking.html#selecting-k"><i class="fa fa-check"></i><b>8.1</b> Selecting <span class="math inline">\(k\)</span></a><ul>
+<li class="chapter" data-level="8" data-path="gam-model-checking.html"><a href="gam-model-checking.html"><i class="fa fa-check"></i><b>8</b> GAM validation</a><ul>
+<li class="chapter" data-level="8.1" data-path="gam-model-checking.html"><a href="gam-model-checking.html#selecting-k-basis-dimensions"><i class="fa fa-check"></i><b>8.1</b> Selecting <span class="math inline">\(k\)</span> basis dimensions</a><ul>
 <li class="chapter" data-level="8.1.1" data-path="gam-model-checking.html"><a href="gam-model-checking.html#is-our-model-wiggly-enough"><i class="fa fa-check"></i><b>8.1.1</b> Is our model wiggly enough?</a></li>
 <li class="chapter" data-level="8.1.2" data-path="gam-model-checking.html"><a href="gam-model-checking.html#is-our-model-actually-normal"><i class="fa fa-check"></i><b>8.1.2</b> Is our model actually Normal?</a></li>
 </ul></li>
@@ -186,8 +186,8 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9.1.1" data-path="other-distributions.html"><a href="other-distributions.html#challenge-3-solution"><i class="fa fa-check"></i><b>9.1.1</b> Challenge 3: Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="changing-the-basis.html"><a href="changing-the-basis.html"><i class="fa fa-check"></i><b>10</b> Changing the basis</a><ul>
-<li class="chapter" data-level="10.1" data-path="changing-the-basis.html"><a href="changing-the-basis.html#example-cyclical-data"><i class="fa fa-check"></i><b>10.1</b> Example: Cyclical data</a></li>
+<li class="chapter" data-level="10" data-path="changing-the-basis-function.html"><a href="changing-the-basis-function.html"><i class="fa fa-check"></i><b>10</b> Changing the basis function</a><ul>
+<li class="chapter" data-level="10.1" data-path="changing-the-basis-function.html"><a href="changing-the-basis-function.html#example-cyclical-data"><i class="fa fa-check"></i><b>10.1</b> Example: Cyclical data</a></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html"><i class="fa fa-check"></i><b>11</b> Quick intro to Generalized Additive Mixed Models (GAMMs)</a><ul>
 <li class="chapter" data-level="11.1" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#residual-autocorrelation"><i class="fa fa-check"></i><b>11.1</b> Residual autocorrelation</a></li>
@@ -237,8 +237,8 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
   <img class= "hero-image" src="assets/images/jean-philippe-delberghe-75xPHEQBmvA-unsplash_hero_image.jpg">
 </div>
 --!>
-<div id="changing-the-basis" class="section level1">
-<h1><span class="header-section-number">Chapter 10</span> Changing the basis</h1>
+<div id="changing-the-basis-function" class="section level1">
+<h1><span class="header-section-number">Chapter 10</span> Changing the basis function</h1>
 <p>To model a non-linear smooth variable or surface, smooth functions can be built in different ways:</p>
 <p>The smooth function <code>s()</code> models a 1-dimensional smooth or for modelling interactions among variables measured using the same unit and the same scale. This is the smooth function we have been using throughout this workshop.</p>
 <p>There are two other smooth functions: <code>te()</code> and <code>ti()</code>, which can both be used to model 2- or n-dimensional interaction surfaces of variables. The function <code>te()</code> is useful when variables are not on the same scale, and when interactions <em>include</em> main effects. The function <code>ti()</code> is best for modelling interaction surfaces that <em>do not</em> include the main effects.</p>
@@ -256,37 +256,36 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <div id="example-cyclical-data" class="section level2">
 <h2><span class="header-section-number">10.1</span> Example: Cyclical data</h2>
 <p>When modelling cyclical data, you generally want the predictor to match at both ends. To achieve this, we need to change the basis function.</p>
-<p>Let’s use a time series of climate data, with monthly measurements, to find a temporal trend in yearly temperature. We’ll use the Nottingham temperature
-time series for this, which is included in <code>R</code>:</p>
-<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="changing-the-basis.html#cb92-1"></a><span class="co"># Nottingham temperature time series</span></span>
-<span id="cb92-2"><a href="changing-the-basis.html#cb92-2"></a><span class="kw">data</span>(nottem)</span></code></pre></div>
+<p>Let’s use a time series of climate data, with monthly measurements, to find a temporal trend in yearly temperature. We’ll use the Nottingham temperature time series for this, which is included in <code>R</code>:</p>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="changing-the-basis-function.html#cb92-1"></a><span class="co"># Nottingham temperature time series</span></span>
+<span id="cb92-2"><a href="changing-the-basis-function.html#cb92-2"></a><span class="kw">data</span>(nottem)</span></code></pre></div>
 <div class="explanation">
 <p>See <code>?nottem</code> for a more complete description of this dataset.</p>
 </div>
 <p>Let us begin by plotting the monthly temperature fluctuations for every year in the <code>nottem</code> dataset:</p>
-<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="changing-the-basis.html#cb93-1"></a><span class="co"># the number of years of data (20 years)</span></span>
-<span id="cb93-2"><a href="changing-the-basis.html#cb93-2"></a>n_years &lt;-<span class="st"> </span><span class="kw">length</span>(nottem)<span class="op">/</span><span class="dv">12</span></span>
-<span id="cb93-3"><a href="changing-the-basis.html#cb93-3"></a></span>
-<span id="cb93-4"><a href="changing-the-basis.html#cb93-4"></a><span class="co"># categorical variable coding for the 12 months of the</span></span>
-<span id="cb93-5"><a href="changing-the-basis.html#cb93-5"></a><span class="co"># year, for every year sampled (so, a sequence 1 to 12</span></span>
-<span id="cb93-6"><a href="changing-the-basis.html#cb93-6"></a><span class="co"># repeated for 20 years).</span></span>
-<span id="cb93-7"><a href="changing-the-basis.html#cb93-7"></a>nottem_month &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">12</span>, <span class="dt">times =</span> n_years)</span>
-<span id="cb93-8"><a href="changing-the-basis.html#cb93-8"></a></span>
-<span id="cb93-9"><a href="changing-the-basis.html#cb93-9"></a><span class="co"># the year corresponding to each month in nottem_month</span></span>
-<span id="cb93-10"><a href="changing-the-basis.html#cb93-10"></a>nottem_year &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1920</span><span class="op">:</span>(<span class="dv">1920</span> <span class="op">+</span><span class="st"> </span>n_years <span class="op">-</span><span class="st"> </span><span class="dv">1</span>), <span class="dt">each =</span> <span class="dv">12</span>)</span>
-<span id="cb93-11"><a href="changing-the-basis.html#cb93-11"></a></span>
-<span id="cb93-12"><a href="changing-the-basis.html#cb93-12"></a><span class="co"># Plot the time series</span></span>
-<span id="cb93-13"><a href="changing-the-basis.html#cb93-13"></a><span class="kw">qplot</span>(<span class="dt">x =</span> nottem_month, <span class="dt">y =</span> nottem, <span class="dt">colour =</span> <span class="kw">factor</span>(nottem_year),</span>
-<span id="cb93-14"><a href="changing-the-basis.html#cb93-14"></a>    <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme_bw</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="changing-the-basis-function.html#cb93-1"></a><span class="co"># the number of years of data (20 years)</span></span>
+<span id="cb93-2"><a href="changing-the-basis-function.html#cb93-2"></a>n_years &lt;-<span class="st"> </span><span class="kw">length</span>(nottem)<span class="op">/</span><span class="dv">12</span></span>
+<span id="cb93-3"><a href="changing-the-basis-function.html#cb93-3"></a></span>
+<span id="cb93-4"><a href="changing-the-basis-function.html#cb93-4"></a><span class="co"># categorical variable coding for the 12 months of the</span></span>
+<span id="cb93-5"><a href="changing-the-basis-function.html#cb93-5"></a><span class="co"># year, for every year sampled (so, a sequence 1 to 12</span></span>
+<span id="cb93-6"><a href="changing-the-basis-function.html#cb93-6"></a><span class="co"># repeated for 20 years).</span></span>
+<span id="cb93-7"><a href="changing-the-basis-function.html#cb93-7"></a>nottem_month &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">12</span>, <span class="dt">times =</span> n_years)</span>
+<span id="cb93-8"><a href="changing-the-basis-function.html#cb93-8"></a></span>
+<span id="cb93-9"><a href="changing-the-basis-function.html#cb93-9"></a><span class="co"># the year corresponding to each month in nottem_month</span></span>
+<span id="cb93-10"><a href="changing-the-basis-function.html#cb93-10"></a>nottem_year &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1920</span><span class="op">:</span>(<span class="dv">1920</span> <span class="op">+</span><span class="st"> </span>n_years <span class="op">-</span><span class="st"> </span><span class="dv">1</span>), <span class="dt">each =</span> <span class="dv">12</span>)</span>
+<span id="cb93-11"><a href="changing-the-basis-function.html#cb93-11"></a></span>
+<span id="cb93-12"><a href="changing-the-basis-function.html#cb93-12"></a><span class="co"># Plot the time series</span></span>
+<span id="cb93-13"><a href="changing-the-basis-function.html#cb93-13"></a><span class="kw">qplot</span>(<span class="dt">x =</span> nottem_month, <span class="dt">y =</span> nottem, <span class="dt">colour =</span> <span class="kw">factor</span>(nottem_year),</span>
+<span id="cb93-14"><a href="changing-the-basis-function.html#cb93-14"></a>    <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme_bw</span>()</span></code></pre></div>
 <p><img src="book-en_files/figure-html/unnamed-chunk-70-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>We can model both the cyclic change of temperature across months and the non-linear trend through years, using a cyclical cubic spline, or <code>cc</code>, for the month variable and a regular smooth for the year variable.</p>
-<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="changing-the-basis.html#cb94-1"></a>year_gam &lt;-<span class="st"> </span><span class="kw">gam</span>(nottem <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(nottem_year) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(nottem_month, <span class="dt">bs =</span> <span class="st">&quot;cc&quot;</span>),</span>
-<span id="cb94-2"><a href="changing-the-basis.html#cb94-2"></a>    <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
-<span id="cb94-3"><a href="changing-the-basis.html#cb94-3"></a><span class="kw">summary</span>(year_gam)<span class="op">$</span>s.table</span></code></pre></div>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="changing-the-basis-function.html#cb94-1"></a>year_gam &lt;-<span class="st"> </span><span class="kw">gam</span>(nottem <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(nottem_year) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(nottem_month, <span class="dt">bs =</span> <span class="st">&quot;cc&quot;</span>),</span>
+<span id="cb94-2"><a href="changing-the-basis-function.html#cb94-2"></a>    <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
+<span id="cb94-3"><a href="changing-the-basis-function.html#cb94-3"></a><span class="kw">summary</span>(year_gam)<span class="op">$</span>s.table</span></code></pre></div>
 <pre><code>##                      edf   Ref.df          F    p-value
 ## s(nottem_year)  1.621375 2.011475   2.850888 0.06141004
 ## s(nottem_month) 6.855132 8.000000 393.119285 0.00000000</code></pre>
-<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="changing-the-basis.html#cb96-1"></a><span class="kw">plot</span>(year_gam, <span class="dt">page =</span> <span class="dv">1</span>, <span class="dt">scale =</span> <span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="changing-the-basis-function.html#cb96-1"></a><span class="kw">plot</span>(year_gam, <span class="dt">page =</span> <span class="dv">1</span>, <span class="dt">scale =</span> <span class="dv">0</span>)</span></code></pre></div>
 <p><img src="book-en_files/figure-html/unnamed-chunk-72-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>There is about 1-1.5 degree rise in temperature over the period (Panel 1), but within a given year there is about 20 degrees variation in temperature, on average (Panel 2). The actual data vary around these values, and this is the unexplained variance.</p>
 <p>Here we can see one of the very interesting bonuses of using GAMs. We can either plot the response surface (fitted values) or the terms (contribution of each covariate) as shown here. You can imagine these as plots of the changing regression coefficients, and how their contribution (or effect size) varies over time. In the first plot, we see that positive contributions of temperature occurred post-1930.</p>
@@ -296,17 +295,17 @@ time series for this, which is included in <code>R</code>:</p>
 <p>That is, the contribution is significant when the confidence intervals do not overlap zero, which occurs at around 300 and 100 B.C. in <span class="citation">Simpson and Anderson (<a href="#ref-simpson-2009" role="doc-biblioref">2009</a>)</span>.</p>
 <p>This allowed the authors to not only determine how much variance was explained by temperature over the last few centuries, but also to pinpoint when in time this effect was significant.</p>
 <p>If of interest to you, the code to plot either the response surface (<code>type = "response"</code>) or the terms (<code>type = "terms"</code>) is given below. When <code>type = "terms"</code> is selected, you obtain the same figure as above.</p>
-<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="changing-the-basis.html#cb97-1"></a>pred &lt;-<span class="st"> </span><span class="kw">predict</span>(year_gam, <span class="dt">type =</span> <span class="st">&quot;terms&quot;</span>, <span class="dt">se =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb97-2"><a href="changing-the-basis.html#cb97-2"></a>I &lt;-<span class="st"> </span><span class="kw">order</span>(nottem_year)</span>
-<span id="cb97-3"><a href="changing-the-basis.html#cb97-3"></a>plusCI &lt;-<span class="st"> </span><span class="kw">I</span>(pred<span class="op">$</span>fit[, <span class="dv">1</span>] <span class="op">+</span><span class="st"> </span><span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>pred<span class="op">$</span>se[, <span class="dv">1</span>])</span>
-<span id="cb97-4"><a href="changing-the-basis.html#cb97-4"></a>minusCI &lt;-<span class="st"> </span><span class="kw">I</span>(pred<span class="op">$</span>fit[, <span class="dv">1</span>] <span class="op">-</span><span class="st"> </span><span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>pred<span class="op">$</span>se[, <span class="dv">1</span>])</span>
-<span id="cb97-5"><a href="changing-the-basis.html#cb97-5"></a>xx &lt;-<span class="st"> </span><span class="kw">c</span>(nottem_year[I], <span class="kw">rev</span>(nottem_year[I]))</span>
-<span id="cb97-6"><a href="changing-the-basis.html#cb97-6"></a>yy &lt;-<span class="st"> </span><span class="kw">c</span>(plusCI[I], <span class="kw">rev</span>(minusCI[I]))</span>
-<span id="cb97-7"><a href="changing-the-basis.html#cb97-7"></a></span>
-<span id="cb97-8"><a href="changing-the-basis.html#cb97-8"></a><span class="kw">plot</span>(xx, yy, <span class="dt">type =</span> <span class="st">&quot;n&quot;</span>, <span class="dt">cex.axis =</span> <span class="fl">1.2</span>, <span class="dt">xlab =</span> <span class="st">&quot;Year&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Temperature&quot;</span>)</span>
-<span id="cb97-9"><a href="changing-the-basis.html#cb97-9"></a><span class="kw">polygon</span>(xx, yy, <span class="dt">col =</span> <span class="st">&quot;light blue&quot;</span>, <span class="dt">border =</span> <span class="st">&quot;light blue&quot;</span>)</span>
-<span id="cb97-10"><a href="changing-the-basis.html#cb97-10"></a><span class="kw">lines</span>(nottem_year[I], pred<span class="op">$</span>fit[, <span class="dv">1</span>][I], <span class="dt">lty =</span> <span class="dv">1</span>, <span class="dt">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb97-11"><a href="changing-the-basis.html#cb97-11"></a><span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">0</span>, <span class="dt">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="changing-the-basis-function.html#cb97-1"></a>pred &lt;-<span class="st"> </span><span class="kw">predict</span>(year_gam, <span class="dt">type =</span> <span class="st">&quot;terms&quot;</span>, <span class="dt">se =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb97-2"><a href="changing-the-basis-function.html#cb97-2"></a>I &lt;-<span class="st"> </span><span class="kw">order</span>(nottem_year)</span>
+<span id="cb97-3"><a href="changing-the-basis-function.html#cb97-3"></a>plusCI &lt;-<span class="st"> </span><span class="kw">I</span>(pred<span class="op">$</span>fit[, <span class="dv">1</span>] <span class="op">+</span><span class="st"> </span><span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>pred<span class="op">$</span>se[, <span class="dv">1</span>])</span>
+<span id="cb97-4"><a href="changing-the-basis-function.html#cb97-4"></a>minusCI &lt;-<span class="st"> </span><span class="kw">I</span>(pred<span class="op">$</span>fit[, <span class="dv">1</span>] <span class="op">-</span><span class="st"> </span><span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>pred<span class="op">$</span>se[, <span class="dv">1</span>])</span>
+<span id="cb97-5"><a href="changing-the-basis-function.html#cb97-5"></a>xx &lt;-<span class="st"> </span><span class="kw">c</span>(nottem_year[I], <span class="kw">rev</span>(nottem_year[I]))</span>
+<span id="cb97-6"><a href="changing-the-basis-function.html#cb97-6"></a>yy &lt;-<span class="st"> </span><span class="kw">c</span>(plusCI[I], <span class="kw">rev</span>(minusCI[I]))</span>
+<span id="cb97-7"><a href="changing-the-basis-function.html#cb97-7"></a></span>
+<span id="cb97-8"><a href="changing-the-basis-function.html#cb97-8"></a><span class="kw">plot</span>(xx, yy, <span class="dt">type =</span> <span class="st">&quot;n&quot;</span>, <span class="dt">cex.axis =</span> <span class="fl">1.2</span>, <span class="dt">xlab =</span> <span class="st">&quot;Year&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Temperature&quot;</span>)</span>
+<span id="cb97-9"><a href="changing-the-basis-function.html#cb97-9"></a><span class="kw">polygon</span>(xx, yy, <span class="dt">col =</span> <span class="st">&quot;light blue&quot;</span>, <span class="dt">border =</span> <span class="st">&quot;light blue&quot;</span>)</span>
+<span id="cb97-10"><a href="changing-the-basis-function.html#cb97-10"></a><span class="kw">lines</span>(nottem_year[I], pred<span class="op">$</span>fit[, <span class="dv">1</span>][I], <span class="dt">lty =</span> <span class="dv">1</span>, <span class="dt">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb97-11"><a href="changing-the-basis-function.html#cb97-11"></a><span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">0</span>, <span class="dt">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="book-en_files/figure-html/unnamed-chunk-73-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 

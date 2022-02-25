@@ -175,8 +175,8 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.2" data-path="gam-with-interaction-terms.html"><a href="gam-with-interaction-terms.html#interaction-between-smoothed-variables"><i class="fa fa-check"></i><b>7.2</b> Interaction between smoothed variables</a></li>
 </ul></li>
 <li class="part"><span><b>Generalization of additive models</b></span></li>
-<li class="chapter" data-level="8" data-path="gam-model-checking.html"><a href="gam-model-checking.html"><i class="fa fa-check"></i><b>8</b> GAM model checking</a><ul>
-<li class="chapter" data-level="8.1" data-path="gam-model-checking.html"><a href="gam-model-checking.html#selecting-k"><i class="fa fa-check"></i><b>8.1</b> Selecting <span class="math inline">\(k\)</span></a><ul>
+<li class="chapter" data-level="8" data-path="gam-model-checking.html"><a href="gam-model-checking.html"><i class="fa fa-check"></i><b>8</b> GAM validation</a><ul>
+<li class="chapter" data-level="8.1" data-path="gam-model-checking.html"><a href="gam-model-checking.html#selecting-k-basis-dimensions"><i class="fa fa-check"></i><b>8.1</b> Selecting <span class="math inline">\(k\)</span> basis dimensions</a><ul>
 <li class="chapter" data-level="8.1.1" data-path="gam-model-checking.html"><a href="gam-model-checking.html#is-our-model-wiggly-enough"><i class="fa fa-check"></i><b>8.1.1</b> Is our model wiggly enough?</a></li>
 <li class="chapter" data-level="8.1.2" data-path="gam-model-checking.html"><a href="gam-model-checking.html#is-our-model-actually-normal"><i class="fa fa-check"></i><b>8.1.2</b> Is our model actually Normal?</a></li>
 </ul></li>
@@ -186,8 +186,8 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9.1.1" data-path="other-distributions.html"><a href="other-distributions.html#challenge-3-solution"><i class="fa fa-check"></i><b>9.1.1</b> Challenge 3: Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="changing-the-basis.html"><a href="changing-the-basis.html"><i class="fa fa-check"></i><b>10</b> Changing the basis</a><ul>
-<li class="chapter" data-level="10.1" data-path="changing-the-basis.html"><a href="changing-the-basis.html#example-cyclical-data"><i class="fa fa-check"></i><b>10.1</b> Example: Cyclical data</a></li>
+<li class="chapter" data-level="10" data-path="changing-the-basis-function.html"><a href="changing-the-basis-function.html"><i class="fa fa-check"></i><b>10</b> Changing the basis function</a><ul>
+<li class="chapter" data-level="10.1" data-path="changing-the-basis-function.html"><a href="changing-the-basis-function.html#example-cyclical-data"><i class="fa fa-check"></i><b>10.1</b> Example: Cyclical data</a></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html"><i class="fa fa-check"></i><b>11</b> Quick intro to Generalized Additive Mixed Models (GAMMs)</a><ul>
 <li class="chapter" data-level="11.1" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#residual-autocorrelation"><i class="fa fa-check"></i><b>11.1</b> Residual autocorrelation</a></li>
@@ -252,10 +252,10 @@ major assumptions:</p>
 <li>The errors are independent of each other;</li>
 </ol>
 <p>A linear model can sometimes accommodate certain types of non-linear responses (e.g. <span class="math inline">\(x^2\)</span>), but this approach strongly relies on decisions that can be either arbitrary or well-informed, and is much less flexible than using an additive model. For example, this linear model with multiple predictors can handle a non-linear response, but quickly becomes difficult to interpret and manage:</p>
-<p><span class="math display">\[y_i = \beta_0 + \beta_1x_{1,i}+\beta_2x_{2,i}+\beta_3x_{3,i}+...+\beta_kx_{k,i} + \epsilon_i\]</span>
-Linear models work very well in certain specific cases where all these criteria are met:</p>
+<p><span class="math display">\[y_i = \beta_0 + \beta_1x_{1,i}+\beta_2x_{2,i}+\beta_3x_{3,i}+...+\beta_kx_{k,i} + \epsilon_i\]</span></p>
+<p>Linear models work very well in certain specific cases where all these criteria are met:</p>
 <p><img src="images/linreg.png" width="70%" style="display: block; margin: auto;" /></p>
-<p>In reality, we often cannot meet these criteria. This means that in many cases, linear models are inappropriate:</p>
+<p>In reality, we often cannot meet these criteria. In many cases, linear models are inappropriate:</p>
 <p><img src="images/linreg_bad.png" width="100%" style="display: block; margin: auto;" /></p>
 <p>So, how can we fit a better model? To answer this question, we must first consider what the regression model is
 trying to do. The linear model is trying to fit the best <strong>straight line</strong> that passes through the middle of the data, <em>without <strong>overfitting</strong></em> the data, which is what would happen if we simply drew a line between each point and its neighbours. Linear models do this by finding the best fit straight line that passes through the data.</p>

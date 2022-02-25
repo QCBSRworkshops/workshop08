@@ -175,8 +175,8 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.2" data-path="gam-with-interaction-terms.html"><a href="gam-with-interaction-terms.html#interaction-between-smoothed-variables"><i class="fa fa-check"></i><b>7.2</b> Interaction between smoothed variables</a></li>
 </ul></li>
 <li class="part"><span><b>Generalization of additive models</b></span></li>
-<li class="chapter" data-level="8" data-path="gam-model-checking.html"><a href="gam-model-checking.html"><i class="fa fa-check"></i><b>8</b> GAM model checking</a><ul>
-<li class="chapter" data-level="8.1" data-path="gam-model-checking.html"><a href="gam-model-checking.html#selecting-k"><i class="fa fa-check"></i><b>8.1</b> Selecting <span class="math inline">\(k\)</span></a><ul>
+<li class="chapter" data-level="8" data-path="gam-model-checking.html"><a href="gam-model-checking.html"><i class="fa fa-check"></i><b>8</b> GAM validation</a><ul>
+<li class="chapter" data-level="8.1" data-path="gam-model-checking.html"><a href="gam-model-checking.html#selecting-k-basis-dimensions"><i class="fa fa-check"></i><b>8.1</b> Selecting <span class="math inline">\(k\)</span> basis dimensions</a><ul>
 <li class="chapter" data-level="8.1.1" data-path="gam-model-checking.html"><a href="gam-model-checking.html#is-our-model-wiggly-enough"><i class="fa fa-check"></i><b>8.1.1</b> Is our model wiggly enough?</a></li>
 <li class="chapter" data-level="8.1.2" data-path="gam-model-checking.html"><a href="gam-model-checking.html#is-our-model-actually-normal"><i class="fa fa-check"></i><b>8.1.2</b> Is our model actually Normal?</a></li>
 </ul></li>
@@ -186,8 +186,8 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9.1.1" data-path="other-distributions.html"><a href="other-distributions.html#challenge-3-solution"><i class="fa fa-check"></i><b>9.1.1</b> Challenge 3: Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="changing-the-basis.html"><a href="changing-the-basis.html"><i class="fa fa-check"></i><b>10</b> Changing the basis</a><ul>
-<li class="chapter" data-level="10.1" data-path="changing-the-basis.html"><a href="changing-the-basis.html#example-cyclical-data"><i class="fa fa-check"></i><b>10.1</b> Example: Cyclical data</a></li>
+<li class="chapter" data-level="10" data-path="changing-the-basis-function.html"><a href="changing-the-basis-function.html"><i class="fa fa-check"></i><b>10</b> Changing the basis function</a><ul>
+<li class="chapter" data-level="10.1" data-path="changing-the-basis-function.html"><a href="changing-the-basis-function.html#example-cyclical-data"><i class="fa fa-check"></i><b>10.1</b> Example: Cyclical data</a></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html"><i class="fa fa-check"></i><b>11</b> Quick intro to Generalized Additive Mixed Models (GAMMs)</a><ul>
 <li class="chapter" data-level="11.1" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#residual-autocorrelation"><i class="fa fa-check"></i><b>11.1</b> Residual autocorrelation</a></li>
@@ -299,7 +299,7 @@ smoothed terms, and smoothed interactions.</p>
 <p>In linear regression, the <em>model</em> degrees of freedom are equivalent to the number of non-redundant free parameters <span class="math inline">\(p\)</span> in the model, and the <em>residual</em> degrees of freedom are given by <span class="math inline">\(n-p\)</span>.</p>
 <p>Because the number of free parameters in GAMs is difficult to define, the <strong>EDF</strong> are instead related to the smoothing parameter <span class="math inline">\(\lambda\)</span>, such that the greater the penalty, the smaller the <strong>EDF</strong>.</p>
 <p>An upper bound on the <strong>EDF</strong> is determined by the basis dimension <span class="math inline">\(k\)</span> for each smooth function, meaning the <strong>EDF</strong> cannot exceed <span class="math inline">\(k-1\)</span>.</p>
-<p>In practice, the exact choice of <span class="math inline">\(k\)</span> is arbitrary, but it should be <strong>large enough</strong> to accommodate a sufficiently complex smooth function. We will talk about choosing <span class="math inline">\(k\)</span> in <a href="#model-checking">Chapter 6</a>.</p>
+<p>In practice, the exact choice of <span class="math inline">\(k\)</span> is arbitrary, but it should be <strong>large enough</strong> to accommodate a sufficiently complex smooth function. We will talk about choosing <span class="math inline">\(k\)</span> in upcoming sections.</p>
 <div class="explanation">
 <p>Higher EDF imply more complex, wiggly splines.</p>
 <p>When a term has an EDF value that is close to 1, it is close to being a linear term. Higher values indicate that the term is more wiggly, or in other words, more non-linear!</p>

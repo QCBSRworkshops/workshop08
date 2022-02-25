@@ -175,8 +175,8 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.2" data-path="gam-with-interaction-terms.html"><a href="gam-with-interaction-terms.html#interaction-between-smoothed-variables"><i class="fa fa-check"></i><b>7.2</b> Interaction between smoothed variables</a></li>
 </ul></li>
 <li class="part"><span><b>Generalization of additive models</b></span></li>
-<li class="chapter" data-level="8" data-path="gam-model-checking.html"><a href="gam-model-checking.html"><i class="fa fa-check"></i><b>8</b> GAM model checking</a><ul>
-<li class="chapter" data-level="8.1" data-path="gam-model-checking.html"><a href="gam-model-checking.html#selecting-k"><i class="fa fa-check"></i><b>8.1</b> Selecting <span class="math inline">\(k\)</span></a><ul>
+<li class="chapter" data-level="8" data-path="gam-model-checking.html"><a href="gam-model-checking.html"><i class="fa fa-check"></i><b>8</b> GAM validation</a><ul>
+<li class="chapter" data-level="8.1" data-path="gam-model-checking.html"><a href="gam-model-checking.html#selecting-k-basis-dimensions"><i class="fa fa-check"></i><b>8.1</b> Selecting <span class="math inline">\(k\)</span> basis dimensions</a><ul>
 <li class="chapter" data-level="8.1.1" data-path="gam-model-checking.html"><a href="gam-model-checking.html#is-our-model-wiggly-enough"><i class="fa fa-check"></i><b>8.1.1</b> Is our model wiggly enough?</a></li>
 <li class="chapter" data-level="8.1.2" data-path="gam-model-checking.html"><a href="gam-model-checking.html#is-our-model-actually-normal"><i class="fa fa-check"></i><b>8.1.2</b> Is our model actually Normal?</a></li>
 </ul></li>
@@ -186,8 +186,8 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9.1.1" data-path="other-distributions.html"><a href="other-distributions.html#challenge-3-solution"><i class="fa fa-check"></i><b>9.1.1</b> Challenge 3: Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="changing-the-basis.html"><a href="changing-the-basis.html"><i class="fa fa-check"></i><b>10</b> Changing the basis</a><ul>
-<li class="chapter" data-level="10.1" data-path="changing-the-basis.html"><a href="changing-the-basis.html#example-cyclical-data"><i class="fa fa-check"></i><b>10.1</b> Example: Cyclical data</a></li>
+<li class="chapter" data-level="10" data-path="changing-the-basis-function.html"><a href="changing-the-basis-function.html"><i class="fa fa-check"></i><b>10</b> Changing the basis function</a><ul>
+<li class="chapter" data-level="10.1" data-path="changing-the-basis-function.html"><a href="changing-the-basis-function.html#example-cyclical-data"><i class="fa fa-check"></i><b>10.1</b> Example: Cyclical data</a></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html"><i class="fa fa-check"></i><b>11</b> Quick intro to Generalized Additive Mixed Models (GAMMs)</a><ul>
 <li class="chapter" data-level="11.1" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#residual-autocorrelation"><i class="fa fa-check"></i><b>11.1</b> Residual autocorrelation</a></li>
@@ -269,8 +269,10 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <p>The plots show some differences between the shape of the smooth terms among the two levels of <code>Season</code>. The most notable difference is the peak in the second panel, which tells us that there is an effect of <code>SampleDepth</code> between 1000 and 2000 that is important in Season 2, but does not occur in Season 1. This hints that the interaction effect could be important to include in our model.</p>
 <p>We can also plot the interaction effect in 3D on a single plot, using <code>vis.gam()</code>.</p>
 <div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="gam-with-interaction-terms.html#cb59-1"></a><span class="kw">vis.gam</span>(factor_interact, <span class="dt">theta =</span> <span class="dv">120</span>, <span class="dt">n.grid =</span> <span class="dv">50</span>, <span class="dt">lwd =</span> <span class="fl">0.4</span>)</span></code></pre></div>
-<p><img src="book-en_files/figure-html/unnamed-chunk-49-1.png" width="672" style="display: block; margin: auto;" />
-&gt; This plot can be rotated by changing the value of the <code>theta</code> argument.</p>
+<p><img src="book-en_files/figure-html/unnamed-chunk-49-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="explanation">
+<p>This plot can be rotated by changing the value of the <code>theta</code> argument.</p>
+</div>
 <p>To test our idea that this interaction is important, we will perform a model comparison using AIC to determine whether the interaction term improves our model’s performance.</p>
 <div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="gam-with-interaction-terms.html#cb60-1"></a><span class="kw">AIC</span>(two_smooth_model, factor_interact)</span></code></pre></div>
 <pre><code>##                        df      AIC
@@ -293,9 +295,9 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <p>We can also plot this interaction on a 3D surface:</p>
 <div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="gam-with-interaction-terms.html#cb65-1"></a><span class="kw">vis.gam</span>(smooth_interact, <span class="dt">view =</span> <span class="kw">c</span>(<span class="st">&quot;SampleDepth&quot;</span>, <span class="st">&quot;RelativeDepth&quot;</span>),</span>
 <span id="cb65-2"><a href="gam-with-interaction-terms.html#cb65-2"></a>    <span class="dt">theta =</span> <span class="dv">50</span>, <span class="dt">n.grid =</span> <span class="dv">50</span>, <span class="dt">lwd =</span> <span class="fl">0.4</span>)</span></code></pre></div>
-<p><img src="book-en_files/figure-html/unnamed-chunk-53-1.png" width="672" style="display: block; margin: auto;" />
-&gt; Remember, this plot can be rotated by changing the value of the <code>theta</code> argument.</p>
+<p><img src="book-en_files/figure-html/unnamed-chunk-53-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="explanation">
+<p>Remember, this plot can be rotated by changing the value of the <code>theta</code> argument.</p>
 <p>You can change the colour of the 3D plot using the <code>color</code> argument. Try specifying <code>color = "cm"</code> in <code>vis.gam()</code> above, and check <code>?vis.gam</code> for more color options.</p>
 </div>
 <p>The plots do illustrate a non-linear interaction effect, where <code>Sources</code> is lowest at high values of <code>SampleDepth</code> and <code>RelativeDepth</code>, but increases with <code>RelativeDepth</code> while <code>SampleDepth</code> is low.</p>

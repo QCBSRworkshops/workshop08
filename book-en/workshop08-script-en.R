@@ -26,10 +26,10 @@ isit2 <- subset(isit, Season == 2)
 linear_model <- gam(Sources ~ SampleDepth, data = isit2)
 summary(linear_model)
 
-data_plot <- ggplot(data = isit2, aes(y = Sources, x = SampleDepth)) + 
+data_plot <- ggplot(data = isit2, aes(y = Sources, x = SampleDepth)) +
   geom_point() +
   geom_line(aes(y = fitted(linear_model)),
-            colour = "red", size = 1.2) + 
+            colour = "red", size = 1.2) +
   theme_bw()
 data_plot
 
@@ -50,7 +50,7 @@ AIC(linear_model, smooth_model)
 isit1 <- subset(isit, Season == 1)
 
 # Challenge 1 ----
-# 
+#
 # 1. Fit a linear and smoothed GAM model to the relation between `SampleDepth` and `Sources`.
 # 2. Determine if linearity is justified for this data.
 # 3. How many effective degrees of freedom does the smoothed term have?
@@ -93,7 +93,7 @@ basic_summary$s.table
 par(mfrow=c(1,2))
 plot(basic_model, all.terms = TRUE)
 
-two_term_model <- gam(Sources ~ Season + s(SampleDepth) + RelativeDepth, 
+two_term_model <- gam(Sources ~ Season + s(SampleDepth) + RelativeDepth,
                       data = isit, method = "REML")
 two_term_summary <- summary(two_term_model)
 
@@ -104,7 +104,7 @@ two_term_summary$s.table
 par(mfrow=c(2,2))
 plot(two_term_model, all.terms = TRUE)
 
-two_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth), 
+two_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth),
                         data = isit, method = "REML")
 two_smooth_summary <- summary(two_smooth_model)
 
@@ -118,9 +118,9 @@ plot(two_smooth_model, page = 1, all.terms = TRUE)
 AIC(basic_model, two_term_model, two_smooth_model)
 
 # Challenge 2 ----
-# 
-# For our second challenge, we will be building onto our model by adding variables which we think might be ecologically significant predictors to explain bioluminescence. 
-# 
+#
+# For our second challenge, we will be building onto our model by adding variables which we think might be ecologically significant predictors to explain bioluminescence.
+#
 #
 # 1. Create two new models: Add `Latitude` to `two_smooth_model`, first as a linear term, then as a smoothed term.
 # 2. Is `Latitude` an important term to include? Does `Latitude` have a linear or additive effect? Use plots, coefficient tables, and the `AIC()` function to help you answer this question.
@@ -128,15 +128,15 @@ AIC(basic_model, two_term_model, two_smooth_model)
 # SOLUTION # -----
 
 # Add Latitude as a linear term
-three_term_model <- gam(Sources ~ 
-                          Season + s(SampleDepth) + s(RelativeDepth) + 
-                          Latitude, 
+three_term_model <- gam(Sources ~
+                          Season + s(SampleDepth) + s(RelativeDepth) +
+                          Latitude,
                         data = isit, method = "REML")
 (three_term_summary <- summary(three_term_model))
 
 # Add Latitude as a smooth term
-three_smooth_model <- gam(Sources ~ 
-                            Season + s(SampleDepth) + s(RelativeDepth) + 
+three_smooth_model <- gam(Sources ~
+                            Season + s(SampleDepth) + s(RelativeDepth) +
                             s(Latitude),
                           data = isit, method = "REML")
 (three_smooth_summary <- summary(three_smooth_model))
@@ -156,9 +156,9 @@ AIC(two_smooth_model, three_smooth_model)
 
 ##Section: 05-interactions.R 
 
-factor_interact <- gam(Sources ~ Season + 
-                         s(SampleDepth, by=Season) + 
-                         s(RelativeDepth), 
+factor_interact <- gam(Sources ~ Season +
+                         s(SampleDepth, by=Season) +
+                         s(RelativeDepth),
                        data = isit, method = "REML")
 
 summary(factor_interact)$s.table
@@ -170,14 +170,14 @@ vis.gam(factor_interact, theta = 120, n.grid = 50, lwd = .4)
 
 AIC(two_smooth_model, factor_interact)
 
-smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), 
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth),
                        data = isit, method = "REML")
 summary(smooth_interact)$s.table
 
 plot(smooth_interact, page = 1, scheme = 2)
 
-vis.gam(smooth_interact, 
-        view = c("SampleDepth", "RelativeDepth"), 
+vis.gam(smooth_interact,
+        view = c("SampleDepth", "RelativeDepth"),
         theta = 50, n.grid = 50, lwd = .4)
 
 AIC(two_smooth_model, smooth_interact)
@@ -185,7 +185,7 @@ AIC(two_smooth_model, smooth_interact)
 
 ##Section: 06-generalization.R 
 
-smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), 
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth),
                        data = isit, method = "REML")
 
 summary(smooth_interact)$p.table
@@ -196,7 +196,7 @@ summary(smooth_interact)$s.table
 
 k.check(smooth_interact)
 
-smooth_interact_k60 <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+smooth_interact_k60 <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60),
                            data = isit, method = "REML")
 
 k.check(smooth_interact_k60)
@@ -209,7 +209,7 @@ gam.check(smooth_interact)
 ?family.mgcv
 
 # Challenge 3 ----
-# 
+#
 # 1. Fit a new model `smooth_interact_tw` with the same formula as the `smooth_interact` model, but with a distribution from the *Tweedie* family (instead of the Normal distribution) and `log` link function. You can do so by using `family = tw(link = "log")` inside `gam()`.
 # 2. Check the choice of `k` and the residual plots for the new model.
 # 3. Compare `smooth_interact_tw` with `smooth_interact`. Which one would you choose?
@@ -217,16 +217,16 @@ gam.check(smooth_interact)
 # SOLUTION # -----
 
 # Hint!
-# Because the Normal distribution is the default setting, 
+# Because the Normal distribution is the default setting,
 # we have not specified the distribution in this workshop yet.
 
 # Here is how we would write the model to specify the Normal distribution:
 
-smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
-                       family = gaussian(link = "identity"), 
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60),
+                       family = gaussian(link = "identity"),
                        data = isit, method = "REML")
 
-smooth_interact_tw <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+smooth_interact_tw <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60),
                           family = tw(link = "log"),
                           data = isit, method = "REML")
 summary(smooth_interact_tw)$p.table
@@ -256,8 +256,8 @@ nottem_month <- rep(1:12, times = n_years)
 nottem_year <- rep(1920:(1920 + n_years - 1), each = 12)
 
 # Plot the time series
-qplot(x = nottem_month, y = nottem, 
-      colour = factor(nottem_year), 
+qplot(x = nottem_month, y = nottem,
+      colour = factor(nottem_year),
       geom = "line") +
   theme_bw()
 
@@ -297,13 +297,13 @@ gamm_intercept <- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2, method = 
 # examine model output
 summary(gamm_intercept)$s.table
 
-plot(gamm_intercept, select = 2) 
+plot(gamm_intercept, select = 2)
 # select = 2 because the random effect appears as the second entry in the summary table.
 
 par(mfrow = c(1,2), cex = 1.1)
 
 # Plot the summed effect of x0 (without random effects)
-plot_smooth(gamm_intercept, view = "x0", rm.ranef = TRUE, 
+plot_smooth(gamm_intercept, view = "x0", rm.ranef = TRUE,
             main = "intercept + s(x1)")
 
 # Plot each level of the random effect
@@ -311,13 +311,13 @@ plot_smooth(gamm_intercept, view = "x0", rm.ranef = FALSE,
             cond = list(fac="1"),
             main = "... + s(fac)", col = 'orange', ylim = c(0,25))
 plot_smooth(gamm_intercept, view = "x0", rm.ranef = FALSE,
-            cond = list(fac = "2"), 
+            cond = list(fac = "2"),
             add = TRUE, col = 'red')
 plot_smooth(gamm_intercept, view="x0", rm.ranef = FALSE,
-            cond = list(fac = "3"), 
+            cond = list(fac = "3"),
             add = TRUE, col = 'purple')
 plot_smooth(gamm_intercept, view="x0", rm.ranef = FALSE,
-            cond = list(fac = "4"), 
+            cond = list(fac = "4"),
             add = TRUE, col = 'turquoise')
 
 gamm_slope <- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2, method = "REML")
@@ -327,7 +327,7 @@ summary(gamm_slope)$s.table
 par(mfrow = c(1,2), cex = 1.1)
 
 # Plot the summed effect of x0 (without random effects)
-plot_smooth(gamm_slope, view = "x0", rm.ranef = TRUE, 
+plot_smooth(gamm_slope, view = "x0", rm.ranef = TRUE,
             main = "intercept + s(x1)")
 
 # Plot each level of the random effect
@@ -335,13 +335,13 @@ plot_smooth(gamm_slope, view = "x0", rm.ranef = FALSE,
             cond = list(fac="1"),
             main = "... + s(fac, x0)", col = 'orange', ylim = c(0,25))
 plot_smooth(gamm_slope, view = "x0", rm.ranef = FALSE,
-            cond = list(fac = "2"), 
+            cond = list(fac = "2"),
             add = TRUE, col = 'red')
 plot_smooth(gamm_slope, view="x0", rm.ranef = FALSE,
-            cond = list(fac = "3"), 
+            cond = list(fac = "3"),
             add = TRUE, col = 'purple')
 plot_smooth(gamm_slope, view="x0", rm.ranef = FALSE,
-            cond = list(fac = "4"), 
+            cond = list(fac = "4"),
             add = TRUE, col = 'turquoise')
 
 gamm_int_slope <- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
@@ -352,7 +352,7 @@ summary(gamm_int_slope)$s.table
 par(mfrow = c(1,2), cex = 1.1)
 
 # Plot the summed effect of x0 (without random effects)
-plot_smooth(gamm_int_slope, view = "x0", rm.ranef = TRUE, 
+plot_smooth(gamm_int_slope, view = "x0", rm.ranef = TRUE,
             main = "intercept + s(x1)")
 
 # Plot each level of the random effect
@@ -360,19 +360,19 @@ plot_smooth(gamm_int_slope, view = "x0", rm.ranef = FALSE,
             cond = list(fac="1"),
             main = "... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(0,25))
 plot_smooth(gamm_int_slope, view = "x0", rm.ranef = FALSE,
-            cond = list(fac = "2"), 
+            cond = list(fac = "2"),
             add = TRUE, col = 'red')
 plot_smooth(gamm_int_slope, view="x0", rm.ranef = FALSE,
-            cond = list(fac = "3"), 
+            cond = list(fac = "3"),
             add = TRUE, col = 'purple')
 plot_smooth(gamm_int_slope, view="x0", rm.ranef = FALSE,
-            cond = list(fac = "4"), 
+            cond = list(fac = "4"),
             add = TRUE, col = 'turquoise')
 
-plot(gamm_int_slope, select=3) 
+plot(gamm_int_slope, select=3)
 # select = 3 because the random slope appears as the third entry in your summary table.
 
-gamm_smooth <- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1), 
+gamm_smooth <- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1),
                    data = gam_data2, method = "REML")
 
 summary(gamm_smooth)$s.table
@@ -383,7 +383,7 @@ plot(gamm_smooth, select=1)
 par(mfrow = c(1,2), cex = 1.1)
 
 # Plot the summed effect of x0 (without random effects)
-plot_smooth(gamm_smooth, view = "x0", rm.ranef = TRUE, 
+plot_smooth(gamm_smooth, view = "x0", rm.ranef = TRUE,
             main = "intercept + s(x1)")
 
 # Plot each level of the random effect
@@ -391,13 +391,13 @@ plot_smooth(gamm_smooth, view = "x0", rm.ranef = FALSE,
             cond = list(fac="1"),
             main = "... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(0,25))
 plot_smooth(gamm_smooth, view = "x0", rm.ranef = FALSE,
-            cond = list(fac = "2"), 
+            cond = list(fac = "2"),
             add = TRUE, col = 'red')
 plot_smooth(gamm_smooth, view="x0", rm.ranef = FALSE,
-            cond = list(fac = "3"), 
+            cond = list(fac = "3"),
             add = TRUE, col = 'purple')
 plot_smooth(gamm_smooth, view="x0", rm.ranef = FALSE,
-            cond = list(fac = "4"), 
+            cond = list(fac = "4"),
             add = TRUE, col = 'turquoise')
 
 AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)

@@ -14,6 +14,10 @@ library(itsadug)
 library(ggplot2, quietly = TRUE)
 library(mgcv, quietly = TRUE)
 
+
+
+
+
 isit <- read.csv("data/ISIT.csv")
 head(isit)
 
@@ -78,7 +82,8 @@ basic_summary$p.table
 
 basic_summary$s.table
 
-plot(basic_model, all.terms = TRUE, page = 1)
+par(mfrow = c(1,2))
+plot(basic_model, all.terms = TRUE)
 
 two_term_model <- gam(Sources ~ Season + s(SampleDepth) + RelativeDepth,
                       data = isit, method = "REML")
@@ -88,7 +93,8 @@ two_term_summary$p.table
 
 two_term_summary$s.table
 
-plot(two_term_model, page = 1, all.terms = TRUE)
+par(mfrow = c(2,2))
+plot(two_term_model, all.terms = TRUE)
 
 two_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth), 
                         data = isit, method = "REML")
@@ -98,7 +104,8 @@ two_smooth_summary$p.table
 
 two_smooth_summary$s.table
 
-plot(two_smooth_model, page = 1, all.terms = TRUE)
+par(mfrow = c(2,2))
+plot(two_smooth_model, all.terms = TRUE)
 
 AIC(basic_model, two_term_model, two_smooth_model)
 
@@ -116,9 +123,11 @@ three_smooth_model <- gam(Sources ~
                           data = isit, method = "REML")
 (three_smooth_summary <- summary(three_smooth_model))
 
-plot(three_term_model, page = 1, all.terms = TRUE)
+par(mfrow = c(2,2))
+plot(three_term_model, all.terms = TRUE)
 
-plot(three_smooth_model, page = 1, all.terms = TRUE)
+par(mfrow = c(2,2))
+plot(three_smooth_model, all.terms = TRUE)
 
 three_smooth_summary$s.table
 
@@ -129,146 +138,270 @@ AIC(two_smooth_model, three_smooth_model)
 
 ##Section: 05-interactions.R 
 
-categorical_interact <- gam(y~x0+s(x1)+s(x2,by=x0),data=gam_data)
-categorical_interact_summary <- summary(categorical_interact)
-print(categorical_interact_summary$s.table)
-plot(categorical_interact,page=1)
-# ou nous pouvons utiliser la fonction vis.gam où theta représente la rotation du plan x-y
-vis.gam(categorical_interact,view=c("x2","x0"),theta=40,n.grid=500,border=NA)
-anova(two_smooth_model, categorical_interact,test="Chisq")
+factor_interact <- gam(Sources ~ Season +
+                         s(SampleDepth,by=Season) +
+                         s(RelativeDepth),
+                       data = isit, method = "REML")
 
-smooth_interact <- gam(y~x0+s(x1,x2),data=gam_data)
-smooth_interact_summary <- summary(smooth_interact)
-print(smooth_interact_summary$s.table)
-plot(smooth_interact,page=1,scheme=3)
-# plot(smooth_interact,page=1,scheme=1) donne un graphique comparable à vis.gam()
-vis.gam(smooth_interact,view=c("x1","x2"),theta=40,n.grid=500,border=NA)
-anova(two_smooth_model,smooth_interact,test="Chisq")
+summary(factor_interact)$s.table
+
+par(mfrow = c(2,2))
+plot(factor_interact)
+
+vis.gam(factor_interact, theta = 120, n.grid = 50, lwd = .4)
+
+AIC(two_smooth_model, factor_interact)
+
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), 
+                       data = isit, method = "REML")
+summary(smooth_interact)$s.table
+
+plot(smooth_interact, page = 1, scheme = 2)
+
+vis.gam(smooth_interact, 
+        view = c("SampleDepth", "RelativeDepth"), 
+        theta = 50, n.grid = 50, lwd = .4)
+
+AIC(two_smooth_model, smooth_interact)
 
 
-##Section: 06-changer-la-fonction-de-base.R 
+##Section: 06-generalisation.R 
 
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), 
+                       data = isit, method = "REML")
+
+summary(smooth_interact)$p.table
+
+summary(smooth_interact)$s.table
+
+par(mfrow=c(1,3))
+install.packages("patchwork", quiet = TRUE)
+library(patchwork)
+
+k_plot <- function(k_value){
+    data("eeg")
+    m <- mgcv::gam(Ampl ~ s(Time, k = k_value), data = eeg)
+     p <- ggplot(eeg, aes(x = Time, y = Ampl)) +
+     geom_point(alpha = .1, size = 1) + 
+     geom_line(aes(y = predict(m)),
+               lwd = 2, col = "black") +
+         labs(title = paste("k =", k_value), x = "", y = "") +
+         theme_classic() + 
+         theme(text = element_text(size = 15), 
+               axis.text = element_blank(),
+               plot.title = element_text(face = "bold", hjust = 0.5))  
+    return(p)
+}
+
+k_plot(3) + k_plot(6) + k_plot(10)
+
+k.check(smooth_interact)
+
+smooth_interact_k60 <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+                           data = isit, method = "REML")
+
+k.check(smooth_interact_k60)
+
+smooth_interact <- smooth_interact_k60
+
+par(mfrow = c(2,2))
+gam.check(smooth_interact)
+
+?family.mgcv
+
+# Défi 3 ----
+# 
+# 1. Ajuster un nouveau modèle `smooth_interact_tw` avec la même formule que le modèle `smooth_interact`, mais avec une distribution de la famille *Tweedie* (au lieu de la distribution Normale) et `log` comme fonction de liaison. Pour ce faire, on peut utiliser `family = tw(link = "log")` dans `gam()`.
+# 2. Vérifier le choix de `k` et les visualisation des résidus pour le nouveau modèle.
+# 3. Comparer `smooth_interact_tw` avec `smooth_interact`. Lequel est meilleur?
+
+# SOLUTION # -----
+
+# Indice!
+# Parce que la distribution normale est le paramètre par défaut, 
+# nous n'avons pas encore spécifié la distribution dans cet atelier.
+
+# Voici comment nous écririons le modèle pour spécifier la distribution normale :
+
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+                       family = gaussian(link = "identity"), 
+                       data = isit, method = "REML")
+
+smooth_interact_tw <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+                          family = tw(link = "log"),
+                          data = isit, method = "REML")
+summary(smooth_interact_tw)$p.table
+summary(smooth_interact_tw)$s.table
+
+k.check(smooth_interact_tw)
+
+par(mfrow = c(2,2))
+gam.check(smooth_interact_tw)
+
+AIC(smooth_interact, smooth_interact_tw)
+
+
+##Section: 07-changer-la-fonction-de-base.R 
+
+# série temporelle de la température de Nottingham
 data(nottem)
+
+# nombre d'années de données (20 ans)
 n_years <- length(nottem)/12
-nottem_month <- rep(1:12, times=n_years)
-nottem_year <- rep(1920:(1920+n_years-1),each=12)
-nottem_plot <- qplot(nottem_month,nottem,
-                    colour=factor(nottem_year),
-                    geom="line") + theme_bw()
-print(nottem_plot)
 
-year_gam <- gam(nottem~s(nottem_year)+s(nottem_month, bs="cc"))
+# ccodage qualitatif pour les 12 mois de l'année,
+# pour chaque année échantillonnée (série de 1 à 12, répétée 20 fois)
+nottem_month <- rep(1:12, times = n_years)
+
+# une variable où l'année correspondant à chaque mois dans nottem_month
+nottem_year <- rep(1920:(1920 + n_years - 1), each = 12)
+
+# Visualiser la série temporelle
+qplot(x = nottem_month, y = nottem, 
+      colour = factor(nottem_year), 
+      geom = "line") +
+  theme_bw()
+
+year_gam <- gam(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"), method = "REML")
 summary(year_gam)$s.table
-plot(year_gam,page=1, scale=0)
 
-pred<-predict(year_gam, type = "terms", se = TRUE)
-I<-order(nottem_year)
-plusCI<-I(pred$fit[,1] + 1.96*pred$se[,1])
-minusCI<-I(pred$fit[,1] - 1.96*pred$se[,1])
-xx <- c(nottem_year[I],rev(nottem_year[I]))
-yy <- c(plusCI[I],rev(minusCI[I]))
-plot(xx,yy,type="n",cex.axis=1.2)
-polygon(xx,yy,col="light grey",border="light grey")
-lines(nottem_year[I], pred$fit[,1][I],lty=1)
-abline(h=0)
-
-
-##Section: 07-autres-distributions.R 
-
-gam_data3 <- read.csv("other_dist.csv")
-summary(gam_data3)
-str(gam_data3)
-
-emptyPlot(range(gam_data3$x1), c(0,1), h=.5,
-          main="Probability of successes", ylab="Probability",xlab="x1")
-
-avg <- aggregate(prop ~ x1, data=gam_data3, mean, na.rm=TRUE)
-lines(avg$x1, avg$prop, col="orange",lwd=2)
-
-prop_model <- gam(prop~ s(x1), data=gam_data3, weights=total, family="binomial")
-prop_summary <- summary(prop_model)
-print(prop_summary$p.table)
-print(prop_summary$s.table)
-
-plot(prop_model)
-
-par(mfrow=c(1,2))
-plot(prop_model, select=1, scale=0, shade=TRUE)
-abline(h=0)
-
-plot_smooth(prop_model, view="x1",main="")
-(diff <- find_difference(out$fv$fit, out$fv$CI, xVals=out$fv$x1))
-addInterval(0, lowVals=diff$start, highVals = diff$end, col='red', lwd=2)
-abline(v=c(diff$start, diff$end), lty=3, col='red')
-text(mean(c(diff$start, diff$end)), 2.1, "sign. more \n success", col='red', font=3)
-
-par(mfrow=c(1,1))
-plot_smooth(prop_model, view="x1", main="",
-            transform=plogis, ylim=c(0,1))
-abline(h=.5, v=diff$start, col='red', lty=2)
+plot(year_gam, page = 1, scale = 0)
 
 
 ##Section: 08-GAMMs.R 
 
-par(mfrow=c(1,2))
+par(mfrow = c(1,2))
 acf(resid(year_gam), lag.max = 36, main = "ACF")
 pacf(resid(year_gam), lag.max = 36, main = "pACF")
 
-year_gam <- gamm(nottem~s(nottem_year)+s(nottem_month, bs="cc"))
-year_gam_AR1 <- gamm(nottem~s(nottem_year)+s(nottem_month, bs="cc"),
-                     correlation = corARMA(form = ~ 1|nottem_year, p = 1))
-year_gam_AR2 <- gamm(nottem~s(nottem_year)+s(nottem_month, bs="cc"),
-                     correlation = corARMA(form = ~ 1|nottem_year, p = 2))
-anova(year_gam$lme,year_gam_AR1$lme,year_gam_AR2$lme)
+df <- data.frame(nottem, nottem_year, nottem_month)
 
-# Générez des données
-gam_data2 <- gamSim(eg=6)
+year_gam <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"), data = df)
+
+year_gam_AR1 <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"),
+                     correlation = corARMA(form = ~ 1|nottem_year, p = 1),
+                     data = df)
+
+year_gam_AR2 <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"),
+                     correlation = corARMA(form = ~ 1|nottem_year, p = 2),
+                     data = df)
+
+AIC(year_gam$lme, year_gam_AR1$lme, year_gam_AR2$lme)
+
+# Générer des données
+gam_data2 <- gamSim(eg = 6)
 head(gam_data2)
 
-# Faites rouler un modèle avec intercepte aléatoire
-gamm_intercept <- gam(y ~ s(x0) + s(fac, bs="re"), data=gam_data2)
-summary(gamm_intercept)
+# Rouler un modèle avec intercepte aléatoire
+gamm_intercept <- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2, method = "REML")
 
-plot(gamm_intercept, select=2)
-# select=2 parce que le terme aléatoire se trouve sur la 2e ligne du tableau sommaire.
+# Voir la sortie du modèle
+summary(gamm_intercept)$s.table
 
-par(mfrow=c(1,2), cex=1.1)
-plot_smooth(gamm_intercept, view="x0", rm.ranef=TRUE, main="intercept + s(x1)", rug=FALSE)
-plot_smooth(gamm_intercept, view="x0", cond=list(fac="1"),
-            main="... + s(fac)", col='orange', ylim=c(8,21), rug=FALSE)
-plot_smooth(gamm_intercept, view="x0", cond=list(fac="2"), add=TRUE, col='red')
-plot_smooth(gamm_intercept, view="x0", cond=list(fac="3"), add=TRUE, col='purple')
-plot_smooth(gamm_intercept, view="x0", cond=list(fac="4"), add=TRUE, col='turquoise')
+plot(gamm_intercept, select = 2) 
+# select = 2 parce que le terme aléatoire se trouve sur la 2e ligne du tableau sommaire.
 
-gamm_slope <- gam(y ~ s(x0) + s(x0, fac, bs="re"), data=gam_data2)
-summary(gamm_slope)
+par(mfrow = c(1,2), cex = 1.1)
 
-plot_smooth(gamm_slope, view="x0", rm.ranef=TRUE, main="intercept + s(x0)", rug=FALSE)
-plot_smooth(gamm_slope, view="x0", cond=list(fac="1"),
-            main="... + s(fac)", col='orange',ylim=c(7,22), rug=FALSE)
-plot_smooth(gamm_slope, view="x0", cond=list(fac="2"), add=TRUE, col='red')
-plot_smooth(gamm_slope, view="x0", cond=list(fac="3"), add=TRUE, col='purple')
-plot_smooth(gamm_slope, view="x0", cond=list(fac="4"), add=TRUE, col='turquoise')
+# Visualiser les effets combinés de x0 (sans effets aléatoires)
+plot_smooth(gamm_intercept, view = "x0", rm.ranef = TRUE, 
+            main = "intercept + s(x1)")
 
-gamm_int_slope <- gam(y ~ s(x0) + s(fac, bs="re")
-                      + s(fac, x0, bs="re"), data=gam_data2)
-summary(gamm_int_slope)
+# Visualiser chaque niveau de l'effet aléatoire
+plot_smooth(gamm_intercept, view = "x0", rm.ranef = FALSE,
+            cond = list(fac="1"),
+            main = "... + s(fac)", col = 'orange', ylim = c(0,25))
+plot_smooth(gamm_intercept, view = "x0", rm.ranef = FALSE,
+            cond = list(fac = "2"), 
+            add = TRUE, col = 'red')
+plot_smooth(gamm_intercept, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "3"), 
+            add = TRUE, col = 'purple')
+plot_smooth(gamm_intercept, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "4"), 
+            add = TRUE, col = 'turquoise')
 
-plot_smooth(gamm_int_slope, view="x0", rm.ranef=TRUE, main="intercept + s(x0)", rug=FALSE)
-plot_smooth(gamm_int_slope, view="x0", cond=list(fac="1"),
-            main="... + s(fac) + s(fac, x0)", col='orange', ylim=c(7,22), rug=FALSE)
-plot_smooth(gamm_int_slope, view="x0", cond=list(fac="2"), add=TRUE, col='red', xpd=TRUE)
-plot_smooth(gamm_int_slope, view="x0", cond=list(fac="3"), add=TRUE, col='purple', xpd=TRUE)
-plot_smooth(gamm_int_slope, view="x0", cond=list(fac="4"), add=TRUE, col='turquoise', xpd=TRUE)
+gamm_slope <- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2, method = "REML")
 
-plot(gamm_int_slope, select=3)
-# select=3 parce que la pente aléatoire se trouve sur la 3e ligne du tableau sommaire.
+summary(gamm_slope)$s.table
 
-gamm_smooth <- gam(y ~ s(x0) + s(x0, fac, bs="fs", m=1), data=gam_data2)
-summary(gamm_smooth)
+par(mfrow = c(1,2), cex = 1.1)
+
+# Visualiser les effets combinés de x0 (sans effets aléatoires)
+plot_smooth(gamm_slope, view = "x0", rm.ranef = TRUE, 
+            main = "intercept + s(x1)")
+
+# Visualiser chaque niveau de l'effet aléatoire
+plot_smooth(gamm_slope, view = "x0", rm.ranef = FALSE,
+            cond = list(fac="1"),
+            main = "... + s(fac, x0)", col = 'orange', ylim = c(0,25))
+plot_smooth(gamm_slope, view = "x0", rm.ranef = FALSE,
+            cond = list(fac = "2"), 
+            add = TRUE, col = 'red')
+plot_smooth(gamm_slope, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "3"), 
+            add = TRUE, col = 'purple')
+plot_smooth(gamm_slope, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "4"), 
+            add = TRUE, col = 'turquoise')
+
+gamm_int_slope <- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
+                      data = gam_data2, method = "REML")
+
+summary(gamm_int_slope)$s.table
+
+par(mfrow = c(1,2), cex = 1.1)
+
+# Visualiser les effets combinés de x0 (sans effets aléatoires)
+plot_smooth(gamm_int_slope, view = "x0", rm.ranef = TRUE, 
+            main = "intercept + s(x1)")
+
+# Visualiser chaque niveau de l'effet aléatoire
+plot_smooth(gamm_int_slope, view = "x0", rm.ranef = FALSE,
+            cond = list(fac="1"),
+            main = "... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(0,25))
+plot_smooth(gamm_int_slope, view = "x0", rm.ranef = FALSE,
+            cond = list(fac = "2"), 
+            add = TRUE, col = 'red')
+plot_smooth(gamm_int_slope, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "3"), 
+            add = TRUE, col = 'purple')
+plot_smooth(gamm_int_slope, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "4"), 
+            add = TRUE, col = 'turquoise')
+
+plot(gamm_int_slope, select=3) 
+# select = 3 parce que la pente aléatoire est sur la troisième ligne de notre tableau sommaire.
+
+gamm_smooth <- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1), 
+                   data = gam_data2, method = "REML")
+
+summary(gamm_smooth)$s.table
 
 plot(gamm_smooth, select=1)
-# select=1 parce que le terme se trouve sur la 1e ligne du tableau sommaire.
+# select = 1 parce que la surface lisse aléatoire est sur la première ligne de notre tableau sommaire.
+
+par(mfrow = c(1,2), cex = 1.1)
+
+# Visualiser les effets combinés de x0 (sans effets aléatoires)
+plot_smooth(gamm_smooth, view = "x0", rm.ranef = TRUE, 
+            main = "intercept + s(x1)")
+
+# Visualiser chaque niveau de l'effet aléatoire
+plot_smooth(gamm_smooth, view = "x0", rm.ranef = FALSE,
+            cond = list(fac="1"),
+            main = "... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(0,25))
+plot_smooth(gamm_smooth, view = "x0", rm.ranef = FALSE,
+            cond = list(fac = "2"), 
+            add = TRUE, col = 'red')
+plot_smooth(gamm_smooth, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "3"), 
+            add = TRUE, col = 'purple')
+plot_smooth(gamm_smooth, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "4"), 
+            add = TRUE, col = 'turquoise')
+
+AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
 
 
 ##Section: 09-references-fr.R 

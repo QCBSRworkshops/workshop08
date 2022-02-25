@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapitre 8 Changer la fonction de base | Atelier 8 : Modèles additifs généralisés en R</title>
+  <title>Chapitre 10 Changer la fonction de base | Atelier 8 : Modèles additifs généralisés en R</title>
   <meta name="description" content="Modèles additifs généralisés en R" />
   <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapitre 8 Changer la fonction de base | Atelier 8 : Modèles additifs généralisés en R" />
+  <meta property="og:title" content="Chapitre 10 Changer la fonction de base | Atelier 8 : Modèles additifs généralisés en R" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://github.com/qcbsRworkshops/" />
   <meta property="og:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="qcbsRworkshops/workshop08" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapitre 8 Changer la fonction de base | Atelier 8 : Modèles additifs généralisés en R" />
+  <meta name="twitter:title" content="Chapitre 10 Changer la fonction de base | Atelier 8 : Modèles additifs généralisés en R" />
   
   <meta name="twitter:description" content="Modèles additifs généralisés en R" />
   <meta name="twitter:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />
-<link rel="prev" href="interactions.html"/>
-<link rel="next" href="autres-distributions.html"/>
+<link rel="prev" href="autres-distributions.html"/>
+<link rel="next" href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -170,18 +170,37 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.5.1" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#défi-2-solution"><i class="fa fa-check"></i><b>6.5.1</b> Défi 2: Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="interactions.html"><a href="interactions.html"><i class="fa fa-check"></i><b>7</b> Interactions</a></li>
-<li class="part"><span><b>Concepts Avancés</b></span></li>
-<li class="chapter" data-level="8" data-path="changer-la-fonction-de-base.html"><a href="changer-la-fonction-de-base.html"><i class="fa fa-check"></i><b>8</b> Changer la fonction de base</a></li>
+<li class="chapter" data-level="7" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html"><i class="fa fa-check"></i><b>7</b> GAM avec des termes d’interaction</a><ul>
+<li class="chapter" data-level="7.1" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html#interaction-entre-variables-non-linéaire-et-qualitatif"><i class="fa fa-check"></i><b>7.1</b> Interaction entre variables non-linéaire et qualitatif</a></li>
+<li class="chapter" data-level="7.2" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html#interaction-entre-variables-non-linéaires"><i class="fa fa-check"></i><b>7.2</b> Interaction entre variables non linéaires</a></li>
+</ul></li>
+<li class="part"><span><b>Généralisation du modèle additif</b></span></li>
+<li class="chapter" data-level="8" data-path="validation-gam.html"><a href="validation-gam.html"><i class="fa fa-check"></i><b>8</b> Validation d’un GAM</a><ul>
+<li class="chapter" data-level="8.1" data-path="validation-gam.html"><a href="validation-gam.html#choisir-k"><i class="fa fa-check"></i><b>8.1</b> Choisir <span class="math inline">\(k\)</span></a><ul>
+<li class="chapter" data-level="8.1.1" data-path="validation-gam.html"><a href="validation-gam.html#est-ce-que-notre-module-est-assez-flexible"><i class="fa fa-check"></i><b>8.1.1</b> Est-ce que notre module est assez flexible?</a></li>
+<li class="chapter" data-level="8.1.2" data-path="validation-gam.html"><a href="validation-gam.html#est-ce-que-notre-modèle-est-réellement-normal"><i class="fa fa-check"></i><b>8.1.2</b> Est-ce que notre modèle est réellement Normal?</a></li>
+</ul></li>
+</ul></li>
 <li class="chapter" data-level="9" data-path="autres-distributions.html"><a href="autres-distributions.html"><i class="fa fa-check"></i><b>9</b> Autres distributions</a><ul>
-<li class="chapter" data-level="9.1" data-path="autres-distributions.html"><a href="autres-distributions.html#visualiser-la-tendance-au-fil-du-temps"><i class="fa fa-check"></i><b>9.1</b> Visualiser la tendance au fil du temps</a></li>
+<li class="chapter" data-level="9.1" data-path="autres-distributions.html"><a href="autres-distributions.html#défi-3"><i class="fa fa-check"></i><b>9.1</b> Défi 3</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="autres-distributions.html"><a href="autres-distributions.html#défi-3-solution"><i class="fa fa-check"></i><b>9.1.1</b> Défi 3: Solution</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><i class="fa fa-check"></i><b>10</b> Intro rapide aux modèles additifs généralisés à effets mixtes (GAMMs)</a><ul>
-<li class="chapter" data-level="10.1" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#la-non-indépendance-des-données"><i class="fa fa-check"></i><b>10.1</b> La non-indépendance des données</a></li>
-<li class="chapter" data-level="10.2" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#modélisation-avec-effets-mixtes"><i class="fa fa-check"></i><b>10.2</b> Modélisation avec effets mixtes</a></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="ressources.html"><a href="ressources.html"><i class="fa fa-check"></i><b>11</b> Ressources</a></li>
-<li class="chapter" data-level="12" data-path="réferences.html"><a href="réferences.html"><i class="fa fa-check"></i><b>12</b> Réferences</a></li>
+<li class="chapter" data-level="10" data-path="changer-la-fonction-de-base.html"><a href="changer-la-fonction-de-base.html"><i class="fa fa-check"></i><b>10</b> Changer la fonction de base</a><ul>
+<li class="chapter" data-level="10.1" data-path="changer-la-fonction-de-base.html"><a href="changer-la-fonction-de-base.html#exemple-données-cycliques"><i class="fa fa-check"></i><b>10.1</b> Exemple: Données cycliques</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><i class="fa fa-check"></i><b>11</b> Intro rapide aux modèles additifs généralisés à effets mixtes (GAMMs)</a><ul>
+<li class="chapter" data-level="11.1" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#lautocorrelation-des-résidus"><i class="fa fa-check"></i><b>11.1</b> L’autocorrelation des résidus</a></li>
+<li class="chapter" data-level="11.2" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#modélisation-avec-effets-mixtes"><i class="fa fa-check"></i><b>11.2</b> Modélisation avec effets mixtes</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-un-intercept-aléatoire"><i class="fa fa-check"></i><b>11.2.1</b> GAMM avec un intercept aléatoire</a></li>
+<li class="chapter" data-level="11.2.2" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-une-pente-aléatoire"><i class="fa fa-check"></i><b>11.2.2</b> GAMM avec une pente aléatoire</a></li>
+<li class="chapter" data-level="11.2.3" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-un-intercept-et-une-pente-aléatoire"><i class="fa fa-check"></i><b>11.2.3</b> GAMM avec un intercept et une pente aléatoire</a></li>
+<li class="chapter" data-level="11.2.4" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-une-surface-lisse-aléatoire"><i class="fa fa-check"></i><b>11.2.4</b> GAMM avec une surface lisse aléatoire</a></li>
+<li class="chapter" data-level="11.2.5" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#comparaison-de-gamm"><i class="fa fa-check"></i><b>11.2.5</b> Comparaison de GAMM</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>Ressources &amp; Références</b></span></li>
+<li class="chapter" data-level="12" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>12</b> References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/qcbsRworkshops" target="blank">QCBS R Workshop Series</a></li>
 
@@ -218,86 +237,85 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 </div>
 --!>
 <div id="changer-la-fonction-de-base" class="section level1">
-<h1><span class="header-section-number">Chapitre 8</span> Changer la fonction de base</h1>
-<p>Sans entrer dans le détail, sachez qu’il est possible de modifier le
-modèle de base que nous avons vu avec :</p>
-<ul>
-<li>des fonctions plus complexes en modifiant la fonction de base (par
-exemple, cyclique),</li>
-<li>d’autres distributions : tout ce que vous pouvez faire avec un GLM
-(tel que spécifier l’argument <code>family</code>) est possible avec les GAMs,</li>
-<li>des modèles à effets mixtes en utilisant la fonction <code>gamm</code> ou la
-fonction <code>gamm4</code> de la librairie <code>gamm4</code>.</li>
-</ul>
-<p>Nous allons d’abord jeter un coup d’œil au changement de la fonction de
-base puis une introduction rapide aux autres distributions et les GAMMs
-(modèles additifs généralisés à effets mixtes) suivra. Commençons par
-regarder un cas où modifier la fonction de base peut être utile, soit
-avec des données cycliques.</p>
-<p>Imaginez que vous avez une série temporelle de données climatiques,
-divisées en mesures mensuelles, et que vous voulez déterminer s’il y a
-une tendance de température annuelle. Nous allons utiliser la série
-temporelle de température de Nottingham pour cette section :</p>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="changer-la-fonction-de-base.html#cb58-1"></a><span class="kw">data</span>(nottem)</span>
-<span id="cb58-2"><a href="changer-la-fonction-de-base.html#cb58-2"></a>n_years &lt;-<span class="st"> </span><span class="kw">length</span>(nottem)<span class="op">/</span><span class="dv">12</span></span>
-<span id="cb58-3"><a href="changer-la-fonction-de-base.html#cb58-3"></a>nottem_month &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">12</span>, <span class="dt">times =</span> n_years)</span>
-<span id="cb58-4"><a href="changer-la-fonction-de-base.html#cb58-4"></a>nottem_year &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1920</span><span class="op">:</span>(<span class="dv">1920</span> <span class="op">+</span><span class="st"> </span>n_years <span class="op">-</span><span class="st"> </span><span class="dv">1</span>), <span class="dt">each =</span> <span class="dv">12</span>)</span>
-<span id="cb58-5"><a href="changer-la-fonction-de-base.html#cb58-5"></a>nottem_plot &lt;-<span class="st"> </span><span class="kw">qplot</span>(nottem_month, nottem, <span class="dt">colour =</span> <span class="kw">factor</span>(nottem_year),</span>
-<span id="cb58-6"><a href="changer-la-fonction-de-base.html#cb58-6"></a>    <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme_bw</span>()</span>
-<span id="cb58-7"><a href="changer-la-fonction-de-base.html#cb58-7"></a><span class="kw">print</span>(nottem_plot)</span></code></pre></div>
-<p>En utilisant les données nottem, nous avons créé trois nouveaux
-vecteurs ; <code>n_years</code> correspond au nombre d’années de données (20 ans),
-<code>nottem_month</code> est un codage qualitatif pour les 12 mois de l’année,
-pour chaque année échantillonnée (série de 1 à 12, répétée 20 fois) et
-<code>nottem_year</code> est une variable où l’année correspondant à chaque mois
-est fournie.</p>
-<p>Données mensuelles des années 1920 à 1940:</p>
-<p><img src="images/graphic4.1.jpg" width="500" /></p>
-<p>Pour modéliser cela, nous devons utiliser ce qu’on appelle un spline
-cubique cyclique, ou <code>"cc"</code>, pour modéliser les effets du mois et de
-l’année.</p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="changer-la-fonction-de-base.html#cb59-1"></a>year_gam &lt;-<span class="st"> </span><span class="kw">gam</span>(nottem <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(nottem_year) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(nottem_month, <span class="dt">bs =</span> <span class="st">&quot;cc&quot;</span>))</span>
-<span id="cb59-2"><a href="changer-la-fonction-de-base.html#cb59-2"></a><span class="kw">summary</span>(year_gam)<span class="op">$</span>s.table</span>
-<span id="cb59-3"><a href="changer-la-fonction-de-base.html#cb59-3"></a><span class="kw">plot</span>(year_gam, <span class="dt">page =</span> <span class="dv">1</span>, <span class="dt">scale =</span> <span class="dv">0</span>)</span></code></pre></div>
-<p><img src="images/graphic4.2.jpg" width="700" /></p>
-<p>Il y a une hausse d’environ 1 - 1,5ºC au cours de la série, mais au
-cours d’une année, il y a une variation d’environ 20ºC. Les données
-réelles varient autour de ces valeurs prédites et ceci représente donc
-la variance inexpliquée. Ici, nous pouvons voir l’un des avantages très
-intéressants de l’utilisation des GAMs. Nous pouvons soit tracer la
-surface réponse (valeurs prédites) ou les termes (contribution de chaque
-covariable) tel qu’indiqué ci-haut. Vous pouvez imaginer ce dernier en
-tant qu’une illustration de la variation des coefficients de régression
-et comment leur contribution (ou taille de leur effet) varie au fil du
-temps. Dans le premier graphique, nous voyons que les contributions
-positives de la température sont survenues après 1930.</p>
-<p>Sur des échelles de temps plus longues, en utilisant par exemple des
-données paléolimnologiques, d’autres (<a href="http://www.aslo.info/lo/toc/vol_54/issue_6_part_2/2529.pdf">Simpson &amp; Anderson 2009;. Fig
-3c</a>) ont
-utilisé des GAMs pour tracer la contribution (effet) de la température
-sur la composition d’algues dans les lacs afin d’illustrer comment les
-contributions significatives ont seulement eu lieu au cours de deux
-périodes extrêmement froides (c’est-à-dire, la contribution est
-importante lorsque les intervalles de confiance ne recoupent pas la
-valeur de zéro à environ 300 et 100 ans AVJC). Cela a permis aux auteurs
-de non seulement déterminer combien de variance est expliquée par la
-température au cours des derniers siècles, mais aussi de repérer dans le
-temps cet effet significatif. Si cela vous intéresse, le code pour
-tracer soit la surface de réponse (<code>type = "response"</code>) ou les termes
-(<code>type = "terms"</code>) est disponible ci-dessous. Lorsque les termes sont
-sélectionnés, vous obtiendrez la même figure que celle ci-dessus.</p>
-<p>Graphique de contribution vs réponse ajustée:</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="changer-la-fonction-de-base.html#cb60-1"></a>pred &lt;-<span class="st"> </span><span class="kw">predict</span>(year_gam, <span class="dt">type =</span> <span class="st">&quot;terms&quot;</span>, <span class="dt">se =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb60-2"><a href="changer-la-fonction-de-base.html#cb60-2"></a>I &lt;-<span class="st"> </span><span class="kw">order</span>(nottem_year)</span>
-<span id="cb60-3"><a href="changer-la-fonction-de-base.html#cb60-3"></a>plusCI &lt;-<span class="st"> </span><span class="kw">I</span>(pred<span class="op">$</span>fit[, <span class="dv">1</span>] <span class="op">+</span><span class="st"> </span><span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>pred<span class="op">$</span>se[, <span class="dv">1</span>])</span>
-<span id="cb60-4"><a href="changer-la-fonction-de-base.html#cb60-4"></a>minusCI &lt;-<span class="st"> </span><span class="kw">I</span>(pred<span class="op">$</span>fit[, <span class="dv">1</span>] <span class="op">-</span><span class="st"> </span><span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>pred<span class="op">$</span>se[, <span class="dv">1</span>])</span>
-<span id="cb60-5"><a href="changer-la-fonction-de-base.html#cb60-5"></a>xx &lt;-<span class="st"> </span><span class="kw">c</span>(nottem_year[I], <span class="kw">rev</span>(nottem_year[I]))</span>
-<span id="cb60-6"><a href="changer-la-fonction-de-base.html#cb60-6"></a>yy &lt;-<span class="st"> </span><span class="kw">c</span>(plusCI[I], <span class="kw">rev</span>(minusCI[I]))</span>
-<span id="cb60-7"><a href="changer-la-fonction-de-base.html#cb60-7"></a><span class="kw">plot</span>(xx, yy, <span class="dt">type =</span> <span class="st">&quot;n&quot;</span>, <span class="dt">cex.axis =</span> <span class="fl">1.2</span>)</span>
-<span id="cb60-8"><a href="changer-la-fonction-de-base.html#cb60-8"></a><span class="kw">polygon</span>(xx, yy, <span class="dt">col =</span> <span class="st">&quot;light grey&quot;</span>, <span class="dt">border =</span> <span class="st">&quot;light grey&quot;</span>)</span>
-<span id="cb60-9"><a href="changer-la-fonction-de-base.html#cb60-9"></a><span class="kw">lines</span>(nottem_year[I], pred<span class="op">$</span>fit[, <span class="dv">1</span>][I], <span class="dt">lty =</span> <span class="dv">1</span>)</span>
-<span id="cb60-10"><a href="changer-la-fonction-de-base.html#cb60-10"></a><span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">0</span>)</span></code></pre></div>
+<h1><span class="header-section-number">Chapitre 10</span> Changer la fonction de base</h1>
+<p>Pour modéliser une surface lisse ou non-linéaire, nous pouvons construire des fonctions lisses de différentes manières:</p>
+<p>La fonction de lissage <code>s()</code> modélise un terme lisse 1-dimensionnelle ou une intéraction entre des variables mesurées sur la <em>même échelle</em>. Il s’agit de la fonction de lissage que nous avons utilisée tout au long de cet atelier.</p>
+<p>Il y a deux autres fonctions de lissage: <code>te()</code> et <code>ti()</code>, qui peuvent modéliser une surface d’interaction 2- ou n-dimensionnelle. La fonction <code>te()</code> est utile pour modéliser des variables qui <em>ne sont pas sur la même échelle</em>, incluant les surfaces qui comprennent les effets principaux. La fonction <code>ti()</code> est utile pour modéliser des surfaces d’interactions <em>qui ne comprennent pas les effets principaux</em>.</p>
+<p>Les fonctions lisses ont beaucoup de paramètres qui changent leur comportement. Les paramètres les plus souvent utilisés sont les suivants :</p>
+<p><code>k</code>: dimensions de base
+- Détermine la limite supérieure du nombre de fonctions de base utilisées pour construire la courbe.
+- Contraint l’ondulation d’une fonction lisse.
+- Le <span class="math inline">\(k\)</span> devrait être &lt; au nombre de données uniques.
+- La complexité (ou la non-linéarité) d’une fonction lisse dans un modèle ajusté est reflétée par ses degrés de liberté effectifs (<strong>EDF</strong>)</p>
+<p><code>bs</code>: spécifie la fonction de base sous-jacente.
+- pour <code>s()</code> on utilise <code>tp</code> (<em>thin plate regression spline</em>) et pour <code>te()</code> et <code>ti()</code> on utilise la base <code>cr</code> (<em>cubic regression spline</em>).</p>
+<p><code>d</code>: spécifie quelles variables d’une intéraction se trouvent sur la même échelle lorsqu’on utilise <code>te()</code> and <code>ti()</code>.
+- Par exemple, <code>te(Temps, largeur, hauteur, d=c(1,2))</code>, indique que la <code>largeur</code> et la <code>hauteur</code> sont sur la même échelle, mais que <code>temps</code> ne l’est pas.</p>
+<div id="exemple-données-cycliques" class="section level2">
+<h2><span class="header-section-number">10.1</span> Exemple: Données cycliques</h2>
+<p>Lorsque l’on modélise des données cycliques, on souhaite généralement que le prédicteur soit identique aux deux bouts des phases. Pour y parvenir, nous devons modifier la fonction de base.</p>
+<p>Utilisons une série chronologique de données climatiques, divisées en mesures mensuelles, afin de déterminer s’il y a une tendance de température annuelle. Nous utiliserons la série temporelle de la température de Nottingham
+pour cela, qui est incluse dans <code>R</code>:</p>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="changer-la-fonction-de-base.html#cb92-1"></a><span class="co"># série temporelle de la température de Nottingham</span></span>
+<span id="cb92-2"><a href="changer-la-fonction-de-base.html#cb92-2"></a><span class="kw">data</span>(nottem)</span></code></pre></div>
+<div class="explanation">
+<p>Voir <code>?nottem</code> pour plus de détails sur le jeu de données.</p>
+</div>
+<p>Commençons par visualiser les fluctuations mensuelles de température pour chaque année dans le jeu de données <code>nottem</code>:</p>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="changer-la-fonction-de-base.html#cb93-1"></a><span class="co"># nombre d&#39;années de données (20 ans)</span></span>
+<span id="cb93-2"><a href="changer-la-fonction-de-base.html#cb93-2"></a>n_years &lt;-<span class="st"> </span><span class="kw">length</span>(nottem)<span class="op">/</span><span class="dv">12</span></span>
+<span id="cb93-3"><a href="changer-la-fonction-de-base.html#cb93-3"></a></span>
+<span id="cb93-4"><a href="changer-la-fonction-de-base.html#cb93-4"></a><span class="co"># ccodage qualitatif pour les 12 mois de l&#39;année, pour</span></span>
+<span id="cb93-5"><a href="changer-la-fonction-de-base.html#cb93-5"></a><span class="co"># chaque année échantillonnée (série de 1 à 12, répétée 20</span></span>
+<span id="cb93-6"><a href="changer-la-fonction-de-base.html#cb93-6"></a><span class="co"># fois)</span></span>
+<span id="cb93-7"><a href="changer-la-fonction-de-base.html#cb93-7"></a>nottem_month &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">12</span>, <span class="dt">times =</span> n_years)</span>
+<span id="cb93-8"><a href="changer-la-fonction-de-base.html#cb93-8"></a></span>
+<span id="cb93-9"><a href="changer-la-fonction-de-base.html#cb93-9"></a><span class="co"># une variable où l&#39;année correspondant à chaque mois dans</span></span>
+<span id="cb93-10"><a href="changer-la-fonction-de-base.html#cb93-10"></a><span class="co"># nottem_month</span></span>
+<span id="cb93-11"><a href="changer-la-fonction-de-base.html#cb93-11"></a>nottem_year &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1920</span><span class="op">:</span>(<span class="dv">1920</span> <span class="op">+</span><span class="st"> </span>n_years <span class="op">-</span><span class="st"> </span><span class="dv">1</span>), <span class="dt">each =</span> <span class="dv">12</span>)</span>
+<span id="cb93-12"><a href="changer-la-fonction-de-base.html#cb93-12"></a></span>
+<span id="cb93-13"><a href="changer-la-fonction-de-base.html#cb93-13"></a><span class="co"># Visualiser la série temporelle</span></span>
+<span id="cb93-14"><a href="changer-la-fonction-de-base.html#cb93-14"></a><span class="kw">qplot</span>(<span class="dt">x =</span> nottem_month, <span class="dt">y =</span> nottem, <span class="dt">colour =</span> <span class="kw">factor</span>(nottem_year),</span>
+<span id="cb93-15"><a href="changer-la-fonction-de-base.html#cb93-15"></a>    <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme_bw</span>()</span></code></pre></div>
+<p><img src="book-fr_files/figure-html/unnamed-chunk-68-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Nous pouvons modéliser le changement cyclique de température à travers les mois et la tendance non-linéaire à travers les années, en utilisant une spline cubique, ou <code>cc</code> pour modéliser les effets de mois ainsi qu’un terme non-linéaire pour la variable année.</p>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="changer-la-fonction-de-base.html#cb94-1"></a>year_gam &lt;-<span class="st"> </span><span class="kw">gam</span>(nottem <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(nottem_year) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(nottem_month, <span class="dt">bs =</span> <span class="st">&quot;cc&quot;</span>),</span>
+<span id="cb94-2"><a href="changer-la-fonction-de-base.html#cb94-2"></a>    <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
+<span id="cb94-3"><a href="changer-la-fonction-de-base.html#cb94-3"></a><span class="kw">summary</span>(year_gam)<span class="op">$</span>s.table</span></code></pre></div>
+<pre><code>##                      edf   Ref.df          F    p-value
+## s(nottem_year)  1.621375 2.011475   2.850888 0.06141004
+## s(nottem_month) 6.855132 8.000000 393.119285 0.00000000</code></pre>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="changer-la-fonction-de-base.html#cb96-1"></a><span class="kw">plot</span>(year_gam, <span class="dt">page =</span> <span class="dv">1</span>, <span class="dt">scale =</span> <span class="dv">0</span>)</span></code></pre></div>
+<p><img src="book-fr_files/figure-html/unnamed-chunk-70-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Il y a une hausse d’environ 1 - 1,5ºC au cours de la série, mais au cours d’une année, il y a une variation d’environ 20ºC. Les données réelles varient autour de ces valeurs prédites et ceci représente donc la variance inexpliquée.</p>
+<p>Ici, nous pouvons voir l’un des avantages très intéressants de l’utilisation des GAMs. Nous pouvons soit tracer la surface réponse (valeurs prédites) ou les termes (contribution de chaque covariable) tel qu’indiqué ci-haut. Vous pouvez imaginer ce dernier en tant qu’une illustration de la variation des coefficients de régression et comment leur contribution (ou taille de leur effet) varie au fil du temps. Dans le premier graphique, nous voyons que les contributions positives de la température sont survenues après 1930.</p>
+<div class="explanation">
+<p><strong>Visualiser les contributions de variables</strong></p>
+<p><span class="citation">Simpson and Anderson (<a href="#ref-simpson-2009" role="doc-biblioref">2009</a>)</span> ont modélisé des données paléolimnologiques avec des GAMs (voir Fig.3c), et ont visualisé la contribution (effet) de la température sur la composition des algues dans des lacs pour illustrer que les contributions significatives de la température ont seulement survenu au cours de deux périodes extrêmement froides.</p>
+<p>C’est-à-dire, la contribution est importante lorsque les intervalles de confiance n’incluent pas la valeur zéro, ce qu’on voit à environ 300 et 100 ans AVJC dans <span class="citation">Simpson and Anderson (<a href="#ref-simpson-2009" role="doc-biblioref">2009</a>)</span>.</p>
+<p>Cela a permis aux auteurs de non seulement déterminer combien de variance est expliquée par la température au cours des derniers siècles, mais aussi de repérer dans le temps cet effet significatif.</p>
+<p>Si cela vous intéresse, le code pour visualiser soit la surface de réponse (<code>type = "response"</code>) ou les termes (<code>type = "terms"</code>) est disponible ci-dessous. Lorsque les termes sont sélectionnés, vous obtiendrez la même figure que celle ci-dessus.</p>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="changer-la-fonction-de-base.html#cb97-1"></a>pred &lt;-<span class="st"> </span><span class="kw">predict</span>(year_gam, <span class="dt">type =</span> <span class="st">&quot;terms&quot;</span>, <span class="dt">se =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb97-2"><a href="changer-la-fonction-de-base.html#cb97-2"></a>I &lt;-<span class="st"> </span><span class="kw">order</span>(nottem_year)</span>
+<span id="cb97-3"><a href="changer-la-fonction-de-base.html#cb97-3"></a>plusCI &lt;-<span class="st"> </span><span class="kw">I</span>(pred<span class="op">$</span>fit[, <span class="dv">1</span>] <span class="op">+</span><span class="st"> </span><span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>pred<span class="op">$</span>se[, <span class="dv">1</span>])</span>
+<span id="cb97-4"><a href="changer-la-fonction-de-base.html#cb97-4"></a>minusCI &lt;-<span class="st"> </span><span class="kw">I</span>(pred<span class="op">$</span>fit[, <span class="dv">1</span>] <span class="op">-</span><span class="st"> </span><span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>pred<span class="op">$</span>se[, <span class="dv">1</span>])</span>
+<span id="cb97-5"><a href="changer-la-fonction-de-base.html#cb97-5"></a>xx &lt;-<span class="st"> </span><span class="kw">c</span>(nottem_year[I], <span class="kw">rev</span>(nottem_year[I]))</span>
+<span id="cb97-6"><a href="changer-la-fonction-de-base.html#cb97-6"></a>yy &lt;-<span class="st"> </span><span class="kw">c</span>(plusCI[I], <span class="kw">rev</span>(minusCI[I]))</span>
+<span id="cb97-7"><a href="changer-la-fonction-de-base.html#cb97-7"></a></span>
+<span id="cb97-8"><a href="changer-la-fonction-de-base.html#cb97-8"></a><span class="kw">plot</span>(xx, yy, <span class="dt">type =</span> <span class="st">&quot;n&quot;</span>, <span class="dt">cex.axis =</span> <span class="fl">1.2</span>, <span class="dt">xlab =</span> <span class="st">&quot;Year&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Temperature&quot;</span>)</span>
+<span id="cb97-9"><a href="changer-la-fonction-de-base.html#cb97-9"></a><span class="kw">polygon</span>(xx, yy, <span class="dt">col =</span> <span class="st">&quot;light blue&quot;</span>, <span class="dt">border =</span> <span class="st">&quot;light blue&quot;</span>)</span>
+<span id="cb97-10"><a href="changer-la-fonction-de-base.html#cb97-10"></a><span class="kw">lines</span>(nottem_year[I], pred<span class="op">$</span>fit[, <span class="dv">1</span>][I], <span class="dt">lty =</span> <span class="dv">1</span>, <span class="dt">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb97-11"><a href="changer-la-fonction-de-base.html#cb97-11"></a><span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">0</span>, <span class="dt">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="book-fr_files/figure-html/unnamed-chunk-71-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
 
+</div>
+</div>
+<h3> References</h3>
+<div id="refs" class="references">
+<div id="ref-simpson-2009">
+<p>Simpson, Gavin L., and N. J. Anderson. 2009. “Deciphering the Effect of Climate Change and Separating the Influence of Confounding Factors in Sediment Core Records Using Additive Models.” <em>Limnology and Oceanography</em> 54 (6part2): 2529–41. <a href="https://doi.org/https://doi.org/10.4319/lo.2009.54.6_part_2.2529">https://doi.org/https://doi.org/10.4319/lo.2009.54.6_part_2.2529</a>.</p>
+</div>
 </div>
 <hr>
 <center> 
@@ -310,8 +328,8 @@ sélectionnés, vous obtiendrez la même figure que celle ci-dessus.</p>
           </div>
         </div>
       </div>
-<a href="interactions.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="autres-distributions.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="autres-distributions.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

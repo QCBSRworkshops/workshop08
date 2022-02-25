@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapitre 5 Le fonctionnement des GAMs | Atelier 8 : Modèles additifs généralisés en R</title>
+  <title>Chapitre 7 GAM avec des termes d’interaction | Atelier 8 : Modèles additifs généralisés en R</title>
   <meta name="description" content="Modèles additifs généralisés en R" />
   <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapitre 5 Le fonctionnement des GAMs | Atelier 8 : Modèles additifs généralisés en R" />
+  <meta property="og:title" content="Chapitre 7 GAM avec des termes d’interaction | Atelier 8 : Modèles additifs généralisés en R" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://github.com/qcbsRworkshops/" />
   <meta property="og:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="qcbsRworkshops/workshop08" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapitre 5 Le fonctionnement des GAMs | Atelier 8 : Modèles additifs généralisés en R" />
+  <meta name="twitter:title" content="Chapitre 7 GAM avec des termes d’interaction | Atelier 8 : Modèles additifs généralisés en R" />
   
   <meta name="twitter:description" content="Modèles additifs généralisés en R" />
   <meta name="twitter:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />
-<link rel="prev" href="introduction-aux-gams.html"/>
-<link rel="next" href="gam-avec-plusieurs-termes-non-linéaires.html"/>
+<link rel="prev" href="gam-avec-plusieurs-termes-non-linéaires.html"/>
+<link rel="next" href="validation-gam.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -236,68 +236,86 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
   <img class= "hero-image" src="assets/images/jean-philippe-delberghe-75xPHEQBmvA-unsplash_hero_image.jpg">
 </div>
 --!>
-<div id="fonctionnement" class="section level1">
-<h1><span class="header-section-number">Chapitre 5</span> Le fonctionnement des GAMs</h1>
-<p>Nous allons maintenant prendre quelques minutes pour regarder comment fonctionnent les GAMs. Commençons en considérant d’abord un modèle qui contient une fonction lisse <span class="math inline">\(f\)</span> d’une covariable, <span class="math inline">\(x\)</span> :</p>
-<p><span class="math display">\[y_i = f(x_i) + \epsilon_i\]</span></p>
-<p>Pour estimer la fonction <span class="math inline">\(f\)</span>, nous avons besoin de représenter l’équation ci-dessus de manière à ce qu’elle devienne un modèle linéaire. Cela peut être fait en définissant des fonctions de base, <span class="math inline">\(b_j(x)\)</span>, dont est composée <span class="math inline">\(f\)</span> :</p>
-<p><span class="math display">\[f(x) = \sum_{j=1}^q b_j(x) \times \beta_j\]</span></p>
-<div id="exemple-une-base-polynomiale" class="section level2">
-<h2><span class="header-section-number">5.1</span> Exemple: une base polynomiale</h2>
-<p>Supposons que <span class="math inline">\(f\)</span> est considérée comme un polynôme d’ordre 4, de sorte que l’espace des polynômes d’ordre 4 et moins contient <span class="math inline">\(f\)</span>. Une base de cet espace serait alors :</p>
-<p><span class="math display">\[b_0(x)=1 \ , \quad b_1(x)=x \ , \quad b_2(x)=x^2 \ , \quad b_3(x)=x^3 \ , \quad b_4(x)=x^4\]</span></p>
-<p>Alors <span class="math inline">\(f(x)\)</span> devient :</p>
-<p><span class="math display">\[f(x) = \beta_0 + x\beta_1 +  x^2\beta_2 + x^3\beta_3 + x^4\beta_4\]</span></p>
-<p>.. et le modèle complet devient :</p>
-<p><span class="math display">\[y_i = \beta_0 + x_i\beta_1 +  x^2_i\beta_2 + x^3_i\beta_3 + x^4_i\beta_4 + \epsilon_i\]</span></p>
-<p>Chaque fonction de base est multipliée par un paramètre à valeur réelle, <span class="math inline">\(\beta_j\)</span>, et est ensuite additionnée pour donner la <font color="orange">courbe finale <span class="math inline">\(f(x)\)</span></font>.</p>
-<p><img src="images/polynomial_basis_example.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>En faisant varier le coefficient <span class="math inline">\(\beta_j\)</span>, on peut faire varier la forme de <span class="math inline">\(f(x)\)</span> pour produire une fonction polynomiale d’ordre 4 ou moins.</p>
-</div>
-<div id="exemple-une-base-de-spline-cubique" class="section level2">
-<h2><span class="header-section-number">5.2</span> Exemple: une base de spline cubique</h2>
-<p>Un spline cubique est une courbe construite à partir de sections d’un polynôme cubique reliées entre elles de sorte qu’elles sont continues en valeur. Chaque section du spline a des coefficients différents.</p>
-<p><img src="images/cubic_spline_fr.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>Voici une représentation d’une fonction lisse utilisant une base de régression spline cubique de rang 5 avec des nœuds situés à incréments de 0.2:</p>
-<p><img src="images/graphic6.1.jpg" width="7s0%" style="display: block; margin: auto;" /></p>
-<p>Dans cet exemple, les nœuds sont espacés uniformément à travers la gamme des valeurs observées de x. Le choix du degré de finesse du modèle est pré-déterminé par le nombre de nœuds, qui était arbitraire.</p>
-<div class="puzzle">
-<p>Y a-t-il une meilleure façon de sélectionner les emplacements des nœuds?</p>
-</div>
-<div id="contrôler-le-degré-de-lissage-avec-des-splines-de-régression-pénalisés" class="section level3">
-<h3><span class="header-section-number">5.2.1</span> Contrôler le degré de lissage avec des splines de régression pénalisés</h3>
-<p>Au lieu de contrôler le lissage (donc, la non linéarité de la courbe) en modifiant le nombre de nœuds, nous gardons celui-ci fixé à une taille un peu plus grande que raisonnablement nécessaire et on contrôle le lissage du modèle en ajoutant une pénalité sur le niveau de courbure. Donc, plutôt que d’ajuster le modèle en minimisant (comme avec la méthode des moindres carrés) :</p>
-<p><span class="math display">\[||y - XB||^{2}\]</span></p>
-<p>Le modèle peut être ajusté en minimisant :</p>
-<p><span class="math display">\[||y - XB||^{2} + \lambda \int_0^1[f^{&#39;&#39;}(x)]^2dx\]</span></p>
-<p>Quand <span class="math inline">\(\lambda\)</span> tend vers <span class="math inline">\(\infty\)</span>, le modèle devient linéaire.</p>
-<p>Si <span class="math inline">\(\lambda\)</span> est trop élevé, les données seront trop lissées et si elle est trop faible, les données ne seront pas assez lissées. Idéalement, il serait bon de choisir une valeur <span class="math inline">\(\lambda\)</span> de sorte que le <span class="math inline">\(\hat{f}\)</span> prédit est aussi proche que possible du <span class="math inline">\(f\)</span> observé. Un critère approprié pourrait être de choisir <span class="math inline">\(\lambda\)</span> pour minimiser :</p>
-<p><span class="math display">\[M = 1/n \times \sum_{i=1}^n (\hat{f_i} - f_i)^2\]</span></p>
-<p>Étant donné que <span class="math inline">\(f\)</span> est inconnue, <span class="math inline">\(M\)</span> doit être estimé. Les méthodes recommandées pour ce faire sont le maximum de vraisemblance (maximum likelihood, <em>ML</em>) ou l’estimation par maximum de vraisemblance restreint (restricted maximum likelihood, <em>REML</em>). La validation croisée généralisée (<em>GCV</em>) est une autre possibilité. Il s’agit d’une technique qui élimine tour à tour chaque donnée des données et considère la capacité prédictive moyenne des modèles adaptés aux données restantes pour prédire la donnée éliminée. Pour plus de détails sur ces méthodes, voir <span class="citation">(Wood <a href="#ref-wood_2006" role="doc-biblioref">2006</a>)</span>.</p>
+<div id="gam-avec-des-termes-dinteraction" class="section level1">
+<h1><span class="header-section-number">Chapitre 7</span> GAM avec des termes d’interaction</h1>
+<p>Il y a deux façons de modéliser une interaction entre deux variables :</p>
+<ul>
+<li>pour deux variables non-linéaire : <code>s(x1, x2)</code></li>
+<li>pour une variable non-linéaire et une variable linéaire (quantitative ou qualitative) : utiliser l’argument <code>by</code>, <code>s(x1, by = x2)</code>
+<ul>
+<li>Quand <code>x2</code> est qualitative, vous avez un terme non linéaire qui varie entre les différents niveaux de <code>x2</code></li>
+<li>Quand <code>x2</code> est quantitative, l’effet linéaire de <code>x2</code> varie avec <code>x1</code></li>
+<li>Quand <code>x2</code> est qualitative, le facteur doit être ajouté comme effet principal dans le modèle</li>
+</ul></li>
+</ul>
+<div id="interaction-entre-variables-non-linéaire-et-qualitatif" class="section level2">
+<h2><span class="header-section-number">7.1</span> Interaction entre variables non-linéaire et qualitatif</h2>
+<p>Nous allons examiner l’effet de l’interaction en utilisant notre variable qualitative <code>Season</code> et examiner si la non-linéarité de <code>s(SampleDepth)</code> varie selon les différents niveaux de <code>Season</code>.</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="gam-avec-des-termes-dinteraction.html#cb56-1"></a>factor_interact &lt;-<span class="st"> </span><span class="kw">gam</span>(Sources <span class="op">~</span><span class="st"> </span>Season <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(SampleDepth, <span class="dt">by =</span> Season) <span class="op">+</span></span>
+<span id="cb56-2"><a href="gam-avec-des-termes-dinteraction.html#cb56-2"></a><span class="st">    </span><span class="kw">s</span>(RelativeDepth), <span class="dt">data =</span> isit, <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
+<span id="cb56-3"><a href="gam-avec-des-termes-dinteraction.html#cb56-3"></a></span>
+<span id="cb56-4"><a href="gam-avec-des-termes-dinteraction.html#cb56-4"></a><span class="kw">summary</span>(factor_interact)<span class="op">$</span>s.table</span></code></pre></div>
+<pre><code>##                             edf   Ref.df          F p-value
+## s(SampleDepth):Season1 6.839386 7.552045  95.119422       0
+## s(SampleDepth):Season2 8.744574 8.966290 154.474325       0
+## s(RelativeDepth)       6.987223 8.055898   6.821074       0</code></pre>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="gam-avec-des-termes-dinteraction.html#cb58-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb58-2"><a href="gam-avec-des-termes-dinteraction.html#cb58-2"></a><span class="kw">plot</span>(factor_interact)</span></code></pre></div>
+<p><img src="book-fr_files/figure-html/unnamed-chunk-46-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="explanation">
-<p><strong>Le principe de validation croisée</strong></p>
-<p><img src="images/illustration_of_smooth_sel.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>Dans le premier panneau, la courbe correspond à un ajustement faible par
-rapport aux données et ne fait pas mieux avec le point manquant. Dans le
-troisième panneau, la courbe ajuste le bruit aussi bien que le signal et
-la variabilité supplémentaire induite l’amène à prédire la donnée
-manquante plutôt mal. Dans le deuxième panneau, cependant, nous voyons
-que l’ajustement de la courbe du signal sous-jacent est très bien, le
-lissage passe à travers le bruit et la donnée manquante est
-raisonnablement bien prédite.</p>
-<p>Dans le premier panneau, <span class="math inline">\(\lambda\)</span> est trop élevé, et la courbe est trop lissée. Ici, la courbe est mal ajustée aux données et prédit donc très difficilement le point manquant.</p>
-<p>Dans le troisième panneau, <span class="math inline">\(\lambda\)</span> est trop élevé, et la courbe est surajustée. Ici, la courbe s’ajuste très étroitement aux données, suivant le signal aussi bien que le bruit qui l’entoure. L’influence de cette variabilité supplémentaire (non informative) fait que le modèle prédit difficilement la donnée manquante.</p>
-<p>Dans le deuxième panneau, <span class="math inline">\(\lambda\)</span> est à peu près parfait. La courbe s’ajuste assez bien au signal sous-jacent, tout en lissant le bruit. La donnée manquante est raisonnablement bien prédite.</p>
+<p>Les deux premiers graphiques montrent l’effet d’interaction entre notre variable lisse <code>SampleDepth</code> et chaque niveau de notre variable factorielle, <code>Season</code>. Voyez-vous une différence entre les deux courbes ?</p>
 </div>
+<p>Les graphiques montrent quelques différences entre la forme des termes lisses entre les deux niveaux de <code>Season</code>. La différence la plus notable est le pic dans le deuxième panneau, qui nous indique qu’il y a un effet de <code>SampleDepth</code> entre 1000 et 2000 qui est important dans la saison 2, mais qui ne se produit pas dans la saison 1. Cela suggère que l’effet d’interaction pourrait être important à inclure dans notre modèle.</p>
+<p>Nous pouvons également représenter l’effet d’interaction en 3D sur un seul graphique, en utilisant <code>vis.gam()</code>.</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="gam-avec-des-termes-dinteraction.html#cb59-1"></a><span class="kw">vis.gam</span>(factor_interact, <span class="dt">theta =</span> <span class="dv">120</span>, <span class="dt">n.grid =</span> <span class="dv">50</span>, <span class="dt">lwd =</span> <span class="fl">0.4</span>)</span></code></pre></div>
+<p><img src="book-fr_files/figure-html/unnamed-chunk-47-1.png" width="672" style="display: block; margin: auto;" />
+&gt; On peut changer le degré de rotation de notre plan x-y avec l’argument <code>theta</code>.</p>
+<p>Pour vérifier notre hypothèse que cette interaction est importante, on peut faire une comparaison de modèles en utilisant l’AIC pour déterminer si le terme d’interaction améliore la performance de notre modèle.</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="gam-avec-des-termes-dinteraction.html#cb60-1"></a><span class="kw">AIC</span>(two_smooth_model, factor_interact)</span></code></pre></div>
+<pre><code>##                        df      AIC
+## two_smooth_model 20.46960 5056.841
+## factor_interact  26.99693 4878.631</code></pre>
+<p>L’AIC de notre modèle avec une interaction factorielle entre le lisse <code>SampleDepth</code> et le <code>Season</code> a un score AIC plus bas, ce qui nous indique que ce modèle est plus performant que <code>two_smooth_model</code>. L’inclusion de cette interaction semble améliorer les performances de notre modèle.</p>
+</div>
+<div id="interaction-entre-variables-non-linéaires" class="section level2">
+<h2><span class="header-section-number">7.2</span> Interaction entre variables non linéaires</h2>
+<p>Finalement, nous regardons les interactions entre deux termes non linéaires, <code>SampleDepth</code> et <code>RelativeDepth</code>.</p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="gam-avec-des-termes-dinteraction.html#cb62-1"></a>smooth_interact &lt;-<span class="st"> </span><span class="kw">gam</span>(Sources <span class="op">~</span><span class="st"> </span>Season <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(SampleDepth, RelativeDepth),</span>
+<span id="cb62-2"><a href="gam-avec-des-termes-dinteraction.html#cb62-2"></a>    <span class="dt">data =</span> isit, <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
+<span id="cb62-3"><a href="gam-avec-des-termes-dinteraction.html#cb62-3"></a><span class="kw">summary</span>(smooth_interact)<span class="op">$</span>s.table</span></code></pre></div>
+<pre><code>##                                   edf Ref.df        F p-value
+## s(SampleDepth,RelativeDepth) 27.12521  28.77 93.91722       0</code></pre>
+<p>Dans la section précédente, nous avons pu visualiser un effet d’interaction entre un terme non linéaire et un terme factoriel en dessinant une fonction lisse différente de <code>SampleDepth</code> pour chaque niveau de <code>Season</code>.</p>
+<p>Dans ce modèle, nous avons deux termes non linéaires, donc l’effet de <code>SampleDepth</code> varie de façon linéaire avec <code>RelativeDepth</code>, et vice-versa. Lorsque nous visualisons cette interaction, nous obtenons plutôt un gradient entre deux fonctions continues lissées :</p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="gam-avec-des-termes-dinteraction.html#cb64-1"></a><span class="kw">plot</span>(smooth_interact, <span class="dt">page =</span> <span class="dv">1</span>, <span class="dt">scheme =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="book-fr_files/figure-html/unnamed-chunk-50-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>We can also plot this interaction on a 3D surface:</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="gam-avec-des-termes-dinteraction.html#cb65-1"></a><span class="kw">vis.gam</span>(smooth_interact, <span class="dt">view =</span> <span class="kw">c</span>(<span class="st">&quot;SampleDepth&quot;</span>, <span class="st">&quot;RelativeDepth&quot;</span>),</span>
+<span id="cb65-2"><a href="gam-avec-des-termes-dinteraction.html#cb65-2"></a>    <span class="dt">theta =</span> <span class="dv">50</span>, <span class="dt">n.grid =</span> <span class="dv">50</span>, <span class="dt">lwd =</span> <span class="fl">0.4</span>)</span></code></pre></div>
+<p><img src="book-fr_files/figure-html/unnamed-chunk-51-1.png" width="672" style="display: block; margin: auto;" />
+&gt; Rappelez-vous, ce graphique peut être réorienté en changeant la valeur de l’argument <code>theta</code>.</p>
+<div class="explanation">
+<p>On peut changer la couleur du graphique 3D en utilisant l’argument <code>color</code>. Essayez de spécifier <code>color = "cm"</code> dans <code>vis.gam()</code> ci-dessus, et consultez <code>?vis.gam</code> pour plus d’options de couleurs.</p>
+</div>
+<p>Les graphiques illustrent une interaction non linéaire, où <code>Sources</code> est plus faible à des valeurs élevées de <code>SampleDepth</code> et <code>RelativeDepth</code>, mais augmente avec <code>RelativeDepth</code> alors que <code>SampleDepth</code> est faible.</p>
+<p>Ainsi, il semble y avoir un effet d’interaction entre ces termes non linéaires. Est-ce que l’inclusion de l’interaction entre <code>s(SampleDepth)</code> et <code>s(RelativeDepth)</code> améliore notre modèle <code>two_smooth_model</code>?</p>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="gam-avec-des-termes-dinteraction.html#cb66-1"></a><span class="kw">AIC</span>(two_smooth_model, smooth_interact)</span></code></pre></div>
+<pre><code>##                        df      AIC
+## two_smooth_model 20.46960 5056.841
+## smooth_interact  30.33625 4943.890</code></pre>
+<p>Le modèle avec l’interaction entre <code>s(SampleDepth)</code> et <code>s(RelativeDepth)</code> a un AIC inférieur, ce qui signifie que l’inclusion de cette interaction améliore la performance de notre modèle, et notre capacité à comprendre les déterminants de la bioluminescence.</p>
 
 </div>
 </div>
-</div>
-<h3> References</h3>
-<div id="refs" class="references">
-<div id="ref-wood_2006">
-<p>Wood, S. N. 2006. <em>Generalized Additive Models: An Introduction with R</em>. 2nd ed. Chapman; Hall/CRC.</p>
-</div>
+
+
+
+<ol style="list-style-type: decimal">
+<li>Utiliser d’autres distributions pour la variable de réponse avec l’argument <code>family</code> (comme dans un GLM),</li>
+<li>Utiliser de différents types de fonctions de base,</li>
+<li>Utilisation de différents types d’effets aléatoires pour ajuster des modèles à effets mixtes.</li>
+</ol>
+<p>Nous allons maintenant examiner ces aspects.</p>
 </div>
 <hr>
 <center> 
@@ -310,8 +328,8 @@ raisonnablement bien prédite.</p>
           </div>
         </div>
       </div>
-<a href="introduction-aux-gams.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="gam-avec-plusieurs-termes-non-linéaires.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="gam-avec-plusieurs-termes-non-linéaires.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="validation-gam.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

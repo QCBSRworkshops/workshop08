@@ -44,7 +44,7 @@ Dans le [Chapter 5](#fonctionnement), nous avons discuté du rôle du paramètre
 
 Chaque fonction lisse dans un GAM est essentiellement la somme pondérée de nombreuses fonctions plus petites, appelées fonctions de base. Plus le nombre de fonctions de base utilisées pour construire une fonction lisse est élevé, plus la fonction lisse est "ondulée". Comme vous pouvez le voir ci-dessous, une fonction lisse avec une petite dimension de base de $k$ sera moins ondulée qu'une fonction lisse avec une grande dimension de base de $k$.
 
-```{r, echo = FALSE, fig.height = 4, fig.width = 10, results='hide', message=FALSE}
+```{r, purl = FALSE, echo = FALSE, fig.height = 4, fig.width = 10, results='hide', message=FALSE}
 par(mfrow=c(1,3))
 install.packages("patchwork", quiet = TRUE)
 library(patchwork)

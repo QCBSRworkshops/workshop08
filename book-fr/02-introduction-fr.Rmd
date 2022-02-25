@@ -25,13 +25,13 @@ Les modèles linéaires fonctionnent très bien dans certains cas spécifiques o
 knitr::include_graphics("images/linreg.png")
 ```
 
-En réalité, il est souvent impossible de respecter ces critères. Cela signifie que, dans de nombreux cas, les modèles linéaires sont inappropriés:
+En réalité, il est souvent impossible de respecter ces critères. Dans de nombreux cas, les modèles linéaires sont inappropriés:
 
 ```{r, fig.align = 'center', out.width = '100%', echo = FALSE, purl = FALSE}
 knitr::include_graphics("images/linreg_bad.png")
 ```
 
-Alors, comment résoudre ce problème ? Pour répondre à cette question, nous devons d'abord considérer ce que le modèle de régression tente de faire. Un modèle linéaire essaye d'ajuster la __meilleure droite__ qui passe au milieu des données _sans __sur-ajuster___ les données, ce qui se produirait si nous tracions simplement une ligne entre chaque point et ses voisins. 
+Alors, comment résoudre ce problème ? Pour répondre à cette question, nous devons d'abord considérer ce que le modèle de régression tente de faire. Un modèle linéaire essaye d'ajuster la __meilleure droite__ qui passe au milieu des données _sans __sur-ajuster___ les données, ce qui se produirait si nous tracions simplement une ligne entre chaque point et ses voisins.
 
 En revanche, les modèles additifs (GAM) ajustent une fonction de lissage non-linéaire à travers les données, tout en contrôlant le __degré de courbure__ de la ligne our éviter un ajustement excessif. Les modèles additifs peuvent donc capturer des relations non linéaires en ajustant une fonction lisse à travers les données, plutôt qu'une ligne droite. Nous reviendrons plus tard sur le __degré de courbure__ de la ligne!
 
@@ -59,13 +59,13 @@ linear_model <- gam(Sources ~ SampleDepth, data = isit2)
 summary(linear_model)
 ```
 
-Le modèle linéaire explique une bonne partie de la variance de notre jeu de données ($R_{adj}$ = 0.588), ce qui veut dire que notre modèle est super bon, non? Voyons comment notre modèle cadre avec les données:
+Le modèle linéaire explique une bonne partie de la variance de notre jeu de données ( $R_{adj}$ = 0.588), ce qui veut dire que notre modèle est super bon, non? Voyons comment notre modèle cadre avec les données:
 
 ```{r}
-data_plot <- ggplot(data = isit2, aes(y = Sources, x = SampleDepth)) + 
+data_plot <- ggplot(data = isit2, aes(y = Sources, x = SampleDepth)) +
   geom_point() +
   geom_line(aes(y = fitted(linear_model)),
-            colour = "red", size = 1.2) + 
+            colour = "red", size = 1.2) +
   theme_bw()
 data_plot
 ```
@@ -140,8 +140,6 @@ plot(gam_model)
 Comment tester si le modèle non linéaire offre une amélioration significative par rapport au modèle linéaire?
 
 On peut utiliser `gam()` et `AIC()` pour tester si une supposition de linéarité est justifiée. Pour ceci, on peut comparer la performance d'un modèle linéaire contenant `x` comme prédicteur linéaire à la performance d'un modèle non linéaire contenant `s(x)` comme prédicteur lisse. En d'autres termes, on demande si l'ajout d'une fonction lisse au modèle linéaire améliore l'ajustement du modèle à nos données.
-Comment utilisons-nous les GAMs pour savoir si un modèle linéaire est
-suffisant pour modéliser nos données? 
 
 ```{r}
 linear_model <- gam(Sources ~ SampleDepth, data = isit2)
@@ -152,7 +150,7 @@ AIC(linear_model, smooth_model)
 Ici, l'AIC du GAM lissé est plus bas, ce qui indique que l'ajout d'une fonction de lissage améliore la performance du modèle. La linéarité n'est donc pas soutenue par nos données.
 
 :::explanation
-Pour expliquer brièvement, le critère d'information d'Akaike (AIC) est une mesure comparative de la performance d'un modèle, où des valeurs plus basses indiquent qu'un modèle est "plus performant" par rapport aux autres modèles considérés. 
+Pour expliquer brièvement, le critère d'information d'Akaike (AIC) est une mesure comparative de la performance d'un modèle, où des valeurs plus basses indiquent qu'un modèle est "plus performant" par rapport aux autres modèles considérés.
 :::
 
 ## Défi 1
@@ -200,7 +198,7 @@ On peut compléter cela par une comparaison quantitative des performances du mod
 AIC(linear_model_s1, smooth_model_s1)
 ```
 
-Le score AIC moins élevé indique que le modèle lissé est plus performant que le modèle linéaire, ce qui confirme que la linéarité n'est pas appropriée pour notre ensemble de données. 
+Le score AIC moins élevé indique que le modèle lissé est plus performant que le modèle linéaire, ce qui confirme que la linéarité n'est pas appropriée pour notre ensemble de données.
 
 __3.__ Quels sont les degrés de liberté effectifs du terme non-linéaire?
 

@@ -20,20 +20,21 @@ major assumptions:
 A linear model can sometimes accommodate certain types of non-linear responses (e.g. $x^2$), but this approach strongly relies on decisions that can be either arbitrary or well-informed, and is much less flexible than using an additive model. For example, this linear model with multiple predictors can handle a non-linear response, but quickly becomes difficult to interpret and manage:
 
 $$y_i = \beta_0 + \beta_1x_{1,i}+\beta_2x_{2,i}+\beta_3x_{3,i}+...+\beta_kx_{k,i} + \epsilon_i$$
+
 Linear models work very well in certain specific cases where all these criteria are met:
 
 ```{r, fig.align = 'center', out.width = '70%', echo = FALSE, purl = FALSE}
 knitr::include_graphics("images/linreg.png")
 ```
 
-In reality, we often cannot meet these criteria. This means that in many cases, linear models are inappropriate:
+In reality, we often cannot meet these criteria. In many cases, linear models are inappropriate:
 
 ```{r, fig.align = 'center', out.width = '100%', echo = FALSE, purl = FALSE}
 knitr::include_graphics("images/linreg_bad.png")
 ```
 
 So, how can we fit a better model? To answer this question, we must first consider what the regression model is
-trying to do. The linear model is trying to fit the best __straight line__ that passes through the middle of the data, _without __overfitting___ the data, which is what would happen if we simply drew a line between each point and its neighbours. Linear models do this by finding the best fit straight line that passes through the data. 
+trying to do. The linear model is trying to fit the best __straight line__ that passes through the middle of the data, _without __overfitting___ the data, which is what would happen if we simply drew a line between each point and its neighbours. Linear models do this by finding the best fit straight line that passes through the data.
 
 In the same way, additive models fit a curve through the data, while controlling the ___wiggliness___ of this curve to avoid overfitting. This means additive models like GAMs can capture non-linear relationships by fitting a smooth function through the data, rather than a straight line. We will come back to the concept of ___wiggliness___ later!
 
@@ -61,13 +62,13 @@ linear_model <- gam(Sources ~ SampleDepth, data = isit2)
 summary(linear_model)
 ```
 
-The linear model is explaining quite a bit of variance in our dataset ($R_{adj}$ = 0.588), which means it's a pretty good model, right? Well, let's take a look at how our model fits the data:
+The linear model is explaining quite a bit of variance in our dataset ( $R_{adj}$ = 0.588), which means it's a pretty good model, right? Well, let's take a look at how our model fits the data:
 
 ```{r}
-data_plot <- ggplot(data = isit2, aes(y = Sources, x = SampleDepth)) + 
+data_plot <- ggplot(data = isit2, aes(y = Sources, x = SampleDepth)) +
   geom_point() +
   geom_line(aes(y = fitted(linear_model)),
-            colour = "red", size = 1.2) + 
+            colour = "red", size = 1.2) +
   theme_bw()
 data_plot
 ```
@@ -94,7 +95,7 @@ where $y_i$ is the response variable, $x_i$ is the predictor variable, and $f$ i
 Importantly, given that the smooth function $f(x_i)$ is non-linear and
 local, the magnitude of the effect of the explanatory variable can vary
 over its range, depending on the relationship between the variable and
-the response. 
+the response.
 
 That is, as opposed to one fixed coefficient $\beta$, the function $f$ can continually change over the range of $x_i$.
 The degree of smoothness (or wiggliness) of $f$ is controlled using penalized regression determined automatically in `mgcv` using a generalized cross-validation (GCV) routine [@wood_2006].
@@ -122,7 +123,7 @@ Recall: As opposed to one fixed coefficient $\beta$ in a linear model, the funct
 
 :::
 
-The `mgcv` package also includes a default plot to look at the smooths:
+The `mgcv` package also includes a default `plot()` function to look at the smooths:
 
 ```{r}
 plot(gam_model)
@@ -144,7 +145,7 @@ AIC(linear_model, smooth_model)
 Here, the AIC of the smooth GAM is lower, which indicates that adding a smoothing function improves model performance. Linearity is therefore not supported by our data.
 
 :::explanation
-As a brief explanation, the Akaike Information Criterion (AIC) is a comparative metric of model performance, where lower scores indicate that a model is performing "better" compared to other considered models. 
+As a brief explanation, the Akaike Information Criterion (AIC) is a comparative metric of model performance, where lower scores indicate that a model is performing "better" compared to other considered models.
 :::
 
 ## Challenge 1
@@ -165,7 +166,7 @@ We have not discussed effective degrees of freedom (**EDF**) yet, but these are 
 
 ```{r, echo = FALSE, include = FALSE}
 # Challenge 1 ----
-# 
+#
 # 1. Fit a linear and smoothed GAM model to the relation between `SampleDepth` and `Sources`.
 # 2. Determine if linearity is justified for this data.
 # 3. How many effective degrees of freedom does the smoothed term have?
@@ -196,13 +197,13 @@ ggplot(isit1, aes(x = SampleDepth, y = Sources)) +
   theme_bw()
 ```
 
-We can supplement this with a quantitative comparison of model performance using `AIC()`. 
+We can supplement this with a quantitative comparison of model performance using `AIC()`.
 
 ```{r}
 AIC(linear_model_s1, smooth_model_s1)
 ```
 
-The lower AIC score indicates that smooth model is performing better than the linear model, which confirms that linearity is not appropriate for our dataset. 
+The lower AIC score indicates that smooth model is performing better than the linear model, which confirms that linearity is not appropriate for our dataset.
 
 __3.__ How many effective degrees of freedom does the smoothed term have?
 
@@ -213,4 +214,3 @@ smooth_model_s1
 ```
 
 The effective degrees of freedom (EDF) are >> 1. Keep this in mind, because we will be coming back to EDF [later](#edf)!
-

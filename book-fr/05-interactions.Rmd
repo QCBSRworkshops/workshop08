@@ -30,14 +30,17 @@ plot(factor_interact)
 Les deux premiers graphiques montrent l'effet d'interaction entre notre variable lisse `SampleDepth` et chaque niveau de notre variable factorielle, `Season`. Voyez-vous une différence entre les deux courbes ?
 :::
 
-Les graphiques montrent quelques différences entre la forme des termes lisses entre les deux niveaux de `Season`. La différence la plus notable est le pic dans le deuxième panneau, qui nous indique qu'il y a un effet de `SampleDepth` entre 1000 et 2000 qui est important dans la saison 2, mais qui ne se produit pas dans la saison 1. Cela suggère que l'effet d'interaction pourrait être important à inclure dans notre modèle.
+Les graphiques montrent quelques différences entre la forme des termes lisses entre les deux niveaux de `Season`. La différence la plus notable est le pic dans le deuxième panneau, qui nous indique qu'il y a un effet de `SampleDepth` entre 1000 et 2000 qui est important dans la saison 2, mais qui ne se produit pas dans la saison 1. Ceci suggère que l'effet d'interaction pourrait être important à inclure dans notre modèle.
 
 Nous pouvons également représenter l'effet d'interaction en 3D sur un seul graphique, en utilisant `vis.gam()`.
 
 ```{r}
 vis.gam(factor_interact, theta = 120, n.grid = 50, lwd = .4)
 ```
-> On peut changer le degré de rotation de notre plan x-y avec l'argument `theta`. 
+
+:::puzzle
+On peut changer le degré de rotation de notre plan x-y avec l'argument `theta`.
+:::
 
 Pour vérifier notre hypothèse que cette interaction est importante, on peut faire une comparaison de modèles en utilisant l'AIC pour déterminer si le terme d'interaction améliore la performance de notre modèle.
 
@@ -45,20 +48,20 @@ Pour vérifier notre hypothèse que cette interaction est importante, on peut fa
 AIC(two_smooth_model, factor_interact)
 ```
 
-L'AIC de notre modèle avec une interaction factorielle entre le lisse `SampleDepth` et le `Season` a un score AIC plus bas, ce qui nous indique que ce modèle est plus performant que `two_smooth_model`. L'inclusion de cette interaction semble améliorer les performances de notre modèle.
+L'AIC de notre modèle avec une interaction factorielle entre le lisse `SampleDepth` et le `Season` a un score AIC plus bas, ce qui nous indique que ce modèle est plus performant que `two_smooth_model`. L'inclusion de cette interaction améliore la performance de notre modèle.
 
 
-## Interaction entre variables non linéaires 
+## Interaction entre variables non linéaires
 
 Finalement, nous regardons les interactions entre deux termes non linéaires, `SampleDepth` et `RelativeDepth`.
 
 ```{r}
-smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), 
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth),
                        data = isit, method = "REML")
 summary(smooth_interact)$s.table
 ```
 
-Dans la section précédente, nous avons pu visualiser un effet d'interaction entre un terme non linéaire et un terme factoriel en dessinant une fonction lisse différente de `SampleDepth` pour chaque niveau de `Season`. 
+Dans la section précédente, nous avons pu visualiser un effet d'interaction entre un terme non linéaire et un terme factoriel en dessinant une fonction lisse différente de `SampleDepth` pour chaque niveau de `Season`.
 
 Dans ce modèle, nous avons deux termes non linéaires, donc l'effet de `SampleDepth` varie de façon linéaire avec `RelativeDepth`, et vice-versa. Lorsque nous visualisons cette interaction, nous obtenons plutôt un gradient entre deux fonctions continues lissées :
 
@@ -69,13 +72,14 @@ plot(smooth_interact, page = 1, scheme = 2)
 We can also plot this interaction on a 3D surface:
 
 ```{r}
-vis.gam(smooth_interact, 
-        view = c("SampleDepth", "RelativeDepth"), 
+vis.gam(smooth_interact,
+        view = c("SampleDepth", "RelativeDepth"),
         theta = 50, n.grid = 50, lwd = .4)
 ```
-> Rappelez-vous, ce graphique peut être réorienté en changeant la valeur de l'argument `theta`.
 
 :::explanation
+Rappelez-vous, ce graphique peut être réorienté en changeant la valeur de l'argument `theta`.
+
 On peut changer la couleur du graphique 3D en utilisant l'argument `color`. Essayez de spécifier `color = "cm"` dans `vis.gam()` ci-dessus, et consultez `?vis.gam` pour plus d'options de couleurs.
 :::
 
@@ -87,4 +91,4 @@ Ainsi, il semble y avoir un effet d'interaction entre ces termes non linéaires.
 AIC(two_smooth_model, smooth_interact)
 ```
 
-Le modèle avec l'interaction entre `s(SampleDepth)` et `s(RelativeDepth)` a un AIC inférieur, ce qui signifie que l'inclusion de cette interaction améliore la performance de notre modèle, et notre capacité à comprendre les déterminants de la bioluminescence. 
+Le modèle avec l'interaction entre `s(SampleDepth)` et `s(RelativeDepth)` a un AIC inférieur, ce qui signifie que l'inclusion de cette interaction améliore la performance de notre modèle, et notre capacité à comprendre les déterminants de la bioluminescence.

@@ -11,7 +11,7 @@ Lorsque les observations ne sont pas indépendantes, les GAMs peuvent
 
 En plus de changer la fonction de base, nous pouvons aussi complexifier
 le modèle en intégrant une structure d'auto-corrélation (ou même des
-effets mixtes) en utilisant les fonctions `gamm()` dans la librairie `mgcv`. Bien que nous ne l'utilisions pas ici, la librairie [`gamm4`](https://cran.r-project.org/web/packages/gamm4/gamm4.pdf) peut également être utilisé pour estimer des modèles GAMMs dans R. 
+effets mixtes) en utilisant les fonctions `gamm()` dans la librairie `mgcv`. Bien que nous ne l'utilisions pas ici, la librairie [`gamm4`](https://cran.r-project.org/web/packages/gamm4/gamm4.pdf) peut également être utilisé pour estimer des modèles GAMMs dans R.
 
 ## L'autocorrelation des résidus
 
@@ -28,9 +28,7 @@ La __fonction d'autocorrelaton__ (ACF; première figure) évalue la corrélation
 
 En contraste, la __fonction partielle d'autocorrelation__ (PACF: deuxième figure) évalue la corrélation croisée d'une série temporelle entre points à différents décalages, après avoir contrôlé les valeurs de la série temporelle à tous les décalages plus courts.
 
-Les figures ACF et pACF sont utilisés pour identifier combien d'intervalle de temps sont nécessaires pour que les observations commencent à être indépendantes.
-
-Les graphiques ACF et pACF sont donc utilisés pour identifier les pas de temps nécessaires avant que les observations soient indépendantes les unes des autres (c'est-à-dire lorsqu'elles ne sont plus autocorrélées).
+Les graphiques ACF et pACF sont donc utilisés pour identifier le temps nécessaire avant que les observations ne sont plus autocorrélées.
 
 Les graphiques des fonctions d'autocorrélation suggèrent qu'un modèle AR de faible ordre est nécessaire (avec un ou deux intervalles de temps décalés).
 
@@ -87,12 +85,12 @@ Pour plus de détails sur les effets aléatoires, voir l'[Atelier 7](https://r.q
 Ceci est une introduction (très!) brève aux effets aléatoires dans les GAMMs. Pour plus de détails, nous recommandons _fortement_ @pedersen2019hierarchical, un article très accessible qui décrit plusieurs façons de spécifier des GAMMs pour répondre à des questions écologiques.
 :::
 
-### GAMM avec un intercept aléatoire
+### GAMM avec un intercepte aléatoire
 
 Nous allons utiliser `gamSim()` pour générer un ensemble de données, cette fois-ci avec un effet aléatoire. Ensuite, nous construirons un modèle avec un intercepte aléatoire en utilisant `fac` comme facteur aléatoire.
 
 ```{r}
-# Générer des données
+# Simuler des données
 gam_data2 <- gamSim(eg = 6)
 head(gam_data2)
 ```
@@ -108,12 +106,12 @@ summary(gamm_intercept)$s.table
 Notez qu'il y a maintenant un terme aléatoire dans le sommaire du modèle. Vous pouvez visualiser les intercepts aléatoires pour chaque niveau de `fac` comme ceci:
 
 ```{r}
-plot(gamm_intercept, select = 2) 
+plot(gamm_intercept, select = 2)
 # select = 2 parce que le terme aléatoire se trouve sur la 2e ligne du tableau sommaire.
 ```
 
 Nous pouvons également utiliser la fonction `plot_smooth` pour visualiser le modèle, qui nous permet de visualisés des
-effets sommés d'un GAM (basé sur les prédictions). Cette fonction permet également de supprimer les effets aléatoires en définissant `rm.ranef = TRUE`. 
+effets sommés d'un GAM (basé sur les prédictions). Cette fonction permet également de supprimer les effets aléatoires en définissant `rm.ranef = TRUE`.
 
 On peut premièrement visualiser l'effet combiné de `x0` sans les niveaux de l'effet aléatoire, et ensuite une courbe pour chacun de quatre niveaux de l'effet aléatoire `fac`:
 
@@ -121,7 +119,7 @@ On peut premièrement visualiser l'effet combiné de `x0` sans les niveaux de l'
 par(mfrow = c(1,2), cex = 1.1)
 
 # Visualiser les effets combinés de x0 (sans effets aléatoires)
-plot_smooth(gamm_intercept, view = "x0", rm.ranef = TRUE, 
+plot_smooth(gamm_intercept, view = "x0", rm.ranef = TRUE,
             main = "intercept + s(x1)")
 
 # Visualiser chaque niveau de l'effet aléatoire
@@ -129,13 +127,13 @@ plot_smooth(gamm_intercept, view = "x0", rm.ranef = FALSE,
             cond = list(fac="1"),
             main = "... + s(fac)", col = 'orange', ylim = c(0,25))
 plot_smooth(gamm_intercept, view = "x0", rm.ranef = FALSE,
-            cond = list(fac = "2"), 
+            cond = list(fac = "2"),
             add = TRUE, col = 'red')
 plot_smooth(gamm_intercept, view="x0", rm.ranef = FALSE,
-            cond = list(fac = "3"), 
+            cond = list(fac = "3"),
             add = TRUE, col = 'purple')
 plot_smooth(gamm_intercept, view="x0", rm.ranef = FALSE,
-            cond = list(fac = "4"), 
+            cond = list(fac = "4"),
             add = TRUE, col = 'turquoise')
 ```
 
@@ -156,7 +154,7 @@ On peut encore une fois visualiser l'effet combiné de `x0` sans les niveaux de 
 par(mfrow = c(1,2), cex = 1.1)
 
 # Visualiser les effets combinés de x0 (sans effets aléatoires)
-plot_smooth(gamm_slope, view = "x0", rm.ranef = TRUE, 
+plot_smooth(gamm_slope, view = "x0", rm.ranef = TRUE,
             main = "intercept + s(x1)")
 
 # Visualiser chaque niveau de l'effet aléatoire
@@ -164,20 +162,20 @@ plot_smooth(gamm_slope, view = "x0", rm.ranef = FALSE,
             cond = list(fac="1"),
             main = "... + s(fac, x0)", col = 'orange', ylim = c(0,25))
 plot_smooth(gamm_slope, view = "x0", rm.ranef = FALSE,
-            cond = list(fac = "2"), 
+            cond = list(fac = "2"),
             add = TRUE, col = 'red')
 plot_smooth(gamm_slope, view="x0", rm.ranef = FALSE,
-            cond = list(fac = "3"), 
+            cond = list(fac = "3"),
             add = TRUE, col = 'purple')
 plot_smooth(gamm_slope, view="x0", rm.ranef = FALSE,
-            cond = list(fac = "4"), 
+            cond = list(fac = "4"),
             add = TRUE, col = 'turquoise')
 ```
 
 
 ### GAMM avec un intercept et une pente aléatoire
 
-On peut aussi inclure un intercept et une pente aléatoire. 
+On peut aussi inclure un intercept et une pente aléatoire.
 
 ```{r}
 gamm_int_slope <- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
@@ -192,7 +190,7 @@ On peut encore une fois visualiser l'effet combiné de `x0` sans les niveaux de 
 par(mfrow = c(1,2), cex = 1.1)
 
 # Visualiser les effets combinés de x0 (sans effets aléatoires)
-plot_smooth(gamm_int_slope, view = "x0", rm.ranef = TRUE, 
+plot_smooth(gamm_int_slope, view = "x0", rm.ranef = TRUE,
             main = "intercept + s(x1)")
 
 # Visualiser chaque niveau de l'effet aléatoire
@@ -200,20 +198,20 @@ plot_smooth(gamm_int_slope, view = "x0", rm.ranef = FALSE,
             cond = list(fac="1"),
             main = "... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(0,25))
 plot_smooth(gamm_int_slope, view = "x0", rm.ranef = FALSE,
-            cond = list(fac = "2"), 
+            cond = list(fac = "2"),
             add = TRUE, col = 'red')
 plot_smooth(gamm_int_slope, view="x0", rm.ranef = FALSE,
-            cond = list(fac = "3"), 
+            cond = list(fac = "3"),
             add = TRUE, col = 'purple')
 plot_smooth(gamm_int_slope, view="x0", rm.ranef = FALSE,
-            cond = list(fac = "4"), 
+            cond = list(fac = "4"),
             add = TRUE, col = 'turquoise')
 ```
 
 Notez que la pente aléatoire est statique dans ce cas:
 
 ```{r}
-plot(gamm_int_slope, select=3) 
+plot(gamm_int_slope, select=3)
 # select = 3 parce que la pente aléatoire est sur la troisième ligne de notre tableau sommaire.
 ```
 
@@ -222,7 +220,7 @@ plot(gamm_int_slope, select=3)
 Finalement, spécifions un modèle avec une surface lisse aléatoire.
 
 ```{r}
-gamm_smooth <- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1), 
+gamm_smooth <- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1),
                    data = gam_data2, method = "REML")
 
 summary(gamm_smooth)$s.table
@@ -230,8 +228,8 @@ summary(gamm_smooth)$s.table
 
 Si la pente aléatoire variait selon `x0`, on verrait différentes courbes pour chaque niveau:
 
-```{r, echo = TRUE, eval = FALSE}
-plot(gamm_smooth, select=1) 
+```{r, echo = TRUE}
+plot(gamm_smooth, select=1)
 # select = 1 parce que la surface lisse aléatoire est sur la première ligne de notre tableau sommaire.
 ```
 
@@ -241,7 +239,7 @@ On peut encore une fois visualiser l'effet combiné de `x0` sans les niveaux de 
 par(mfrow = c(1,2), cex = 1.1)
 
 # Visualiser les effets combinés de x0 (sans effets aléatoires)
-plot_smooth(gamm_smooth, view = "x0", rm.ranef = TRUE, 
+plot_smooth(gamm_smooth, view = "x0", rm.ranef = TRUE,
             main = "intercept + s(x1)")
 
 # Visualiser chaque niveau de l'effet aléatoire
@@ -249,13 +247,13 @@ plot_smooth(gamm_smooth, view = "x0", rm.ranef = FALSE,
             cond = list(fac="1"),
             main = "... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(0,25))
 plot_smooth(gamm_smooth, view = "x0", rm.ranef = FALSE,
-            cond = list(fac = "2"), 
+            cond = list(fac = "2"),
             add = TRUE, col = 'red')
 plot_smooth(gamm_smooth, view="x0", rm.ranef = FALSE,
-            cond = list(fac = "3"), 
+            cond = list(fac = "3"),
             add = TRUE, col = 'purple')
 plot_smooth(gamm_smooth, view="x0", rm.ranef = FALSE,
-            cond = list(fac = "4"), 
+            cond = list(fac = "4"),
             add = TRUE, col = 'turquoise')
 ```
 

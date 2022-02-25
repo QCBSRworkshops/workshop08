@@ -8,7 +8,7 @@ When observations are not independent, GAMs can be used to either incorporate:
 -   random effects that model independence among observations from the
     same site.
 
-That is, in addition to changing the basis as with the `nottem` example, we can also add complexity to the model by incorporating an autocorrelation structure or mixed effects using the `gamm()` function in the `mgcv` package. Although we will not be using it here, the [`gamm4`](https://cran.r-project.org/web/packages/gamm4/gamm4.pdf) package can also be used to estimate GAMMs in R. 
+That is, in addition to changing the basis as with the `nottem` example, we can also add complexity to the model by incorporating an autocorrelation structure or mixed effects using the `gamm()` function in the `mgcv` package. Although we will not be using it here, the [`gamm4`](https://cran.r-project.org/web/packages/gamm4/gamm4.pdf) package can also be used to estimate GAMMs in R.
 
 ## Residual autocorrelation
 
@@ -20,16 +20,16 @@ acf(resid(year_gam), lag.max = 36, main = "ACF")
 pacf(resid(year_gam), lag.max = 36, main = "pACF")
 ```
 
-The __autocorrelation function__ (ACF; first panel above) evaluates the cross correlation of a time series with itself at different time lags (i.e. similarity between observations at increasingly large time lags). 
+The __autocorrelation function__ (ACF; first panel above) evaluates the cross correlation of a time series with itself at different time lags (i.e. similarity between observations at increasingly large time lags).
 
 In contrast, the __partial autocorrelation function__ (PACF: second panel above)
 gives the partial correlation of a time series with its own lagged values,
 after controlling for the values of the time series at all shorter lags.
 
-The ACF and pACF plots are thus used to identify the time steps needed before observations are independent from one another (i.e., when they are no longer autocorrelated).
+The ACF and pACF plots are thus used to identify the time steps are needed before observations are no longer autocorrelated.
 
 The ACF plot of our model residuals suggests a significant lag of 1, and perhaps
-a lag of 2. Therefore, a low-order AR model is likely needed. 
+a lag of 2. Therefore, a low-order AR model is likely needed.
 
 We can test this by adding AR structures to the Nottingham temperature model. Let's make one with an `AR(1)` (correlation at 1 time step) and one with an `AR(2)` (correlation at two times steps), and compare models using AIC to find a the best-fit model.
 
@@ -96,12 +96,12 @@ summary table. You can plot and view the random intercepts for each
 level of `fac` as follows:
 
 ```{r}
-plot(gamm_intercept, select = 2) 
+plot(gamm_intercept, select = 2)
 # select = 2 because the random effect appears as the second entry in the summary table.
 ```
 
 We can also use the `plot_smooth` function to visualize the model, which allows us to plot a smooth of the
-summed effects of a GAM (based on predictions). This function also optionally removes the random effects by setting `rm.ranef = TRUE`. 
+summed effects of a GAM (based on predictions). This function also optionally removes the random effects by setting `rm.ranef = TRUE`.
 
 Here, we will plot the summed effects for the `x0` without random effects, and then plot the predictions of all four levels of the random `fac` effect:
 
@@ -109,7 +109,7 @@ Here, we will plot the summed effects for the `x0` without random effects, and t
 par(mfrow = c(1,2), cex = 1.1)
 
 # Plot the summed effect of x0 (without random effects)
-plot_smooth(gamm_intercept, view = "x0", rm.ranef = TRUE, 
+plot_smooth(gamm_intercept, view = "x0", rm.ranef = TRUE,
             main = "intercept + s(x1)")
 
 # Plot each level of the random effect
@@ -117,13 +117,13 @@ plot_smooth(gamm_intercept, view = "x0", rm.ranef = FALSE,
             cond = list(fac="1"),
             main = "... + s(fac)", col = 'orange', ylim = c(0,25))
 plot_smooth(gamm_intercept, view = "x0", rm.ranef = FALSE,
-            cond = list(fac = "2"), 
+            cond = list(fac = "2"),
             add = TRUE, col = 'red')
 plot_smooth(gamm_intercept, view="x0", rm.ranef = FALSE,
-            cond = list(fac = "3"), 
+            cond = list(fac = "3"),
             add = TRUE, col = 'purple')
 plot_smooth(gamm_intercept, view="x0", rm.ranef = FALSE,
-            cond = list(fac = "4"), 
+            cond = list(fac = "4"),
             add = TRUE, col = 'turquoise')
 ```
 
@@ -144,7 +144,7 @@ We can once again plot the summed effects for the `x0` without random effects, a
 par(mfrow = c(1,2), cex = 1.1)
 
 # Plot the summed effect of x0 (without random effects)
-plot_smooth(gamm_slope, view = "x0", rm.ranef = TRUE, 
+plot_smooth(gamm_slope, view = "x0", rm.ranef = TRUE,
             main = "intercept + s(x1)")
 
 # Plot each level of the random effect
@@ -152,13 +152,13 @@ plot_smooth(gamm_slope, view = "x0", rm.ranef = FALSE,
             cond = list(fac="1"),
             main = "... + s(fac, x0)", col = 'orange', ylim = c(0,25))
 plot_smooth(gamm_slope, view = "x0", rm.ranef = FALSE,
-            cond = list(fac = "2"), 
+            cond = list(fac = "2"),
             add = TRUE, col = 'red')
 plot_smooth(gamm_slope, view="x0", rm.ranef = FALSE,
-            cond = list(fac = "3"), 
+            cond = list(fac = "3"),
             add = TRUE, col = 'purple')
 plot_smooth(gamm_slope, view="x0", rm.ranef = FALSE,
-            cond = list(fac = "4"), 
+            cond = list(fac = "4"),
             add = TRUE, col = 'turquoise')
 ```
 
@@ -180,7 +180,7 @@ We can once again plot the summed effects for the `x0` without random effects, a
 par(mfrow = c(1,2), cex = 1.1)
 
 # Plot the summed effect of x0 (without random effects)
-plot_smooth(gamm_int_slope, view = "x0", rm.ranef = TRUE, 
+plot_smooth(gamm_int_slope, view = "x0", rm.ranef = TRUE,
             main = "intercept + s(x1)")
 
 # Plot each level of the random effect
@@ -188,20 +188,20 @@ plot_smooth(gamm_int_slope, view = "x0", rm.ranef = FALSE,
             cond = list(fac="1"),
             main = "... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(0,25))
 plot_smooth(gamm_int_slope, view = "x0", rm.ranef = FALSE,
-            cond = list(fac = "2"), 
+            cond = list(fac = "2"),
             add = TRUE, col = 'red')
 plot_smooth(gamm_int_slope, view="x0", rm.ranef = FALSE,
-            cond = list(fac = "3"), 
+            cond = list(fac = "3"),
             add = TRUE, col = 'purple')
 plot_smooth(gamm_int_slope, view="x0", rm.ranef = FALSE,
-            cond = list(fac = "4"), 
+            cond = list(fac = "4"),
             add = TRUE, col = 'turquoise')
 ```
 
 Note that the random slope is static in this case:
 
 ```{r}
-plot(gamm_int_slope, select=3) 
+plot(gamm_int_slope, select=3)
 # select = 3 because the random slope appears as the third entry in your summary table.
 ```
 
@@ -210,7 +210,7 @@ plot(gamm_int_slope, select=3)
 Lastly, we will examine a model with a random smooth.
 
 ```{r}
-gamm_smooth <- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1), 
+gamm_smooth <- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1),
                    data = gam_data2, method = "REML")
 
 summary(gamm_smooth)$s.table
@@ -219,7 +219,7 @@ summary(gamm_smooth)$s.table
 Here, if the random slope varied along `x0`, we would see different curves for each level:
 
 ```{r, echo = TRUE, eval = FALSE}
-plot(gamm_smooth, select=1) 
+plot(gamm_smooth, select=1)
 # select = 1 because the smooth slope appears as the first entry in your summary table.
 ```
 
@@ -229,7 +229,7 @@ We can once again plot the summed effects for the `x0` without random effects, a
 par(mfrow = c(1,2), cex = 1.1)
 
 # Plot the summed effect of x0 (without random effects)
-plot_smooth(gamm_smooth, view = "x0", rm.ranef = TRUE, 
+plot_smooth(gamm_smooth, view = "x0", rm.ranef = TRUE,
             main = "intercept + s(x1)")
 
 # Plot each level of the random effect
@@ -237,13 +237,13 @@ plot_smooth(gamm_smooth, view = "x0", rm.ranef = FALSE,
             cond = list(fac="1"),
             main = "... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(0,25))
 plot_smooth(gamm_smooth, view = "x0", rm.ranef = FALSE,
-            cond = list(fac = "2"), 
+            cond = list(fac = "2"),
             add = TRUE, col = 'red')
 plot_smooth(gamm_smooth, view="x0", rm.ranef = FALSE,
-            cond = list(fac = "3"), 
+            cond = list(fac = "3"),
             add = TRUE, col = 'purple')
 plot_smooth(gamm_smooth, view="x0", rm.ranef = FALSE,
-            cond = list(fac = "4"), 
+            cond = list(fac = "4"),
             add = TRUE, col = 'turquoise')
 ```
 

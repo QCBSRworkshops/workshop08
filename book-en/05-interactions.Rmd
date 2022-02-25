@@ -14,9 +14,9 @@ There are two ways to include interactions between variables:
 We will examine interaction effects to determine whether the non-linear smoother `s(SampleDepth)` varies across different levels of `Season`.
 
 ```{r}
-factor_interact <- gam(Sources ~ Season + 
-                         s(SampleDepth, by=Season) + 
-                         s(RelativeDepth), 
+factor_interact <- gam(Sources ~ Season +
+                         s(SampleDepth, by=Season) +
+                         s(RelativeDepth),
                        data = isit, method = "REML")
 
 summary(factor_interact)$s.table
@@ -38,8 +38,10 @@ We can also plot the interaction effect in 3D on a single plot, using `vis.gam()
 ```{r}
 vis.gam(factor_interact, theta = 120, n.grid = 50, lwd = .4)
 ```
-> This plot can be rotated by changing the value of the `theta` argument.
 
+:::explanation
+This plot can be rotated by changing the value of the `theta` argument.
+:::
 
 To test our idea that this interaction is important, we will perform a model comparison using AIC to determine whether the interaction term improves our model's performance.
 
@@ -55,12 +57,12 @@ The AIC of our model with a factor interaction between the `SampleDepth` smooth 
 Next, we'll look at the interactions between two smoothed terms, `SampleDepth` and `RelativeDepth`.
 
 ```{r}
-smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), 
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth),
                        data = isit, method = "REML")
 summary(smooth_interact)$s.table
 ```
 
-In the previous section, we were able to visualise an interaction effect between a smooth and a factor term by plotting a different smooth function of `SampleDepth` for each level of `Season`. 
+In the previous section, we were able to visualise an interaction effect between a smooth and a factor term by plotting a different smooth function of `SampleDepth` for each level of `Season`.
 
 In this model, we have two smoothed terms, which means that the effect of `SampleDepth` varies smoothly with `RelativeDepth`, and vice-versa. When we visualise this interaction, we instead get a gradient between two continuous smooth functions:
 
@@ -71,13 +73,14 @@ plot(smooth_interact, page = 1, scheme = 2)
 We can also plot this interaction on a 3D surface:
 
 ```{r}
-vis.gam(smooth_interact, 
-        view = c("SampleDepth", "RelativeDepth"), 
+vis.gam(smooth_interact,
+        view = c("SampleDepth", "RelativeDepth"),
         theta = 50, n.grid = 50, lwd = .4)
 ```
-> Remember, this plot can be rotated by changing the value of the `theta` argument.
 
 :::explanation
+Remember, this plot can be rotated by changing the value of the `theta` argument.
+
 You can change the colour of the 3D plot using the `color` argument. Try specifying `color = "cm"` in `vis.gam()` above, and check `?vis.gam` for more color options.
 :::
 
@@ -89,4 +92,4 @@ So, there does seem to be an interaction effect between these smooth terms. Does
 AIC(two_smooth_model, smooth_interact)
 ```
 
-The model with the interaction between `s(SampleDepth)` and `s(RelativeDepth)` has a lower AIC, which means including this interaction improves our model's performance, and our ability to understand the drivers of bioluminescence. 
+The model with the interaction between `s(SampleDepth)` and `s(RelativeDepth)` has a lower AIC, which means including this interaction improves our model's performance, and our ability to understand the drivers of bioluminescence.

@@ -1,9 +1,9 @@
-# GAM with multiple smooth terms 
+# GAM with multiple smooth terms
 
 ## GAM with linear and smooth terms
 
 GAMs make it easy to include both smooth and linear terms, multiple
-smoothed terms, and smoothed interactions. 
+smoothed terms, and smoothed interactions.
 
 For this section, we will use the `ISIT` dataset again. We will try to model the response `Sources` using the predictors `Season` and `SampleDepth` simultaneously.
 
@@ -25,7 +25,7 @@ basic_model <- gam(Sources ~ Season + s(SampleDepth), data = isit, method = "REM
 basic_summary <- summary(basic_model)
 ```
 
-The `p.table` provides information on the linear effects: 
+The `p.table` provides information on the linear effects:
 
 ```{r}
 basic_summary$p.table
@@ -70,9 +70,10 @@ In linear regression, the *model* degrees of freedom are equivalent to the numbe
 
 Because the number of free parameters in GAMs is difficult to define, the **EDF** are instead related to the smoothing parameter $\lambda$, such that the greater the penalty, the smaller the **EDF**.
 
-An upper bound on the **EDF** is determined by the basis dimension $k$ for each smooth function, meaning the **EDF** cannot exceed $k-1$. 
+An upper bound on the **EDF** is determined by the basis dimension $k$ for each smooth function, meaning the **EDF** cannot exceed $k-1$.
 
-In practice, the exact choice of $k$ is arbitrary, but it should be **large enough** to accommodate a sufficiently complex smooth function. We will talk about choosing $k$ in [Chapter 6](#model-checking).
+In practice, the exact choice of $k$ is arbitrary, but it should be **large enough** to accommodate a sufficiently complex smooth function. We will talk about choosing $k$ in upcoming sections.
+
 
 :::explanation
 Higher EDF imply more complex, wiggly splines.
@@ -85,7 +86,7 @@ When a term has an EDF value that is close to 1, it is close to being a linear t
 We can add a second term (`RelativeDepth`) to our basic model, but specify a linear relationship with `Sources`.
 
 ```{r}
-two_term_model <- gam(Sources ~ Season + s(SampleDepth) + RelativeDepth, 
+two_term_model <- gam(Sources ~ Season + s(SampleDepth) + RelativeDepth,
                       data = isit, method = "REML")
 two_term_summary <- summary(two_term_model)
 ```
@@ -116,7 +117,7 @@ If we want to know whether the relationship between `Sources` and `RelativeDepth
 non-linear, we can model `RelativeDepth` as a smooth term instead. In this model, we would have two smooth terms:
 
 ```{r}
-two_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth), 
+two_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth),
                         data = isit, method = "REML")
 two_smooth_summary <- summary(two_smooth_model)
 ```
@@ -133,7 +134,7 @@ In the `s.table`, we will now find two non-linear smoothers, `s(SampleDepth)` an
 two_smooth_summary$s.table
 ```
 
-Let us take a look at the relationships between the linear and non-linear predictors and our response variable. 
+Let us take a look at the relationships between the linear and non-linear predictors and our response variable.
 
 ```{r, fig.height = 8}
 par(mfrow=c(2,2))
@@ -154,16 +155,16 @@ We can see that `two_smooth_model` has the lowest AIC value. The best fit model 
 
 ## Challenge 2
 
-For our second challenge, we will be building onto our model by adding variables which we think might be ecologically significant predictors to explain bioluminescence. 
+For our second challenge, we will be building onto our model by adding variables which we think might be ecologically significant predictors to explain bioluminescence.
 
 1. Create two new models: Add `Latitude` to `two_smooth_model`, first as a linear term, then as a smoothed term.
 2. Is `Latitude` an important term to include? Does `Latitude` have a linear or additive effect? Use plots, coefficient tables, and the `AIC()` function to help you answer this question.
 
 ```{r, echo = FALSE, include = FALSE}
 # Challenge 2 ----
-# 
-# For our second challenge, we will be building onto our model by adding variables which we think might be ecologically significant predictors to explain bioluminescence. 
-# 
+#
+# For our second challenge, we will be building onto our model by adding variables which we think might be ecologically significant predictors to explain bioluminescence.
+#
 #
 # 1. Create two new models: Add `Latitude` to `two_smooth_model`, first as a linear term, then as a smoothed term.
 # 2. Is `Latitude` an important term to include? Does `Latitude` have a linear or additive effect? Use plots, coefficient tables, and the `AIC()` function to help you answer this question.
@@ -177,17 +178,17 @@ __1.__ Create two new models: Add `Latitude` to `two_smooth_model`, first as a l
 
 ```{r}
 # Add Latitude as a linear term
-three_term_model <- gam(Sources ~ 
-                          Season + s(SampleDepth) + s(RelativeDepth) + 
-                          Latitude, 
+three_term_model <- gam(Sources ~
+                          Season + s(SampleDepth) + s(RelativeDepth) +
+                          Latitude,
                         data = isit, method = "REML")
 (three_term_summary <- summary(three_term_model))
 ```
 
 ```{r}
 # Add Latitude as a smooth term
-three_smooth_model <- gam(Sources ~ 
-                            Season + s(SampleDepth) + s(RelativeDepth) + 
+three_smooth_model <- gam(Sources ~
+                            Season + s(SampleDepth) + s(RelativeDepth) +
                             s(Latitude),
                           data = isit, method = "REML")
 (three_smooth_summary <- summary(three_smooth_model))
@@ -221,7 +222,7 @@ Before deciding which model is "best", we should test whether the effect of `Lat
 AIC(three_smooth_model, three_term_model)
 ```
 
-Our model including Latitude as a _smooth_ term has a lower AIC score, meaning it performs better than our model including Latitude as a _linear_ term. 
+Our model including Latitude as a _smooth_ term has a lower AIC score, meaning it performs better than our model including Latitude as a _linear_ term.
 
 But, does adding `Latitude` as a smooth predictor actually improve on our last "best" model (`two_smooth_model`)?
 
@@ -229,6 +230,6 @@ But, does adding `Latitude` as a smooth predictor actually improve on our last "
 AIC(two_smooth_model, three_smooth_model)
 ```
 
-Our `three_smooth_model`, which includes `SampleDepth`, `RelativeDepth`, and `Latitude` as _smooth_ terms, and Season as a linear term, has a lower AIC score than our previous best model, which did not include `Latitude`. 
+Our `three_smooth_model`, which includes `SampleDepth`, `RelativeDepth`, and `Latitude` as _smooth_ terms, and Season as a linear term, has a lower AIC score than our previous best model, which did not include `Latitude`.
 
 This implies that `Latitude` is indeed an informative non-linear predictor of bioluminescence.

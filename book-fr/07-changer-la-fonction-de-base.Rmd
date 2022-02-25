@@ -25,7 +25,7 @@ Les fonctions lisses ont beaucoup de paramètres qui changent leur comportement.
 Lorsque l'on modélise des données cycliques, on souhaite généralement que le prédicteur soit identique aux deux bouts des phases. Pour y parvenir, nous devons modifier la fonction de base.
 
 Utilisons une série chronologique de données climatiques, divisées en mesures mensuelles, afin de déterminer s'il y a une tendance de température annuelle. Nous utiliserons la série temporelle de la température de Nottingham
-pour cela, qui est incluse dans `R`: 
+pour cela, qui est incluse dans `R`:
 
 ```{r}
 # série temporelle de la température de Nottingham
@@ -42,7 +42,7 @@ Commençons par visualiser les fluctuations mensuelles de température pour chaq
 # nombre d'années de données (20 ans)
 n_years <- length(nottem)/12
 
-# ccodage qualitatif pour les 12 mois de l'année,
+# codage qualitatif pour les 12 mois de l'année,
 # pour chaque année échantillonnée (série de 1 à 12, répétée 20 fois)
 nottem_month <- rep(1:12, times = n_years)
 
@@ -50,8 +50,8 @@ nottem_month <- rep(1:12, times = n_years)
 nottem_year <- rep(1920:(1920 + n_years - 1), each = 12)
 
 # Visualiser la série temporelle
-qplot(x = nottem_month, y = nottem, 
-      colour = factor(nottem_year), 
+qplot(x = nottem_month, y = nottem,
+      colour = factor(nottem_year),
       geom = "line") +
   theme_bw()
 ```
@@ -67,18 +67,18 @@ summary(year_gam)$s.table
 plot(year_gam, page = 1, scale = 0)
 ```
 
-Il y a une hausse d'environ 1 - 1,5ºC au cours de la série, mais au cours d'une année, il y a une variation d'environ 20ºC. Les données réelles varient autour de ces valeurs prédites et ceci représente donc la variance inexpliquée. 
+Il y a une augmentation d'environ 1 - 1,5ºC au cours de la série, mais au cours d'une année, il y a une variation d'environ 20ºC. Les données réelles varient autour de ces valeurs prédites et ceci représente donc la variance inexpliquée.
 
 Ici, nous pouvons voir l'un des avantages très intéressants de l'utilisation des GAMs. Nous pouvons soit tracer la surface réponse (valeurs prédites) ou les termes (contribution de chaque covariable) tel qu'indiqué ci-haut. Vous pouvez imaginer ce dernier en tant qu'une illustration de la variation des coefficients de régression et comment leur contribution (ou taille de leur effet) varie au fil du temps. Dans le premier graphique, nous voyons que les contributions positives de la température sont survenues après 1930.
 
 :::explanation
 __Visualiser les contributions de variables__
 
-@simpson-2009 ont modélisé des données paléolimnologiques avec des GAMs (voir Fig.3c), et ont visualisé la contribution (effet) de la température sur la composition des algues dans des lacs pour illustrer que les contributions significatives de la température ont seulement survenu au cours de deux périodes extrêmement froides. 
+@simpson-2009 ont modélisé des données paléolimnologiques avec des GAMs (voir Fig.3c), et ont visualisé la contribution (effet) de la température sur la composition des algues dans des lacs pour illustrer que les contributions significatives de la température ont seulement survenu au cours de deux périodes extrêmement froides.
 
 C'est-à-dire, la contribution est importante lorsque les intervalles de confiance n'incluent pas la valeur zéro, ce qu'on voit à environ 300 et 100 ans AVJC dans @simpson-2009.
 
-Cela a permis aux auteurs de non seulement déterminer combien de variance est expliquée par la température au cours des derniers siècles, mais aussi de repérer dans le temps cet effet significatif. 
+Cela a permis aux auteurs de non seulement déterminer combien de variance est expliquée par la température au cours des derniers siècles, mais aussi de repérer dans le temps cet effet significatif.
 
 Si cela vous intéresse, le code pour visualiser soit la surface de réponse (`type = "response"`) ou les termes (`type = "terms"`) est disponible ci-dessous. Lorsque les termes sont sélectionnés, vous obtiendrez la même figure que celle ci-dessus.
 

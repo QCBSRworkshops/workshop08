@@ -1,6 +1,6 @@
-# GAM avec plusieurs termes non-linéaires
+# GAM avec plusieurs termes non linéaires
 
-## GAM à plusieurs variables
+## GAM à variables linéaires et non linéaires
 
 Avec les GAMs, il est facile d'ajouter des termes non-linéaires et linéaires dans un seul modèle, plusieurs termes non-linéaires ou même des interactions non-linéaires.
 
@@ -24,22 +24,22 @@ basic_model <- gam(Sources ~ Season + s(SampleDepth), data = isit, method = "REM
 basic_summary <- summary(basic_model)
 ```
 
-La sortie de `p.table` donne des informations sur les termes paramétriques :
+La sortie de `p.table` donne des informations sur les termes linéaires:
 
 ```{r}
 basic_summary$p.table
 ```
 
-Le tableau `s.table` nous donne donne des informations sur le terme non-linéaire :
+Le tableau `s.table` nous donne donne des informations sur le terme non-linéaire:
 
 ```{r}
 basic_summary$s.table
 ```
 
 :::explanation
-Les `edf` indiqués dans le `s.table` sont les **degrés effectifs de liberté** (EDF) du terme lisse `s(SampleDepth)`. Plus le nombre de degrés de liberté est élevé, plus les splines sont complexes et ondulées.
+Les `edf` indiqués dans le `s.table` sont les **degrés effectifs de liberté** (EDF) du terme lisse `s(SampleDepth)`. Plus le nombre de degrés de liberté est élevé, plus la courbe est complexe et ondulée.
 
-Lorsqu'un terme a une valeur EDF proche de 1, il est sur le point d'être un terme linéaire. Des valeurs plus élevées indiquent que la courbe spline du terme est plus ondulée, ou en d'autres termes, fortement non-linéaire.
+Lorsqu'un terme a une valeur EDF proche de 1, il est sur le point d'être un terme linéaire. Des valeurs plus élevées indiquent que la courbe est plus ondulée, ou en d'autres termes, fortement non-linéaire.
 :::
 
 Dans notre modèle de base, les EDF de la fonction lisse `s(SampleDepth)` sont ~9, ce qui suggère une courbe fortement non-linéaire.
@@ -71,12 +71,11 @@ Parce que le nombre de paramètres libres des splines de lissage (tel que les GA
 
 La limite supérieure d'**EDF** est déterminée par les dimensions de base $k$ de la fonction lisse (les **EDF** ne peut pas dépasser $k-1$)
 
-En pratique, le choix exact de $k$ est arbitraire, mais il devrait être **suffisamment grand** pour permettre une fonction lisse suffisamment complexe.
+En pratique, le choix exact de $k$ est arbitraire, mais il devrait être **suffisamment grand** pour permettre une fonction lisse suffisamment complexe. Nous discuterons du choix de $k$ dans les sections qui suivent.
 
-Nous discuterons du choix de $k$ dans la section [SECTION HERE].
 
 :::explanation
-Des EDF plus élevés impliquent des splines plus complexes et plus ondulées.
+Des EDF plus élevés impliquent une courbe plus complexe et plus ondulée.
 
 Lorsqu'un terme a une valeur EDF proche de 1, il est sur le point d'être un terme linéaire. Des valeurs plus élevées indiquent que le terme est plus ondulé, ou en d'autres termes, plus non-linéaire!
 :::
@@ -116,7 +115,7 @@ plot(two_term_model, all.terms = TRUE)
 Si nous voulons vérifier que la relation entre `Sources` et `RelativeDepth` est non-linéaire, on peut modéliser `RelativeDepth` avec une fonction non-linéaire. Dans ce modèle, nous aurions deux termes lisses:
 
 ```{r}
-two_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth), 
+two_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth),
                         data = isit, method = "REML")
 two_smooth_summary <- summary(two_smooth_model)
 ```
@@ -155,11 +154,11 @@ On peut voir que `two_smooth_model` a la plus petite valeur AIC. Le modèle le m
 
 ## Défi 2
 
-Pour notre deuxième défi, nous allons développer notre modèle en ajoutant des variables qui, selon nous, pourraient être des prédicteurs écologiquement significatifs pour expliquer la bioluminescence. 
+Pour notre deuxième défi, nous allons développer notre modèle en ajoutant des variables qui, selon nous, pourraient être des prédicteurs écologiquement significatifs pour expliquer la bioluminescence.
 
 __1.__ Créez deux nouveaux modèles: Ajoutez la variable `Latitude` à `two_smooth_model`, premièrement comme paramètre linéaire, et ensuite comme fonction non-linéaire.
 
-__2.__ Est-ce que `Latitude` est un terme important à inclure dans le modèle? La `Latitude` a-t-elle un effet linéaire ou non-linéaire? 
+__2.__ Est-ce que `Latitude` est un terme important à inclure dans le modèle? La `Latitude` a-t-elle un effet linéaire ou non-linéaire?
 
 Utilisez des graphiques, les tables des coefficients et la fonction `AIC()` pour répondre à ces questions.
 
@@ -169,17 +168,17 @@ __1.__ Créez deux nouveaux modèles: Ajoutez la variable `Latitude` à `two_smo
 
 ```{r}
 # Ajouter Latitude comme terme linéaire
-three_term_model <- gam(Sources ~ 
-                          Season + s(SampleDepth) + s(RelativeDepth) + 
-                          Latitude, 
+three_term_model <- gam(Sources ~
+                          Season + s(SampleDepth) + s(RelativeDepth) +
+                          Latitude,
                         data = isit, method = "REML")
 (three_term_summary <- summary(three_term_model))
 ```
 
 ```{r}
 # Ajouter Latitude comme terme non-linéaire
-three_smooth_model <- gam(Sources ~ 
-                            Season + s(SampleDepth) + s(RelativeDepth) + 
+three_smooth_model <- gam(Sources ~
+                            Season + s(SampleDepth) + s(RelativeDepth) +
                             s(Latitude),
                           data = isit, method = "REML")
 (three_smooth_summary <- summary(three_smooth_model))
@@ -214,7 +213,7 @@ Avant de décider quel modèle est le "meilleur", nous devrions tester si l'effe
 AIC(three_smooth_model, three_term_model)
 ```
 
-Notre modèle incluant la `Latitude` comme terme _non-linéaire_ a un score AIC inférieur, ce qui signifie qu'il est plus performant que notre modèle incluant la `Latitude` comme terme _linéaire_. 
+Notre modèle incluant la `Latitude` comme terme _non-linéaire_ a un score AIC inférieur, ce qui signifie qu'il est plus performant que notre modèle incluant la `Latitude` comme terme _linéaire_.
 
 Mais, est-ce que l'ajout de `Latitude` comme prédicteur non-linéaire améliore réellement notre "meilleur" modèle (`two_smooth_model`)?
 
@@ -222,6 +221,6 @@ Mais, est-ce que l'ajout de `Latitude` comme prédicteur non-linéaire améliore
 AIC(two_smooth_model, three_smooth_model)
 ```
 
-Notre `three_smooth_model`, qui inclut `SampleDepth`, `RelativeDepth`, et `Latitude` comme termes lisses, et Season comme terme linéaire, a un score AIC inférieur à notre meilleur modèle précédent (`two_smooth_model`), qui n'incluait pas `Latitude`. 
+Notre `three_smooth_model`, qui inclut `SampleDepth`, `RelativeDepth`, et `Latitude` comme termes lisses, et Season comme terme linéaire, a un score AIC inférieur à notre meilleur modèle précédent (`two_smooth_model`), qui n'incluait pas `Latitude`.
 
 Ceci implique que `Latitude` est en effet un prédicteur informatif non-linéaire de la bioluminescence.

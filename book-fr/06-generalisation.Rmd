@@ -12,14 +12,14 @@ Nous allons maintenant examiner ces aspects.
 
 Jusqu'à présent, nous avons utilisé des modèles additifs Gaussiens (distribution Normale), l'équivalent non linéaire d'un modèle linéaire.
 
-Cependant, les jeux de données en écologie ne respectent souvent pas les conditions des modèles Gaussiens. Donc, que pouvons-nous faire si les observations de la variable de réponse **ne suivent pas une distribution normale** ? Ou si la **variance n'est pas constante** (hétéroscédasticité) ?
+Cependant, les jeux de données en écologie ne respectent souvent pas les conditions des modèles Gaussiens. Donc, que pouvons-nous faire si les observations de la variable de réponse **ne suivent pas une distribution normale** ? Ou si la **variance n'est pas constante** (hétéroscédasticité)?
 
 Tout comme les modèles linéaires généralisés (GLM), nous pouvons formuler des modèles additifs **généralisés** pour répondre à ces problèmes.
 
-Rappelons le modèle d'interaction pour les données de bioluminescence:
+Revenons au modèle d'interaction pour les données de bioluminescence :
 
 ```{r}
-smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), 
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth),
                        data = isit, method = "REML")
 
 summary(smooth_interact)$p.table
@@ -40,7 +40,7 @@ Heureusement, `mgcv` inclut des fonctions utiles pour la validation de modèle:
 
 ## Choisir $k$
 
-Dans le [Chapter 5](#fonctionnement), nous avons discuté du rôle du paramètre de lissage $\lambda$ pour contrôler les _ondulations_ de nos fonctions de lissage. Cet _ondulation_ est également contrôlé par la dimension de base $k$, qui définit le nombre de fonctions de base utilisées pour créer une fonction lisse. 
+Dans le [Chapter 5](#fonctionnement), nous avons discuté du rôle du paramètre de lissage $\lambda$ pour contrôler les _ondulations_ de nos fonctions de lissage. Cette _ondulation_ est également contrôlé par la dimension de base $k$, qui définit le nombre de fonctions de base utilisées pour créer une fonction lisse.
 
 Chaque fonction lisse dans un GAM est essentiellement la somme pondérée de nombreuses fonctions plus petites, appelées fonctions de base. Plus le nombre de fonctions de base utilisées pour construire une fonction lisse est élevé, plus la fonction lisse est "ondulée". Comme vous pouvez le voir ci-dessous, une fonction lisse avec une petite dimension de base de $k$ sera moins ondulée qu'une fonction lisse avec une grande dimension de base de $k$.
 
@@ -53,14 +53,14 @@ k_plot <- function(k_value){
     data("eeg")
     m <- mgcv::gam(Ampl ~ s(Time, k = k_value), data = eeg)
      p <- ggplot(eeg, aes(x = Time, y = Ampl)) +
-     geom_point(alpha = .1, size = 1) + 
+     geom_point(alpha = .1, size = 1) +
      geom_line(aes(y = predict(m)),
                lwd = 2, col = "black") +
          labs(title = paste("k =", k_value), x = "", y = "") +
-         theme_classic() + 
-         theme(text = element_text(size = 15), 
+         theme_classic() +
+         theme(text = element_text(size = 15),
                axis.text = element_blank(),
-               plot.title = element_text(face = "bold", hjust = 0.5))  
+               plot.title = element_text(face = "bold", hjust = 0.5))
     return(p)
 }
 
@@ -76,7 +76,7 @@ Tout au long de cet atelier, nous avons cherché à améliorer l'ajustement de n
 Avons-nous optimisé le compromis entre le lissage ($\lambda$) et la flexibilité ($k$) dans notre modèle?
 :::
 
-### Est-ce que notre module est assez flexible? 
+### Est-ce que notre module est assez flexible?
 
 On n'a pas encore spécifié de valeur $k$ dans notre modèle, mais `gam()` définit un $k$ par défaut en fonction du nombre de variables sur lequel la fonction lisse est construite.
 
@@ -86,12 +86,12 @@ Est-ce que le `k` est assez grand?
 k.check(smooth_interact)
 ```
 
-Les **EDF se rapprochent beaucoup de** `k`. Ceci signifie que la _flexibilité_ du modèle est restreint par le `k` utilisé par défaut, et que notre modèle pourrait mieux s'ajuster aux données si on permettait plus d'ondulations. En d'autres mots, nousn n'avons pas un compromis équilibré entre le lissage et l'ondulation du modèle.
+Les **EDF se rapprochent beaucoup de** `k`. Ceci signifie que la _flexibilité_ du modèle est restreinte par le `k` utilisé par défaut, et que notre modèle pourrait mieux s'ajuster aux données si on permettait plus d'ondulations. En d'autres mots, nous n'avons pas un compromis équilibré entre le lissage et l'ondulation du modèle.
 
 Recommençons le modèle avec un `k` plus élevé:
 
 ```{r}
-smooth_interact_k60 <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+smooth_interact_k60 <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60),
                            data = isit, method = "REML")
 ```
 
@@ -101,7 +101,7 @@ Est-ce que le `k` est assez grand maintenant?
 k.check(smooth_interact_k60)
 ```
 
-Les EDF sont beaucoup plus petits que `k`, donc notre modèle s'adjuste mieux aux données avec plus d'ondulations. On peut donc remplacer notre modèle avec cette version plus flexible: 
+Les EDF sont beaucoup plus petits que `k`, donc notre modèle s'adjuste mieux aux données avec plus d'ondulations. On peut donc remplacer notre modèle avec cette version plus flexible:
 
 ```{r}
 smooth_interact <- smooth_interact_k60
@@ -156,7 +156,7 @@ Pour vous rappeler, voici notre modèle `smooth_interact`:
 
 ```{r, echo = FALSE, include = FALSE}
 # Défi 3 ----
-# 
+#
 # 1. Ajuster un nouveau modèle `smooth_interact_tw` avec la même formule que le modèle `smooth_interact`, mais avec une distribution de la famille *Tweedie* (au lieu de la distribution Normale) et `log` comme fonction de liaison. Pour ce faire, on peut utiliser `family = tw(link = "log")` dans `gam()`.
 # 2. Vérifier le choix de `k` et les visualisation des résidus pour le nouveau modèle.
 # 3. Comparer `smooth_interact_tw` avec `smooth_interact`. Lequel est meilleur?
@@ -167,13 +167,13 @@ Pour vous rappeler, voici notre modèle `smooth_interact`:
 
 ```{r}
 # Indice!
-# Parce que la distribution normale est le paramètre par défaut, 
+# Parce que la distribution normale est le paramètre par défaut,
 # nous n'avons pas encore spécifié la distribution dans cet atelier.
 
 # Voici comment nous écririons le modèle pour spécifier la distribution normale :
 
-smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
-                       family = gaussian(link = "identity"), 
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60),
+                       family = gaussian(link = "identity"),
                        data = isit, method = "REML")
 ```
 
@@ -182,7 +182,7 @@ smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60),
 __1.__ Premièrement, construisons un nouveau modèle avec une distribution *Tweedie* un lien `log`.
 
 ```{r}
-smooth_interact_tw <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+smooth_interact_tw <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60),
                           family = tw(link = "log"),
                           data = isit, method = "REML")
 summary(smooth_interact_tw)$p.table

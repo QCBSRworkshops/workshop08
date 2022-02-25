@@ -8,9 +8,9 @@ The basic additive model can be extended in the following ways:
 
 We will now go over these aspects.
 
-# GAM model checking {#gam-model-checking}
+# GAM validation {#gam-model-checking}
 
-So far, we have worked with simple (Gaussian) additive models, the non-linear equivalent to a linear model. 
+So far, we have worked with simple (Gaussian) additive models, the non-linear equivalent to a linear model.
 
 However, ecological datasets often do not fit the assumptions of Gaussian models. So, what can we do if the observations of the response variable do **not follow a Normal distribution**? Or if the **variance is not constant** (heteroscedasticity)?
 
@@ -19,7 +19,7 @@ Just like generalized linear models (GLM), we can formulate **generalized** addi
 Let us return to our smooth interaction model for the bioluminescence data:
 
 ```{r}
-smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), 
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth),
                        data = isit, method = "REML")
 
 summary(smooth_interact)$p.table
@@ -37,9 +37,9 @@ Luckily, `mgcv` includes helpful functions for model checking:
 - `k.check()` performs a basis dimension check.
 - `gam.check()` produces residual plots (and also calls `k.check()`).
 
-## Selecting $k$
+## Selecting $k$ basis dimensions
 
-In [Chapter 5](#how-gams-work), we discussed the role of the smoothing parameter $\lambda$ in controlling the _wiggliness_ of our smoothing functions. This _wiggliness_ is further controlled by the basis dimension $k$, which sets the number of basis functions used to create a smooth function. 
+In [Chapter 5](#how-gams-work), we discussed the role of the smoothing parameter $\lambda$ in constrains the _wiggliness_ of our smoothing functions. This _wiggliness_ is further controlled by the basis dimension $k$, which sets the number of basis functions used to create a smooth function.
 
 Each smooth in a GAM essentially the weighted sum of many smaller functions, called basis functions. The more basis functions used to build a smooth function, the more _wiggly_ the smooth. As you can see below, a smooth with a small $k$ basis dimension will be less wiggly than a smooth with a high $k$ basis dimension.
 
@@ -52,14 +52,14 @@ k_plot <- function(k_value){
     data("eeg")
     m <- mgcv::gam(Ampl ~ s(Time, k = k_value), data = eeg)
      p <- ggplot(eeg, aes(x = Time, y = Ampl)) +
-     geom_point(alpha = .1, size = 1) + 
+     geom_point(alpha = .1, size = 1) +
      geom_line(aes(y = predict(m)),
                lwd = 2, col = "black") +
          labs(title = paste("k =", k_value), x = "", y = "") +
-         theme_classic() + 
-         theme(text = element_text(size = 15), 
+         theme_classic() +
+         theme(text = element_text(size = 15),
                axis.text = element_blank(),
-               plot.title = element_text(face = "bold", hjust = 0.5))  
+               plot.title = element_text(face = "bold", hjust = 0.5))
     return(p)
 }
 
@@ -73,10 +73,10 @@ Throughout this workshop, we have been working towards improving the fit of our 
 + The basis dimension $k$, which allows the model to _wiggle_ according to our data.
 
 :::puzzle
-Have we optimized the tradeoff between smoothness ($\lambda$) and _wiggliness_ ($k$) in our model?
+Have we optimized the tradeoff between smoothness ( $\lambda$ ) and _wiggliness_ ( $k$ ) in our model?
 :::
 
-### Is our model wiggly enough? 
+### Is our model wiggly enough?
 
 We have not yet specified a $k$ value in our model, but `gam()` sets a default $k$ depending on the number of variables on which the smooth is built.
 
@@ -91,7 +91,7 @@ The **EDF are very close to** `k`. This means the _wiggliness_ of the model is b
 We can refit the model with a larger `k`:
 
 ```{r}
-smooth_interact_k60 <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+smooth_interact_k60 <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60),
                            data = isit, method = "REML")
 ```
 
@@ -108,7 +108,7 @@ smooth_interact <- smooth_interact_k60
 ```
 
 
-### Is our model actually Normal? 
+### Is our model actually Normal?
 
 As with any Normal model, we must check some model assumptions before continuing. We can evaluate the distribution of the model residuals to verify these assumptions, just as we would do for a GLM (see [Workshop 6](https://r.qcbs.ca/workshops/r-workshop-06/)).
 
@@ -119,7 +119,7 @@ par(mfrow = c(2,2))
 gam.check(smooth_interact)
 ```
 
-> In addition to the plots, `gam.check()` also provides the output of `k.check()`.
+In addition to the plots, `gam.check()` also provides the output of `k.check()`.
 
 :::explanation
 If you would like more in-depth explanations of how to interpret residual plots, we recommend consulting [Workshop 4](https://r.qcbs.ca/workshops/r-workshop-04/) and [Workshop 6](https://r.qcbs.ca/workshops/r-workshop-06/).
@@ -158,7 +158,7 @@ As a reminder, here is our `smooth_interact` model:
 
 ```{r, echo = FALSE, include = FALSE}
 # Challenge 3 ----
-# 
+#
 # 1. Fit a new model `smooth_interact_tw` with the same formula as the `smooth_interact` model, but with a distribution from the *Tweedie* family (instead of the Normal distribution) and `log` link function. You can do so by using `family = tw(link = "log")` inside `gam()`.
 # 2. Check the choice of `k` and the residual plots for the new model.
 # 3. Compare `smooth_interact_tw` with `smooth_interact`. Which one would you choose?
@@ -169,13 +169,13 @@ As a reminder, here is our `smooth_interact` model:
 
 ```{r}
 # Hint!
-# Because the Normal distribution is the default setting, 
+# Because the Normal distribution is the default setting,
 # we have not specified the distribution in this workshop yet.
 
 # Here is how we would write the model to specify the Normal distribution:
 
-smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
-                       family = gaussian(link = "identity"), 
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60),
+                       family = gaussian(link = "identity"),
                        data = isit, method = "REML")
 ```
 
@@ -184,7 +184,7 @@ smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60),
 __1.__ First, let us fit a new model with the _Tweedie_ distribution and a `log` link function.
 
 ```{r}
-smooth_interact_tw <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+smooth_interact_tw <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60),
                           family = tw(link = "log"),
                           data = isit, method = "REML")
 summary(smooth_interact_tw)$p.table

@@ -199,6 +199,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="11.2.5" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#gamm-model-comparison"><i class="fa fa-check"></i><b>11.2.5</b> GAMM model comparison</a></li>
 </ul></li>
 </ul></li>
+<li class="part"><span><b>Resources &amp; References</b></span></li>
 <li class="chapter" data-level="12" data-path="resources.html"><a href="resources.html"><i class="fa fa-check"></i><b>12</b> Resources</a></li>
 <li class="chapter" data-level="13" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>13</b> References</a></li>
 <li class="divider"></li>
@@ -245,17 +246,17 @@ encounter in statistics. As we saw in Workshop 4: <a href="https://github.com/QC
 models</a>, linear regression relies on four
 major assumptions:</p>
 <ol style="list-style-type: decimal">
-<li>There is a linear relationship between response and predictor variables: <span class="math inline">\(y_i = \beta_0 + \beta_1 \times x_i + \epsilon_i\)</span></li>
-<li>The error is normally distributed: <span class="math inline">\(\epsilon_i \sim \mathcal{N}(0,\,\sigma^2)\)</span></li>
-<li>The variance of the error is homogeneous (homoscedastic)</li>
-<li>The errors are independent of each other</li>
+<li>There is a linear relationship between response and predictor variables: <span class="math inline">\(y_i = \beta_0 + \beta_1 \times x_i + \epsilon_i\)</span>;</li>
+<li>The error is normally distributed: <span class="math inline">\(\epsilon_i \sim \mathcal{N}(0,\,\sigma^2)\)</span>;</li>
+<li>The variance of the error is homogeneous (homoscedastic);</li>
+<li>The errors are independent of each other;</li>
 </ol>
 <p>A linear model can sometimes accommodate certain types of non-linear responses (e.g. <span class="math inline">\(x^2\)</span>), but this approach strongly relies on decisions that can be either arbitrary or well-informed, and is much less flexible than using an additive model. For example, this linear model with multiple predictors can handle a non-linear response, but quickly becomes difficult to interpret and manage:</p>
 <p><span class="math display">\[y_i = \beta_0 + \beta_1x_{1,i}+\beta_2x_{2,i}+\beta_3x_{3,i}+...+\beta_kx_{k,i} + \epsilon_i\]</span>
 Linear models work very well in certain specific cases where all these criteria are met:</p>
-<p><img src="images/linreg.png" /></p>
+<p><img src="images/linreg.png" width="70%" style="display: block; margin: auto;" /></p>
 <p>In reality, we often cannot meet these criteria. This means that in many cases, linear models are inappropriate:</p>
-<p><img src="images/linreg_bad.png" /></p>
+<p><img src="images/linreg_bad.png" width="100%" style="display: block; margin: auto;" /></p>
 <p>So, how can we fit a better model? To answer this question, we must first consider what the regression model is
 trying to do. The linear model is trying to fit the best <strong>straight line</strong> that passes through the middle of the data, <em>without <strong>overfitting</strong></em> the data, which is what would happen if we simply drew a line between each point and its neighbours. Linear models do this by finding the best fit straight line that passes through the data.</p>
 <p>In the same way, additive models fit a curve through the data, while controlling the <strong><em>wiggliness</em></strong> of this curve to avoid overfitting. This means additive models like GAMs can capture non-linear relationships by fitting a smooth function through the data, rather than a straight line. We will come back to the concept of <strong><em>wiggliness</em></strong> later!</p>

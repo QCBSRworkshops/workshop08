@@ -199,6 +199,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="11.2.5" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#gamm-model-comparison"><i class="fa fa-check"></i><b>11.2.5</b> GAMM model comparison</a></li>
 </ul></li>
 </ul></li>
+<li class="part"><span><b>Resources &amp; References</b></span></li>
 <li class="chapter" data-level="12" data-path="resources.html"><a href="resources.html"><i class="fa fa-check"></i><b>12</b> Resources</a></li>
 <li class="chapter" data-level="13" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>13</b> References</a></li>
 <li class="divider"></li>
@@ -252,7 +253,7 @@ scenes. Let us first consider a simple model containing one smooth function <spa
 <p>and the full model now becomes:</p>
 <p><span class="math display">\[y_i = \beta_0 + x_i\beta_1 +  x^2_i\beta_2 + x^3_i\beta_3 + x^4_i\beta_4 + \epsilon_i\]</span></p>
 <p>The basis functions are each multiplied by a real valued parameter, <span class="math inline">\(\beta_j\)</span>, and are then summed to give the <font color="orange">final curve <span class="math inline">\(f(x)\)</span></font>.</p>
-<p><img src="images/polynomial_basis_example.png" /></p>
+<p><img src="images/polynomial_basis_example.png" width="100%" style="display: block; margin: auto;" /></p>
 <p>By varying the <span class="math inline">\(\beta_j\)</span> we can vary the form of <span class="math inline">\(f(x)\)</span> to produce any polynomial function of order 4 or lower.</p>
 </div>
 <div id="example-a-cubic-spline-basis" class="section level2">
@@ -260,9 +261,9 @@ scenes. Let us first consider a simple model containing one smooth function <spa
 <p>A cubic spline is a curve constructed from sections of a cubic
 polynomial joined together so that they are continuous in value. Each
 section of cubic has different coefficients.</p>
-<p><img src="images/cubic_spline.png" /></p>
+<p><img src="images/cubic_spline.png" width="100%" style="display: block; margin: auto;" /></p>
 <p>Here is a representation of a smooth function using a rank 5 cubic spline basis with knot locations at increments of 0.2:</p>
-<p><img src="images/cubic_spline5.jpg" /></p>
+<p><img src="images/cubic_spline5.jpg" width="7s0%" style="display: block; margin: auto;" /></p>
 <p>Here, the knots are evenly spaced through the range of observed x values. However, the choice of the degree of model smoothness is controlled by the the number of knots, which was arbitrary.</p>
 <div class="puzzle">
 <p>Is there a better way to select the knot locations?</p>
@@ -283,7 +284,7 @@ is too high then the data will be over smoothed, and if it is too low, the data 
 <p>Since <span class="math inline">\(f\)</span> is unknown, <span class="math inline">\(M\)</span> must be estimated. The recommend methods for this are maximum likelihood (<em>ML</em>) or restricted maximum likelihood estimation (<em>REML</em>). Generalized cross validation (<em>GCV</em>) is another possibility, which is a technique that leaves out each datum from the data in turn and considers the average predictive ability of models fitted to the remaining data to predict the removed datum. For further details on these methods, see <span class="citation">(Wood <a href="#ref-wood_2006" role="doc-biblioref">2006</a>)</span>.</p>
 <div class="explanation">
 <p><strong>The principle behind cross validation</strong></p>
-<p><img src="images/illustration_of_smooth_sel.png" /></p>
+<p><img src="images/illustration_of_smooth_sel.png" width="100%" style="display: block; margin: auto;" /></p>
 <p>In the first panel, <span class="math inline">\(\lambda\)</span> is too high, and the curve is oversmoothed. Here, the curve loosely fits the data and therefore predicts the missing point very poorly.</p>
 <p>In the third panel, <span class="math inline">\(\lambda\)</span> is too high, and the curver is overfitted. Here, the curve fits the data very closely, following the signal as well as the noise surrounding it. The influence of this additional (uninformative) variability causes it to predict the missing datum rather poorly.</p>
 <p>In the second panel, <span class="math inline">\(\lambda\)</span> is just about right. The curve fits the underlying signal quite well, while smoothing through the noise. The missing datum is reasonably well predicted.</p>

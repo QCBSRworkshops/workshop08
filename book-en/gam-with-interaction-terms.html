@@ -199,6 +199,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="11.2.5" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#gamm-model-comparison"><i class="fa fa-check"></i><b>11.2.5</b> GAMM model comparison</a></li>
 </ul></li>
 </ul></li>
+<li class="part"><span><b>Resources &amp; References</b></span></li>
 <li class="chapter" data-level="12" data-path="resources.html"><a href="resources.html"><i class="fa fa-check"></i><b>12</b> Resources</a></li>
 <li class="chapter" data-level="13" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>13</b> References</a></li>
 <li class="divider"></li>
@@ -259,15 +260,16 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 ## s(SampleDepth):Season1 6.839386 7.552045  95.119422       0
 ## s(SampleDepth):Season2 8.744574 8.966290 154.474325       0
 ## s(RelativeDepth)       6.987223 8.055898   6.821074       0</code></pre>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="gam-with-interaction-terms.html#cb58-1"></a><span class="kw">plot</span>(factor_interact, <span class="dt">page =</span> <span class="dv">1</span>)</span></code></pre></div>
-<p><img src="book-en_files/figure-html/unnamed-chunk-40-1.png" width="960" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="gam-with-interaction-terms.html#cb58-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb58-2"><a href="gam-with-interaction-terms.html#cb58-2"></a><span class="kw">plot</span>(factor_interact)</span></code></pre></div>
+<p><img src="book-en_files/figure-html/unnamed-chunk-48-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="explanation">
 <p>The first two panels show the interaction effect of the <code>SampleDepth</code> smooth and each level of our factor variable, <code>Season</code>. Do you see a difference between the two smooth curves?</p>
 </div>
 <p>The plots show some differences between the shape of the smooth terms among the two levels of <code>Season</code>. The most notable difference is the peak in the second panel, which tells us that there is an effect of <code>SampleDepth</code> between 1000 and 2000 that is important in Season 2, but does not occur in Season 1. This hints that the interaction effect could be important to include in our model.</p>
 <p>We can also plot the interaction effect in 3D on a single plot, using <code>vis.gam()</code>.</p>
 <div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="gam-with-interaction-terms.html#cb59-1"></a><span class="kw">vis.gam</span>(factor_interact, <span class="dt">theta =</span> <span class="dv">120</span>, <span class="dt">n.grid =</span> <span class="dv">50</span>, <span class="dt">lwd =</span> <span class="fl">0.4</span>)</span></code></pre></div>
-<p><img src="book-en_files/figure-html/unnamed-chunk-41-1.png" width="672" style="display: block; margin: auto;" />
+<p><img src="book-en_files/figure-html/unnamed-chunk-49-1.png" width="672" style="display: block; margin: auto;" />
 &gt; This plot can be rotated by changing the value of the <code>theta</code> argument.</p>
 <p>To test our idea that this interaction is important, we will perform a model comparison using AIC to determine whether the interaction term improves our model’s performance.</p>
 <div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="gam-with-interaction-terms.html#cb60-1"></a><span class="kw">AIC</span>(two_smooth_model, factor_interact)</span></code></pre></div>
@@ -287,11 +289,11 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <p>In the previous section, we were able to visualise an interaction effect between a smooth and a factor term by plotting a different smooth function of <code>SampleDepth</code> for each level of <code>Season</code>.</p>
 <p>In this model, we have two smoothed terms, which means that the effect of <code>SampleDepth</code> varies smoothly with <code>RelativeDepth</code>, and vice-versa. When we visualise this interaction, we instead get a gradient between two continuous smooth functions:</p>
 <div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="gam-with-interaction-terms.html#cb64-1"></a><span class="kw">plot</span>(smooth_interact, <span class="dt">page =</span> <span class="dv">1</span>, <span class="dt">scheme =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="book-en_files/figure-html/unnamed-chunk-44-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="book-en_files/figure-html/unnamed-chunk-52-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>We can also plot this interaction on a 3D surface:</p>
 <div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="gam-with-interaction-terms.html#cb65-1"></a><span class="kw">vis.gam</span>(smooth_interact, <span class="dt">view =</span> <span class="kw">c</span>(<span class="st">&quot;SampleDepth&quot;</span>, <span class="st">&quot;RelativeDepth&quot;</span>),</span>
 <span id="cb65-2"><a href="gam-with-interaction-terms.html#cb65-2"></a>    <span class="dt">theta =</span> <span class="dv">50</span>, <span class="dt">n.grid =</span> <span class="dv">50</span>, <span class="dt">lwd =</span> <span class="fl">0.4</span>)</span></code></pre></div>
-<p><img src="book-en_files/figure-html/unnamed-chunk-45-1.png" width="672" style="display: block; margin: auto;" />
+<p><img src="book-en_files/figure-html/unnamed-chunk-53-1.png" width="672" style="display: block; margin: auto;" />
 &gt; Remember, this plot can be rotated by changing the value of the <code>theta</code> argument.</p>
 <div class="explanation">
 <p>You can change the colour of the 3D plot using the <code>color</code> argument. Try specifying <code>color = "cm"</code> in <code>vis.gam()</code> above, and check <code>?vis.gam</code> for more color options.</p>

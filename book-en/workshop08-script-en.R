@@ -14,6 +14,10 @@ library(itsadug)
 library(ggplot2, quietly = TRUE)
 library(mgcv, quietly = TRUE)
 
+
+
+
+
 isit <- read.csv("data/ISIT.csv")
 head(isit)
 
@@ -44,6 +48,14 @@ smooth_model <- gam(Sources ~ s(SampleDepth), data = isit2)
 AIC(linear_model, smooth_model)
 
 isit1 <- subset(isit, Season == 1)
+
+# Challenge 1 ----
+# 
+# 1. Fit a linear and smoothed GAM model to the relation between `SampleDepth` and `Sources`.
+# 2. Determine if linearity is justified for this data.
+# 3. How many effective degrees of freedom does the smoothed term have?
+
+# SOLUTION # -----
 
 linear_model_s1 <- gam(Sources ~ SampleDepth, data = isit1)
 smooth_model_s1 <- gam(Sources ~ s(SampleDepth), data = isit1)
@@ -78,7 +90,8 @@ basic_summary$p.table
 
 basic_summary$s.table
 
-plot(basic_model, all.terms = TRUE, page = 1)
+par(mfrow=c(1,2))
+plot(basic_model, all.terms = TRUE)
 
 two_term_model <- gam(Sources ~ Season + s(SampleDepth) + RelativeDepth, 
                       data = isit, method = "REML")
@@ -88,7 +101,8 @@ two_term_summary$p.table
 
 two_term_summary$s.table
 
-plot(two_term_model, page = 1, all.terms = TRUE)
+par(mfrow=c(2,2))
+plot(two_term_model, all.terms = TRUE)
 
 two_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth), 
                         data = isit, method = "REML")
@@ -98,9 +112,20 @@ two_smooth_summary$p.table
 
 two_smooth_summary$s.table
 
+par(mfrow=c(2,2))
 plot(two_smooth_model, page = 1, all.terms = TRUE)
 
 AIC(basic_model, two_term_model, two_smooth_model)
+
+# Challenge 2 ----
+# 
+# For our second challenge, we will be building onto our model by adding variables which we think might be ecologically significant predictors to explain bioluminescence. 
+# 
+#
+# 1. Create two new models: Add `Latitude` to `two_smooth_model`, first as a linear term, then as a smoothed term.
+# 2. Is `Latitude` an important term to include? Does `Latitude` have a linear or additive effect? Use plots, coefficient tables, and the `AIC()` function to help you answer this question.
+
+# SOLUTION # -----
 
 # Add Latitude as a linear term
 three_term_model <- gam(Sources ~ 
@@ -116,9 +141,11 @@ three_smooth_model <- gam(Sources ~
                           data = isit, method = "REML")
 (three_smooth_summary <- summary(three_smooth_model))
 
-plot(three_term_model, page = 1, all.terms = TRUE)
+par(mfrow=c(2,2))
+plot(three_term_model, all.terms = TRUE)
 
-plot(three_smooth_model, page = 1, all.terms = TRUE)
+par(mfrow=c(2,2))
+plot(three_smooth_model, all.terms = TRUE)
 
 three_smooth_summary$s.table
 
@@ -136,7 +163,8 @@ factor_interact <- gam(Sources ~ Season +
 
 summary(factor_interact)$s.table
 
-plot(factor_interact, page = 1)
+par(mfrow = c(2,2))
+plot(factor_interact)
 
 vis.gam(factor_interact, theta = 120, n.grid = 50, lwd = .4)
 
@@ -164,23 +192,26 @@ summary(smooth_interact)$p.table
 
 summary(smooth_interact)$s.table
 
+par(mfrow=c(1,3))
+install.packages("patchwork", quiet = TRUE)
+library(patchwork)
+
 k_plot <- function(k_value){
     data("eeg")
     m <- mgcv::gam(Ampl ~ s(Time, k = k_value), data = eeg)
      p <- ggplot(eeg, aes(x = Time, y = Ampl)) +
-     geom_point(alpha = .1, size = 3) + 
+     geom_point(alpha = .1, size = 1) + 
      geom_line(aes(y = predict(m)),
                lwd = 2, col = "black") +
          labs(title = paste("k =", k_value), x = "", y = "") +
          theme_classic() + 
-         theme(text = element_text(size = 30), 
+         theme(text = element_text(size = 15), 
                axis.text = element_blank(),
                plot.title = element_text(face = "bold", hjust = 0.5))  
     return(p)
 }
-k_plot(3)
-k_plot(6)
-k_plot(10)
+
+k_plot(3) + k_plot(6) + k_plot(10)
 
 k.check(smooth_interact)
 
@@ -191,9 +222,18 @@ k.check(smooth_interact_k60)
 
 smooth_interact <- smooth_interact_k60
 
+par(mfrow = c(2,2))
 gam.check(smooth_interact)
 
 ?family.mgcv
+
+# Challenge 3 ----
+# 
+# 1. Fit a new model `smooth_interact_tw` with the same formula as the `smooth_interact` model, but with a distribution from the *Tweedie* family (instead of the Normal distribution) and `log` link function. You can do so by using `family = tw(link = "log")` inside `gam()`.
+# 2. Check the choice of `k` and the residual plots for the new model.
+# 3. Compare `smooth_interact_tw` with `smooth_interact`. Which one would you choose?
+
+# SOLUTION # -----
 
 # Hint!
 # Because the Normal distribution is the default setting, 
@@ -213,6 +253,7 @@ summary(smooth_interact_tw)$s.table
 
 k.check(smooth_interact_tw)
 
+par(mfrow = c(2,2))
 gam.check(smooth_interact_tw)
 
 AIC(smooth_interact, smooth_interact_tw)
@@ -247,7 +288,7 @@ plot(year_gam, page = 1, scale = 0)
 
 ##Section: 08-GAMMs.R 
 
-par(mfrow =c (1,2))
+par(mfrow = c(1,2))
 acf(resid(year_gam), lag.max = 36, main = "ACF")
 pacf(resid(year_gam), lag.max = 36, main = "pACF")
 

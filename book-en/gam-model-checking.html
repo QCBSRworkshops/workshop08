@@ -199,6 +199,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="11.2.5" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#gamm-model-comparison"><i class="fa fa-check"></i><b>11.2.5</b> GAMM model comparison</a></li>
 </ul></li>
 </ul></li>
+<li class="part"><span><b>Resources &amp; References</b></span></li>
 <li class="chapter" data-level="12" data-path="resources.html"><a href="resources.html"><i class="fa fa-check"></i><b>12</b> Resources</a></li>
 <li class="chapter" data-level="13" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>13</b> References</a></li>
 <li class="divider"></li>
@@ -266,7 +267,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">8.1</span> Selecting <span class="math inline">\(k\)</span></h2>
 <p>In <a href="how-gams-work.html#how-gams-work">Chapter 5</a>, we discussed the role of the smoothing parameter <span class="math inline">\(\lambda\)</span> in controlling the <em>wiggliness</em> of our smoothing functions. This <em>wiggliness</em> is further controlled by the basis dimension <span class="math inline">\(k\)</span>, which sets the number of basis functions used to create a smooth function.</p>
 <p>Each smooth in a GAM essentially the weighted sum of many smaller functions, called basis functions. The more basis functions used to build a smooth function, the more <em>wiggly</em> the smooth. As you can see below, a smooth with a small <span class="math inline">\(k\)</span> basis dimension will be less wiggly than a smooth with a high <span class="math inline">\(k\)</span> basis dimension.</p>
-<p><img src="book-en_files/figure-html/unnamed-chunk-48-1.png" width="33%" style="display: block; margin: auto;" /><img src="book-en_files/figure-html/unnamed-chunk-48-2.png" width="33%" style="display: block; margin: auto;" /><img src="book-en_files/figure-html/unnamed-chunk-48-3.png" width="33%" style="display: block; margin: auto;" /></p>
+<p><img src="book-en_files/figure-html/unnamed-chunk-56-1.png" width="960" style="display: block; margin: auto;" /></p>
 <p>Throughout this workshop, we have been working towards improving the fit of our model, meaning we have been trying to build the best possible GAM to capture relationships in our dataset. The key to getting a good model fit is to <strong>balance</strong> the trade-off between two things:</p>
 <ul>
 <li>The smoothing parameter <span class="math inline">\(\lambda\)</span>, which <em>penalizes wiggliness</em>;</li>
@@ -281,7 +282,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <p>Is the <span class="math inline">\(k\)</span> large enough?</p>
 <div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="gam-model-checking.html#cb72-1"></a><span class="kw">k.check</span>(smooth_interact)</span></code></pre></div>
 <pre><code>##                              k&#39;      edf   k-index p-value
-## s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883  0.0625</code></pre>
+## s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883    0.07</code></pre>
 <p>The <strong>EDF are very close to</strong> <code>k</code>. This means the <em>wiggliness</em> of the model is being overly constrained by the default <code>k</code>, and could fit the data better with greater wiggliness. In other words, the tradeoff between smoothness and wiggliness is not balanced.</p>
 <p>We can refit the model with a larger <code>k</code>:</p>
 <div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="gam-model-checking.html#cb74-1"></a>smooth_interact_k60 &lt;-<span class="st"> </span><span class="kw">gam</span>(Sources <span class="op">~</span><span class="st"> </span>Season <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(SampleDepth,</span>
@@ -289,7 +290,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <p>Is <code>k</code> large enough this time?</p>
 <div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="gam-model-checking.html#cb75-1"></a><span class="kw">k.check</span>(smooth_interact_k60)</span></code></pre></div>
 <pre><code>##                              k&#39;      edf  k-index p-value
-## s(SampleDepth,RelativeDepth) 59 46.03868 1.048626  0.8725</code></pre>
+## s(SampleDepth,RelativeDepth) 59 46.03868 1.048626  0.8875</code></pre>
 <p>The EDF are much smaller than <code>k</code>, which means this model fits the data better with additional wiggliness. We can replace our previous model with this wigglier version:</p>
 <div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="gam-model-checking.html#cb77-1"></a>smooth_interact &lt;-<span class="st"> </span>smooth_interact_k60</span></code></pre></div>
 </div>
@@ -297,8 +298,9 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">8.1.2</span> Is our model actually Normal?</h3>
 <p>As with any Normal model, we must check some model assumptions before continuing. We can evaluate the distribution of the model residuals to verify these assumptions, just as we would do for a GLM (see <a href="https://r.qcbs.ca/workshops/r-workshop-06/">Workshop 6</a>).</p>
 <p>We can look at the residual plots with <code>gam.check()</code>:</p>
-<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="gam-model-checking.html#cb78-1"></a><span class="kw">gam.check</span>(smooth_interact)</span></code></pre></div>
-<p><img src="book-en_files/figure-html/unnamed-chunk-53-1.png" width="50%" height="50%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="gam-model-checking.html#cb78-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb78-2"><a href="gam-model-checking.html#cb78-2"></a><span class="kw">gam.check</span>(smooth_interact)</span></code></pre></div>
+<p><img src="book-en_files/figure-html/unnamed-chunk-61-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre><code>## 
 ## Method: REML   Optimizer: outer newton
 ## full convergence after 4 iterations.
@@ -311,7 +313,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 ## indicate that k is too low, especially if edf is close to k&#39;.
 ## 
 ##                              k&#39; edf k-index p-value
-## s(SampleDepth,RelativeDepth) 59  46    1.05    0.91</code></pre>
+## s(SampleDepth,RelativeDepth) 59  46    1.05    0.87</code></pre>
 <blockquote>
 <p>In addition to the plots, <code>gam.check()</code> also provides the output of <code>k.check()</code>.</p>
 </blockquote>

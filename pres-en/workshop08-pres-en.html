@@ -41,10 +41,9 @@ class: inverse, center, middle
 
 # Required packages and datasets
 
-For this workshop, we will be working with the following datasets:
+For this workshop, we will be working with the following dataset:
 
 * [ISIT.csv](https://r.qcbs.ca/workshop08/pres-en/data/ISIT.csv) 
-* [other_dist.csv](https://r.qcbs.ca/workshop08/pres-en/data/other_dist.csv) 
 
 &lt;br&gt;
 
@@ -73,20 +72,29 @@ To follow this workshop, we recommend:
 
 # Workshop overview
 
+We will first cover the basics of GAMs, and how to implement them in R:
+
 1. The linear model... and where it fails
-2. Introduction to GAM
-3. GAM with multiple smooth terms
-4. Interactions
-5. Generalization of the additive model
-6. Changing basis
-7. Quick intro to GAMM
+2. Introduction to GAMs
+3. How GAMs work
+4. GAMs with multiple smooth terms
+5. GAMs with interaction terms
+
+&lt;br&gt;
+
+We will then discuss the generalization of the additive model, including:
+
+6. GAM validation
+7. Choosing another distribution
+8. Changing the basis function
+9. Quick introduction to GAMMs (Mixed effect GAMs)
 
 ---
 
 # Learning objectives
 
-1. Use the mgcv package to fit non-linear relationships,
-2. Understand the output of a GAM to help you understand your data,
+1. Use the `mgcv` package to fit non-linear relationships,
+2. Understand the output of a Generalized Additive Model (GAM) to help you understand your data,
 3. Use tests to determine if a non-linear model fits better than a linear one,
 4. Include smooth interactions between variables,
 5. Understand the idea of a basis function, and why it makes GAMs so powerful,
@@ -96,7 +104,7 @@ To follow this workshop, we recommend:
 class: inverse, center, middle
 # 1. The linear model
 
-## ...and where it fails
+## ... and where it fails
 
 ---
 # Linear regression
@@ -105,12 +113,12 @@ Regression is the workhorse of statistics. It allows us to model a response vari
 
 --
 
-As we saw in the [linear models workshop](http://qcbs.ca/wiki/r_workshop4), a linear model is based on 4 major assumptions:
+As we saw in [Workshop 4: Linear Models](https://r.qcbs.ca/workshops/r-workshop-04/), a linear model is based on four major assumptions:
 
 1. Linear relationship between response and predictor variables: `$$y_i = \beta_0 + \beta_1 \times x_i + \epsilon_i$$`
 2. Normally distributed error: `$$\epsilon_i \sim \mathcal{N}(0,\,\sigma^2)$$`
-3. Homogeneity of the variance
-4. Independance of the errors
+3. Homogeneity of the errors' variance
+4. Independence of the errors (homoscedasticity)
 
 &lt;br&gt;
 
@@ -121,12 +129,12 @@ As we saw in the [linear models workshop](http://qcbs.ca/wiki/r_workshop4), a li
 `$$y_i = \beta_0 + \beta_1x_{1,i}+\beta_2x_{2,i}+\beta_3x_{3,i}+...+\beta_kx_{k,i} + \epsilon_i$$`
 
 ???
-- A linear model can easily accomodate certain types of non-linear responses (e.g. `\(x^2\)`) but this approach strongly relies on (arbitrary or well-informed) choices, and is less flexible than using an additive model.
+A linear model can easily accomodate certain types of non-linear responses (e.g. `\(x^2\)`) but this approach strongly relies on (arbitrary or well-informed) choices, and is less flexible than using an additive model.
 
 ---
 # Linear regression
 
-There's only one way for the linear model to be right:
+Linear models work very well in certain specific cases where all these criteria are met:
 
 .center[
 ![](images/linreg.png)
@@ -136,7 +144,7 @@ There's only one way for the linear model to be right:
 ---
 # Linear regression
 
-And yet so many ways for it to fail:
+In reality, we often cannot meet these criteria. In many cases, linear models are inappropriate:
 
 .center[
 ![:scale 60%](images/linreg_bad.png)
@@ -149,17 +157,21 @@ And yet so many ways for it to fail:
 
 A **linear model** tries to fit the best **straight line** that passes through the data, so it doesn't work well for all datasets.
 
-In contrast, a **GAM** can capture complexe relationships by fitting a **non-linear smooth function** through the data, while controlling how wiggly the smooth can get (more on this later).
+In contrast, a **GAM** can capture complexe relationships by fitting a **non-linear smooth function** through the data, while controlling how wiggly the smooth can get (*more on this later*).
 
 ---
 class: inverse, center, middle
 
-## 2. Introduction to GAM
+## 2. Introduction to GAMs
 
 ---
 # Generalized Additive Models (GAM)
 
-Let's look at an example. First, we will load the `ISIT` datasets.
+Let us use an example to demonstrate the difference between a linear regression and an additive model.
+
+&lt;br&gt;
+
+First, we will load the `ISIT` dataset.
 
 
 ```r
@@ -167,10 +179,12 @@ isit &lt;- read.csv("data/ISIT.csv")
 head(isit)
 ```
 
-This datasets is comprised of bioluminescence levels (`Sources`) in relation to depth, seasons and different stations.
+&gt; This dataset is comprised of bioluminescence levels (`Sources`) in relation to depth, seasons and different stations.
 
 
-For now, let's focus on Season 2.
+
+For now, we will be focusing on Season 2.
+
 
 
 
@@ -179,21 +193,57 @@ isit2 &lt;- subset(isit, Season==2)
 ```
 
 ---
-# GAM
+# Generalized Additive Models (GAM)
 
-Trying to fit `Sources` to `SampleDepth` as a linear regression model, we would violate the assumptions listed above.
+Let's begin by trying to fit a linear regression model to the relationship between `Sources` and `SampleDepth`.
+
 
 ```r
 linear_model &lt;- gam(Sources ~ SampleDepth, data = isit2)
-data_plot &lt;- ggplot(isit2, aes(y = Sources, x = SampleDepth)) + geom_point() +
-             geom_line(colour = "red", size = 1.2,aes(y = fitted(linear_model))) + theme_bw()
+summary(linear_model)
+...
+# 
+# Parametric coefficients:
+#               Estimate Std. Error t value Pr(&gt;|t|)    
+# (Intercept) 30.9021874  0.7963891   38.80   &lt;2e-16 ***
+# SampleDepth -0.0083450  0.0003283  -25.42   &lt;2e-16 ***
+# 
+# 
+# R-sq.(adj) =  0.588   Deviance explained = 58.9%
+# GCV =  60.19  Scale est. = 59.924    n = 453
+...
+```
+
+The linear model is explaining quite a bit of variance in our dataset ($R_{adj}$ = 0.588), which means it's a pretty good model, right?
+
+---
+# Generalized Additive Models (GAM)
+
+Well, let's take a look at how our model fits the data:
+
+
+```r
+data_plot &lt;- ggplot(data = isit2, aes(y = Sources, x = SampleDepth)) + 
+  geom_point() +
+  geom_line(aes(y = fitted(linear_model)),
+            colour = "red", size = 1.2) + 
+  theme_bw()
 data_plot
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-5-1.png" width="432" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-6-1.png" width="432" style="display: block; margin: auto;" /&gt;
+
+???
+
+Are the assumptions of linear regression met in this case? As you may have noticed, we are violating the assumptions of the linear model:
+
+1.  There is a strong _non-linear_ relationship between `Sources` and `SampleDepth`.
+2.  The error is _not_ normally distributed.
+3.  The variance of the error is _not_ homoscedastic.
+4.  The errors are _not_ independent of each other.
 
 ---
-exclude:true
+exclude:true 
 # Generalized Additive Models (GAM)
 
 Let's look at an example. First, we'll generate some data, and plot it.
@@ -227,7 +277,7 @@ Trying to fit these data as a linear regression model, we would violate the assu
 
 
 ---
-# GAM
+# Generalized Additive Models (GAM)
 
 **Relationship between the response variable and predictor variables**
 
@@ -241,10 +291,18 @@ One big advantage of using a GAM over a manual specification of the model is tha
 
 ???
 
-- Strictly speaking, the equations are for a Gaussian GAM with identity link, which is also called "additive model" (without "generalized").
+Strictly speaking, the equations are for a Gaussian GAM with identity link, which is also called "additive model" (without "generalized").
+
+Importantly, given that the smooth function `\(f(x_i)\)` is non-linear and
+local, the magnitude of the effect of the explanatory variable can vary
+over its range, depending on the relationship between the variable and
+the response. 
+
+That is, as opposed to one fixed coefficient `\(\beta\)`, the function `\(f\)` can continually change over the range of `\(x_i\)`.
+The degree of smoothness (or wiggliness) of `\(f\)` is controlled using penalized regression determined automatically in `mgcv` using a generalized cross-validation (GCV) routine.
 
 ---
-#GAM
+# Generalized Additive Models (GAM)
 
 Let's try to fit a model to the data using a smooth function `s()` with `mgcv::gam()`
 
@@ -275,12 +333,22 @@ gam_model &lt;- gam(Sources ~ s(SampleDepth), data = isit2)
 ...
 ```
 
----
-# GAM
+???
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-11-1.png" width="432" style="display: block; margin: auto;" /&gt;
+We can try to build a more appropriate model by fitting the data with a smoothed (non-linear) term. In `mgcv::gam()`, smooth terms are specified by expressions of the form `s(x)`, where `\(x\)` is the non-linear predictor variable we want to smooth. In this case, we want to apply a smooth function to `SampleDepth`.
+
+The variance explained by our model has increased by more than 20% ($R_{adj}$ = 0.81)! 
+
+---
+# Generalized Additive Models (GAM)
+
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-12-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 Note: as opposed to one fixed coefficient, `\(\beta\)` in linear regression, the smooth function can continually change over the range of the predictor `\(x\)`.
+
+???
+
+When we compare the fit of the linear (red) and non-linear (blue) models, it is clear that the latter is more appropriate for our dataset.
 
 ---
 exclude:true
@@ -317,35 +385,41 @@ exclude:true
 
 
 ---
-# GAM
+# Generalized Additive Models (GAM)
 
-The `mgcv` package also includes a default plot to look at the smooths:
+The `mgcv` package also includes a default `plot()` function to look at the smooths:
 
 
 ```r
 plot(gam_model)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-15-1.png" width="432" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-16-1.png" width="468" style="display: block; margin: auto;" /&gt;
 
 ---
 # Test for linearity using GAM
 
-We can use `gam()` and `AIC()` to test whether an assumption of linearity is justified. To do so, we must simply set our smoothed model so that it is nested in our linear model.
+How do we test whether the non-linear model offers a significant improvement over the linear model?
+
+We can use `gam()` and `AIC()` to compare the performance of a linear model containing `x` as a linear predictor to the performance of a non-linear model containing `s(x)` as a smooth predictor. 
 
 
 ```r
-linear_model &lt;- gam(Sources ~ SampleDepth, data = isit2) # fit a regular linear model using gam()
-nested_gam_model &lt;- gam(Sources ~ s(SampleDepth), data = isit2)
-AIC(linear_model, nested_gam_model)
-#                        df      AIC
-# linear_model      3.00000 3143.720
-# nested_gam_model 10.90825 2801.451
+linear_model &lt;- gam(Sources ~ SampleDepth, data = isit2)
+smooth_model &lt;- gam(Sources ~ s(SampleDepth), data = isit2)
+AIC(linear_model, smooth_model)
+#                    df      AIC
+# linear_model  3.00000 3143.720
+# smooth_model 10.90825 2801.451
 ```
 
-**AIC of the nested gam is lower, so linearity is not justified**
+Here, the AIC of the smooth GAM is lower, which indicates that adding a smoothing function improves model performance. _Linearity is therefore not supported by our data._
 
-.comment[Note that the model `y ~ s(x)` is nested in the model `y ~ x`.]
+???
+
+In other words, we ask whether adding a smooth function to the linear model improves the fit of the model to our dataset.
+
+As a brief explanation, the Akaike Information Criterion (AIC) is a comparative metric of model performance, where lower scores indicate that a model is performing "better" compared to other considered models.
 
 ---
 exclude:true
@@ -365,54 +439,87 @@ anova(linear_model, nested_gam_model, test = "Chisq")
 ---
 # Challenge 1 ![:cube]()
 
-We will now try this comparison test with the data recorded in the first season, just to get a handle on it.
+We will now try to determine whether this the data recorded in the first season should be modelled with a linear regression, or with an additive model. 
+
+Let's repeat the comparison test with `gam()` and `AIC()` using the data recorded in the first season only:
 
 
 ```r
-isit1 &lt;- subset(isit, Season==1)
+isit1 &lt;- subset(isit, Season == 1)
 ```
 
 1. Fit a linear and smoothed GAM model to the relation between `SampleDepth` and `Sources`.
 2. Determine if linearity is justified for this data.
 3. How many effective degrees of freedom does the smoothed term have?
 
+???
 
-&lt;!-- we didn't talk about **edf** before... --&gt;
+We have not discussed effective degrees of freedom (**EDF**) yet, but these are a key tool to help us interpret the fit of a GAM. Keep this term in mind. More on this in the next sections!
+
 ---
 # Challenge 1 - Solution ![:cube]()
+
+__1.__ Fit a linear and smoothed GAM model to the relation between `SampleDepth` and `Sources`.
 
 
 ```r
 linear_model_s1 &lt;- gam(Sources ~ SampleDepth, data = isit1)
-gam_model_s1 &lt;- gam(Sources ~ s(SampleDepth), data = isit1)
+smooth_model_s1 &lt;- gam(Sources ~ s(SampleDepth), data = isit1)
 ```
 
 ---
 # Challenge 1 - Solution ![:cube]()
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-20-1.png" width="432" style="display: block; margin: auto;" /&gt;
+__2.__ Determine whether a linear model is appropriate for this data.
 
----
-# Challenge 1 - Solution ![:cube]()
+As before, visualizing the model fit on our dataset is an excellent first step to determine whether our model is performing well.
 
 
 ```r
-linear_model_s1 &lt;- gam(Sources ~ SampleDepth,data = isit1)
-nested_gam_model_s1 &lt;- gam(Sources ~ s(SampleDepth),data = isit1)
-
-AIC(linear_model_s1, nested_gam_model_s1)
-#                           df      AIC
-# linear_model_s1     3.000000 2324.905
-# nested_gam_model_s1 9.644938 2121.249
+ggplot(isit1, aes(x = SampleDepth, y = Sources)) +
+  geom_point() +
+  geom_line(colour = "red", size = 1.2,
+            aes(y = fitted(linear_model_s1))) +
+  geom_line(colour = "blue", size = 1.2,
+            aes(y = fitted(smooth_model_s1))) +
+  theme_bw()
 ```
 
+---
+# Challenge 1 - Solution ![:cube]()
+
+__2.__ Determine whether a linear model is appropriate for this data.
+
+As before, visualizing the model fit on our dataset is an excellent first step to determine whether our model is performing well.
+
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-22-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 ---
 # Challenge 1 - Solution ![:cube]()
 
+We can supplement this with a quantitative comparison of model performance using `AIC()`.
+
 
 ```r
-nested_gam_model_s1
+AIC(linear_model_s1, smooth_model_s1)
+#                       df      AIC
+# linear_model_s1 3.000000 2324.905
+# smooth_model_s1 9.644938 2121.249
+```
+
+&gt; The lower AIC score indicates that smooth model is performing better than the linear model, which confirms that linearity is not appropriate for our dataset.
+
+
+---
+# Challenge 1 - Solution ![:cube]()
+
+__3.__ How many effective degrees of freedom does the smoothed term have?
+
+To get the effective degrees of freedom, we can simply print the model object:
+
+
+```r
+smooth_model_s1
 # 
 # Family: gaussian 
 # Link function: identity 
@@ -426,7 +533,10 @@ nested_gam_model_s1
 # GCV score: 32.13946
 ```
 
-**Answer** Yes, non-linearity is justified. The effective degrees of freedom (**EDF**) are &gt;&gt; 1 (we'll get back to this soon).
+The effective degrees of freedom (EDF) are &gt;&gt; 1. 
+
+&gt; Keep this in mind, because we will be coming back to EDF soon!
+
 
 ---
 exclude:true
@@ -484,6 +594,12 @@ nested_gam_model_test
 **Answer** Yes non-linearity is justified. The estimated degrees of freedom (**edf**) are &gt;&gt; 1 (we'll get back to this soon).
 
 ---
+class: inverse, center, middle
+
+## 3. How GAMs work
+
+---
+
 # How GAMs work
 
 We will now take a few minutes to look at what GAMs are doing behind the scenes. Let us first consider a simple model containing one smooth function `\(f\)` of one covariate, `\(x\)`:
@@ -601,14 +717,17 @@ exclude:true
 
 class: inverse, center, middle
 
-## 3. GAM with multiple smooth terms
+## 4. GAM with multiple smooth terms
 
 ---
-# GAM with multiple variables
+
+# GAM with linear and smooth terms
 
 GAMs make it easy to include both smooth and linear terms, multiple smoothed terms, and smoothed interactions.
 
-For this section, we will use the `ISIT` data again.
+For this section, we will use the `ISIT` data again. We will try to model the response `Sources` using the predictors `Season` and `SampleDepth` simultaneously.
+
+First, we need to convert our categorical predictor (`Season`) into a factor variable.
 
 
 ```r
@@ -616,19 +735,17 @@ head(isit)
 isit$Season &lt;- as.factor(isit$Season)
 ```
 
-We will try to model the response `Sources` using the predictors `Season` and `SampleDepth` simultaneously.
+???
 
-.comment[`Season` needs to be converted into a factor] 
+Remember this dataset from previous sections? The ISIT dataset is comprised of bioluminescence levels (`Sources`) in relation to depth, seasons and different stations.
 
 ---
-# GAM with multiple variables
+# GAM with linear and smooth terms
 
 Let us start with a basic model, with one smoothed term (`SampleDepth`) and one categorical predictor (`Season`, which has 2 levels).
 
 
-
 ```r
-isit$Season &lt;- as.factor(isit$Season)
 basic_model &lt;- gam(Sources ~ Season + s(SampleDepth), data = isit, method = "REML")
 basic_summary &lt;- summary(basic_model)
 ```
@@ -651,8 +768,6 @@ basic_summary$s.table
 #                     edf   Ref.df        F p-value
 # s(SampleDepth) 8.706426 8.975172 184.3583       0
 ```
-
-
 
 ---
 exclude:true
@@ -686,27 +801,27 @@ basic_summary$p.table
 basic_summary$s.table
 ```
 
-.comment[The `p.table` provides the significance table for each linear term
+.comment[The `p.table` provides the significance table for each linear term.
 
 The `s.table` provides the significance table for each smoothed term.
 ]
 
 ---
 
-# GAM with multiple variables
+# GAM with linear and smooth terms
+
+What do these plots tell us about the relationship between bioluminescence, sample depth, and seasons?
 
 
 ```r
-plot(basic_model, all.terms = TRUE,page=1)
+par(mfrow=c(1,2))
+plot(basic_model, all.terms = TRUE)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-34-1.png" width="864" style="display: block; margin: auto;" /&gt;
-
---
-
-There is a pronounced difference in bioluminescence between the seasons.
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-35-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 ???
+
 Bioluminescence varies non-linearly across the `SampleDepth` gradient, with highest levels of bioluminescence at the surface, followed by a second but smaller peak just above a depth of 1500, with declining levels at deeper depths.
 
 There is also a pronounced difference in bioluminescence between the seasons, with high levels during Season 2, compared to Season 1.
@@ -721,7 +836,7 @@ basic_summary$s.table
 # s(SampleDepth) 8.706426 8.975172 184.3583       0
 ```
 
-The `edf` shown in the `s.table` are the **effective degrees of freedom** (EDF) of the the smooth term - essentially, more EDF imply more complex, wiggly splines.
+The `edf` shown in the `s.table` are the **effective degrees of freedom** (EDF) of the the smooth term `s(SampleDepth)`. Essentially, more EDF imply more complex, wiggly splines.
 
 - A value close to 1 tends to be close to a linear term.
 
@@ -732,20 +847,28 @@ The `edf` shown in the `s.table` are the **effective degrees of freedom** (EDF) 
 ---
 # Effective degrees of freedom (EDF)
 
-The **EDF** of a GAM are estimated differently from the degrees of freedom in a linear regression.
+Let us come back to the concept of effective degrees of freedom (EDF).
 
-In linear regression, the *model* degrees of freedom are equivalent to the number of non-redundant free parameters `\(p\)` in the model (and the *residual* degrees of freedom are given by `\(n-p\)`).
+Effective degrees of freedom give us a lot of information about the relationship between model predictors and response variables. 
 
-Because the number of free parameters in GAMs is difficult to define, the **EDF** are related to the smoothing parameter `\(\lambda\)`, such that the greater the penalty, the smaller the **EDF**.
+&gt; You might recognize the term "degrees of freedom" from previous workshops about linear models, but be careful! The effective degrees of freedom of a GAM are estimated differently from the degrees of freedom in a linear regression, and are interpreted differently.
+
+In linear regression, the *model* degrees of freedom are equivalent to the number of non-redundant free parameters `\(p\)` in the model, and the *residual* degrees of freedom are given by `\(n-p\)`.
+
+Because the number of free parameters in GAMs is difficult to define, the **EDF** are instead related to the smoothing parameter `\(\lambda\)`, such that the greater the penalty, the smaller the **EDF**.
+
+???
+
+Let us come back to the concept of effective degrees of freedom (EDF).
 
 ---
-# Basis dimension and EDF
+# Effective degrees of freedom (EDF) and k 
 
 An upper bound on the **EDF** is determined by the basis dimension `\(k\)` for each smooth function (the **EDF** cannot exceed `\(k-1\)`)
 
 In practice, the exact choice of `\(k\)` is arbitrary, but it should be **large enough** to accommodate a sufficiently complex smooth function.
 
-We will talk about choosing `\(k\)` in section 5.
+We will talk about choosing `\(k\)` in upcoming sections.
 
 ---
 # GAM with multiple linear and smooth terms
@@ -780,25 +903,24 @@ two_term_summary$s.table
 ```
 
 ???
-The regression coefficient which is estimated for this new linear term, `RelativeDepth`, will appear in the `p.table`. Remember, the `p.table` shows information on the parametric effects (linear terms)
+The regression coefficient which is estimated for this new linear term, `RelativeDepth`, will appear in the `p.table`. Remember, the `p.table` shows information on the parametric effects (linear terms).
 
-In the `s.table`, we will once again find the non-linear smoother, `s(SampleDepth)`, and its wiggleness parameter (`edf`). Remember, the `s.table` shows information on the additive effects (non-linear terms)
+In the `s.table`, we will once again find the non-linear smoother, `s(SampleDepth)`, and its wiggleness parameter (`edf`). Remember, the `s.table` shows information on the additive effects (non-linear terms).
 
 ---
 
-# GAM with multiple variables
-
-We can add a second term (`RelativeDepth`) to our basic model, but specify a linear relationship with `Sources`.
+# GAM with multiple linear and smooth terms
 
 
 ```r
-plot(two_term_model, page = 1, all.terms = TRUE)
+par(mfrow=c(2,2))
+plot(two_term_model, all.terms = TRUE)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-39-1.png" width="720" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-40-1.png" width="720" style="display: block; margin: auto;" /&gt;
 
 ---
-# GAM with multiple variables
+# GAM with multiple smooth terms
 
 If we want to know whether the relationship between `Sources` and `RelativeDepth` is
 non-linear, we can model `RelativeDepth` as a smooth term instead.
@@ -830,18 +952,31 @@ two_smooth_summary$s.table
 # s(RelativeDepth) 8.044197 8.749580  19.97476       0
 ```
 
+???
+
+The regression coefficient which is estimated for our only linear term, `Season`, will appear in the `p.table`.
+
+In the `s.table`, we will now find two non-linear smoothers, `s(SampleDepth)` and `s(RelativeDepth)`, and their wiggleness parameters (`edf`).
+
 ---
-# GAM with multiple variables
+# GAM with multiple smooth terms
+
+Let us take a look at the relationships between the linear and non-linear predictors and our response variable. 
 
 
 ```r
-plot(two_smooth_model, page = 1, all.terms = TRUE)
+par(mfrow = c(2,2))
+plot(two_smooth_model, all.terms = TRUE)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-43-1.png" width="720" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-44-1.png" width="720" style="display: block; margin: auto;" /&gt;
+
+???
+
+Do you think that the additional non-linear term improves the performance of our model representing the relationship between bioluminescence and relative depth?
 
 ---
-# GAM with multiple variables
+# GAM with multiple smooth terms
 
 As before, we can compare our models with AIC to test whether the smoothed term improves our model's performance.
 
@@ -854,7 +989,10 @@ AIC(basic_model, two_term_model, two_smooth_model)
 # two_smooth_model 20.46960 5056.841
 ```
 
-.alert[The best fit model is the model with both smooth terms for `SampleDepth` and `RelativeDepth`]
+&gt; We can see that `two_smooth_model` has the lowest AIC value. 
+
+The best fit model includes both smooth terms for `SampleDepth` and `RelativeDepth`, and a linear term for `Season`.
+
 ---
 exclude:true
 # GAM with multiple variables
@@ -930,7 +1068,7 @@ For our second challenge, we will be building onto our model by adding variables
 1. Create two new models: Add `Latitude` to `two_smooth_model`, first as a linear term, then as a smooth term.
 2. Is `Latitude` an important term to include? Does `Latitude` have a linear or additive effect? 
 
-Use plots, coefficient tables, and the `AIC()` function to help you answer this question.
+&gt; Use plots, coefficient tables, and the `AIC()` function to help you answer this question.
 
 ---
 exclude:true
@@ -985,20 +1123,11 @@ Let us begin by plotting the the 4 effects that are now included in each model.
 
 
 ```r
-plot(three_term_model, page = 1, all.terms = TRUE)
+par(mfrow = c(2,2))
+plot(three_smooth_model, all.terms = TRUE)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-53-1.png" width="576" style="display: block; margin: auto;" /&gt;
-
----
-# Challenge 2 - Solution ![:cube]()
-
-
-```r
-plot(three_smooth_model, page = 1, all.terms = TRUE)
-```
-
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-55-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-54-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 ---
 # Challenge 2 - Solution ![:cube]()
@@ -1087,7 +1216,7 @@ exclude:true
 plot(three_smooth_model, page = 1)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-61-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-60-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 ---
 exclude:true
@@ -1164,10 +1293,11 @@ summary(factor_interact)$s.table
 
 
 ```r
-plot(factor_interact, page = 1)
+par(mfrow = c(2,2))
+plot(factor_interact)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-65-1.png" width="720" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-65-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 ???
 The first two panels show the interaction effect of the `SampleDepth` smooth and each level of our factor variable, `Season`. 
@@ -1181,7 +1311,7 @@ This hints that the interaction effect could be important to include in our mode
 ---
 # Interaction: smoothed and factor variables
 
-We can also visualise our model in 3D using `vis.gam()`, where `theta` is the degree rotation on the x-y plane.
+We can also visualise our model in 3D using `vis.gam()`.
 
 
 ```r
@@ -1191,6 +1321,8 @@ vis.gam(factor_interact, theta = 120, n.grid = 50, lwd = .4)
 &lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-66-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 ???
+We can change the rotation of this plot using the `theta` argument.
+
 When we plot the interaction terms, we saw differences in the shape of the `SampleDepth` smooth among the two levels of `Season`. This hints that the interaction effect could be important to include in our model.
 
 ---
@@ -1210,7 +1342,8 @@ AIC(two_smooth_model, factor_interact)
 
 The AIC of our model with a factor interaction between the `SampleDepth` smooth and `Season` has a lower AIC score. 
 
-&lt;br&gt;
+--
+
 &gt; Together, the AIC and the plots confirm that including this interaction improves our model's performance.
 
 
@@ -1261,6 +1394,7 @@ vis.gam(smooth_interact, view = c("SampleDepth", "RelativeDepth"),
 &lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-72-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 ???
+
 We can see a non-linear interaction clearly, where `Sources` is lowest at high values of `SampleDepth` and `RelativeDepth`, but increases with `RelativeDepth` while `SampleDepth` is low.
 
 Remember, this plot can be rotated by changing the value of the `theta` argument.
@@ -1324,7 +1458,6 @@ Just like generalized linear models (GLM), we can formulate **generalized** addi
 
 # Generalized additive models
 
-
 Let us return to our smooth interaction model for the bioluminescence data:
 
 
@@ -1344,7 +1477,7 @@ summary(smooth_interact)$s.table
 
 ---
 
-# GAM model checking
+# GAM validation
 
 As with a GLM, it is essential to check whether the model is correctly specified, especially in regards to the *distribution* of the response variable.
 
@@ -1364,30 +1497,57 @@ Useful functions included in `mgcv`:
 
 ---
 
-# GAM model checking
+# GAM validation: selecting `\(k\)` basis dimensions
 
-##### First step:
+Remember the smoothing parameter `\(\lambda\)`, which constrains the _wiggliness_ of our smoothing functions? 
 
-Have we chosen a `k` that is large enough? 
+This _wiggliness_ is further controlled by the basis dimension `\(k\)`, which sets the number of basis functions used to create a smooth function.
 
-.comment[The default for smooth interactions is `k = 30`]
+The more basis functions used to build a smooth function, the more _wiggly_ the smooth:
+
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-75-1.png" width="720" style="display: block; margin: auto;" /&gt;
+
+
+???
+
+In previous sections, we discussed the role of the smoothing parameter `\(\lambda\)` in controlling the _wiggliness_ of our smoothing functions. This _wiggliness_ is further controlled by the basis dimension `\(k\)`, which sets the number of basis functions used to create a smooth function.
+
+Each smooth in a GAM essentially the weighted sum of many smaller functions, called basis functions. The more basis functions used to build a smooth function, the more _wiggly_ the smooth. As you can see below, a smooth with a small `\(k\)` basis dimension will be less wiggly than a smooth with a high `\(k\)` basis dimension.
+
+---
+# GAM validation: selecting `\(k\)` basis dimensions
+
+The key to getting a good model fit is therefore to __balance__ the trade-off between two things:
+
++ The smoothing parameter `\(\lambda\)`, which _penalizes wiggliness_;
++ The basis dimension `\(k\)`, which allows the model to _wiggle_ according to our data.
+
+Have we optimized the tradeoff between smoothness ( `\(\lambda\)` ) and _wiggliness_ ( `\(k\)` ) in our model?
+
+In other words, have we chosen a `k` that is large enough? 
 
 
 ```r
 k.check(smooth_interact)
 #                              k'      edf   k-index p-value
-# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883   0.095
+# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883  0.0575
 ```
 
 --
 
-The **EDF are very close to** `k`, this could be problematic.
+The **EDF are very close to** `k`, which means the _wiggliness_ of the model is being overly constrained. .alert[The tradeoff between smoothness and wiggliness is not balanced].
+
+???
+
+Here we essentially ask: is our model wiggly enough?
+
+The **EDF are very close to** `k`. This means the _wiggliness_ of the model is being overly constrained by the default `k`, and could fit the data better with greater wiggliness. In other words, the tradeoff between smoothness and wiggliness is not balanced.
 
 ---
 
-# GAM model checking
+# GAM validation: selecting `\(k\)` basis dimensions
 
-Let's refit the model with a larger `k`:
+We can refit the model with a larger `k`:
 
 
 ```r
@@ -1410,56 +1570,64 @@ Is `k` large enough this time?
 ```r
 k.check(smooth_interact_k60)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626   0.875
+# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626    0.89
 ```
 
 --
 
-Looks better, let's replace the old model:
+The EDF are much smaller than `k`. We can replace our previous model with this wigglier version:
 
 
 ```r
 smooth_interact &lt;- smooth_interact_k60
 ```
 
+???
+
+The EDF are much smaller than `k`, which means this model fits the data better with additional wiggliness. We can replace our previous model with this wigglier version:
+
 ---
+# GAM validation: choosing a distribution
 
-# GAM model checking
+As with any Normal model, we must check some model assumptions before continuing. 
 
-##### Second Step:
-
-Let's look at the residual plots, using `gam.check()`:
+We can look at the residual plots with `gam.check()`:
 
 
 ```r
-par(mfrow = c(2,2)) # Show all 4 plots side by side
+par(mfrow = c(2,2))
 gam.check(smooth_interact)
 ```
 
 .comment[In addition to the plots, `gam.check()` also provides the output of `k.check()`.]
 
+???
+
+Recall: We can evaluate the distribution of the model residuals to verify these assumptions, just as we would do for a GLM (see [Workshop 6](https://r.qcbs.ca/workshops/r-workshop-06/)).
+
 ---
+# GAM validation: choosing a distribution
 
-# GAM model checking
-
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-80-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-81-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 --
 &lt;br&gt;
 
-.alert[Pronounced heteroscedasticity and patterns in the residuals]
+.alert[Pronounced heteroscedasticity and some strong outliers in the residuals]
 
 
 ???
 
 - These plots are a little different than those produced by `plot` for a linear model (e.g. no leverage plot)
-- Participants should already be familiar with residual plots (they are explaned more in detail in workshops 4 and 6)
-- Obvious problem: heteroscedasticity, visible in residuals vs. linear predictor.
-- Another problem: a few strong outliers (visible in QQ plot, response vs. fitted)
+
+- Participants should already be familiar with residual plots (they are explaned more in detail in  [Workshop 4](https://r.qcbs.ca/workshops/r-workshop-04/) and [Workshop 6](https://r.qcbs.ca/workshops/r-workshop-06/).
+
+These residual plots highlight some problems:
+- Panel 2: The variance of the error is _not_ constant (heteroscedasticity).
+- Panels 1 and 4: There are a few strong outlier patterns in this dataset.
 
 ---
-
-# Other distributions
+# GAM validation: choosing a distribution
 
 
 For our interaction model, we need a probability distribution that allows the **variance to increase with the mean**.
@@ -1482,9 +1650,6 @@ To get an overview of families available in `mgcv`:
 ?family.mgcv
 ```
 
-
-
-
 ---
 
 # Challenge 3 ![:cube]()
@@ -1501,25 +1666,21 @@ To get an overview of families available in `mgcv`:
 
 
 ```r
-# Normal distribution
-smooth_interact &lt;- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
-                          data = isit, method = "REML")
-# Tweedie family with log link
-smooth_interact_tw &lt;- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
-                          family = tw(link = "log"),
-                          data = isit, method = "REML")
+# Here is how we would write the model to specify the Normal distribution:
+smooth_interact &lt;- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60),
+                       family = gaussian(link = "identity"),
+                       data = isit, method = "REML")
 ```
 
 
 ---
-
 # Challenge 3 - Solution ![:cube]()
 
-Fit the model:
+__1.__ First, let us fit a new model with the _Tweedie_ distribution and a `log` link function.
 
 
 ```r
-smooth_interact_tw &lt;- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+smooth_interact_tw &lt;- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60),
                           family = tw(link = "log"),
                           data = isit, method = "REML")
 summary(smooth_interact_tw)$p.table
@@ -1531,22 +1692,26 @@ summary(smooth_interact_tw)$s.table
 # s(SampleDepth,RelativeDepth) 43.23949 51.57139 116.9236       0
 ```
 
---
+---
+# Challenge 3 - Solution ![:cube]()
 
-Check the basis dimension:
+__2.__ Check the choice of `k` and the residual plots for the new model.
+
+Next, we should check the basis dimension:
 
 
 ```r
 k.check(smooth_interact_tw)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062  0.7975
+# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062  0.8125
 ```
 
+The trade-off between `\(k\)` and EDF is well balanced. Great!
 ---
 
 # Challenge 3 - Solution ![:cube]()
 
-Residual plots:
+We should also verify the residual plots, to validate the Tweedie distribution:
 
 
 ```r
@@ -1554,18 +1719,17 @@ par(mfrow=c(2,2))
 gam.check(smooth_interact_tw)
 ```
 
-
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-86-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-87-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 
 ???
-- The residuals look much better, but it is clear that something is missing from the model. This could be a spatial affect (longtitude and latitude), or a random effect (e.g. based on `Station`).
+The residual plots do look much better, but it is clear that something is missing from the model. This could be a spatial affect (longtitude and latitude), or a random effect (e.g. based on `Station`).
 
 ---
 
 # Challenge 3 - Solution ![:cube]()
 
-Compare the models:
+__3.__ Compare `smooth_interact_tw` with `smooth_interact`. Which one would you choose?
 
 
 ```r
@@ -1579,14 +1743,16 @@ AIC(smooth_interact, smooth_interact_tw)
 
 --
 
-Using a *Tweedie* instead of a *normal* distribution greatly improves our model!
+Using a *Tweedie* instead of a *Normal* distribution greatly improves our model!
 
+???
+
+The AIC score for `smooth_interact_tw` is _much_ smaller than the AIC score for the `smooth_interact`. Using a *Tweedie* instead of a *Normal* distribution greatly improves our model!
 
 ---
 class: inverse, center, middle
 
 ## 6. Changing the basis
-
 
 ---
 # Other smooth functions
@@ -1610,41 +1776,65 @@ The smooth functions have several parameters that can be set to change their beh
   - k should be &lt; the number of unique data points.
   - the complexity (i.e. non-linearity) of a smooth function in a fitted model is reflected by its effective degrees of freedom (**EDF**).
 
-
 ---
 # Parameters of smooth functions
 
-The smooth functions have several parameters that can be set to change their behavior. The most often-used parameters are :
-
-`bs` ![:faic](arrow-right) specifies the type of basis functions.
-  - the default for `s()` is `tp` (thin plate regression spline) and for `te()` and `ti()` is `cr` (cubic regression spline).
+The smooth functions have several parameters that can be set to change their behaviour. The most often-used parameters are:
 
 `d` ![:faic](arrow-right) specifies that predictors in the interaction are on the same scale or dimension (only used in `te()` and `ti()`).
   - For example, in `te(Time, width, height, d=c(1,2))`, indicates that `width` and `height` are one the same scale, but not `Time`.
-
-&lt;!--last 2 slides were a copy-paste from this websites: http://www.sfs.uni-tuebingen.de/~jvanrij/Tutorial/GAMM.html. However, as I'm not a specialist of GAM, I let them asis, but we should modify them or at least site the website--&gt;
+  
+`bs` ![:faic](arrow-right) specifies the type of basis functions.
+  - the default for `s()` is `tp` (thin plate regression spline) and for `te()` and `ti()` is `cr` (cubic regression spline).
 
 ---
-# Example smooth for cyclical data
+# Example: Cyclical data
 
-Cyclical data is a good example where changing basis is useful: you want the predictor to match at the ends.
-
-Let's use a time series of climate data, with monthly measurements, and see if there's a temporal trend in yearly temperature.
+Let's use a time series of climate data, with monthly measurements, to find a temporal trend in yearly temperature. We'll use the Nottingham temperature time series for this, which is included in `R`:
 
 
 ```r
-data(nottem) # Nottingham temperature time series
+data(nottem)
+```
+
+Let's plot the monthly temperature fluctuations for every year in the `nottem` dataset:
+
+
+```r
+# the number of years of data (20 years)
 n_years &lt;- length(nottem)/12
+
+# categorical variable coding for the 12 months of the year, for every
+# year sampled (so, a sequence 1 to 12 repeated for 20 years).
 nottem_month &lt;- rep(1:12, times = n_years)
+
+# the year corresponding to each month in nottem_month
 nottem_year &lt;- rep(1920:(1920 + n_years - 1), each = 12)
-qplot(nottem_month, nottem, colour = factor(nottem_year), geom = "line") +
+```
+
+
+```r
+# Plot the time series
+qplot(x = nottem_month, y = nottem, colour = factor(nottem_year), geom = "line") +
   theme_bw()
 ```
 
----
-# Example smooth for cyclical data
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-89-1.png" width="864" style="display: block; margin: auto;" /&gt;
+???
+
+See `?nottem` for a more complete description of this dataset.
+
+Using the nottem data, we have created three new vectors: 
+- `n_years` corresponds to the number of years of data (20 years)
+- `nottem_month` is a categorical variable coding for the 12 months of the year, for every
+year sampled (so, a sequence 1 to 12 repeated for 20 years).
+- `nottem_year` is a variable containing the year corresponding to each month in nottem_month.
+
+
+---
+# Example: Cyclical data
+
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-92-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 ???
 
@@ -1655,7 +1845,7 @@ year sampled (so, a sequence 1 to 12 repeated for 20 years).
 - `nottem_year` is a variable containing the year corresponding to each month in nottem_month.
 
 ---
-# Example smooth for cyclical data
+# Example: Cyclical data
 
 We can model both the cyclic change of temperature across months and the non-linear trend through years, using a cyclical cubic spline, or `cc`, for the month variable and a regular smooth for the year variable.
 
@@ -1669,14 +1859,14 @@ summary(year_gam)$s.table
 ```
 
 ---
-# Example smooth for cyclical data
+# Example: Cyclical data
 
 
 ```r
 plot(year_gam, page = 1, scale = 0)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-91-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-94-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 There is about 1-1.5 degree rise in temperature over the period, but within a given year there is about 20 degrees variation in temperature, on average. The actual data vary around these values and that is the unexplained variance.
 
@@ -1687,7 +1877,7 @@ Here we can see one of the very interesting bonuses of using GAMs. We can either
 ---
 class: inverse, center, middle
 
-# 7. Quick intro to GAMM
+# 7. Quick introduction to GAMMs
 
 ---
 # Dealing with non-independence
@@ -1712,15 +1902,23 @@ pacf(resid(year_gam), lag.max = 36, main = "pACF")
 ---
 # Model with correlated errors
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-93-1.png" width="648" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-96-1.png" width="648" style="display: block; margin: auto;" /&gt;
 
-.comment[ACF evaluates the cross correlation and pACF the partial correlation of a time series with itself at different time lags]
-
-ACF and pACF are used to identify after how many time steps observations start to be independent.
+.comment[ __ACF__ evaluates the cross correlation and __pACF__ the partial correlation of a time series with itself at different time lags (i.e. similarity between observations at increasingly large time lags).]
+ 
+The ACF and pACF plots are thus used to identify the time steps are needed before observations are no longer autocorrelated.
 
 --
 
 The ACF plot of our model residuals suggests a significant lag of 1, and perhaps a lag of 2. Therefore, a low-order AR model is likely needed.
+
+???
+
+The __autocorrelation function__ (ACF; first panel above) evaluates the cross correlation of a time series with itself at different time lags (i.e. similarity between observations at increasingly large time lags). 
+
+In contrast, the __partial autocorrelation function__ (PACF: second panel above)
+gives the partial correlation of a time series with its own lagged values,
+after controlling for the values of the time series at all shorter lags.
 
 ---
 # Model with correlated errors
@@ -1734,19 +1932,25 @@ We can add AR structures to the model:
 
 
 ```r
-year_gam &lt;- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"))
+df &lt;- data.frame(nottem, nottem_year, nottem_month)
+
+year_gam &lt;- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"), data = df)
+
 year_gam_AR1 &lt;- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"),
                      correlation = corARMA(form = ~ 1|nottem_year, p = 1),
-                   data = data.frame(nottem, nottem_year, nottem_month))
+                     data = df)
+
 year_gam_AR2 &lt;- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"),
                      correlation = corARMA(form = ~ 1|nottem_year, p = 2),
-                   data = data.frame(nottem, nottem_year, nottem_month))
+                     data = df)
 ```
 
 
 ---
 
 # Model with correlated errors
+
+Which of these models performs the best?
 
 
 ```r
@@ -1757,8 +1961,9 @@ AIC(year_gam$lme, year_gam_AR1$lme, year_gam_AR2$lme)
 # year_gam_AR2$lme  7 1101.598
 ```
 
-AR(1) provides a better fit over the naive model. But there is little improvement with AR(2).
+The `AR(1)` provides a significant increase in fit over the naive model (`year_gam`), but there is very little improvement in moving to the `AR(2)`. 
 
+So, it is best to include only the `AR(1)` structure in our model.
 
 ---
 # Random effects
@@ -1781,37 +1986,38 @@ We will use the `gamSim()` function to generate a dataset with a random effect, 
 
 ```r
 gam_data2 &lt;- gamSim(eg = 6)
-# 4 term additive + random effectGu &amp; Wahba 4 term additive model
 str(gam_data2)
-# 'data.frame':	400 obs. of  11 variables:
-#  $ y  : num  12.3 9.72 18.71 21.77 8.05 ...
-#  $ x0 : num  0.3375 0.0818 0.5092 0.3238 0.8837 ...
-#  $ x1 : num  0.541 0.886 0.294 0.259 0.544 ...
-#  $ x2 : num  0.342 0.949 0.367 0.122 0.536 ...
-#  $ x3 : num  0.208 0.751 0.524 0.399 0.397 ...
-#  $ f  : num  13.9 12.39 18.11 20.29 9.49 ...
-#  $ f0 : num  1.745 0.508 1.999 1.701 0.715 ...
-#  $ f1 : num  2.95 5.88 1.8 1.68 2.97 ...
-#  $ f2 : num  6.20734 0.00188 5.31134 4.9122 2.80795 ...
-#  $ f3 : num  0 0 0 0 0 0 0 0 0 0 ...
-#  $ fac: Factor w/ 4 levels "1","2","3","4": 1 2 3 4 1 2 3 4 1 2 ...
 ```
 
+
+```
+# 4 term additive + random effectGu &amp; Wahba 4 term additive model
+```
 
 ---
 # GAMM with a random intercept
 
 
 ```r
+# run random intercept model
 gamm_intercept &lt;- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2, method = "REML")
+
+# examine model output
 summary(gamm_intercept)$s.table
-#             edf   Ref.df         F      p-value
-# s(x0)  5.228150 6.351297  4.415429 0.0001945784
-# s(fac) 2.969619 3.000000 97.425346 0.0000000000
-plot(gamm_intercept, select = 2)
+#             edf   Ref.df           F   p-value
+# s(x0)  2.071105 2.578746   0.5868895 0.4961083
+# s(fac) 2.975771 3.000000 122.2654367 0.0000000
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-97-1.png" width="396" style="display: block; margin: auto;" /&gt;
+---
+# GAMM with a random intercept
+
+
+```r
+plot(gamm_intercept, select = 2) 
+```
+
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-102-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM with a random intercept
@@ -1846,9 +2052,9 @@ plot_smooth(gamm_intercept, view="x0", rm.ranef = FALSE,
 
 &lt;br&gt;
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-99-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-104-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
-.pull-right[
+.pull-right3[
 &amp;nbsp; &lt;font color="orange"&gt;fac1&lt;/font&gt; &amp;nbsp; &lt;font color="red"&gt;fac2&lt;/font&gt; &amp;nbsp; &lt;font color="purple"&gt;fac3&lt;/font&gt; &amp;nbsp; &lt;font color="turquoise"&gt;fac4&lt;/font&gt;
 ]
 
@@ -1863,9 +2069,9 @@ Next, we will run and plot a model with a random slope:
 gamm_slope &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2, method = "REML")
 
 summary(gamm_slope)$s.table
-#                edf   Ref.df         F    p-value
-# s(x0)     3.426411 4.254388  2.647463 0.04104034
-# s(x0,fac) 2.946275 3.000000 52.963456 0.00000000
+#                edf   Ref.df           F   p-value
+# s(x0)     1.005685 1.011347  0.04105774 0.8482266
+# s(x0,fac) 2.952750 3.000000 61.18739380 0.0000000
 ```
 
 
@@ -1883,7 +2089,7 @@ plot_smooth(gamm_slope, view = "x0", rm.ranef = TRUE,
 # Plot each level of the random effect
 plot_smooth(gamm_slope, view = "x0", rm.ranef = FALSE,
             cond = list(fac="1"),
-            main = "... + s(fac)", col = 'orange', ylim = c(0,25))
+            main = "... + s(fac, x0)", col = 'orange', ylim = c(0,25))
 plot_smooth(gamm_slope, view = "x0", rm.ranef = FALSE,
             cond = list(fac = "2"), 
             add = TRUE, col = 'red')
@@ -1900,7 +2106,7 @@ plot_smooth(gamm_slope, view="x0", rm.ranef = FALSE,
 
 &lt;br&gt;
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-102-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-107-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM with a random intercept and slope
@@ -1911,10 +2117,10 @@ gamm_int_slope &lt;- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
                       data = gam_data2, method = "REML")
 
 summary(gamm_int_slope)$s.table
-#                  edf   Ref.df            F      p-value
-# s(x0)     5.22814212 6.351286 4.415487e+00 0.0001945518
-# s(fac)    2.96958505 3.000000 9.754059e+01 0.0000000000
-# s(fac,x0) 0.00130522 3.000000 2.163445e-04 0.7030025229
+#                 edf   Ref.df           F   p-value
+# s(x0)     2.0798123 2.589317   0.5904657 0.4940181
+# s(fac)    2.9720188 3.000000 147.1976464 0.0000000
+# s(fac,x0) 0.1817639 3.000000   0.9256892 0.4781224
 ```
 
 ---
@@ -1948,7 +2154,7 @@ plot_smooth(gamm_int_slope, view="x0", rm.ranef = FALSE,
 
 &lt;br&gt;
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-105-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-110-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM with a random intercept and slope
@@ -1960,7 +2166,7 @@ Note that the random slope is static in this case:
 plot(gamm_int_slope, select = 3)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-106-1.png" width="432" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-111-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM with a random smooth
@@ -1973,22 +2179,24 @@ gamm_smooth &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1),
                    data = gam_data2, method = "REML")
 
 summary(gamm_smooth)$s.table
-#                edf    Ref.df        F      p-value
-# s(x0)     5.229122  6.351492 4.402772 0.0002007885
-# s(x0,fac) 3.076758 35.000000 8.355972 0.0000000000
+#                edf    Ref.df          F   p-value
+# s(x0)     2.072652  2.576493  0.5820573 0.4988207
+# s(x0,fac) 3.306815 35.000000 10.4999035 0.0000000
 ```
 
 ---
 # GAMM with a random smooth
-
-Here, if the random slope varied along `x0`, we would see different curves for each level:
 
 
 ```r
 plot(gamm_smooth, select = 1)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-108-1.png" width="396" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-113-1.png" width="432" style="display: block; margin: auto;" /&gt;
+
+???
+
+select = 1 because the smooth slope appears as the first entry in your summary table.
 
 ---
 # GAMM with a random smooth
@@ -2021,7 +2229,7 @@ plot_smooth(gamm_smooth, view="x0", rm.ranef = FALSE,
 
 &lt;br&gt;
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-110-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-115-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 .comment[Here, if the random slope varied along `x0`, we would see different curves for each level.]
 
@@ -2034,13 +2242,12 @@ All of the mixed models from this section can be compared using `AIC()` to deter
 ```r
 AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
 #                      df      AIC
-# gamm_intercept 11.35091 2214.424
-# gamm_slope      9.25334 2305.251
-# gamm_int_slope 11.35344 2214.428
-# gamm_smooth    11.56241 2214.622
+# gamm_intercept 7.578539 2205.059
+# gamm_slope     6.010599 2313.398
+# gamm_int_slope 7.933540 2205.310
+# gamm_smooth    8.218016 2205.628
 ```
 
-???
 The best model among those we have built here would be a GAMM with a random effect on the intercept.
 
 ---
@@ -2106,7 +2313,7 @@ avg &lt;- aggregate(prop ~ x1, data = gam_data3, mean)
 lines(avg$x1, avg$prop, col = "orange", lwd = 2)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-113-1.png" width="360" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-118-1.png" width="360" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAM using other distributions
@@ -2191,7 +2398,7 @@ This represents how the log odds of successes vs failures change over time (x1).
 plot(prop_model)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-120-1.png" width="309.6" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-125-1.png" width="309.6" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -2208,7 +2415,7 @@ There are different ways this relationship can be represented graphically:
 
 What do these plots tell us about successes vs failures?
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-121-1.png" width="648" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-126-1.png" width="648" style="display: block; margin: auto;" /&gt;
 
 
 

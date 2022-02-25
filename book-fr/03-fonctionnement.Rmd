@@ -24,7 +24,9 @@ $$y_i = \beta_0 + x_i\beta_1 +  x^2_i\beta_2 + x^3_i\beta_3 + x^4_i\beta_4 + \ep
 
 Chaque fonction de base est multipliée par un paramètre à valeur réelle, $\beta_j$, et est ensuite additionnée pour donner la <font color="orange">courbe finale $f(x)$</font>.
 
-![](images/polynomial_basis_example.png)
+```{r, fig.align = 'center', out.width='100%', echo = FALSE, purl = FALSE}
+knitr::include_graphics("images/polynomial_basis_example.png")
+```
 
 En faisant varier le coefficient $\beta_j$, on peut faire varier la forme de $f(x)$ pour produire une fonction polynomiale d'ordre 4 ou moins.
 
@@ -32,11 +34,17 @@ En faisant varier le coefficient $\beta_j$, on peut faire varier la forme de $f(
 
 Un spline cubique est une courbe construite à partir de sections d'un polynôme cubique reliées entre elles de sorte qu'elles sont continues en valeur. Chaque section du spline a des coefficients différents.
 
-![](images/cubic_spline_fr.png)
+```{r, fig.align = 'center', echo = FALSE, purl = FALSE, out.width='100%'}
+knitr::include_graphics("images/cubic_spline_fr.png")
+```
+
 
 Voici une représentation d'une fonction lisse utilisant une base de régression spline cubique de rang 5 avec des nœuds situés à incréments de 0.2:
 
-![](images/graphic6.1.jpg)
+```{r, fig.align = 'center', echo = FALSE, purl = FALSE, out.width='7s0%'}
+knitr::include_graphics("images/graphic6.1.jpg")
+```
+
 
 Dans cet exemple, les nœuds sont espacés uniformément à travers la gamme des valeurs observées de x. Le choix du degré de finesse du modèle est pré-déterminé par le nombre de nœuds, qui était arbitraire.
 
@@ -65,7 +73,9 @@ $$M = 1/n \times \sum_{i=1}^n (\hat{f_i} - f_i)^2$$
 :::explanation
 __Le principe de validation croisée__
 
-![](images/illustration_of_smooth_sel.png)
+```{r, fig.align = 'center', out.width = '100%', echo = FALSE, purl = FALSE}
+knitr::include_graphics("images/illustration_of_smooth_sel.png")
+```
 
 Dans le premier panneau, la courbe correspond à un ajustement faible par
 rapport aux données et ne fait pas mieux avec le point manquant. Dans le

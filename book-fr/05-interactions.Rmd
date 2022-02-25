@@ -1,55 +1,90 @@
-# Interactions
+# GAM avec des termes d'interaction
 
-Il y a deux façons de modéliser une interaction entre deux variables:
+Il y a deux façons de modéliser une interaction entre deux variables :
 
--   si une variable est quantitative et l'autre est qualitative, on
-    utilise l'argument `by` &#8594; `s(x, by=facteur)`,
--   si les deux variables sont quantitatives, on inclut les deux termes
-    sous une même fonction non linéaire &#8594; `s(x1, x2)`.
+- pour deux variables non-linéaire : `s(x1, x2)`
+- pour une variable non-linéaire et une variable linéaire (quantitative ou qualitative) : utiliser l'argument `by`, `s(x1, by = x2)`
+  - Quand `x2` est qualitative, vous avez un terme non linéaire qui varie entre les différents niveaux de `x2`
+  - Quand `x2` est quantitative, l'effet linéaire de `x2` varie avec `x1`
+  - Quand `x2` est qualitative, le facteur doit être ajouté comme effet principal dans le modèle
 
-L'argument `by` permet de faire varier un terme non linéaire selon les
-différents niveaux d'un facteur. Nous allons examiner ceci en utilisant
-notre variable qualitative `x0` et examiner si la non-linérité de
-`s(x2)` varie selon les différents niveaux de `x0`. Pour déterminer si
-les courbes diffèrent significativement entre les niveaux du facteur,
-nous allons utiliser une ANOVA sur l'interaction.
+## Interaction entre variables non-linéaire et qualitatif
 
-```{r, echo = TRUE, eval = FALSE}
-categorical_interact <- gam(y~x0+s(x1)+s(x2,by=x0),data=gam_data)
-categorical_interact_summary <- summary(categorical_interact)
-print(categorical_interact_summary$s.table)
-plot(categorical_interact,page=1)
-# ou nous pouvons utiliser la fonction vis.gam où theta représente la rotation du plan x-y
-vis.gam(categorical_interact,view=c("x2","x0"),theta=40,n.grid=500,border=NA) 
-anova(two_smooth_model, categorical_interact,test="Chisq")
+Nous allons examiner l'effet de l'interaction en utilisant notre variable qualitative `Season` et examiner si la non-linéarité de `s(SampleDepth)` varie selon les différents niveaux de `Season`.
+
+```{r}
+factor_interact <- gam(Sources ~ Season +
+                         s(SampleDepth,by=Season) +
+                         s(RelativeDepth),
+                       data = isit, method = "REML")
+
+summary(factor_interact)$s.table
 ```
 
-![](images//graphic3.1b.png){width="350"}
-
-Nous pouvons constater à partir du graphique que les formes des termes
-non linéaires sont comparables entre les quatre niveaux de `x0`.
-L'ANOVA le confirme également (déviance = 98,6, *p* = 0,2347).
-
-Ensuite, nous allons examiner l'interaction non linéaire entre deux
-termes quantitatifs, `x1` et `x2`. Cette fois-ci, l'argument `by` est
-supprimé.
-
-```{r, echo = TRUE, eval = FALSE}
-smooth_interact <- gam(y~x0+s(x1,x2),data=gam_data)
-smooth_interact_summary <- summary(smooth_interact)
-print(smooth_interact_summary$s.table)
-plot(smooth_interact,page=1,scheme=3)
-# plot(smooth_interact,page=1,scheme=1) donne un graphique comparable à vis.gam()
-vis.gam(smooth_interact,view=c("x1","x2"),theta=40,n.grid=500,border=NA) 
-anova(two_smooth_model,smooth_interact,test="Chisq")
+```{r, fig.height = 8}
+par(mfrow = c(2,2))
+plot(factor_interact)
 ```
 
-![](images//graphic3.2b.png){width="350"}
+:::explanation
+Les deux premiers graphiques montrent l'effet d'interaction entre notre variable lisse `SampleDepth` et chaque niveau de notre variable factorielle, `Season`. Voyez-vous une différence entre les deux courbes ?
+:::
 
-L'interaction entre `s(x1)` et `s(x2)` est significative et le
-graphique en deux dimensions illustre très bien cette interaction non
-linéaire. La relation entre y et x1 change en fonction de la valeur de
-`x2`. Vous pouvez changez la valeur de l'argument `theta` pour tourner
-l'axe du graphique. Si vous prévoyez exécuter un grand nombre de
-graphiques, supprimez l'argument `n.grid = 500`, car ceci fait appel à
-des calculs intensifs et ralentit R.
+Les graphiques montrent quelques différences entre la forme des termes lisses entre les deux niveaux de `Season`. La différence la plus notable est le pic dans le deuxième panneau, qui nous indique qu'il y a un effet de `SampleDepth` entre 1000 et 2000 qui est important dans la saison 2, mais qui ne se produit pas dans la saison 1. Cela suggère que l'effet d'interaction pourrait être important à inclure dans notre modèle.
+
+Nous pouvons également représenter l'effet d'interaction en 3D sur un seul graphique, en utilisant `vis.gam()`.
+
+```{r}
+vis.gam(factor_interact, theta = 120, n.grid = 50, lwd = .4)
+```
+> On peut changer le degré de rotation de notre plan x-y avec l'argument `theta`. 
+
+Pour vérifier notre hypothèse que cette interaction est importante, on peut faire une comparaison de modèles en utilisant l'AIC pour déterminer si le terme d'interaction améliore la performance de notre modèle.
+
+```{r}
+AIC(two_smooth_model, factor_interact)
+```
+
+L'AIC de notre modèle avec une interaction factorielle entre le lisse `SampleDepth` et le `Season` a un score AIC plus bas, ce qui nous indique que ce modèle est plus performant que `two_smooth_model`. L'inclusion de cette interaction semble améliorer les performances de notre modèle.
+
+
+## Interaction entre variables non linéaires 
+
+Finalement, nous regardons les interactions entre deux termes non linéaires, `SampleDepth` et `RelativeDepth`.
+
+```{r}
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), 
+                       data = isit, method = "REML")
+summary(smooth_interact)$s.table
+```
+
+Dans la section précédente, nous avons pu visualiser un effet d'interaction entre un terme non linéaire et un terme factoriel en dessinant une fonction lisse différente de `SampleDepth` pour chaque niveau de `Season`. 
+
+Dans ce modèle, nous avons deux termes non linéaires, donc l'effet de `SampleDepth` varie de façon linéaire avec `RelativeDepth`, et vice-versa. Lorsque nous visualisons cette interaction, nous obtenons plutôt un gradient entre deux fonctions continues lissées :
+
+```{r}
+plot(smooth_interact, page = 1, scheme = 2)
+```
+
+We can also plot this interaction on a 3D surface:
+
+```{r}
+vis.gam(smooth_interact, 
+        view = c("SampleDepth", "RelativeDepth"), 
+        theta = 50, n.grid = 50, lwd = .4)
+```
+> Rappelez-vous, ce graphique peut être réorienté en changeant la valeur de l'argument `theta`.
+
+:::explanation
+On peut changer la couleur du graphique 3D en utilisant l'argument `color`. Essayez de spécifier `color = "cm"` dans `vis.gam()` ci-dessus, et consultez `?vis.gam` pour plus d'options de couleurs.
+:::
+
+Les graphiques illustrent une interaction non linéaire, où `Sources` est plus faible à des valeurs élevées de `SampleDepth` et `RelativeDepth`, mais augmente avec `RelativeDepth` alors que `SampleDepth` est faible.
+
+Ainsi, il semble y avoir un effet d'interaction entre ces termes non linéaires. Est-ce que l'inclusion de l'interaction entre `s(SampleDepth)` et `s(RelativeDepth)` améliore notre modèle `two_smooth_model`?
+
+```{r}
+AIC(two_smooth_model, smooth_interact)
+```
+
+Le modèle avec l'interaction entre `s(SampleDepth)` et `s(RelativeDepth)` a un AIC inférieur, ce qui signifie que l'inclusion de cette interaction améliore la performance de notre modèle, et notre capacité à comprendre les déterminants de la bioluminescence. 

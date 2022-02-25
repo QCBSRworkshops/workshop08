@@ -12,7 +12,7 @@ We will now go over these aspects.
 
 So far, we have worked with simple (Gaussian) additive models, the non-linear equivalent to a linear model. 
 
-However, ecological datasets often do not fit the assumptions rof Gaussian models. So, what can we do if the observations of the response variable do **not follow a Normal distribution**? Or if the **variance is not constant** (heteroscedasticity)?
+However, ecological datasets often do not fit the assumptions of Gaussian models. So, what can we do if the observations of the response variable do **not follow a Normal distribution**? Or if the **variance is not constant** (heteroscedasticity)?
 
 Just like generalized linear models (GLM), we can formulate **generalized** additive models to deal with these issues.
 
@@ -217,7 +217,7 @@ AIC(smooth_interact, smooth_interact_tw)
 ```
 
 :::explanation
-AIC allows us to compare models that are based on different distributions
+AIC allows us to compare models that are based on different distributions!
 :::
 
 The AIC score for `smooth_interact_tw` is _much_ smaller than the AIC score for the `smooth_interact`. Using a *Tweedie* instead of a *Normal* distribution greatly improves our model!

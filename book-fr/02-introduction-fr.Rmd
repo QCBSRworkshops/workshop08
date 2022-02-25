@@ -21,11 +21,15 @@ $$y_i = \beta_0 + \beta_1x_{1,i}+\beta_2x_{2,i}+\beta_3x_{3,i}+...+\beta_kx_{k,i
 
 Les modèles linéaires fonctionnent très bien dans certains cas spécifiques où tous ces critères sont respectés:
 
-![](images/linreg.png) 
+```{r, fig.align = 'center', out.width = '70%', echo = FALSE, purl = FALSE}
+knitr::include_graphics("images/linreg.png")
+```
 
-Dans la réalité, il est souvent impossible de respecter ces critères. Cela signifie que, dans de nombreux cas, les modèles linéaires sont inappropriés:
+En réalité, il est souvent impossible de respecter ces critères. Cela signifie que, dans de nombreux cas, les modèles linéaires sont inappropriés:
 
-![](images/linreg_bad.png)
+```{r, fig.align = 'center', out.width = '100%', echo = FALSE, purl = FALSE}
+knitr::include_graphics("images/linreg_bad.png")
+```
 
 Alors, comment résoudre ce problème ? Pour répondre à cette question, nous devons d'abord considérer ce que le modèle de régression tente de faire. Un modèle linéaire essaye d'ajuster la __meilleure droite__ qui passe au milieu des données _sans __sur-ajuster___ les données, ce qui se produirait si nous tracions simplement une ligne entre chaque point et ses voisins. 
 

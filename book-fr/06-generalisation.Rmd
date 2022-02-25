@@ -1,0 +1,226 @@
+# (PART\*) Généralisation du modèle additif {-}
+
+Le modèle additif de base peut être étendu de plusieurs façons :
+
+1. Utiliser d'autres distributions pour la variable de réponse avec l'argument `family` (comme dans un GLM),
+2. Utiliser de différents types de fonctions de base,
+3. Utilisation de différents types d'effets aléatoires pour ajuster des modèles à effets mixtes.
+
+Nous allons maintenant examiner ces aspects.
+
+# Validation d'un GAM {#validation-gam}
+
+Jusqu'à présent, nous avons utilisé des modèles additifs Gaussiens (distribution Normale), l'équivalent non linéaire d'un modèle linéaire.
+
+Mais que pouvons-nous faire si :
+- les observations de la variable de réponse ne **suivent pas une distribution Normale** ?
+- la **variance n'est pas constante** ? (hétéroscédasticité)
+
+Tout comme les modèles linéaires généralisés (GLM), nous pouvons formuler des modèles additifs **généralisés** pour répondre à ces problèmes.
+
+Cependant, les jeux de données en écologie ne respectent souvent pas les conditions des modèles Gaussiens. Donc, que pouvons-nous faire si les observations de la variable de réponse **ne suivent pas une distribution normale** ? Ou si la **variance n'est pas constante** (hétéroscédasticité) ?
+
+Tout comme les modèles linéaires généralisés (GLM), nous pouvons formuler des modèles additifs **généralisés** pour répondre à ces problèmes.
+
+Rappelons le modèle d'interaction pour les données de bioluminescence:
+
+```{r}
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth), 
+                       data = isit, method = "REML")
+
+summary(smooth_interact)$p.table
+
+summary(smooth_interact)$s.table
+```
+
+Comme pour un GLM, il est essentiel de vérifier si nous avons correctement spécifié le modèle, et surtout la *distribution* de la variable réponse. Il faut vérifier:
+
+1. Le choix des dimensions de base `k`.
+2. La distribution des résidus de notre modèle, comme on fait pour un GLM (voir [Workshop 6](https://r.qcbs.ca/fr/workshops/r-workshop-06/)).
+
+Heureusement, `mgcv` inclut des fonctions utiles pour la validation de modèle:
+
+- `k.check()` vérifie les dimensions de base.
+- `gam.check()` fait une visualisation des résidus, et fournit également la sortie de `k.check()`.
+
+
+## Choisir $k$
+
+Dans le [Chapter 5](#fonctionnement), nous avons discuté du rôle du paramètre de lissage $\lambda$ pour contrôler les _ondulations_ de nos fonctions de lissage. Cet _ondulation_ est également contrôlé par la dimension de base $k$, qui définit le nombre de fonctions de base utilisées pour créer une fonction lisse. 
+
+Chaque fonction lisse dans un GAM est essentiellement la somme pondérée de nombreuses fonctions plus petites, appelées fonctions de base. Plus le nombre de fonctions de base utilisées pour construire une fonction lisse est élevé, plus la fonction lisse est "ondulée". Comme vous pouvez le voir ci-dessous, une fonction lisse avec une petite dimension de base de $k$ sera moins ondulée qu'une fonction lisse avec une grande dimension de base de $k$.
+
+```{r, echo = FALSE, fig.height = 4, fig.width = 10, results='hide', message=FALSE}
+par(mfrow=c(1,3))
+install.packages("patchwork", quiet = TRUE)
+library(patchwork)
+
+k_plot <- function(k_value){
+    data("eeg")
+    m <- mgcv::gam(Ampl ~ s(Time, k = k_value), data = eeg)
+     p <- ggplot(eeg, aes(x = Time, y = Ampl)) +
+     geom_point(alpha = .1, size = 1) + 
+     geom_line(aes(y = predict(m)),
+               lwd = 2, col = "black") +
+         labs(title = paste("k =", k_value), x = "", y = "") +
+         theme_classic() + 
+         theme(text = element_text(size = 15), 
+               axis.text = element_blank(),
+               plot.title = element_text(face = "bold", hjust = 0.5))  
+    return(p)
+}
+
+k_plot(3) + k_plot(6) + k_plot(10)
+```
+
+Tout au long de cet atelier, nous avons cherché à améliorer l'ajustement de notre modèle, c'est-à-dire que nous avons essayé de construire le meilleur GAM possible pour capturer les relations dans notre jeu de données. La clé pour obtenir un bon ajustement du modèle consiste à __équilibrer__ le compromis entre deux éléments :
+
++ Le paramètre de lissage $\lambda$, qui _pénalise les _ondulations_ ;
++ La dimension de base $k$, qui permet plus de _flexibilité_ au modèle (plus d'ondulations) en fonction de nos données.
+
+:::puzzle
+Avons-nous optimisé le compromis entre le lissage ($\lambda$) et la flexibilité ($k$) dans notre modèle?
+:::
+
+### Est-ce que notre module est assez flexible? 
+
+On n'a pas encore spécifié de valeur $k$ dans notre modèle, mais `gam()` définit un $k$ par défaut en fonction du nombre de variables sur lequel la fonction lisse est construite.
+
+Est-ce que le `k` est assez grand?
+
+```{r}
+k.check(smooth_interact)
+```
+
+Les **EDF se rapprochent beaucoup de** `k`. Ceci signifie que la _flexibilité_ du modèle est restreint par le `k` utilisé par défaut, et que notre modèle pourrait mieux s'ajuster aux données si on permettait plus d'ondulations. En d'autres mots, nousn n'avons pas un compromis équilibré entre le lissage et l'ondulation du modèle.
+
+Recommençons le modèle avec un `k` plus élevé:
+
+```{r}
+smooth_interact_k60 <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+                           data = isit, method = "REML")
+```
+
+Est-ce que le `k` est assez grand maintenant?
+
+```{r}
+k.check(smooth_interact_k60)
+```
+
+Les EDF sont beaucoup plus petits que `k`, donc notre modèle s'adjuste mieux aux données avec plus d'ondulations. On peut donc remplacer notre modèle avec cette version plus flexible: 
+
+```{r}
+smooth_interact <- smooth_interact_k60
+```
+
+### Est-ce que notre modèle est réellement Normal?
+
+Comme pour tout modèle Normal, nous devons vérifier certaines conditions avant de continuer. Nous pouvons évaluer la distribution des résidus du modèle pour vérifier ces conditions, tout comme nous le ferions pour un GLM (voir [Atelier 6](https://r.qcbs.ca/fr/workshops/r-workshop-06/)).
+
+On peut visualiser les résidus du modèle avec `gam.check()`:
+
+```{r, fig.height=8}
+par(mfrow = c(2,2))
+gam.check(smooth_interact)
+```
+
+> En plus des graphiques, `gam.check()` fournit également la sortie de `k.check()`.
+
+:::explanation
+Pour plus de détails et d'explications au sujet de l'interprétation des résidus, nous vous recommandons de consulter l'[Atelier 4](https://r.qcbs.ca/fr/workshops/r-workshop-04/) et l'[Atelier 6](https://r.qcbs.ca/fr/workshops/r-workshop-06/).
+:::
+
+La visualisation des résidus met quelques problèmes en évidence:
+
+- Figure 2: La variance des erreurs n'est pas constante (hétéroscédasticité).
+- Figures 1 et 4: Quelques observations extrêmes.
+
+:::noway
+Il semble qu'une distribution Normale est inappropriée pour modéliser notre variable réponse!
+:::
+
+# Autres distributions {#autres-distributions}
+
+Nous avons besoin d'une distribution de probabilité qui permet à la **variance d'augmenter avec la moyenne**. Une famille de distributions qui possède cette propriété et qui fonctionne bien dans un GAM est la famille **Tweedie**.
+
+Une fonction de liaison commune pour les distributions *Tweedie* est le $log$.
+
+Comme dans un GLM, nous pouvons utiliser l'argument `family = ` dans `gam()` pour ajuster des modèles avec d'autres distributions (y compris des distributions telles que `binomial`, `poisson`, `gamma` etc).
+
+Pour en savoir plus sur les familles disponibles dans `mgcv` :
+```{r, eval = FALSE}
+?family.mgcv
+```
+
+## Défi 3
+
+1. Ajuster un nouveau modèle `smooth_interact_tw` avec la même formule que le modèle `smooth_interact`, mais avec une distribution de la famille *Tweedie* (au lieu de la distribution Normale) et `log` comme fonction de liaison. Pour ce faire, on peut utiliser `family = tw(link = "log")` dans `gam()`.
+2. Vérifier le choix de `k` et la visualisation des résidus pour le nouveau modèle.
+3. Comparer `smooth_interact_tw` avec `smooth_interact`. Lequel est meilleur?
+
+Pour vous rappeler, voici notre modèle `smooth_interact`:
+
+```{r, echo = FALSE, include = FALSE}
+# Défi 3 ----
+# 
+# 1. Ajuster un nouveau modèle `smooth_interact_tw` avec la même formule que le modèle `smooth_interact`, mais avec une distribution de la famille *Tweedie* (au lieu de la distribution Normale) et `log` comme fonction de liaison. Pour ce faire, on peut utiliser `family = tw(link = "log")` dans `gam()`.
+# 2. Vérifier le choix de `k` et les visualisation des résidus pour le nouveau modèle.
+# 3. Comparer `smooth_interact_tw` avec `smooth_interact`. Lequel est meilleur?
+
+# SOLUTION # -----
+```
+
+
+```{r}
+# Indice!
+# Parce que la distribution normale est le paramètre par défaut, 
+# nous n'avons pas encore spécifié la distribution dans cet atelier.
+
+# Voici comment nous écririons le modèle pour spécifier la distribution normale :
+
+smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+                       family = gaussian(link = "identity"), 
+                       data = isit, method = "REML")
+```
+
+### Défi 3: Solution
+
+__1.__ Premièrement, construisons un nouveau modèle avec une distribution *Tweedie* un lien `log`.
+
+```{r}
+smooth_interact_tw <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60), 
+                          family = tw(link = "log"),
+                          data = isit, method = "REML")
+summary(smooth_interact_tw)$p.table
+summary(smooth_interact_tw)$s.table
+```
+
+
+__2.__ Vérifier le choix de `k` et la visualisation des résidus pour le nouveau modèle.
+
+Ensuite, on devrait vérifier le choix des dimensions de bases `k`:
+
+```{r}
+k.check(smooth_interact_tw)
+```
+
+Ainsi que la visualisation des résidus, pour valider que la distribution Tweedie est appropriée:
+
+```{r, fig.height = 8}
+par(mfrow = c(2,2))
+gam.check(smooth_interact_tw)
+```
+
+Les résidus semblent mieux distribués, mais il est évident que le modèle manque encore quelque chose. Il pourrait s'agir d'un effet spatial (longitude et latitude), ou d'un effet aléatoire (par exemple basé sur `Station`).
+
+__3.__ Comparer `smooth_interact_tw` avec `smooth_interact`. Lequel est meilleur?
+
+```{r}
+AIC(smooth_interact, smooth_interact_tw)
+```
+
+:::explanation
+L'AIC nous permet de comparer des modèles qui sont basés sur des distributions différentes!
+:::
+
+Le score AIC pour `smooth_interact_tw` est beaucoup plus petit que celui de `smooth_interact`. Utiliser une distribution *Tweedie* au lieu d'une distribution *Normale* améliore beaucoup notre modèle!

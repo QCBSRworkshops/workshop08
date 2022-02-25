@@ -46,8 +46,9 @@ Dans notre modèle de base, les EDF de la fonction lisse `s(SampleDepth)` sont ~
 
 Traçons les termes lissés (`s(SampleDepth)`) et linéaires (`Season`) de notre modèle ajusté:
 
-```{r}
-plot(basic_model, all.terms = TRUE, page = 1)
+```{r, fig.height = 4}
+par(mfrow = c(1,2))
+plot(basic_model, all.terms = TRUE)
 ```
 
 :::puzzle
@@ -105,8 +106,9 @@ two_term_summary$s.table
 
 Regardons les relations entre les prédicteurs linéaires et non-linéaires et notre variable réponse.
 
-```{r}
-plot(two_term_model, page = 1, all.terms = TRUE)
+```{r, fig.height = 8}
+par(mfrow = c(2,2))
+plot(two_term_model, all.terms = TRUE)
 ```
 
 ## GAM à plusieurs variables
@@ -133,8 +135,9 @@ two_smooth_summary$s.table
 
 Regardons les relations entre les prédicteurs linéaires et non-linéaires et notre variable réponse.
 
-```{r}
-plot(two_smooth_model, page = 1, all.terms = TRUE)
+```{r, fig.height = 8}
+par(mfrow = c(2,2))
+plot(two_smooth_model, all.terms = TRUE)
 ```
 
 :::puzzle
@@ -187,12 +190,14 @@ __2.__ Est-ce que `Latitude` est un terme important à inclure dans le modèle? 
 
 Commençons par visualiser les 4 effets qui sont maintenant inclus dans chaque modèle:
 
-```{r}
-plot(three_term_model, page = 1, all.terms = TRUE)
+```{r, fig.height = 8}
+par(mfrow = c(2,2))
+plot(three_term_model, all.terms = TRUE)
 ```
 
-```{r}
-plot(three_smooth_model, page = 1, all.terms = TRUE)
+```{r, fig.height = 8}
+par(mfrow = c(2,2))
+plot(three_smooth_model, all.terms = TRUE)
 ```
 
 Nous devrions également examiner nos tableaux de coefficients. Qu'est-ce que les EDF nous disent à propos de _l'ondulation_, ou la non-linéarité, des effets de nos prédicteurs?

@@ -161,8 +161,8 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.2.1" data-path="fonctionnement.html"><a href="fonctionnement.html#contrôler-le-degré-de-lissage-avec-des-splines-de-régression-pénalisés"><i class="fa fa-check"></i><b>5.2.1</b> Contrôler le degré de lissage avec des splines de régression pénalisés</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html"><i class="fa fa-check"></i><b>6</b> GAM avec plusieurs termes non-linéaires</a><ul>
-<li class="chapter" data-level="6.1" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables"><i class="fa fa-check"></i><b>6.1</b> GAM à plusieurs variables</a></li>
+<li class="chapter" data-level="6" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html"><i class="fa fa-check"></i><b>6</b> GAM avec plusieurs termes non linéaires</a><ul>
+<li class="chapter" data-level="6.1" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-variables-linéaires-et-non-linéaires"><i class="fa fa-check"></i><b>6.1</b> GAM à variables linéaires et non linéaires</a></li>
 <li class="chapter" data-level="6.2" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#degrés-de-liberté-effectifs-edf"><i class="fa fa-check"></i><b>6.2</b> Degrés de liberté effectifs (edf)</a></li>
 <li class="chapter" data-level="6.3" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables-linéaires-et-lisses"><i class="fa fa-check"></i><b>6.3</b> GAM à plusieurs variables linéaires et lisses</a></li>
 <li class="chapter" data-level="6.4" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables-non-linéaires"><i class="fa fa-check"></i><b>6.4</b> GAM à plusieurs variables non linéaires</a></li>
@@ -192,7 +192,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="11" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><i class="fa fa-check"></i><b>11</b> Intro rapide aux modèles additifs généralisés à effets mixtes (GAMMs)</a><ul>
 <li class="chapter" data-level="11.1" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#lautocorrelation-des-résidus"><i class="fa fa-check"></i><b>11.1</b> L’autocorrelation des résidus</a></li>
 <li class="chapter" data-level="11.2" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#modélisation-avec-effets-mixtes"><i class="fa fa-check"></i><b>11.2</b> Modélisation avec effets mixtes</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-un-intercept-aléatoire"><i class="fa fa-check"></i><b>11.2.1</b> GAMM avec un intercept aléatoire</a></li>
+<li class="chapter" data-level="11.2.1" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-un-intercepte-aléatoire"><i class="fa fa-check"></i><b>11.2.1</b> GAMM avec un intercepte aléatoire</a></li>
 <li class="chapter" data-level="11.2.2" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-une-pente-aléatoire"><i class="fa fa-check"></i><b>11.2.2</b> GAMM avec une pente aléatoire</a></li>
 <li class="chapter" data-level="11.2.3" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-un-intercept-et-une-pente-aléatoire"><i class="fa fa-check"></i><b>11.2.3</b> GAMM avec un intercept et une pente aléatoire</a></li>
 <li class="chapter" data-level="11.2.4" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-une-surface-lisse-aléatoire"><i class="fa fa-check"></i><b>11.2.4</b> GAMM avec une surface lisse aléatoire</a></li>
@@ -266,17 +266,19 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <div class="explanation">
 <p>Les deux premiers graphiques montrent l’effet d’interaction entre notre variable lisse <code>SampleDepth</code> et chaque niveau de notre variable factorielle, <code>Season</code>. Voyez-vous une différence entre les deux courbes ?</p>
 </div>
-<p>Les graphiques montrent quelques différences entre la forme des termes lisses entre les deux niveaux de <code>Season</code>. La différence la plus notable est le pic dans le deuxième panneau, qui nous indique qu’il y a un effet de <code>SampleDepth</code> entre 1000 et 2000 qui est important dans la saison 2, mais qui ne se produit pas dans la saison 1. Cela suggère que l’effet d’interaction pourrait être important à inclure dans notre modèle.</p>
+<p>Les graphiques montrent quelques différences entre la forme des termes lisses entre les deux niveaux de <code>Season</code>. La différence la plus notable est le pic dans le deuxième panneau, qui nous indique qu’il y a un effet de <code>SampleDepth</code> entre 1000 et 2000 qui est important dans la saison 2, mais qui ne se produit pas dans la saison 1. Ceci suggère que l’effet d’interaction pourrait être important à inclure dans notre modèle.</p>
 <p>Nous pouvons également représenter l’effet d’interaction en 3D sur un seul graphique, en utilisant <code>vis.gam()</code>.</p>
 <div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="gam-avec-des-termes-dinteraction.html#cb59-1"></a><span class="kw">vis.gam</span>(factor_interact, <span class="dt">theta =</span> <span class="dv">120</span>, <span class="dt">n.grid =</span> <span class="dv">50</span>, <span class="dt">lwd =</span> <span class="fl">0.4</span>)</span></code></pre></div>
-<p><img src="book-fr_files/figure-html/unnamed-chunk-47-1.png" width="672" style="display: block; margin: auto;" />
-&gt; On peut changer le degré de rotation de notre plan x-y avec l’argument <code>theta</code>.</p>
+<p><img src="book-fr_files/figure-html/unnamed-chunk-47-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="puzzle">
+<p>On peut changer le degré de rotation de notre plan x-y avec l’argument <code>theta</code>.</p>
+</div>
 <p>Pour vérifier notre hypothèse que cette interaction est importante, on peut faire une comparaison de modèles en utilisant l’AIC pour déterminer si le terme d’interaction améliore la performance de notre modèle.</p>
 <div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="gam-avec-des-termes-dinteraction.html#cb60-1"></a><span class="kw">AIC</span>(two_smooth_model, factor_interact)</span></code></pre></div>
 <pre><code>##                        df      AIC
 ## two_smooth_model 20.46960 5056.841
 ## factor_interact  26.99693 4878.631</code></pre>
-<p>L’AIC de notre modèle avec une interaction factorielle entre le lisse <code>SampleDepth</code> et le <code>Season</code> a un score AIC plus bas, ce qui nous indique que ce modèle est plus performant que <code>two_smooth_model</code>. L’inclusion de cette interaction semble améliorer les performances de notre modèle.</p>
+<p>L’AIC de notre modèle avec une interaction factorielle entre le lisse <code>SampleDepth</code> et le <code>Season</code> a un score AIC plus bas, ce qui nous indique que ce modèle est plus performant que <code>two_smooth_model</code>. L’inclusion de cette interaction améliore la performance de notre modèle.</p>
 </div>
 <div id="interaction-entre-variables-non-linéaires" class="section level2">
 <h2><span class="header-section-number">7.2</span> Interaction entre variables non linéaires</h2>
@@ -293,9 +295,9 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <p>We can also plot this interaction on a 3D surface:</p>
 <div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="gam-avec-des-termes-dinteraction.html#cb65-1"></a><span class="kw">vis.gam</span>(smooth_interact, <span class="dt">view =</span> <span class="kw">c</span>(<span class="st">&quot;SampleDepth&quot;</span>, <span class="st">&quot;RelativeDepth&quot;</span>),</span>
 <span id="cb65-2"><a href="gam-avec-des-termes-dinteraction.html#cb65-2"></a>    <span class="dt">theta =</span> <span class="dv">50</span>, <span class="dt">n.grid =</span> <span class="dv">50</span>, <span class="dt">lwd =</span> <span class="fl">0.4</span>)</span></code></pre></div>
-<p><img src="book-fr_files/figure-html/unnamed-chunk-51-1.png" width="672" style="display: block; margin: auto;" />
-&gt; Rappelez-vous, ce graphique peut être réorienté en changeant la valeur de l’argument <code>theta</code>.</p>
+<p><img src="book-fr_files/figure-html/unnamed-chunk-51-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="explanation">
+<p>Rappelez-vous, ce graphique peut être réorienté en changeant la valeur de l’argument <code>theta</code>.</p>
 <p>On peut changer la couleur du graphique 3D en utilisant l’argument <code>color</code>. Essayez de spécifier <code>color = "cm"</code> dans <code>vis.gam()</code> ci-dessus, et consultez <code>?vis.gam</code> pour plus d’options de couleurs.</p>
 </div>
 <p>Les graphiques illustrent une interaction non linéaire, où <code>Sources</code> est plus faible à des valeurs élevées de <code>SampleDepth</code> et <code>RelativeDepth</code>, mais augmente avec <code>RelativeDepth</code> alors que <code>SampleDepth</code> est faible.</p>

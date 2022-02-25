@@ -15,7 +15,7 @@ exemple-une-base-polynomiale
 exemple-une-base-de-spline-cubique
 contrôler-le-degré-de-lissage-avec-des-splines-de-régression-pénalisés
 gam-avec-plusieurs-termes-non-linéaires
-gam-à-plusieurs-variables
+gam-à-variables-linéaires-et-non-linéaires
 degrés-de-liberté-effectifs-edf
 gam-à-plusieurs-variables-linéaires-et-lisses
 gam-à-plusieurs-variables-non-linéaires
@@ -36,7 +36,7 @@ exemple-données-cycliques
 intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms
 lautocorrelation-des-résidus
 modélisation-avec-effets-mixtes
-gamm-avec-un-intercept-aléatoire
+gamm-avec-un-intercepte-aléatoire
 gamm-avec-une-pente-aléatoire
 gamm-avec-un-intercept-et-une-pente-aléatoire
 gamm-avec-une-surface-lisse-aléatoire

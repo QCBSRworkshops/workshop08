@@ -316,29 +316,29 @@ s’éloigne de 0, ce qui entraîne un retrait vers la moyenne.</li>
 <span id="cb102-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb102-2"></a>gam_data2 &lt;-<span class="st"> </span><span class="kw">gamSim</span>(<span class="dt">eg =</span> <span class="dv">6</span>)</span></code></pre></div>
 <pre><code>## 4 term additive + random effectGu &amp; Wahba 4 term additive model</code></pre>
 <div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb104-1"></a><span class="kw">head</span>(gam_data2)</span></code></pre></div>
-<pre><code>##           y         x0        x1         x2        x3         f        f0
-## 1 10.186882 0.03847641 0.4064120 0.32489826 0.7059337 12.320317 0.2411661
-## 2  9.777972 0.02721981 0.4074298 0.02922903 0.1813551  8.615292 0.1708188
-## 3  7.947132 0.88080563 0.1371544 0.88148930 0.3268593 11.185510 0.7315403
-## 4 16.391882 0.13455382 0.4997173 0.72868066 0.3464291 17.999298 0.8204729
-## 5  9.988260 0.63260459 0.2260947 0.43951496 0.3288779  9.731267 1.8289485
-## 6 22.083001 0.43472560 0.9960983 0.27436604 0.8253490 23.668325 1.9580953
-##         f1        f2 f3 fac
-## 1 2.254265 6.8248864  0   1
-## 2 2.258859 0.1856141  0   2
-## 3 1.315621 0.1383486  0   3
-## 4 2.716745 2.4620795  0   4
-## 5 1.571750 3.3305684  0   1
-## 6 7.331621 8.3786081  0   2</code></pre>
+<pre><code>##           y        x0        x1         x2         x3         f         f0
+## 1  5.773319 0.8030558 0.4349338 0.91309392 0.77336053  6.578274 1.15998316
+## 2 18.410780 0.9902571 0.7210095 0.20933156 0.35217159 19.050958 0.06120704
+## 3 22.013993 0.1353518 0.3429243 0.23368264 0.36652323 20.726906 0.82504267
+## 4 23.505359 0.2936441 0.9758333 0.08646011 0.08202249 23.251162 1.59423964
+## 5  5.997440 0.5480820 0.4660067 0.79008266 0.60619815  8.799160 1.97722599
+## 6 13.958305 0.8510811 0.9499599 0.81139496 0.87503206 14.491038 0.90192338
+##         f1         f2 f3 fac
+## 1 2.386595 0.03169593  0   1
+## 2 4.229226 8.76052449  0   2
+## 3 1.985456 8.91640743  0   3
+## 4 7.040411 2.61651105  0   4
+## 5 2.539617 1.28231676  0   1
+## 6 6.685359 0.90375634  0   2</code></pre>
 <div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb106-1"></a><span class="co"># Rouler un modèle avec intercepte aléatoire</span></span>
 <span id="cb106-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb106-2"></a>gamm_intercept &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(x0) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(fac, <span class="dt">bs =</span> <span class="st">&quot;re&quot;</span>), <span class="dt">data =</span> gam_data2,</span>
 <span id="cb106-3"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb106-3"></a>    <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
 <span id="cb106-4"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb106-4"></a></span>
 <span id="cb106-5"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb106-5"></a><span class="co"># Voir la sortie du modèle</span></span>
 <span id="cb106-6"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb106-6"></a><span class="kw">summary</span>(gamm_intercept)<span class="op">$</span>s.table</span></code></pre></div>
-<pre><code>##             edf   Ref.df          F p-value
-## s(x0)  1.319600 1.572663  0.8002152 0.55131
-## s(fac) 2.965102 3.000000 85.0046074 0.00000</code></pre>
+<pre><code>##             edf   Ref.df          F    p-value
+## s(x0)  2.850017 3.541654   2.217422 0.07832763
+## s(fac) 2.977740 3.000000 133.491076 0.00000000</code></pre>
 <p>Notez qu’il y a maintenant un terme aléatoire dans le sommaire du modèle. Vous pouvez visualiser les intercepts aléatoires pour chaque niveau de <code>fac</code> comme ceci:</p>
 <div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb108-1"></a><span class="kw">plot</span>(gamm_intercept, <span class="dt">select =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="book-fr_files/figure-html/unnamed-chunk-77-1.png" width="672" style="display: block; margin: auto;" /></p>
@@ -371,9 +371,9 @@ effets sommés d’un GAM (basé sur les prédictions). Cette fonction permet é
 <span id="cb111-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb111-2"></a>    <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
 <span id="cb111-3"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb111-3"></a></span>
 <span id="cb111-4"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb111-4"></a><span class="kw">summary</span>(gamm_slope)<span class="op">$</span>s.table</span></code></pre></div>
-<pre><code>##                edf   Ref.df          F   p-value
-## s(x0)     1.084057 1.163194  0.0839315 0.9076228
-## s(x0,fac) 2.949445 3.000000 57.1960605 0.0000000</code></pre>
+<pre><code>##                edf Ref.df         F   p-value
+## s(x0)     3.230399 4.0088  2.963934 0.0195516
+## s(x0,fac) 2.960709 3.0000 73.796148 0.0000000</code></pre>
 <p>On peut encore une fois visualiser l’effet combiné de <code>x0</code> sans les niveaux de l’effet aléatoire, et ensuite une courbe pour chacun de quatre niveaux de l’effet aléatoire <code>fac</code>:</p>
 <div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb113-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="dt">cex =</span> <span class="fl">1.1</span>)</span>
 <span id="cb113-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb113-2"></a></span>
@@ -399,10 +399,10 @@ effets sommés d’un GAM (basé sur les prédictions). Cette fonction permet é
 <span id="cb114-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb114-2"></a>    x0, <span class="dt">bs =</span> <span class="st">&quot;re&quot;</span>), <span class="dt">data =</span> gam_data2, <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
 <span id="cb114-3"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb114-3"></a></span>
 <span id="cb114-4"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb114-4"></a><span class="kw">summary</span>(gamm_int_slope)<span class="op">$</span>s.table</span></code></pre></div>
-<pre><code>##                   edf   Ref.df            F   p-value
-## s(x0)     1.315800285 1.566561 7.988714e-01 0.5514448
-## s(fac)    2.965052824 3.000000 8.511218e+01 0.0000000
-## s(fac,x0) 0.001446042 3.000000 3.481135e-04 0.5794391</code></pre>
+<pre><code>##                   edf   Ref.df            F    p-value
+## s(x0)     2.850010888 3.541642 2.217458e+00 0.07832346
+## s(fac)    2.977706001 3.000000 1.336902e+02 0.00000000
+## s(fac,x0) 0.001656458 3.000000 1.739992e-04 0.83778553</code></pre>
 <p>On peut encore une fois visualiser l’effet combiné de <code>x0</code> sans les niveaux de l’effet aléatoire, et ensuite une courbe pour chacun de quatre niveaux de l’effet aléatoire <code>fac</code>:</p>
 <div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb116-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="dt">cex =</span> <span class="fl">1.1</span>)</span>
 <span id="cb116-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb116-2"></a></span>
@@ -435,9 +435,9 @@ effets sommés d’un GAM (basé sur les prédictions). Cette fonction permet é
 <pre><code>## Warning in gam.side(sm, X, tol = .Machine$double.eps^0.5): model has repeated 1-
 ## d smooths of same variable.</code></pre>
 <div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb121-1"></a><span class="kw">summary</span>(gamm_smooth)<span class="op">$</span>s.table</span></code></pre></div>
-<pre><code>##                edf    Ref.df         F   p-value
-## s(x0)     1.315708  1.566382 0.7986992 0.5514964
-## s(x0,fac) 2.968236 35.000000 7.2860347 0.0000000</code></pre>
+<pre><code>##                edf    Ref.df         F    p-value
+## s(x0)     2.850003  3.541634  2.217393 0.07833104
+## s(x0,fac) 2.978030 35.000000 11.442085 0.00000000</code></pre>
 <p>Si la pente aléatoire variait selon <code>x0</code>, on verrait différentes courbes pour chaque niveau:</p>
 <div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb123-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb123-1"></a><span class="kw">plot</span>(gamm_smooth, <span class="dt">select =</span> <span class="dv">1</span>)</span>
 <span id="cb123-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb123-2"></a><span class="co"># select = 1 parce que la surface lisse aléatoire est sur</span></span>
@@ -466,10 +466,10 @@ effets sommés d’un GAM (basé sur les prédictions). Cette fonction permet é
 <p>Tous les GAMMs de cette section peuvent être comparé avec <code>AIC()</code> pour trouver le modèle le mieux ajusté:</p>
 <div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb125-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb125-1"></a><span class="kw">AIC</span>(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)</span></code></pre></div>
 <pre><code>##                      df      AIC
-## gamm_intercept 6.572224 2207.602
-## gamm_slope     6.162322 2261.761
-## gamm_int_slope 6.568915 2207.601
-## gamm_smooth    6.572179 2207.604</code></pre>
+## gamm_intercept 8.541445 2187.186
+## gamm_slope     8.963484 2288.586
+## gamm_int_slope 8.544670 2187.191
+## gamm_smooth    8.542007 2187.187</code></pre>
 <p>Le meilleur modèle de ces trois modèles serait donc le GAMM avec un intercept aléatoire.</p>
 
 </div>

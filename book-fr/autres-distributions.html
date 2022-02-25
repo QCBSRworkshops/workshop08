@@ -278,7 +278,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <p>Ensuite, on devrait vérifier le choix des dimensions de bases <code>k</code>:</p>
 <div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="autres-distributions.html#cb86-1"></a><span class="kw">k.check</span>(smooth_interact_tw)</span></code></pre></div>
 <pre><code>##                              k&#39;      edf  k-index p-value
-## s(SampleDepth,RelativeDepth) 59 43.23949 1.015062   0.835</code></pre>
+## s(SampleDepth,RelativeDepth) 59 43.23949 1.015062  0.8025</code></pre>
 <p>Ainsi que la visualisation des résidus, pour valider que la distribution Tweedie est appropriée:</p>
 <div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="autres-distributions.html#cb88-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
 <span id="cb88-2"><a href="autres-distributions.html#cb88-2"></a><span class="kw">gam.check</span>(smooth_interact_tw)</span></code></pre></div>

@@ -289,7 +289,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <p>Est-ce que le <code>k</code> est assez grand?</p>
 <div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="validation-gam.html#cb72-1"></a><span class="kw">k.check</span>(smooth_interact)</span></code></pre></div>
 <pre><code>##                              k&#39;      edf   k-index p-value
-## s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883  0.0675</code></pre>
+## s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883  0.0575</code></pre>
 <p>Les <strong>EDF se rapprochent beaucoup de</strong> <code>k</code>. Ceci signifie que la <em>flexibilité</em> du modèle est restreint par le <code>k</code> utilisé par défaut, et que notre modèle pourrait mieux s’ajuster aux données si on permettait plus d’ondulations. En d’autres mots, nousn n’avons pas un compromis équilibré entre le lissage et l’ondulation du modèle.</p>
 <p>Recommençons le modèle avec un <code>k</code> plus élevé:</p>
 <div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="validation-gam.html#cb74-1"></a>smooth_interact_k60 &lt;-<span class="st"> </span><span class="kw">gam</span>(Sources <span class="op">~</span><span class="st"> </span>Season <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(SampleDepth,</span>
@@ -297,7 +297,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <p>Est-ce que le <code>k</code> est assez grand maintenant?</p>
 <div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="validation-gam.html#cb75-1"></a><span class="kw">k.check</span>(smooth_interact_k60)</span></code></pre></div>
 <pre><code>##                              k&#39;      edf  k-index p-value
-## s(SampleDepth,RelativeDepth) 59 46.03868 1.048626  0.9125</code></pre>
+## s(SampleDepth,RelativeDepth) 59 46.03868 1.048626   0.895</code></pre>
 <p>Les EDF sont beaucoup plus petits que <code>k</code>, donc notre modèle s’adjuste mieux aux données avec plus d’ondulations. On peut donc remplacer notre modèle avec cette version plus flexible:</p>
 <div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="validation-gam.html#cb77-1"></a>smooth_interact &lt;-<span class="st"> </span>smooth_interact_k60</span></code></pre></div>
 </div>
@@ -321,7 +321,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 ## indicate that k is too low, especially if edf is close to k&#39;.
 ## 
 ##                              k&#39; edf k-index p-value
-## s(SampleDepth,RelativeDepth) 59  46    1.05    0.91</code></pre>
+## s(SampleDepth,RelativeDepth) 59  46    1.05    0.88</code></pre>
 <blockquote>
 <p>En plus des graphiques, <code>gam.check()</code> fournit également la sortie de <code>k.check()</code>.</p>
 </blockquote>

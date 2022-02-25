@@ -1,5 +1,7 @@
 # (PART\*) Généralisation du modèle additif {-}
 
+# Validation d'un GAM {#validation-gam}
+
 Le modèle additif de base peut être étendu de plusieurs façons :
 
 1. Utiliser d'autres distributions pour la variable de réponse avec l'argument `family` (comme dans un GLM),
@@ -8,15 +10,7 @@ Le modèle additif de base peut être étendu de plusieurs façons :
 
 Nous allons maintenant examiner ces aspects.
 
-# Validation d'un GAM {#validation-gam}
-
 Jusqu'à présent, nous avons utilisé des modèles additifs Gaussiens (distribution Normale), l'équivalent non linéaire d'un modèle linéaire.
-
-Mais que pouvons-nous faire si :
-- les observations de la variable de réponse ne **suivent pas une distribution Normale** ?
-- la **variance n'est pas constante** ? (hétéroscédasticité)
-
-Tout comme les modèles linéaires généralisés (GLM), nous pouvons formuler des modèles additifs **généralisés** pour répondre à ces problèmes.
 
 Cependant, les jeux de données en écologie ne respectent souvent pas les conditions des modèles Gaussiens. Donc, que pouvons-nous faire si les observations de la variable de réponse **ne suivent pas une distribution normale** ? Ou si la **variance n'est pas constante** (hétéroscédasticité) ?
 
@@ -113,7 +107,7 @@ Les EDF sont beaucoup plus petits que `k`, donc notre modèle s'adjuste mieux au
 smooth_interact <- smooth_interact_k60
 ```
 
-### Est-ce que notre modèle est réellement Normal?
+## Choisir une distribution
 
 Comme pour tout modèle Normal, nous devons vérifier certaines conditions avant de continuer. Nous pouvons évaluer la distribution des résidus du modèle pour vérifier ces conditions, tout comme nous le ferions pour un GLM (voir [Atelier 6](https://r.qcbs.ca/fr/workshops/r-workshop-06/)).
 

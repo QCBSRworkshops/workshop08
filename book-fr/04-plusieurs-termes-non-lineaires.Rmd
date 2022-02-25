@@ -111,7 +111,7 @@ par(mfrow = c(2,2))
 plot(two_term_model, all.terms = TRUE)
 ```
 
-## GAM à plusieurs variables
+## GAM à plusieurs variables non linéaires
 
 Si nous voulons vérifier que la relation entre `Sources` et `RelativeDepth` est non-linéaire, on peut modéliser `RelativeDepth` avec une fonction non-linéaire. Dans ce modèle, nous aurions deux termes lisses:
 

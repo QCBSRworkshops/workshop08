@@ -1,5 +1,6 @@
 # (PART\*) Ressources & Références {-}
 
+# Ressources 
 
 Cet atelier présente une brève introduction aux concepts de base et aux packages populaires pour vous aider à estimer, évaluer et visualiser les GAMs dans R, mais les GAMs offrent bien d'autres possibilités!
 

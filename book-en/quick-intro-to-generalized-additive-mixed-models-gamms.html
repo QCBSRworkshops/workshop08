@@ -304,29 +304,29 @@ a lag of 2. Therefore, a low-order AR model is likely needed.</p>
 <span id="cb102-2"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb102-2"></a>gam_data2 &lt;-<span class="st"> </span><span class="kw">gamSim</span>(<span class="dt">eg =</span> <span class="dv">6</span>)</span></code></pre></div>
 <pre><code>## 4 term additive + random effectGu &amp; Wahba 4 term additive model</code></pre>
 <div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb104-1"></a><span class="kw">head</span>(gam_data2)</span></code></pre></div>
-<pre><code>##           y         x0        x1        x2          x3         f         f0
-## 1  4.707676 0.19930712 0.7213077 0.8433368 0.005111829  8.857626 1.17204570
-## 2 12.854490 0.17943383 0.9730922 0.8433733 0.724500426 14.523981 1.06864831
-## 3 14.531226 0.01512093 0.7968079 0.7551768 0.291082739 15.981732 0.09497191
-## 4 15.607726 0.97991327 0.5698026 0.4851578 0.975026633 18.051330 0.12612489
-## 5  8.228999 0.18129313 0.5458173 0.7847777 0.754993213  8.440862 1.07850489
-## 6 15.166280 0.70702369 0.1046484 0.1728129 0.893574890 16.565221 1.59170257
-##         f1        f2 f3 fac
-## 1 4.231749 0.4538311  0   1
-## 2 7.001919 0.4534130  0   2
-## 3 4.921512 1.9652481  0   3
-## 4 3.125534 2.7996705  0   4
-## 5 2.979140 1.3832172  0   1
-## 6 1.232811 7.7407077  0   2</code></pre>
+<pre><code>##          y         x0        x1          x2        x3        f        f0
+## 1 10.46300 0.90806101 0.6436341 0.477566808 0.8819798 10.04063 0.5696711
+## 2 14.58725 0.84990594 0.9881793 0.529795812 0.3464884 16.90550 0.9085075
+## 3 13.47647 0.82787790 0.8820677 0.005890937 0.4921378 15.86799 1.0295369
+## 4 14.61737 0.23082291 0.1077244 0.915901150 0.1309754 14.59384 1.3264978
+## 5 12.48018 0.02789716 0.4369661 0.322204591 0.1347955 12.49185 0.1750587
+## 6 14.15768 0.67078129 0.3282087 0.594632990 0.3745788 12.81524 1.7189800
+##         f1          f2 f3 fac
+## 1 3.622876 2.848086723  0   1
+## 2 7.216417 2.780579137  0   2
+## 3 5.836524 0.001927052  0   3
+## 4 1.240419 0.026921991  0   4
+## 5 2.396315 6.920473088  0   1
+## 6 1.927873 3.168384359  0   2</code></pre>
 <div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb106-1"></a><span class="co"># run random intercept model</span></span>
 <span id="cb106-2"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb106-2"></a>gamm_intercept &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(x0) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(fac, <span class="dt">bs =</span> <span class="st">&quot;re&quot;</span>), <span class="dt">data =</span> gam_data2,</span>
 <span id="cb106-3"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb106-3"></a>    <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
 <span id="cb106-4"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb106-4"></a></span>
 <span id="cb106-5"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb106-5"></a><span class="co"># examine model output</span></span>
 <span id="cb106-6"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb106-6"></a><span class="kw">summary</span>(gamm_intercept)<span class="op">$</span>s.table</span></code></pre></div>
-<pre><code>##             edf   Ref.df           F   p-value
-## s(x0)  1.001389 1.002777   0.9346389 0.3346259
-## s(fac) 2.971430 3.000000 104.2441882 0.0000000</code></pre>
+<pre><code>##             edf   Ref.df         F    p-value
+## s(x0)  2.662446 3.310355  2.136342 0.07854657
+## s(fac) 2.962709 3.000000 79.444610 0.00000000</code></pre>
 <p>Note that there is now a smoother term for the random intercept in the
 summary table. You can plot and view the random intercepts for each
 level of <code>fac</code> as follows:</p>
@@ -360,9 +360,9 @@ summed effects of a GAM (based on predictions). This function also optionally re
 <span id="cb111-2"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb111-2"></a>    <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
 <span id="cb111-3"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb111-3"></a></span>
 <span id="cb111-4"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb111-4"></a><span class="kw">summary</span>(gamm_slope)<span class="op">$</span>s.table</span></code></pre></div>
-<pre><code>##                edf   Ref.df          F   p-value
-## s(x0)     1.263294 1.480414  0.2367023 0.8300685
-## s(x0,fac) 2.952089 3.000000 63.0717487 0.0000000</code></pre>
+<pre><code>##                edf   Ref.df        F    p-value
+## s(x0)     2.786738 3.462451  2.07548 0.08022505
+## s(x0,fac) 2.938845 3.000000 49.46984 0.00000000</code></pre>
 <p>We can once again plot the summed effects for the <code>x0</code> without random effects, and then plot the predictions of all four levels of the random <code>fac</code> effect:</p>
 <div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb113-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="dt">cex =</span> <span class="fl">1.1</span>)</span>
 <span id="cb113-2"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb113-2"></a></span>
@@ -387,10 +387,10 @@ summed effects of a GAM (based on predictions). This function also optionally re
 <span id="cb114-2"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb114-2"></a>    x0, <span class="dt">bs =</span> <span class="st">&quot;re&quot;</span>), <span class="dt">data =</span> gam_data2, <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
 <span id="cb114-3"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb114-3"></a></span>
 <span id="cb114-4"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb114-4"></a><span class="kw">summary</span>(gamm_int_slope)<span class="op">$</span>s.table</span></code></pre></div>
-<pre><code>##                    edf   Ref.df            F   p-value
-## s(x0)     1.0002628956 1.000526 9.354850e-01 0.3341041
-## s(fac)    2.9714139622 3.000000 1.043029e+02 0.0000000
-## s(fac,x0) 0.0005099656 3.000000 3.760951e-05 0.8886639</code></pre>
+<pre><code>##                   edf   Ref.df            F    p-value
+## s(x0)     2.662481847 3.310395 2.136248e+00 0.07855556
+## s(fac)    2.962667751 3.000000 7.953832e+01 0.00000000
+## s(fac,x0) 0.001199642 3.000000 8.413225e-05 0.89884007</code></pre>
 <p>We can once again plot the summed effects for the <code>x0</code> without random effects, and then plot the predictions of all four levels of the random <code>fac</code> effect:</p>
 <div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb116-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="dt">cex =</span> <span class="fl">1.1</span>)</span>
 <span id="cb116-2"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb116-2"></a></span>
@@ -422,9 +422,9 @@ summed effects of a GAM (based on predictions). This function also optionally re
 <pre><code>## Warning in gam.side(sm, X, tol = .Machine$double.eps^0.5): model has repeated 1-
 ## d smooths of same variable.</code></pre>
 <div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb121-1"></a><span class="kw">summary</span>(gamm_smooth)<span class="op">$</span>s.table</span></code></pre></div>
-<pre><code>##                edf    Ref.df         F   p-value
-## s(x0)     1.000102  1.000205 0.9352436 0.3341233
-## s(x0,fac) 2.974595 35.000000 8.9353722 0.0000000</code></pre>
+<pre><code>##                edf    Ref.df        F    p-value
+## s(x0)     2.662440  3.310316 2.135965 0.07858937
+## s(x0,fac) 2.965355 35.000000 6.809620 0.00000000</code></pre>
 <p>Here, if the random slope varied along <code>x0</code>, we would see different curves for each level:</p>
 <div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb123-1"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb123-1"></a><span class="kw">plot</span>(gamm_smooth, <span class="dt">select =</span> <span class="dv">1</span>)</span>
 <span id="cb123-2"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb123-2"></a><span class="co"># select = 1 because the smooth slope appears as the first</span></span>
@@ -452,10 +452,10 @@ summed effects of a GAM (based on predictions). This function also optionally re
 <p>All of the mixed models from this section can be compared using <code>AIC()</code> to determine the best fit model</p>
 <div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb125-1"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#cb125-1"></a><span class="kw">AIC</span>(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)</span></code></pre></div>
 <pre><code>##                      df      AIC
-## gamm_intercept 6.002505 2159.320
-## gamm_slope     6.479639 2236.126
-## gamm_int_slope 6.000175 2159.316
-## gamm_smooth    6.006261 2159.324</code></pre>
+## gamm_intercept 8.309828 2240.584
+## gamm_slope     8.460977 2301.535
+## gamm_int_slope 8.312177 2240.588
+## gamm_smooth    8.315031 2240.591</code></pre>
 <p>The best model among those we have built here would be a GAMM with a random effect on the intercept.</p>
 
 </div>

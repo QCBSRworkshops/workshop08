@@ -25,7 +25,9 @@ $$y_i = \beta_0 + x_i\beta_1 +  x^2_i\beta_2 + x^3_i\beta_3 + x^4_i\beta_4 + \ep
 
 The basis functions are each multiplied by a real valued parameter, $\beta_j$, and are then summed to give the <font color="orange">final curve $f(x)$</font>.
 
-![](images/polynomial_basis_example.png)
+```{r, fig.align = 'center', out.width='100%', echo = FALSE, purl = FALSE}
+knitr::include_graphics("images/polynomial_basis_example.png")
+```
 
 By varying the $\beta_j$ we can vary the form of $f(x)$ to produce any polynomial function of order 4 or lower.
 
@@ -35,11 +37,15 @@ A cubic spline is a curve constructed from sections of a cubic
 polynomial joined together so that they are continuous in value. Each
 section of cubic has different coefficients.
 
-![](images/cubic_spline.png)
+```{r, fig.align = 'center', echo = FALSE, purl = FALSE, out.width='100%'}
+knitr::include_graphics("images/cubic_spline.png")
+```
 
 Here is a representation of a smooth function using a rank 5 cubic spline basis with knot locations at increments of 0.2:
 
-![](images/cubic_spline5.jpg)
+```{r, fig.align = 'center', echo = FALSE, purl = FALSE, out.width='7s0%'}
+knitr::include_graphics("images/cubic_spline5.jpg")
+```
 
 Here, the knots are evenly spaced through the range of observed x values. However, the choice of the degree of model smoothness is controlled by the the number of knots, which was arbitrary. 
 
@@ -73,7 +79,9 @@ Since $f$ is unknown, $M$ must be estimated. The recommend methods for this are 
 :::explanation
 __The principle behind cross validation__
 
-![](images//illustration_of_smooth_sel.png)
+```{r, fig.align = 'center', out.width = '100%', echo = FALSE, purl = FALSE}
+knitr::include_graphics("images/illustration_of_smooth_sel.png")
+```
 
 In the first panel, $\lambda$ is too high, and the curve is oversmoothed. Here, the curve loosely fits the data and therefore  predicts the missing point very poorly. 
 

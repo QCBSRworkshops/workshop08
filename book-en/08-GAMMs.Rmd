@@ -15,7 +15,7 @@ That is, in addition to changing the basis as with the `nottem` example, we can 
 To start, let's have a look at a model with temporal autocorrelation in the residuals. We will revisit the Nottingham temperature model and test for correlated errors using the (partial) autocorrelation function.
 
 ```{r, echo = TRUE, eval = FALSE}
-par(mfrow =c (1,2))
+par(mfrow = c(1,2))
 acf(resid(year_gam), lag.max = 36, main = "ACF")
 pacf(resid(year_gam), lag.max = 36, main = "pACF")
 ```

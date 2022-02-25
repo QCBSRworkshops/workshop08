@@ -47,8 +47,9 @@ In our basic model, the EDF of the smooth function `s(SampleDepth)` are ~9, whic
 
 Let us plot the smoothed (`s(SampleDepth)`) and the linear (`Season`) terms from our fitted model:
 
-```{r}
-plot(basic_model, all.terms = TRUE, page = 1)
+```{r, fig.height = 4}
+par(mfrow=c(1,2))
+plot(basic_model, all.terms = TRUE)
 ```
 
 :::puzzle
@@ -104,8 +105,9 @@ two_term_summary$s.table
 
 Let us take a look at the relationships between the linear and non-linear predictors and our response variable.
 
-```{r}
-plot(two_term_model, page = 1, all.terms = TRUE)
+```{r, fig.height = 8}
+par(mfrow=c(2,2))
+plot(two_term_model, all.terms = TRUE)
 ```
 
 ## GAM with multiple smooth terms
@@ -133,7 +135,8 @@ two_smooth_summary$s.table
 
 Let us take a look at the relationships between the linear and non-linear predictors and our response variable. 
 
-```{r}
+```{r, fig.height = 8}
+par(mfrow=c(2,2))
 plot(two_smooth_model, page = 1, all.terms = TRUE)
 ```
 
@@ -155,6 +158,18 @@ For our second challenge, we will be building onto our model by adding variables
 
 1. Create two new models: Add `Latitude` to `two_smooth_model`, first as a linear term, then as a smoothed term.
 2. Is `Latitude` an important term to include? Does `Latitude` have a linear or additive effect? Use plots, coefficient tables, and the `AIC()` function to help you answer this question.
+
+```{r, echo = FALSE, include = FALSE}
+# Challenge 2 ----
+# 
+# For our second challenge, we will be building onto our model by adding variables which we think might be ecologically significant predictors to explain bioluminescence. 
+# 
+#
+# 1. Create two new models: Add `Latitude` to `two_smooth_model`, first as a linear term, then as a smoothed term.
+# 2. Is `Latitude` an important term to include? Does `Latitude` have a linear or additive effect? Use plots, coefficient tables, and the `AIC()` function to help you answer this question.
+
+# SOLUTION # -----
+```
 
 ### Challenge 2: Solution
 
@@ -182,12 +197,14 @@ __2.__ Is `Latitude` an important term to include? Does `Latitude` have a linear
 
 Let us begin by plotting the the 4 effects that are now included in each model:
 
-```{r}
-plot(three_term_model, page = 1, all.terms = TRUE)
+```{r, fig.height = 8}
+par(mfrow=c(2,2))
+plot(three_term_model, all.terms = TRUE)
 ```
 
-```{r}
-plot(three_smooth_model, page = 1, all.terms = TRUE)
+```{r, fig.height = 8}
+par(mfrow=c(2,2))
+plot(three_smooth_model, all.terms = TRUE)
 ```
 
 We should also look at our coefficient tables. What can the EDF tell us about the _wiggliness_ of our predictors' effects?

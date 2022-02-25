@@ -43,24 +43,27 @@ In [Chapter 5](#how-gams-work), we discussed the role of the smoothing parameter
 
 Each smooth in a GAM essentially the weighted sum of many smaller functions, called basis functions. The more basis functions used to build a smooth function, the more _wiggly_ the smooth. As you can see below, a smooth with a small $k$ basis dimension will be less wiggly than a smooth with a high $k$ basis dimension.
 
-```{r, out.width = '33%', echo = FALSE, fig.height = 8}
+```{r, echo = FALSE, fig.height = 4, fig.width = 10, results='hide', message=FALSE}
+par(mfrow=c(1,3))
+install.packages("patchwork", quiet = TRUE)
+library(patchwork)
+
 k_plot <- function(k_value){
     data("eeg")
     m <- mgcv::gam(Ampl ~ s(Time, k = k_value), data = eeg)
      p <- ggplot(eeg, aes(x = Time, y = Ampl)) +
-     geom_point(alpha = .1, size = 3) + 
+     geom_point(alpha = .1, size = 1) + 
      geom_line(aes(y = predict(m)),
                lwd = 2, col = "black") +
          labs(title = paste("k =", k_value), x = "", y = "") +
          theme_classic() + 
-         theme(text = element_text(size = 30), 
+         theme(text = element_text(size = 15), 
                axis.text = element_blank(),
                plot.title = element_text(face = "bold", hjust = 0.5))  
     return(p)
 }
-k_plot(3)
-k_plot(6)
-k_plot(10)
+
+k_plot(3) + k_plot(6) + k_plot(10)
 ```
 
 
@@ -111,7 +114,8 @@ As with any Normal model, we must check some model assumptions before continuing
 
 We can look at the residual plots with `gam.check()`:
 
-```{r, out.width='50%', out.height = '50%'}
+```{r, fig.height=8}
+par(mfrow = c(2,2))
 gam.check(smooth_interact)
 ```
 
@@ -152,6 +156,17 @@ To get an overview of families available in `mgcv`:
 
 As a reminder, here is our `smooth_interact` model:
 
+```{r, echo = FALSE, include = FALSE}
+# Challenge 3 ----
+# 
+# 1. Fit a new model `smooth_interact_tw` with the same formula as the `smooth_interact` model, but with a distribution from the *Tweedie* family (instead of the Normal distribution) and `log` link function. You can do so by using `family = tw(link = "log")` inside `gam()`.
+# 2. Check the choice of `k` and the residual plots for the new model.
+# 3. Compare `smooth_interact_tw` with `smooth_interact`. Which one would you choose?
+
+# SOLUTION # -----
+```
+
+
 ```{r}
 # Hint!
 # Because the Normal distribution is the default setting, 
@@ -187,7 +202,8 @@ k.check(smooth_interact_tw)
 
 We should also verify the residual plots, to verify whether the Tweedie distribution is appropriate:
 
-```{r, out.width='50%', out.height = '50%'}
+```{r, fig.height = 8}
+par(mfrow = c(2,2))
 gam.check(smooth_interact_tw)
 ```
 

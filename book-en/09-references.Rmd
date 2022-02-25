@@ -1,3 +1,5 @@
+# (PART\*) Resources & References {-}
+
 # Resources
 
 This workshop is intended as a brief introduction to basic concepts, and popular packages to help you estimate, evaluate, and visualise GAMs in R, but there is so much more to GAMs!
@@ -14,6 +16,7 @@ We have a few resources to suggest if you would like to delve deeper into the su
 
 Finally, the help pages, available through `?gam` in R, are always an excellent
 resource.
+
 
 `r if (knitr::is_html_output()) '
 # References

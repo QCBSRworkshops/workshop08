@@ -22,8 +22,9 @@ factor_interact <- gam(Sources ~ Season +
 summary(factor_interact)$s.table
 ```
 
-```{r, fig.width = 10, fig.height = 6.5}
-plot(factor_interact, page = 1)
+```{r, fig.height = 8}
+par(mfrow = c(2,2))
+plot(factor_interact)
 ```
 
 :::explanation

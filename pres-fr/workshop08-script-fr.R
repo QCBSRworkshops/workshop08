@@ -51,8 +51,13 @@ library(mgcv)
 isit2 <- subset(isit, Season==2)
 
 linear_model <- gam(Sources ~ SampleDepth, data = isit2)
-data_plot <- ggplot(isit2, aes(y = Sources, x = SampleDepth)) + geom_point() +
-             geom_line(colour = "red", size = 1.2, aes(y = fitted(linear_model))) + theme_bw()
+summary(linear_model)
+
+data_plot <- ggplot(data = isit2, aes(y = Sources, x = SampleDepth)) + 
+  geom_point() +
+  geom_line(aes(y = fitted(linear_model)),
+            colour = "red", size = 1.2) + 
+  theme_bw()
 data_plot
 
 library(ggplot2)
@@ -110,9 +115,9 @@ data_plot
 
 plot(gam_model)
 
-linear_model <- gam(Sources ~ SampleDepth, data = isit2) # fit a regular linear model using gam()
-nested_gam_model <- gam(Sources ~ s(SampleDepth), data = isit2)
-AIC(linear_model, nested_gam_model)
+linear_model <- gam(Sources ~ SampleDepth, data = isit2)
+smooth_model <- gam(Sources ~ s(SampleDepth), data = isit2)
+AIC(linear_model, smooth_model)
 
 linear_model <- gam(y_obs ~ x) # ajuster un modèle linéaire régulier avec gam()
 nested_gam_model <- gam(y_obs ~ s(x) + x)
@@ -122,26 +127,30 @@ linear_model <- gam(y_obs ~ x) # ajuster un modèle linéaire régulier avec gam
 nested_gam_model <- gam(y_obs ~ s(x) + x)
 anova(linear_model, nested_gam_model, test = "Chisq")
 
-isit1 <- subset(isit, Season==1)
+isit1 <- subset(isit, Season == 1)
 
 linear_model_s1 <- gam(Sources ~ SampleDepth, data = isit1)
-gam_model_s1 <- gam(Sources ~ s(SampleDepth), data = isit1)
-
+smooth_model_s1 <- gam(Sources ~ s(SampleDepth), data = isit1)
 
 ggplot(isit1, aes(x = SampleDepth, y = Sources)) +
-         geom_point() +
-         geom_line(colour = "red", size = 1.2,
-                   aes(y = fitted(linear_model_s1))) +
-         geom_line(colour = "blue", size = 1.2,
-                   aes(y = fitted(gam_model_s1))) +
-         theme_bw()
+  geom_point() +
+  geom_line(colour = "red", size = 1.2,
+            aes(y = fitted(linear_model_s1))) +
+  geom_line(colour = "blue", size = 1.2,
+            aes(y = fitted(smooth_model_s1))) +
+  theme_bw()
 
-linear_model_s1 <- gam(Sources ~ SampleDepth, data = isit1)
-nested_gam_model_s1 <- gam(Sources ~ s(SampleDepth) + SampleDepth,data = isit1)
+ggplot(isit1, aes(x = SampleDepth, y = Sources)) +
+  geom_point() +
+  geom_line(colour = "red", size = 1.2,
+            aes(y = fitted(linear_model_s1))) +
+  geom_line(colour = "blue", size = 1.2,
+            aes(y = fitted(smooth_model_s1))) +
+  theme_bw()
 
-AIC(linear_model_s1, nested_gam_model_s1)
+AIC(linear_model_s1, smooth_model_s1)
 
-nested_gam_model_s1
+smooth_model_s1
 
 n <- 250
 x_test <- runif(n, -5, 5)
@@ -159,12 +168,9 @@ qplot(x_test, y_test_obs) +
 
 nested_gam_model_test
 
-isit
+head(isit)
 isit$Season <- as.factor(isit$Season)
 
-isit$Season <- as.factor(isit$Season)
-
-isit$Season <- as.factor(isit$Season)
 basic_model <- gam(Sources ~ Season + s(SampleDepth), data = isit, method = "REML")
 basic_summary <- summary(basic_model)
 
@@ -182,7 +188,8 @@ basic_summary$p.table
 
 basic_summary$s.table
 
-plot(basic_model, all.terms = TRUE,page = 1)
+par(mfrow = c(1,2))
+plot(basic_model, all.terms = TRUE)
 
 basic_summary$s.table
 
@@ -194,7 +201,8 @@ two_term_summary$p.table
 
 two_term_summary$s.table
 
-plot(two_term_model, page=1, all.terms = T)
+par(mfrow = c(2,2))
+plot(two_term_model, all.terms = TRUE)
 
 two_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth),
                         data = isit, method = "REML")
@@ -204,7 +212,8 @@ two_smooth_summary$p.table
 
 two_smooth_summary$s.table
 
-plot(two_smooth_model, page = 1, all.terms = TRUE)
+par(mfrow = c(2,2))
+plot(two_smooth_model, all.terms = TRUE)
 
 AIC(basic_model, two_term_model, two_smooth_model)
 
@@ -224,8 +233,6 @@ two_smooth_summary$s.table
 
 plot(two_smooth_model, page = 1, all.terms = TRUE)
 
-AIC(basic_model, two_term_model, two_smooth_model)
-
 # Ajouter Latitude comme terme linéaire
 three_term_model <- gam(Sources ~ 
                           Season + s(SampleDepth) + s(RelativeDepth) + 
@@ -240,24 +247,14 @@ three_smooth_model <- gam(Sources ~
                           data = isit, method = "REML")
 three_smooth_summary <- summary(three_smooth_model)
 
-plot(three_term_model, page = 1, all.terms = TRUE)
-
-par(mar=c(3.8,3.8,.2,.2))
-plot(three_term_model, page = 1, all.terms = TRUE)
-
-plot(three_smooth_model, page = 1, all.terms = TRUE)
-
-par(mar=c(3.8,3.8,.2,.2))
-plot(three_smooth_model, page = 1, all.terms = TRUE)
-
 three_term_model <- gam(y ~ x0 + s(x1) + s(x2) + x3, data = gam_data)
 three_smooth_model <- gam(y~x0 + s(x1) + s(x2) + s(x3), data = gam_data)
 three_smooth_summary <- summary(three_smooth_model)
 
-plot(three_smooth_model, page = 1, all.terms = TRUE)
+par(mfrow = c(2,2))
+plot(three_smooth_model, all.terms = TRUE)
 
-par(mar=c(3.8,3.8,.2,.2))
-plot(three_smooth_model, page = 1,all.terms = TRUE)
+plot(three_smooth_model, page = 1, all.terms = TRUE)
 
 three_smooth_summary$s.table
 
@@ -276,9 +273,12 @@ factor_interact <- gam(y ~ x0 + s(x1) + s(x2, by = x0), data = gam_data)
 
 summary(factor_interact)$s.table
 
-plot(factor_interact, page = 1)
+par(mfrow = c(2),2))
+plot(factor_interact)
 
-vis.gam(factor_interact, view = c("SampleDepth","Season"), theta = 40, n.grid = 500, border = NA)
+plot(factor_interact, page = 1, all.terms = TRUE)
+
+vis.gam(factor_interact, theta = 120, n.grid = 50, lwd = .4)
 
 AIC(two_smooth_model, factor_interact)
 
@@ -286,10 +286,10 @@ smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth),
                        data = isit, method = "REML")
 summary(smooth_interact)$s.table
 
-plot(smooth_interact, page = 1, scheme = 3)
+plot(smooth_interact, page = 1, scheme = 2)
 
-vis.gam(smooth_interact, view = c("SampleDepth", "RelativeDepth"),
-        cond = list(Season = 1), theta=40, n.grid = 50, color = "cm")
+vis.gam(smooth_interact,  view = c("SampleDepth", "RelativeDepth"), 
+        theta = 50, n.grid = 50, lwd = .4)
 
 AIC(two_smooth_model, smooth_interact)
 
@@ -299,6 +299,27 @@ smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth),
 summary(smooth_interact)$p.table
 
 summary(smooth_interact)$s.table
+
+par(mfrow=c(1,3))
+install.packages("patchwork", quiet = TRUE)
+library(patchwork)
+
+k_plot <- function(k_value){
+    data("eeg")
+    m <- mgcv::gam(Ampl ~ s(Time, k = k_value), data = eeg)
+     p <- ggplot(eeg, aes(x = Time, y = Ampl)) +
+     geom_point(alpha = .1, size = 1) +
+     geom_line(aes(y = predict(m)),
+               lwd = 2, col = "black") +
+         labs(title = paste("k =", k_value), x = "", y = "") +
+         theme_classic() +
+         theme(text = element_text(size = 15),
+               axis.text = element_blank(),
+               plot.title = element_text(face = "bold", hjust = 0.5))
+    return(p)
+}
+
+k_plot(3) + k_plot(6) + k_plot(10)
 
 k.check(smooth_interact)
 
@@ -311,7 +332,7 @@ k.check(smooth_interact_k60)
 
 smooth_interact <- smooth_interact_k60
 
-par(mfrow = c(2,2)) # Afficher les 4 tracés à la fois
+par(mfrow = c(2,2))
 gam.check(smooth_interact)
 
 par(mfrow=c(2,2), mar = c(4,4,2,1.1), oma =c(0,0,0,0))
@@ -319,13 +340,10 @@ gam.check(smooth_interact)
 
 ?family.mgcv
 
-# Distribution normale
+# Voici comment nous écririons le modèle pour spécifier la distribution normale :
 smooth_interact <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60),
-                          data = isit, method = "REML")
-# Tweedie avec log comme fonction de liaison
-smooth_interact_tw <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60),
-                          family = tw(link = "log"),
-                          data = isit, method = "REML")
+                       family = gaussian(link = "identity"),
+                       data = isit, method = "REML")
 
 smooth_interact_tw <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60),
                           family = tw(link = "log"),
@@ -343,19 +361,25 @@ gam.check(smooth_interact_tw)
 
 AIC(smooth_interact, smooth_interact_tw)
 
-data(nottem) # Nottingham temperature time series
+data(nottem)
+
+# nombre d'années de données (20 ans)
 n_years <- length(nottem)/12
+
+# codage qualitatif pour les 12 mois de l'année,
+# pour chaque année échantillonnée (série de 1 à 12, répétée 20 fois)
 nottem_month <- rep(1:12, times = n_years)
+
+# une variable où l'année correspondant à chaque mois dans nottem_month
 nottem_year <- rep(1920:(1920 + n_years - 1), each = 12)
-qplot(nottem_month, nottem, colour = factor(nottem_year), geom = "line") +
+
+# Visualiser la série temporelle
+qplot(x = nottem_month, y = nottem, colour = factor(nottem_year), geom = "line") +
   theme_bw()
 
-data(nottem)
-n_years <- length(nottem)/12
-nottem_month <- rep(1:12, times = n_years)
-nottem_year <- rep(1920:(1920 + n_years - 1), each = 12)
-qplot(nottem_month, nottem, colour = factor(nottem_year), geom = "line") +
-  theme_bw()
+# Plot the time series
+qplot(x = nottem_month, y = nottem, colour = factor(nottem_year), geom = "line") +
+  theme_bw() + theme(text = element_text(size = 20))
 
 year_gam <- gam(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"), method = "REML")
 summary(year_gam)$s.table
@@ -370,47 +394,73 @@ par(mfrow = c(1,2))
 acf(resid(year_gam), lag.max = 36, main = "ACF")
 pacf(resid(year_gam), lag.max = 36, main = "pACF")
 
+df <- data.frame(nottem, nottem_year, nottem_month)
 
-year_gam <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"))
+year_gam <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"), data = df)
+
 year_gam_AR1 <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"),
                      correlation = corARMA(form = ~ 1|nottem_year, p = 1),
-                   data = data.frame(nottem, nottem_year, nottem_month))
+                     data = df)
+
 year_gam_AR2 <- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"),
                      correlation = corARMA(form = ~ 1|nottem_year, p = 2),
-                   data = data.frame(nottem, nottem_year, nottem_month))
+                     data = df)
 
 AIC(year_gam$lme, year_gam_AR1$lme, year_gam_AR2$lme)
 
+# Simuler des données
 gam_data2 <- gamSim(eg = 6)
-str(gam_data2)
+head(gam_data2)
 
-par(mar=c(4,4,1,1))
+gam_data2 <- gamSim(eg = 6)
+
+# Rouler un modèle avec intercepte aléatoire
 gamm_intercept <- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2, method = "REML")
+
+# Voir la sortie du modèle
 summary(gamm_intercept)$s.table
+
 plot(gamm_intercept, select = 2)
 
 par(mfrow = c(1,2), cex = 1.1)
 
-plot_smooth(gamm_intercept, view = "x0", rm.ranef = T,
+# Visualiser les effets combinés de x0 (sans effets aléatoires)
+plot_smooth(gamm_intercept, view = "x0", rm.ranef = TRUE,
             main = "intercept + s(x1)")
 
-plot_smooth(gamm_intercept, view = "x0", cond = list(fac="1"),
-            main = "... + s(fac)", col = 'orange', ylim = c(8,21))
+# Visualiser chaque niveau de l'effet aléatoire
+plot_smooth(gamm_intercept, view = "x0", rm.ranef = FALSE,
+            cond = list(fac="1"),
+            main = "... + s(fac)", col = 'orange', ylim = c(0,25))
+plot_smooth(gamm_intercept, view = "x0", rm.ranef = FALSE,
+            cond = list(fac = "2"),
+            add = TRUE, col = 'red')
+plot_smooth(gamm_intercept, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "3"),
+            add = TRUE, col = 'purple')
+plot_smooth(gamm_intercept, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "4"),
+            add = TRUE, col = 'turquoise')
 
-plot_smooth(gamm_intercept, view = "x0", cond = list(fac = "2"), add = T, col = 'red')
+par(mfrow = c(1,2), cex = 1.1)
 
-plot_smooth(gamm_intercept, view="x0", cond = list(fac = "3"), add = T, col = 'purple')
+# Visualiser les effets combinés de x0 (sans effets aléatoires)
+plot_smooth(gamm_intercept, view = "x0", rm.ranef = TRUE,
+            main = "intercept + s(x1)")
 
-plot_smooth(gamm_intercept, view="x0", cond = list(fac = "4"), add = T, col = 'turquoise')
-
-par(mfrow = c(1,2), cex = 1.1, mar = c(4,4,1,1))
-plot_smooth(gamm_intercept, view = "x0", rm.ranef = T,
-            main = "intercept + s(x1)", print.summary=F)
-plot_smooth(gamm_intercept, view = "x0", cond = list(fac = "1"),
-            main = "... + s(fac)", col = 'orange', ylim = c(8,21), print.summary=F)
-plot_smooth(gamm_intercept, view = "x0", cond = list(fac = "2"), add = T, col = 'red', print.summary = F)
-plot_smooth(gamm_intercept, view = "x0", cond = list(fac = "3"), add = T, col = 'purple', print.summary = F)
-plot_smooth(gamm_intercept, view = "x0", cond = list(fac = "4"), add = T, col = 'turquoise', print.summary = F)
+# Visualiser chaque niveau de l'effet aléatoire
+plot_smooth(gamm_intercept, view = "x0", rm.ranef = FALSE,
+            cond = list(fac="1"),
+            main = "... + s(fac)", col = 'orange', ylim = c(0,25))
+plot_smooth(gamm_intercept, view = "x0", rm.ranef = FALSE,
+            cond = list(fac = "2"),
+            add = TRUE, col = 'red')
+plot_smooth(gamm_intercept, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "3"),
+            add = TRUE, col = 'purple')
+plot_smooth(gamm_intercept, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "4"),
+            add = TRUE, col = 'turquoise')
 
 gamm_slope <- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2, method = "REML")
 
@@ -418,28 +468,43 @@ summary(gamm_slope)$s.table
 
 par(mfrow = c(1,2), cex = 1.1)
 
-plot_smooth(gamm_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)")
+# Visualiser les effets combinés de x0 (sans effets aléatoires)
+plot_smooth(gamm_slope, view = "x0", rm.ranef = TRUE,
+            main = "intercept + s(x1)")
 
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "1"),
-            main = "... + s(fac)", col = 'orange', ylim = c(7,22))
+# Visualiser chaque niveau de l'effet aléatoire
+plot_smooth(gamm_slope, view = "x0", rm.ranef = FALSE,
+            cond = list(fac="1"),
+            main = "... + s(fac, x0)", col = 'orange', ylim = c(0,25))
+plot_smooth(gamm_slope, view = "x0", rm.ranef = FALSE,
+            cond = list(fac = "2"),
+            add = TRUE, col = 'red')
+plot_smooth(gamm_slope, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "3"),
+            add = TRUE, col = 'purple')
+plot_smooth(gamm_slope, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "4"),
+            add = TRUE, col = 'turquoise')
 
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "2"), add = T, col = 'red')
+par(mfrow = c(1,2), cex = 1.1)
 
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "3"), add = T, col = 'purple')
+# Visualiser les effets combinés de x0 (sans effets aléatoires)
+plot_smooth(gamm_slope, view = "x0", rm.ranef = TRUE,
+            main = "intercept + s(x1)")
 
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "4"), add = T, col = 'turquoise')
-
-par(mfrow = c(1,2), cex = 1.1, mar = c(4,4,1,1))
-plot_smooth(gamm_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)",
-            print.summary=F)
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "1"),
-            main = "... + s(fac)", col = 'orange', ylim = c(7,22), print.summary=F)
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "2"), add = T, col = 'red',
-            print.summary = F)
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "3"), add = T, col = 'purple',
-            print.summary = F)
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "4"), add = T, col = 'turquoise',
-            print.summary = F)
+# Visualiser chaque niveau de l'effet aléatoire
+plot_smooth(gamm_slope, view = "x0", rm.ranef = FALSE,
+            cond = list(fac="1"),
+            main = "... + s(fac, x0)", col = 'orange', ylim = c(0,25))
+plot_smooth(gamm_slope, view = "x0", rm.ranef = FALSE,
+            cond = list(fac = "2"),
+            add = TRUE, col = 'red')
+plot_smooth(gamm_slope, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "3"),
+            add = TRUE, col = 'purple')
+plot_smooth(gamm_slope, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "4"),
+            add = TRUE, col = 'turquoise')
 
 gamm_int_slope <- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
                       data = gam_data2, method = "REML")
@@ -448,27 +513,43 @@ summary(gamm_int_slope)$s.table
 
 par(mfrow = c(1,2), cex = 1.1)
 
-plot_smooth(gamm_int_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)")
+# Visualiser les effets combinés de x0 (sans effets aléatoires)
+plot_smooth(gamm_int_slope, view = "x0", rm.ranef = TRUE,
+            main = "intercept + s(x1)")
 
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "1"),
-            main="... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(7,22))
+# Visualiser chaque niveau de l'effet aléatoire
+plot_smooth(gamm_int_slope, view = "x0", rm.ranef = FALSE,
+            cond = list(fac="1"),
+            main = "... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(0,25))
+plot_smooth(gamm_int_slope, view = "x0", rm.ranef = FALSE,
+            cond = list(fac = "2"),
+            add = TRUE, col = 'red')
+plot_smooth(gamm_int_slope, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "3"),
+            add = TRUE, col = 'purple')
+plot_smooth(gamm_int_slope, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "4"),
+            add = TRUE, col = 'turquoise')
 
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "2"), add = T, col='red')
+par(mfrow = c(1,2), cex = 1.1)
 
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "3"), add = T, col = 'purple')
+# Visualiser les effets combinés de x0 (sans effets aléatoires)
+plot_smooth(gamm_int_slope, view = "x0", rm.ranef = TRUE,
+            main = "intercept + s(x1)")
 
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "4"), add = T, col = 'turquoise')
-
-par(mfrow = c(1,2), cex = 1.1, mar = c(4,4,1,1))
-plot_smooth(gamm_int_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)", print.summary = F)
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "1"), print.summary=F,
-            main="... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(7,22))
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "2"), add = T,
-            col='red',print.summary = F)
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "3"), add = T,
-            col = 'purple', print.summary = F)
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "4"), add = T,
-            col = 'turquoise', print.summary = F)
+# Visualiser chaque niveau de l'effet aléatoire
+plot_smooth(gamm_int_slope, view = "x0", rm.ranef = FALSE,
+            cond = list(fac="1"),
+            main = "... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(0,25))
+plot_smooth(gamm_int_slope, view = "x0", rm.ranef = FALSE,
+            cond = list(fac = "2"),
+            add = TRUE, col = 'red')
+plot_smooth(gamm_int_slope, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "3"),
+            add = TRUE, col = 'purple')
+plot_smooth(gamm_int_slope, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "4"),
+            add = TRUE, col = 'turquoise')
 
 plot(gamm_int_slope, select = 3)
 
@@ -477,32 +558,47 @@ gamm_smooth <- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1),
 
 summary(gamm_smooth)$s.table
 
-par(mar=c(4,4,.5,.5), lwd = 2)
-plot(gamm_smooth, select = 1)
+plot(gamm_smooth, select=1)
 
 par(mfrow = c(1,2), cex = 1.1)
 
-plot_smooth(gamm_smooth, view = "x0", rm.ranef = T, main = "intercept + s(x0)")
+# Visualiser les effets combinés de x0 (sans effets aléatoires)
+plot_smooth(gamm_smooth, view = "x0", rm.ranef = TRUE,
+            main = "intercept + s(x1)")
 
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "1"),
-            main="... + s(x0, fac)", col = 'orange', ylim = c(7,22))
+# Visualiser chaque niveau de l'effet aléatoire
+plot_smooth(gamm_smooth, view = "x0", rm.ranef = FALSE,
+            cond = list(fac="1"),
+            main = "... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(0,25))
+plot_smooth(gamm_smooth, view = "x0", rm.ranef = FALSE,
+            cond = list(fac = "2"),
+            add = TRUE, col = 'red')
+plot_smooth(gamm_smooth, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "3"),
+            add = TRUE, col = 'purple')
+plot_smooth(gamm_smooth, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "4"),
+            add = TRUE, col = 'turquoise')
 
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "2"), add = T, col='red')
+par(mfrow = c(1,2), cex = 1.1)
 
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "3"), add = T, col = 'purple')
+# Visualiser les effets combinés de x0 (sans effets aléatoires)
+plot_smooth(gamm_smooth, view = "x0", rm.ranef = TRUE,
+            main = "intercept + s(x1)")
 
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "4"), add = T, col = 'turquoise')
-
-par(mfrow = c(1,2), cex = 1.1, mar = c(4,4,1,1))
-plot_smooth(gamm_smooth, view = "x0", rm.ranef = T, main = "intercept + s(x0)", print.summary=F)
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "1"), print.summary=F,
-            main="... + s(x0, fac)", col = 'orange', ylim = c(7,22))
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "2"), add = T,
-            col='red',print.summary = F)
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "3"), add = T,
-            col = 'purple', print.summary = F)
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "4"), add = T,
-            col = 'turquoise', print.summary = F)
+# Visualiser chaque niveau de l'effet aléatoire
+plot_smooth(gamm_smooth, view = "x0", rm.ranef = FALSE,
+            cond = list(fac="1"),
+            main = "... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(0,25))
+plot_smooth(gamm_smooth, view = "x0", rm.ranef = FALSE,
+            cond = list(fac = "2"),
+            add = TRUE, col = 'red')
+plot_smooth(gamm_smooth, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "3"),
+            add = TRUE, col = 'purple')
+plot_smooth(gamm_smooth, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "4"),
+            add = TRUE, col = 'turquoise')
 
 AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
 

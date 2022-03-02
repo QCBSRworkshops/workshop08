@@ -37,7 +37,6 @@ class: inverse, center, middle
 [![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=Site&amp;message=r.qcbs.ca&amp;color=A3BE8C)](https://r.qcbs.ca/fr/workshops/r-workshop-08/)
 [![badge](https://img.shields.io/static/v1?style=for-the-badge&amp;label=GitHub&amp;message=08&amp;color=B48EAD&amp;logo=github)](https://github.com/QCBSRworkshops/workshop08) 
 
-
 ---
 
 # Librairies et jeux de données 
@@ -45,7 +44,6 @@ class: inverse, center, middle
 Pour cet atelier, nous travaillerons avec les jeux de données suivants :
 
 * [ISIT.csv](https://r.qcbs.ca/workshop08/pres-en/data/ISIT.csv) 
-* [other_dist.csv](https://r.qcbs.ca/workshop08/pres-en/data/other_dist.csv) 
 
 &lt;br&gt;
 
@@ -61,23 +59,33 @@ install.packages(c('ggplot2', 'itsadug', 'mgcv'))
 ```
 
 ---
+
 # Prérequis
 
 Pour suivre cet atelier, nous recommandons:
 
-+ Assez d'expérience avec le logiciel R pour être en mesure d'exécuter un script et d'examiner les données et les objets R;
++ Assez d'expérience avec le logiciel R pour exécuter un script et examiner les données et les objets R;
 + Une connaissance de base de la régression linéaire.
 
 ---
 # Aperçu de l'atelier
 
-1. Le modèle linéaire ... et où il échoue
+Nous commencerons par les bases de comment spécifier et implémenter des GAMs en R:
+
+1. Le modèle linéaire... et où il échoue
 2. Introduction aux GAMs
-3. GAM avec plusieurs termes non-linéaires
-4. Interactions
-5. Généralisation du modèle additif
-6. Changer la fonction de base
-7. Intro rapide aux GAMMs
+3. Le fonctionnement des GAMs
+4. GAM avec plusieurs termes non-linéaires
+5. GAM avec des termes d'interaction
+
+&lt;br&gt;
+
+Nous discuterons ensuite de la généralisation du modèle additif, incluant: 
+
+6. La validation d'un GAM
+7. Choisir une autre distribution
+8. Changer la fonction de base
+9. Introduction rapide aux GAMMs
 
 ---
 # Objectifs d'apprentissage
@@ -86,7 +94,7 @@ Pour suivre cet atelier, nous recommandons:
 2. Évaluer la sortie d'un Modèle Additif Généralisé (GAM) afin de mieux comprendre nos données,
 3. Utiliser des tests pour déterminer si nos relations correspondent à des modèles non linéaires ou linéaires,
 4. Ajouter des interactions non linéaires entre les variables explicatives,
-5. Comprendre l'idée d'une fonction de base (basis function) et la raison pour laquelle ça rend les GAMs si puissants !,
+5. Comprendre l'idée d'une fonction de base (basis function) et pourquoi ça rend les GAMs si puissants,
 6. Comment modéliser la dépendance dans les données (autocorrélation, structure hiérarchique) en utilisant les GAMMs.
 
 ---
@@ -95,7 +103,7 @@ class: inverse, center, middle
 
 &lt;hr&gt;
 
-## ...et où il échoue
+## ... et où il échoue
 
 ---
 # La régression linéaire
@@ -103,7 +111,8 @@ class: inverse, center, middle
 La régression linéaire est ce que la plupart des gens apprennent avant tout en statistiques et est parmi les méthodes les plus performantes. Elle nous permet de modéliser une variable réponse en fonction de facteurs prédictifs et d'une erreur résiduelle.
 
 --
-Tel que vu dans l'[atelier sur les modèles linéaires](http://qcbs.ca/wiki/r_workshop4), le modèle linéaire fait quatre suppositions importantes :
+
+Comme on a vu dans l'[Atelier 4: Modèles linéaires](https://r.qcbs.ca/fr/workshops/r-workshop-04/), le modèle linéaire fait quatre suppositions importantes:
 
 1. Relation linéaire entre les variables de réponse et les variables prédicteurs:  `$$y_i = \beta_0 + \beta_1 \times x_i + \epsilon_i$$`
 2. L'erreur est distribuée normalement: `$$\epsilon_i \sim \mathcal{N}(0,\,\sigma^2)$$`
@@ -117,6 +126,8 @@ Tel que vu dans l'[atelier sur les modèles linéaires](http://qcbs.ca/wiki/r_wo
 *Modèle linéaire avec plusieurs prédicteurs:*
 
 `$$y_i = \beta_0 + \beta_1x_{1,i}+\beta_2x_{2,i}+\beta_3x_{3,i}+...+\beta_kx_{k,i} + \epsilon_i$$`
+???
+Un modèle linéaire peut parfois s'adapter à certains types de réponses non linéaires (par exemple `\(x^2\)`), mais cette approche repose fortement sur des décisions qui peuvent être soit arbitraires, soit bien informées, et est beaucoup moins flexible que l'utilisation d'un modèle additif. 
 
 ---
 # La régression linéaire
@@ -131,7 +142,7 @@ Les modèles linéaires fonctionnent très bien dans certains cas spécifiques o
 ---
 # La régression linéaire
 
-Et pourtant tant de façons pour qu'il ne le soit pas :
+En réalité, il est souvent impossible de respecter ces critères. Dans de nombreux cas, les modèles linéaires sont inappropriés:
 
 .center[
 ![:scale 60%](images/linreg_bad.png)
@@ -144,7 +155,7 @@ Et pourtant tant de façons pour qu'il ne le soit pas :
 
 Un **modèle linéaire** essaye d'ajuster la meilleure **droite** qui passe au milieu des données, cela ne fonctionne donc pas pour tous les jeux de données.
 
-En revanche, les **GAM** font cela en ajustant une **fonction de lissage non-linéaire** à travers les données, mais tout en contrôlant le degré de courbure de la ligne (*plus d'information sur cela plus bas*).
+En revanche, les **GAM** font cela en ajustant une **fonction de lissage non-linéaire** à travers les données, mais tout en contrôlant le degré de courbure de la ligne (*plus d'informations suivront*).
 
 ---
 class: inverse, center, middle
@@ -153,7 +164,9 @@ class: inverse, center, middle
 ---
 # Modèle Additif Généralisé (GAM)
 
-Examinons un exemple! Nous allons utiliser le jeu de données `ISIT`.
+Utilisons un exemple pour démontrer la différence entre une régression linéaire et un modèle additif. Nous allons utiliser le jeu de données `ISIT`.
+
+&lt;br&gt;
 
 
 ```r
@@ -161,11 +174,12 @@ isit &lt;- read.csv("data/ISIT.csv")
 head(isit)
 ```
 
-Ce jeu de donnée comporte des mesures de bioluminescence en relation à la profondeur (*depth*), la station de rechercher et la saison (*Season*).
+&gt; Ce jeu de donnée comporte des mesures de bioluminescence en relation à la profondeur (*depth*), la station de rechercher et la saison (*Season*).
 
 
 
-Prenons que les données de la deuxième saison pour l'instant
+Prenons que les données de la deuxième saison pour l'instant:
+
 
 
 
@@ -174,18 +188,58 @@ isit2 &lt;- subset(isit, Season==2)
 ```
 
 ---
-# GAM
+# Modèle Additif Généralisé (GAM)
 
-Si nous modélisions la mesure de bioluminescence selon la profondeur par une régression linéaire, les résultats ne respecteraient pas les suppositions énumérées ci-dessus.
+Commençons par essayer d'ajuster un modèle de régression linéaire à la relation entre `Sources` et `SampleDepth`.
+
 
 ```r
 linear_model &lt;- gam(Sources ~ SampleDepth, data = isit2)
-data_plot &lt;- ggplot(isit2, aes(y = Sources, x = SampleDepth)) + geom_point() +
-             geom_line(colour = "red", size = 1.2, aes(y = fitted(linear_model))) + theme_bw()
+summary(linear_model)
+...
+# 
+# Parametric coefficients:
+#               Estimate Std. Error t value Pr(&gt;|t|)    
+# (Intercept) 30.9021874  0.7963891   38.80   &lt;2e-16 ***
+# SampleDepth -0.0083450  0.0003283  -25.42   &lt;2e-16 ***
+# 
+# 
+# R-sq.(adj) =  0.588   Deviance explained = 58.9%
+# GCV =  60.19  Scale est. = 59.924    n = 453
+...
+```
+
+Le modèle linéaire explique une bonne partie de la variance de notre jeu de données ( `\(R_{adj}\)` = 0.588), ce qui veut dire que notre modèle est super bon, non?
+
+???
+
+Nous pouvons utiliser la commande `gam()` de la librairie `mgcv` pour modéliser une régression par les moindres carrés. Nous verrons plus loin comment utiliser `gam()` pour spécifier un terme lissé et non linéaire.
+
+---
+# Modèle Additif Généralisé (GAM)
+
+Voyons comment notre modèle cadre avec les données:
+
+
+```r
+data_plot &lt;- ggplot(data = isit2, aes(y = Sources, x = SampleDepth)) + 
+  geom_point() +
+  geom_line(aes(y = fitted(linear_model)),
+            colour = "red", size = 1.2) + 
+  theme_bw()
 data_plot
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-5-1.png" width="432" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-6-1.png" width="432" style="display: block; margin: auto;" /&gt;
+
+???
+
+Les suppositions de la régression linéaire sont-elles satisfaites dans ce cas? Comme vous l'avez peut-être remarqué, nous ne respectons pas les conditions du modèle linéaire:
+
+1.  Il existe une forte relation _non linéaire_ entre `Sources` et `SampleDepth`.
+2.  L'erreur n'est _pas_ normalement distribuée.
+3.  La variance de l'erreur n'est _pas_ homoscédastique.
+4.  Les erreurs ne sont _pas_ indépendantes les unes des autres.
 
 ---
 exclude:true
@@ -223,7 +277,7 @@ Si nous modélisions cette relation par une régression linéaire, les résultat
 
 
 ---
-# GAM
+# Modèles Additifs Généralisés (GAMs)
 
 **Relation entre la variable réponse et le prédicteur**
 
@@ -238,12 +292,22 @@ Un des grands avantages d'utiliser un GAM est que la forme optimale de la non-li
 
 ???
 
-- Au sens strict, les équations concernent un GAM gaussien avec lien d'identité, qui est aussi appelé "modèle additif" (sans "généralisé").
+Au sens strict, les équations concernent un GAM gaussien avec lien d'identité, qui est aussi appelé "modèle additif" (sans "généralisé").
+
+Étant donné que la fonction de lissage `\(f(x_i)\)` est non linéaire et
+locale, l'ampleur de l'effet de la variable explicative peut varier en
+fonction de la relation entre la variable et la réponse. 
+
+Autrement dit, contrairement à un coefficient fixe `\(\beta x_i\)`, la fonction `\(f\)`
+peut changer tout au long du gradient `\(x_i\)`. Le degré de lissage de `\(f\)`
+est contrôlée en utilisant une régression pénalisée qui est déterminée
+automatiquement à l'aide d'une méthode de validation croisée
+généralisée (GCV) de la librairie `mgcv`.
 
 ---
-#GAM
-Essayons de modéliser les données à l'aide d'une fonction de lissage `s(x)` avec `mgcv::gam()`
+# Modèles Additifs Généralisés (GAMs)
 
+Essayons de modéliser les données à l'aide d'une fonction de lissage `s(x)` avec `mgcv::gam()`
 
 
 ```r
@@ -273,12 +337,22 @@ gam_model &lt;- gam(Sources ~ s(SampleDepth), data = isit2)
 ...
 ```
 
----
-#GAM
+???
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-11-1.png" width="432" style="display: block; margin: auto;" /&gt;
+Nous pouvons essayer de construire un modèle plus approprié en ajustant les données avec un terme lissé (non-linéaire). Dans `mgcv::gam()`, les termes lissés sont spécifiés par des expressions de la forme `s(x)`, où `\(x\)` est la variable prédictive non linéaire que nous voulons lisser. Dans ce cas, nous voulons appliquer une fonction de lissage à `SampleDepth`.
+
+La variance expliquée par notre modèle a augmenté de plus de 20% ($R_{adj}$ = 0.81)!
+
+---
+# Modèles Additifs Généralisés (GAMs)
+
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-12-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 Note: contrairement à un coefficient fixe `\(\beta\)`, la fonction de lissage peut changer tout au long du gradient `\(x\)`.
+
+???
+
+Lorsque nous comparons l'ajustement des modèles linéaire (rouge) et non linéaire (bleu), il est clair que ce dernier cadre mieux avec nos données
 
 ---
 exclude:true
@@ -315,33 +389,40 @@ exclude:true
 ---
 # GAM
 
-La librairie `mgcv` comprend également une fonction plot qui, par défaut, nous permet de visualiser la non-linéarité du modèle :
+La librairie `mgcv` comprend également une fonction `plot` qui, par
+défaut, nous permet de visualiser la non-linéarité du modèle.
 
 
 ```r
 plot(gam_model)
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-15-1.png" width="396" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-16-1.png" width="468" style="display: block; margin: auto;" /&gt;
 
 ---
 # Test de linéarité avec GAM
 
-Nous pouvons utiliser les fonctions `gam()` et `AIC()` pour tester formellement si une hypothèse de linéarité est justifiée. Nous devons simplement le configurer de sorte que notre modèle non-linéaire soit emboîté dans notre modèle linéaire.
+Comment tester si le modèle non linéaire offre une amélioration significative par rapport au modèle linéaire?
+
+On peut utiliser `gam()` et `AIC()` pour comparer la performance d'un modèle linéaire contenant `x` comme prédicteur linéaire à la performance d'un modèle non linéaire contenant `s(x)` comme prédicteur lisse. 
 
 
 ```r
-linear_model &lt;- gam(Sources ~ SampleDepth, data = isit2) # fit a regular linear model using gam()
-nested_gam_model &lt;- gam(Sources ~ s(SampleDepth), data = isit2)
-AIC(linear_model, nested_gam_model)
-#                        df      AIC
-# linear_model      3.00000 3143.720
-# nested_gam_model 10.90825 2801.451
+linear_model &lt;- gam(Sources ~ SampleDepth, data = isit2)
+smooth_model &lt;- gam(Sources ~ s(SampleDepth), data = isit2)
+AIC(linear_model, smooth_model)
+#                    df      AIC
+# linear_model  3.00000 3143.720
+# smooth_model 10.90825 2801.451
 ```
 
-**Le modèle linéaire à une valeur de AIC plus élevé, donc l'hypothèse de linéarité n'est pas acceptée.**
+Ici, l'AIC du GAM lissé est plus bas, ce qui indique que l'ajout d'une fonction de lissage améliore la performance du modèle. _La linéarité n'est donc pas soutenue par nos données._
 
-.comment[Noté que le modèle `y ~ s(x)` est emboité dans  `y ~ x`.]
+???
+
+En d'autres termes, on demande si l'ajout d'une fonction lisse au modèle linéaire améliore l'ajustement du modèle à nos données.
+
+Pour expliquer brièvement, le critère d'information d'Akaike (AIC) est une mesure comparative de la performance d'un modèle, où des valeurs plus basses indiquent qu'un modèle est "plus performant" par rapport aux autres modèles considérés.
 
 ---
 exclude:true
@@ -372,70 +453,103 @@ anova(linear_model, nested_gam_model, test = "Chisq")
 ---
 # Défi 1 ![:cube]()
 
-Nous allons maintenant essayer cela avec les données du de la saison 1.
+Essayons maintenant de déterminer si les données enregistrées lors de la première saison doivent être modélisées par une régression linéaire ou par un modèle additif. 
+
+Répétons le test de comparaison avec `gam()` et `AIC()` en utilisant les données de la première saison seulement:
 
 
 ```r
-isit1 &lt;- subset(isit, Season==1)
+isit1 &lt;- subset(isit, Season == 1)
 ```
-
 
 1. Ajustez un modèle linéaire et un GAM à la relation entre `Sources` et `SampleDepth`.
 2. Déterminez si l'hypothèse de linéarité est justifiée pour ces données.
-3. Quels sont les degrés de liberté effectifs du terme non-linéaire ?
+3. Quels sont les degrés de liberté effectifs du terme non-linéaire?
 
+???
 
-&lt;!-- nous n'Avons pas encore parler du **edf** --&gt;
+Nous n'avons pas encore discuté des degrés de liberté effectifs (**EDF**), mais ils sont un outil clé pour nous aider à interpréter l'ajustement d'un GAM. Gardez ce terme en tête. Plus sur ce sujet dans les prochaines sections!
+
 ---
 # Défi 1 - Solution ![:cube]()
+
+__1.__ Ajustez un modèle linéaire et un GAM à la relation entre `Sources` et `SampleDepth`.
 
 
 ```r
 linear_model_s1 &lt;- gam(Sources ~ SampleDepth, data = isit1)
-gam_model_s1 &lt;- gam(Sources ~ s(SampleDepth), data = isit1)
+smooth_model_s1 &lt;- gam(Sources ~ s(SampleDepth), data = isit1)
 ```
 
 ---
 # Défi 1 - Solution ![:cube]()
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-21-1.png" width="432" style="display: block; margin: auto;" /&gt;
+__2.__ Déterminez si l'hypothèse de linéarité est justifiée pour ces données.
 
----
-# Défi 1 - Solution ![:cube]()
+Comme ci-dessus, la visualisation de la courbe du modèle sur notre ensemble de données est une excellente première étape pour déterminer si notre modèle est bien conçu.
 
 
 ```r
-linear_model_s1 &lt;- gam(Sources ~ SampleDepth, data = isit1)
-nested_gam_model_s1 &lt;- gam(Sources ~ s(SampleDepth) + SampleDepth,data = isit1)
-
-AIC(linear_model_s1, nested_gam_model_s1)
-#                           df      AIC
-# linear_model_s1     3.000000 2324.905
-# nested_gam_model_s1 9.644938 2121.249
+ggplot(isit1, aes(x = SampleDepth, y = Sources)) +
+  geom_point() +
+  geom_line(colour = "red", size = 1.2,
+            aes(y = fitted(linear_model_s1))) +
+  geom_line(colour = "blue", size = 1.2,
+            aes(y = fitted(smooth_model_s1))) +
+  theme_bw()
 ```
 
+---
+# Défi 1 - Solution ![:cube]()
+
+__2.__ Déterminez si l'hypothèse de linéarité est justifiée pour ces données.
+
+Comme ci-dessus, la visualisation de la courbe du modèle sur notre ensemble de données est une excellente première étape pour déterminer si notre modèle est bien conçu.
+
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-23-1.png" width="432" style="display: block; margin: auto;" /&gt;
+
 
 ---
 # Défi 1 - Solution ![:cube]()
 
+On peut compléter cela par une comparaison quantitative des performances du modèle en utilisant `AIC()`.
+
 
 ```r
-nested_gam_model_s1
+AIC(linear_model_s1, smooth_model_s1)
+#                       df      AIC
+# linear_model_s1 3.000000 2324.905
+# smooth_model_s1 9.644938 2121.249
+```
+
+&gt; Le score AIC moins élevé indique que le modèle lissé est plus performant que le modèle linéaire, ce qui confirme que la linéarité n'est pas appropriée pour notre ensemble de données.
+
+---
+# Défi 1 - Solution ![:cube]()
+
+__3.__ Quels sont les degrés de liberté effectifs du terme non-linéaire?
+
+Pour obtenir les degrés de liberté effectifs, il suffit d'imprimer notre objet du modèle:
+
+
+```r
+smooth_model_s1
 # 
 # Family: gaussian 
 # Link function: identity 
 # 
 # Formula:
-# Sources ~ s(SampleDepth) + SampleDepth
+# Sources ~ s(SampleDepth)
 # 
 # Estimated degrees of freedom:
-# 7.44  total = 8.64 
+# 7.64  total = 8.64 
 # 
-# GCV score: 32.13946     rank: 10/11
+# GCV score: 32.13946
 ```
 
+Les degrés de liberté effectifs (EDF) sont &gt;&gt; 1. 
 
-**Réponse** Oui, la non-linéarité est justifiée. Les degrés de liberté effectifs (**EDF**) sont &gt;&gt; 1 (on reviendra la dessus bientôt).
+&gt; Gardez cela à l'esprit, car nous reviendrons bientôt sur les EDF!
 
 ---
 exclude:true
@@ -493,6 +607,11 @@ nested_gam_model_test
 **Réponse** Oui la non-linéarité est justifiée. Les degrés de liberté effectifs (**EDF**) sont &gt;&gt; 1 (on reviendra la dessus bientôt).
 
 ---
+class: inverse, center, middle
+
+## 3. Le fonctionnement des GAMs
+
+---
 # Le fonctionnement des GAMs
 
 Nous allons maintenant prendre quelques minutes pour regarder comment fonctionnent les GAMs. Commençons en considérant d'abord un modèle qui contient une fonction lisse `\(f\)` d'une covariable, `\(x\)` :
@@ -504,7 +623,7 @@ Pour estimer la fonction `\(f\)`, nous avons besoin de représenter l'équation 
 `$$f(x) = \sum_{j=1}^q b_j(x) \times \beta_j$$`
 
 ---
-# Exemple : une base polynomiale
+# Exemple: une base polynomiale
 
 Supposons que `\(f\)` est considérée comme un polynôme d'ordre 4, de sorte que l'espace des polynômes d'ordre 4 et moins contient `\(f\)`. Une base de cet espace serait alors :
 
@@ -519,7 +638,7 @@ Alors `\(f(x)\)` devient :
 `$$y_i = \beta_0 + x_i\beta_1 +  x^2_i\beta_2 + x^3_i\beta_3 + x^4_i\beta_4 + \epsilon_i$$`
 
 ---
-# Exemple : une base polynomiale
+# Exemple: une base polynomiale
 
 Chaque fonction de base est multipliée par un paramètre à valeur réelle, `\(\beta_j\)`, et est ensuite additionnée pour donner la &lt;font color="orange"&gt;courbe finale `\(f(x)\)`&lt;/font&gt;.
 
@@ -530,7 +649,7 @@ Chaque fonction de base est multipliée par un paramètre à valeur réelle, `\(
 En faisant varier le coefficient `\(\beta_j\)`, on peut faire varier la forme de `\(f(x)\)` pour produire une fonction polynomiale d'ordre 4 ou moins.
 
 ---
-# Exemple : une base de spline cubique
+# Exemple: une base de spline cubique
 
 Un spline cubique est une courbe construite à partir de sections d'un polynôme cubique reliées entre elles de sorte qu'elles sont continues en valeur. Chaque section du spline a des coefficients différents.
 
@@ -539,7 +658,7 @@ Un spline cubique est une courbe construite à partir de sections d'un polynôme
 ]
 
 ---
-# Exemple : une base de spline cubique
+# Exemple: une base de spline cubique
 
 Voici une représentation d'une fonction lisse utilisant une base de régression spline cubique de rang 5 avec des nœuds situés à incréments de 0.2:
 
@@ -601,40 +720,43 @@ exclude:true
 
 
 ---
+
 class: inverse, center, middle
 
-## 3. GAM avec plusieurs termes non-linéaires
+## 4. GAM avec plusieurs termes non-linéaires
+
 ---
-# GAM à plusieurs variables
+
+# GAM à variables linéaires et non linéaires
 
 Avec les GAMs, il est facile d'ajouter des termes non linéaires et linéaires dans un seul modèle, plusieurs termes non linéaires ou même des interactions non linéaires.
 
-Dans cette section, nous allons utiliser les données de `ISIT` de nouveau.
+Dans cette section, nous allons utiliser les données de `ISIT` de nouveau. Nous allons essayer de modéliser la réponse `Sources` avec les prédicteurs `Season` and `SampleDepth` simultanément.
+
+Tout d'abord, nous devons convertir notre prédicteur qualitatif (`Season`) en facteur.
 
 
 ```r
-isit
+head(isit)
 isit$Season &lt;- as.factor(isit$Season)
 ```
 
-Nous allons essayer de modéliser la réponse `Sources` avec les prédicteurs `Season` and `SampleDepth` simultanément.
+???
 
-.comment[La variable `Season` doit etre convertie en facteur]
+Rappelez-vous de ce jeu de données présenté dans les sections précédentes? Le jeu de données ISIT est composé des niveaux de bioluminescence (`Sources`) en fonction de la profondeur, des saisons et des différentes stations.
 
 ---
-# GAM à plusieurs variables
+# GAM à variables linéaires et non linéaires
 
 Commençons par un modèle de base comprenant un terme non linéaire (`SampleDepth`) et un facteur qualitatif (`Season` avec 2 niveaux).
 
 
-
 ```r
-isit$Season &lt;- as.factor(isit$Season)
 basic_model &lt;- gam(Sources ~ Season + s(SampleDepth), data = isit, method = "REML")
 basic_summary &lt;- summary(basic_model)
 ```
 
-La sortie de `p.table` donne des informations sur les termes paramétriques :
+Le tableau `p.table` donne des informations sur les termes linéaires:
 
 
 ```r
@@ -644,7 +766,7 @@ basic_summary$p.table
 # Season2     6.156130  0.4825491 12.75752 5.525673e-34
 ```
 
-Le tableau `s.table` nous donne donne des informations sur le terme non linéaire :
+Le tableau `s.table` nous donne donne des informations sur le terme non linéaire:
 
 
 ```r
@@ -652,7 +774,6 @@ basic_summary$s.table
 #                     edf   Ref.df        F p-value
 # s(SampleDepth) 8.706426 8.975172 184.3583       0
 ```
-
 
 ---
 exclude:true
@@ -691,18 +812,23 @@ Le tableau `s.table` nous donne les résultats du terme non linéaire.
 ]
 
 ---
-# GAM à plusieurs variables
+# GAM à variables linéaires et non linéaires
+
+Que nous montrent ces graphiques sur la relation entre la bioluminescence, la profondeur de l'échantillon et les saisons?
 
 
 ```r
-plot(basic_model, all.terms = TRUE,page = 1)
+par(mfrow = c(1,2))
+plot(basic_model, all.terms = TRUE)
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-35-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-36-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
---
+???
 
-Entre les saisons, il y a une différence marquée dans la bioluminescence.
+La bioluminescence varie de manière non-linéaire sur le gradient `SampleDepth`, avec des niveaux de bioluminescence les plus élevés à la surface, suivis d'un second maximum plus petit, juste au-dessus d'une profondeur de 1500, avec des niveaux décroissants à des profondeurs plus basses.
+
+Il y a également une différence prononcée dans la bioluminescence entre les saisons, avec des niveaux élevés pendant la saison 2, par rapport à la saison 1.
 
 ---
 # Degrés de liberté effectifs (EDF)
@@ -714,38 +840,42 @@ basic_summary$s.table
 # s(SampleDepth) 8.706426 8.975172 184.3583       0
 ```
 
-Les `edf` indiqués dans le tableau `s.table` correspond aux **degrés de liberté effectifs** de la fonction lisse -– essentiellement, plus d'**EDF**, plus la non-linéarité est forte.
+Les `edf` indiqués dans le `s.table` sont les **degrés effectifs de liberté** (EDF) du terme lisse `s(SampleDepth)`.Plus le nombre de degrés de liberté est élevé, plus la courbe est complexe et ondulée.
 
 - Une valeur proche de 1 se rapproche d'un terme linéaire.
 
-- Une valeur elevée signifie que la courbe est non-linéaire.
+- Une valeur elevée signifie que la courbe est plus ondulé, ou en d'autres termes, plus non-linéaire.
 
 &gt; Dans notre modèle de base, les **EDF** du terme non-linéaire `s(SampleDepth)` sont ~9, ce qui suggère une courbe fortement non-linéaire.
 
 ---
 # Degrés de liberté effectifs (EDF)
 
-Les **EDF** dans un GAM sont estimés différemment des degrés de liberté dans une régression linéaire.
+Les degrés de liberté effectifs nous donnent beaucoup d'informations sur la relation entre les prédicteurs du modèle et les variables de réponse. 
+
+&gt; Vous reconnaissez peut-être le terme "degrés de liberté" suite à des ateliers précédents sur les modèles linéaires, mais attention! Les degrés de liberté effectifs d'un GAM sont estimés différemment des degrés de liberté d'une régression linéaire, et sont interprétés différemment.
 
 Dans la régression linéaire, les degrés de liberté du *modèle* sont équivalents au nombre de paramètres libres non redondants, `\(p\)`, dans le modèle (et les degrés de liberté *résiduels* sont égaux à `\(n-p\)`).
 
-Parce que le nombre de paramètres libres des splines de lissage (tel que les GAMs) est souvent difficile à définir, les **EDF** sont liés à `\(\lambda\)`, où l'effet de la pénalité est de réduire les degrés de liberté.
+Parce que le nombre de paramètres libres des fonctions de lissage est souvent difficile à définir, les **EDF** sont liés à `\(\lambda\)`, où l'effet de la pénalité est de réduire les degrés de liberté.
+
+???
+
+Revenons sur le concept de degrés de liberté effectifs (EDF). (Rappel: Défi 1)
 
 ---
 
-# Dimensions de base et EDF
+# Degrés de liberté effectifs (EDF) et k
 
 La limite supérieure d'**EDF** est déterminée par les dimensions de base `\(k\)` de la fonction lisse (les **EDF** ne peut pas dépasser `\(k-1\)`)
 
 En pratique, le choix exact de `\(k\)` est arbitraire, mais il devrait être **suffisamment grand** pour permettre une fonction lisse suffisamment complexe.
 
-Nous discuterons du choix de `\(k\)` dans la section 5.
+Nous discuterons du choix de `\(k\)` dans les sections qui suivent.
 
 ---
 
 # GAM à plusieurs variables linéaires et lisses
-
-Nous pouvons ajouter un second terme, `RelativeDepth`, mais spécifier une relation linéaire avec `Sources`
 
 
 ```r
@@ -754,7 +884,7 @@ two_term_model &lt;- gam(Sources ~ Season + s(SampleDepth) + RelativeDepth,
 two_term_summary &lt;- summary(two_term_model)
 ```
 
-Informations sur les effets paramétriques (termes linéaires) :
+Informations sur les effets paramétriques (termes linéaires):
 
 
 ```r
@@ -765,7 +895,7 @@ two_term_summary$p.table
 # RelativeDepth -0.001401908 0.0002968443 -4.722705 2.761048e-06
 ```
 
-Informations sur les effets additifs (termes non linéaires) :
+Informations sur les effets additifs (termes non linéaires):
 
 
 ```r
@@ -774,24 +904,30 @@ two_term_summary$s.table
 # s(SampleDepth) 8.699146 8.97396 132.4801       0
 ```
 
+
+???
+
+L'estimation du coefficient de régression pour ce nouveau terme linéaire, `RelativeDepth`, sera présenté dans le tableau `p.table`. Rappelez-vous, le tableau `p.table` montre des informations sur les effets paramétriques (termes linéaires).
+
+Dans `s.table`, nous trouverons encore une fois le terme non-linéaire, `s(SampleDepth)`, et son paramètre de courbure (`edf`). Rappelez-vous, le tableau `s.table` montre des informations sur les effets additifs (termes non-linéaires).
+
 ---
 
-# GAM à plusieurs variables
-
-Nous pouvons ajouter un second terme, `RelativeDepth`, mais spécifier une relation linéaire avec `Sources`
+# GAM à plusieurs variables linéaires et lisses
 
 
 ```r
-plot(two_term_model, page=1, all.terms = T)
+par(mfrow = c(2,2))
+plot(two_term_model, all.terms = TRUE)
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-40-1.png" width="720" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-41-1.png" width="720" style="display: block; margin: auto;" /&gt;
 
 ---
-# GAM à plusieurs variables
 
+# GAM à plusieurs variables non linéaires
 
-Nous pouvons aussi vérifier que la relation entre `Sources` et `RelativeDepth` est non-linéaire.
+Si nous voulons vérifier que la relation entre `Sources` et `RelativeDepth` est non-linéaire, on peut modéliser `RelativeDepth` avec une fonction non-linéaire. 
 
 
 ```r
@@ -820,23 +956,28 @@ two_smooth_summary$s.table
 # s(RelativeDepth) 8.044197 8.749580  19.97476       0
 ```
 
+???
+
 
 ---
-# GAM à plusieurs variables
-
+# GAM à plusieurs variables non linéaires
 
 Nous pouvons aussi vérifier que la relation entre `Sources` et `RelativeDepth` est non-linéaire.
 
 
 ```r
-plot(two_smooth_model, page = 1, all.terms = TRUE)
+par(mfrow = c(2,2))
+plot(two_smooth_model, all.terms = TRUE)
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-44-1.png" width="720" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-45-1.png" width="720" style="display: block; margin: auto;" /&gt;
+
+???
+
+Pensez-vous que la performance de notre modèle est amélioré par l'ajout de ce nouveau terme non-linéaire, pour mieux représenter la relation entre la bioluminescence et la profondeur relative?
 
 ---
-# GAM à plusieurs variables
-
+# GAM à plusieurs variables non linéaires
 
 Comme précédemment, nous pouvons comparer nos modèles avec AIC pour tester si le terme non-linéaire améliore la performance de notre modèle:
 
@@ -849,7 +990,9 @@ AIC(basic_model, two_term_model, two_smooth_model)
 # two_smooth_model 20.46960 5056.841
 ```
 
-.alert[Le meilleur modèle est le modèle avec deux fonctions non linéaires.]
+&gt; On peut voir que `two_smooth_model` a la plus petite valeur AIC. 
+
+Le modèle le mieux ajusté comprend donc deux fonctions non-linéaires pour `SampleDepth` et `RelativeDepth`, et un terme linéaire pour `Season`.
 
 ---
 exclude:true
@@ -905,23 +1048,6 @@ plot(two_smooth_model, page = 1, all.terms = TRUE)
 ```
 
 ---
-exclude:true
-# GAM à plusieurs variables
-
-Comme avant, nous pouvons faire une AIC pour tester si le terme non-linéaire est nécessaire
-
-
-```r
-AIC(basic_model, two_term_model, two_smooth_model)
-```
-
---
-
-On peut voir que `two_smooth_model` a la plus petite valeur AIC.
-
-.alert[Le modèle le mieux ajusté comprend donc deux fonctions non-linéaires pour `SampleDepth` et `RelativeDepth`, et un terme linéaire pour `Season`.]
-
----
 # Défi 2 ![:cube]()
 
 &lt;br&gt;
@@ -932,7 +1058,7 @@ Pour notre deuxième défi, nous allons développer notre modèle en ajoutant de
 
 2. Est-ce que `Latitude` est un terme important à inclure dans le modèle? La `Latitude` a-t-elle un effet linéaire ou non-linéaire? 
 
-Utilisez des graphiques, les tables des coefficients et la fonction `AIC()` pour répondre à ces questions.
+&gt; Utilisez des graphiques, les tables des coefficients et la fonction `AIC()` pour répondre à ces questions.
 
 
 ---
@@ -970,25 +1096,6 @@ three_smooth_summary &lt;- summary(three_smooth_model)
 __2.__ Est-ce que `Latitude` est un terme important à inclure dans le modèle? 
 
 Commençons par visualiser les 4 effets qui sont maintenant inclus dans chaque modèle. 
----
-# Défi 2 - Solution ![:cube]()
-
-
-```r
-plot(three_term_model, page = 1, all.terms = TRUE)
-```
-
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-53-1.png" width="576" style="display: block; margin: auto;" /&gt;
-
----
-# Défi 2 - Solution ![:cube]()
-
-
-```r
-plot(three_smooth_model, page = 1, all.terms = TRUE)
-```
-
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-55-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 ---
 exclude:true
@@ -1007,10 +1114,11 @@ three_smooth_summary &lt;- summary(three_smooth_model)
 
 
 ```r
-plot(three_smooth_model, page = 1, all.terms = TRUE)
+par(mfrow = c(2,2))
+plot(three_smooth_model, all.terms = TRUE)
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-58-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-54-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 ---
 # Défi 2 - Solution ![:cube]()
@@ -1073,22 +1181,28 @@ Ceci implique que `Latitude` est en effet un prédicteur informatif non-linéair
 ---
 class: inverse, center, middle
 
-## 4. Intéractions
+## 4. Interactions
+
 ---
 # GAM avec des termes d'interaction
+&lt;br&gt;
 
 Il y a deux façons de modéliser une interaction entre deux variables :
+&lt;br&gt;&lt;br&gt;
 
-- pour deux variables non-linéaire : `s(x1, x2)`
-- pour une variable non-linéaire et une variable linéaire (quantitative ou qualitative) : utiliser l'argument `by`, `s(x1, by = x2)`
+- pour __deux variables non-linéaires__ : `s(x1, x2)`
+&lt;br&gt;&lt;br&gt;
+
+- pour __une variable non-linéaire et une variable linéaire__ (quantitative ou qualitative) : utiliser l'argument `by`, `s(x1, by = x2)`
   - Quand `x2` est qualitative, vous avez un terme non linéaire qui varie entre les différents niveaux de `x2`
   - Quand `x2` est quantitative, l'effet linéaire de `x2` varie avec `x1`
   - Quand `x2` est qualitative, le facteur doit être ajouté comme effet principal dans le modèle
 
 ---
-# GAM avec des termes d'interaction
+# Interaction: variables non-linéaire et qualitatif
 
 Nous allons examiner l'effet de l'interaction en utilisant notre variable qualitative `Season` et examiner si la non-linéarité de `s(SampleDepth)` varie selon les différents niveaux de `Season`.
+&lt;br&gt;&lt;br&gt;
 
 
 ```r
@@ -1118,30 +1232,50 @@ summary(factor_interact)$s.table
 ```
 
 ---
-# GAM avec des termes d'interaction
+# Interaction: variables non-linéaire et qualitatif
 
 
 ```r
-plot(factor_interact, page = 1)
+par(mfrow = c(2),2))
+plot(factor_interact)
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-64-1.png" width="720" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-61-1.png" width="576" style="display: block; margin: auto;" /&gt;
+
+???
+
+Les deux graphiques montrent l'effet d'interaction entre notre variable lisse `SampleDepth` et chaque niveau de notre variable factorielle, `Season`. 
+
+Une bonne question pour les participants: Voyez-vous une différence entre les deux courbes?
+
+Les graphiques montrent quelques différences entre la forme des termes lisses entre les deux niveaux de `Season`. La différence la plus notable est le pic dans le deuxième panneau, qui nous indique qu'il y a un effet de `SampleDepth` entre 1000 et 2000 qui est important dans la saison 2, mais qui ne se produit pas dans la saison 1. 
+
+Ceci suggère que l'effet d'interaction pourrait être important à inclure dans notre modèle.
 
 ---
-exclude:true
-# GAM avec des termes d'interaction
+# Interaction: variables non-linéaire et qualitatif
 
-Nous pouvons aussi visualiser notre modèle en 3D avec `vis.gam`, où `theta` est le degré de rotation de notre plan x-y
+Nous pouvons également représenter l'effet d'interaction en 3D sur un seul graphique, en utilisant `vis.gam()`.
 
 
 ```r
-vis.gam(factor_interact, view = c("SampleDepth","Season"), theta = 40, n.grid = 500, border = NA)
+vis.gam(factor_interact, theta = 120, n.grid = 50, lwd = .4)
 ```
 
----
-# GAM avec des termes d'interaction
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-62-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
-Faisons une comparaison de modèle avec AIC pour déterminer si le terme d'interaction est nécessaire
+???
+
+Nous pouvons modifier la rotation de ce graphique en utilisant l'argument `theta`.
+
+Lorsqu'on visualise les termes d'interaction, on observe des différences dans la forme du lissage de `SampleDepth` entre les deux niveaux de `Season`. Ceci suggère que l'effet d'interaction pourrait être important à inclure dans notre modèle.
+
+---
+# Interaction: variables non-linéaire et qualitatif
+
+Ces graphiques suggèrent que l'effet d'interaction pourrait être important à inclure dans notre modèle.
+
+On peut faire une comparaison de modèles en utilisant l'AIC pour déterminer si le terme d'interaction améliore la performance de notre modèle.
 
 
 ```r
@@ -1151,12 +1285,16 @@ AIC(two_smooth_model, factor_interact)
 # factor_interact  26.99693 4878.631
 ```
 
-À partir des graphiques, on voit que les formes des termes non-linéaires sont comparables parmi les 2 niveaux de `Season`. L'AIC confirme cela aussi.
+L'AIC de notre modèle avec une interaction factorielle entre la variable non-linéair `SampleDepth` et le `Season` a un score AIC plus bas.
+
+--
+
+&gt; Ensemble, l'AIC et les graphiques confirment que l'inclusion de cette interaction améliore la performance de notre modèle.
 
 ---
-# GAM avec des termes d'interaction
+# Interaction entre variables non linéaires
 
-Finalement, nous regardons les interactions entre 2 termes non linéaires, `SampleDepth` et `RelativeDepth`.
+Finalement, nous regardons les interactions entre deux termes non linéaires, `SampleDepth` et `RelativeDepth`.
 
 
 ```r
@@ -1169,23 +1307,34 @@ summary(smooth_interact)$s.table
 
 --
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-68-1.png" width="504" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-65-1.png" width="504" style="display: block; margin: auto;" /&gt;
 
 
 ---
 
-# GAM avec des termes d'interaction
+# Interaction entre variables non linéaires
 
 
 ```r
-vis.gam(smooth_interact, view = c("SampleDepth", "RelativeDepth"),
-        cond = list(Season = 1), theta=40, n.grid = 50, color = "cm")
+vis.gam(smooth_interact,  view = c("SampleDepth", "RelativeDepth"), 
+        theta = 50, n.grid = 50, lwd = .4)
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-69-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-66-1.png" width="576" style="display: block; margin: auto;" /&gt;
+
+???
+
+Les graphiques illustrent une interaction non linéaire, où `Sources` est plus faible à des valeurs élevées de `SampleDepth` et `RelativeDepth`, mais augmente avec `RelativeDepth` alors que `SampleDepth` est faible.
+
+Rappelez-vous, ce graphique peut être réorienté en changeant la valeur de l'argument `theta`.
+On peut changer la couleur du graphique 3D en utilisant l'argument `color`. Essayez de spécifier `color = "cm"` dans `vis.gam()` ci-dessus, et consultez `?vis.gam` pour plus d'options de couleurs.
 
 ---
-# GAM avec des termes d'interaction
+# Interaction entre variables non linéaires
+
+Ainsi, il semble y avoir un effet d'interaction entre ces termes non linéaires. 
+
+Est-ce que l'inclusion de l'interaction entre `s(SampleDepth)` et `s(RelativeDepth)` améliore notre modèle `two_smooth_model`?
 
 
 ```r
@@ -1195,7 +1344,9 @@ AIC(two_smooth_model, smooth_interact)
 # smooth_interact  30.33625 4943.890
 ```
 
-Le modèle avec l'intéraction entre `s(SampleDepth)` et `s(RelativeDepth)` a une plus petite valeur d'AIC et le graphique en 2D illustre bien cette intéraction non-linéaire, où `Sources` est faible pour de fortes valeurs de `SampleDepth` mais élevé pour de moyennes à hautes  valeurs de `RelativeDepth`.
+Le modèle avec l'intéraction entre `s(SampleDepth)` et `s(RelativeDepth)` a une plus petite valeur d'AIC.
+
+&gt; L'inclusion de cette interaction améliore la performance de notre modèle, et donc notre capacité à comprendre les déterminants de la bioluminescence.
 
 ---
 class: inverse, center, middle
@@ -1209,9 +1360,9 @@ class: inverse, center, middle
 
 Le modèle additif de base peut être étendu de plusieurs façons :
 
-1. Utiliser d'autres distributions pour la variable de réponse avec l'argument `family` (comme dans un GLM),
-2. Utiliser de différents types de fonctions de base,
-3. Utilisation de différents types d'effets aléatoires pour ajuster des modèles à effets mixtes.
+1. Utiliser d'autres __distributions__ pour la variable de réponse avec l'argument `family` (comme dans un GLM),
+2. Utiliser de différents types de __fonctions de base__,
+3. Utilisation de différents types d'__effets aléatoires__ pour ajuster des modèles à effets mixtes.
 
 
 Nous allons maintenant examiner ces aspects.
@@ -1226,8 +1377,8 @@ Jusqu'à présent, nous avons utilisé des modèles additifs simples (gaussiens)
 --
 
 Mais que pouvons-nous faire si :
-- les observations de la variable de réponse ne **suivent pas une distribution normale** ?
-- la **variance n'est pas constante** ? (hétéroscédasticité)
+- les observations de la variable de réponse ne **suivent pas une distribution Normale**?
+- la **variance n'est pas constante**? (hétéroscédasticité)
 
 --
 
@@ -1239,8 +1390,7 @@ Tout comme les modèles linéaires généralisés (GLM), nous pouvons formuler d
 
 # Modèle additif généralisé
 
-
-Rappelons le modèle d'interaction pour les données de bioluminescence :
+Revenons au modèle d'interaction pour les données de bioluminescence :
 
 
 ```r
@@ -1263,7 +1413,7 @@ summary(smooth_interact)$s.table
 
 Comme pour un GLM, il est essentiel de vérifier si nous avons correctement spécifié le modèle, en particulier la *distribution* de la réponse.
 
-**Il faut vérifier :**
+Il faut vérifier:
 
 1. Le choix des dimensions de base `k`.
 2. Les tracés des résidus (comme pour un GLM).
@@ -1279,31 +1429,57 @@ Fonctions incluses dans `mgcv` :
 
 
 ---
+# Validation GAM: choisir `\(k\)` dimensions de base
 
-# Validation d'un GAM
+Vous vous rappelez du paramètre de lissage `\(\lambda\)` qui restreint les _ondulations_ de nos fonctions de lissage? 
 
-##### Première étape :
+Cette _ondulation_ est également contrôlé par la dimension de base `\(k\)`, qui définit le nombre de fonctions de base utilisées pour créer une fonction lisse.
 
-Avons-nous choisi `k` assez grand ?
+Plus le nombre de fonctions de base utilisées pour construire une fonction lisse est élevé, plus la fonction lisse est "ondulée":
 
-.comment[Le défaut pour les interactions lisses est `k = 30`].
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-69-1.png" width="720" style="display: block; margin: auto;" /&gt;
+
+???
+
+Dans les section précédents, nous avons discuté du rôle du paramètre de lissage `\(\lambda\)` pour contrôler les _ondulations_ de nos fonctions de lissage. Cette _ondulation_ est également contrôlé par la dimension de base `\(k\)`, qui définit le nombre de fonctions de base utilisées pour créer une fonction lisse.
+
+Chaque fonction lisse dans un GAM est essentiellement la somme pondérée de nombreuses fonctions plus petites, appelées fonctions de base. Plus le nombre de fonctions de base utilisées pour construire une fonction lisse est élevé, plus la fonction lisse est "ondulée". Comme vous pouvez le voir ci-dessous, une fonction lisse avec une petite dimension de base de `\(k\)` sera moins ondulée qu'une fonction lisse avec une grande dimension de base de `\(k\)`.
+
+---
+# Validation GAM: choisir `\(k\)` dimensions de base
+
+La clé pour obtenir un bon ajustement du modèle consiste à __équilibrer__ le compromis entre deux éléments:
+
++ Le paramètre de lissage `\(\lambda\)`, qui _pénalise les _ondulations_ ;
++ La dimension de base `\(k\)`, qui permet plus de _flexibilité_ au modèle (plus d'ondulations) en fonction de nos données.
+
+Avons-nous optimisé le compromis entre le lissage ( `\(\lambda\)` ) et la flexibilité ( `\(k\)` ) dans notre modèle?
+
+En d'autres mots, est-ce que le `k` est assez grand?
 
 
 ```r
 k.check(smooth_interact)
 #                              k'      edf   k-index p-value
-# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883  0.0575
+# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883  0.0675
 ```
 
 --
 
-Les **EDF se rapprochent beaucoup de** `k`, cela pourrait être problématique.
+Les **EDF se rapprochent beaucoup de** `k`, donc la _flexibilité_ du modèle est trop restreinte par le `k` utilisé par défaut. En d'autres mots, .alert[nous n'avons pas un compromis équilibré entre le lissage et l'ondulation du modèle].
+
+???
+
+Ici, on se demande essentiellement: Est-ce que notre module est assez flexible? 
+
+On n'a pas encore spécifié de valeur `\(k\)` dans notre modèle, mais `gam()` définit un `\(k\)` par défaut en fonction du nombre de variables sur lequel la fonction lisse est construite.
+
+Les **EDF se rapprochent beaucoup de** `k`. Ceci signifie que la _flexibilité_ du modèle est restreint par le `k` utilisé par défaut, et que notre modèle pourrait mieux s'ajuster aux données si on permettait plus d'ondulations. En d'autres mots, nousn n'avons pas un compromis équilibré entre le lissage et l'ondulation du modèle.
 
 ---
+# Validation GAM: choisir `\(k\)` dimensions de base
 
-# Validation d'un GAM
-
-Refaisons le modèle avec un `k` plus grand :
+Recommençons le modèle avec un `k` plus élevé:
 
 
 ```r
@@ -1320,64 +1496,69 @@ summary(smooth_interact_k60)$s.table
 
 --
 
-Est-ce que `k` est assez grand ?
+Est-ce que `k` est assez grand maintenant?
 
 
 ```r
 k.check(smooth_interact_k60)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626  0.8925
+# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626    0.89
 ```
 
 --
 
-C'est mieux, remplaçons l'ancien modèle :
+Les EDF sont beaucoup plus petits que `k`. On peut remplacer notre modèle avec cette version plus flexible:
 
 
 ```r
 smooth_interact &lt;- smooth_interact_k60
 ```
 
+???
+
+Les EDF sont beaucoup plus petits que `k`, donc notre modèle s'adjuste mieux aux données avec plus d'ondulations. On peut donc remplacer notre modèle avec cette version plus flexible.
+
 ---
+# Validation GAM: Choisir une autre distribution
 
-# Validation d'un GAM
+Comme pour tout modèle Normal, nous devons vérifier certaines conditions avant de continuer. 
 
-##### Deuxième étape :
-
-Regardons les tracés des résidus, en utilisant `gam.check()` :
+On peut visualiser les résidus du modèle avec `gam.check()`:
 
 
 ```r
-par(mfrow = c(2,2)) # Afficher les 4 tracés à la fois
+par(mfrow = c(2,2))
 gam.check(smooth_interact)
 ```
 
 .comment[En plus des graphiques, `gam.check()` fournit également la sortie de `k.check()`].
 
+???
+
+Rappel: Nous pouvons évaluer la distribution des résidus du modèle pour vérifier ces conditions, tout comme nous le ferions pour un GLM (voir [Atelier 6](https://r.qcbs.ca/fr/workshops/r-workshop-06/)).
+
 ---
+# Validation GAM: Choisir une autre distribution
 
-# Validation d'un GAM
-
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-77-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-75-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 --
 &lt;br&gt;
 
-.alert[Hétéroscédasticité marquée et tendances dans les résidus]
-
+.alert[Hétéroscédasticité marquée et points extrêmes dans les résidus]
 
 ???
 
 - Ces tracés sont un peu différents de ceux produits par `plot` pour un modèle linéaire (par exemple, pas de tracé de levier).
-- Les participants devraient déjà être familiarisés avec les graphiques de résidus (ils sont expliqués plus en détail dans les ateliers 4 et 6).
-- Problème : hétéroscédasticité, visible dans "residuals vs. linear predictor".
-- Autre problème : quelques observations extrêmes(visibles dans le tracé QQ, et "response vs. fitted").
 
+- Les participants devraient déjà être familiarisés avec les graphiques de résidus (ils sont expliqués plus en détail dans les [Atelier 4](https://r.qcbs.ca/fr/workshops/r-workshop-04/) et [Atelier 6](https://r.qcbs.ca/fr/workshops/r-workshop-06/).
+
+La visualisation des résidus met quelques problèmes en évidence:
+- Figure 2: La variance des erreurs n'est pas constante (hétéroscédasticité).
+- Figures 1 et 4: Quelques observations extrêmes.
 
 ---
-
-# Autres distributions
-
+# Validation GAM: Choisir une autre distribution
 
 Pour notre modèle d'interaction, nous avons besoin d'une distribution de probabilité qui permet à la **variance d'augmenter avec la moyenne**.
 
@@ -1399,7 +1580,6 @@ Pour en savoir plus sur les familles disponibles dans `mgcv` :
 ?family.mgcv
 ```
 
-
 ---
 
 # Défi 3 ![:cube]()
@@ -1412,25 +1592,21 @@ Pour en savoir plus sur les familles disponibles dans `mgcv` :
 
 &lt;br&gt;
 
-.comment[Indice :]
+.comment[Indice:]
 
 
 ```r
-# Distribution normale
+# Voici comment nous écririons le modèle pour spécifier la distribution normale :
 smooth_interact &lt;- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60),
-                          data = isit, method = "REML")
-# Tweedie avec log comme fonction de liaison
-smooth_interact_tw &lt;- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60),
-                          family = tw(link = "log"),
-                          data = isit, method = "REML")
+                       family = gaussian(link = "identity"),
+                       data = isit, method = "REML")
 ```
 
 
 ---
-
 # Défi 3 - Solution ![:cube]()
 
-Ajuster le modèle :
+__1.__ Premièrement, construisons un nouveau modèle avec une distribution *Tweedie* un lien `log`.
 
 
 ```r
@@ -1446,21 +1622,26 @@ summary(smooth_interact_tw)$s.table
 # s(SampleDepth,RelativeDepth) 43.23949 51.57139 116.9236       0
 ```
 
---
+---
+# Défi 3 - Solution ![:cube]()
 
-Vérifier les dimensions de base :
+__2.__ Vérifier le choix de `k` et la visualisation des résidus pour le nouveau modèle.
+
+Ensuite, on devrait vérifier le choix des dimensions de bases `k`:
+
 
 ```r
 k.check(smooth_interact_tw)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062  0.8425
+# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062  0.8375
 ```
 
----
+On a un équilibre entre `\(k\)` et les EDF. Super!
 
+---
 # Défi 3 - Solution ![:cube]()
 
-Tracés des résidus :
+Ensuite la visualisation des résidus, pour valider la distribution Tweedie:
 
 
 ```r
@@ -1468,18 +1649,17 @@ par(mfrow=c(2,2))
 gam.check(smooth_interact_tw)
 ```
 
-
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-83-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-81-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 
 ???
-- Les résidus semblent meilleurs, mais il est évident que le modèle manque quelque chose. Il pourrait s'agir d'un effet spatial (longitude et latitude), ou d'un effet aléatoire (par exemple basé sur `Station`).
+Les résidus semblent mieux distribués, mais il est évident que le modèle manque encore quelque chose. Il pourrait s'agir d'un effet spatial (longitude et latitude), ou d'un effet aléatoire (par exemple basé sur `Station`).
 
 ---
 
 # Défi 3 - Solution ![:cube]()
 
-Comparer les modèles:
+__3.__ Comparer `smooth_interact_tw` avec `smooth_interact`. Lequel est meilleur?
 
 
 ```r
@@ -1489,29 +1669,31 @@ AIC(smooth_interact, smooth_interact_tw)
 # smooth_interact_tw 47.86913 3497.733
 ```
 
-.comment[L'AIC nous permet de comparer des modèles qui sont basés sur des distributions différentes !]
+.comment[L'AIC nous permet de comparer des modèles qui sont basés sur des distributions différentes!]
 
 --
 
-Utiliser une distribution *Tweedie* au lieu d'une distribution *normale* améliore beaucoup notre modèle !
+Utiliser une distribution *Tweedie* au lieu d'une distribution *Normale* améliore beaucoup notre modèle!
 
+???
+
+Le score AIC pour `smooth_interact_tw` est beaucoup plus petit que celui de `smooth_interact`. Utiliser une distribution *Tweedie* au lieu d'une distribution *Normale* améliore beaucoup notre modèle!
 
 ---
 class: inverse, center, middle
 
 ## 6. Changer la fonction de base
 
-
 ---
-# Fonctions lisses
+# Autres fonctions lisses
 
 Pour modéliser une surface lisse ou non-linéaire, nous pouvons construire des fonctions lisses de différentes manières:
 
-`s()` ![:faic](arrow-right) pour modéliser un terme lisse 1-dimensionnel, ou pour modéliser une intéraction entre des variables mesurées sur la *même échelle*
+`s()` ![:faic](arrow-right) pour modéliser un terme lisse 1-dimensionnelle, ou pour modéliser une intéraction entre des variables mesurées sur la *même échelle*
 
-`te()` ![:faic](arrow-right)  pour modéliser une surface d'interaction 2- ou n-dimensionnel entre des variables qui *ne sont pas sur la même échelle*. Comprend les effets principaux.
+`te()` ![:faic](arrow-right)  pour modéliser une surface d'interaction 2- ou n-dimensionnelle entre des variables qui *ne sont pas sur la même échelle*. Comprend les effets principaux.
 
-`ti()` ![:faic](arrow-right) pour modéliser une surface d'interaction 2- ou n-dimensionnel *qui ne comprend pas les effets principaux*.
+`ti()` ![:faic](arrow-right) pour modéliser une surface d'interaction 2- ou n-dimensionnelle *qui ne comprend pas les effets principaux*.
 
 ---
 # Paramètres des fonctions lisses
@@ -1521,48 +1703,63 @@ Les fonctions lisses ont beaucoup de paramètres qui pourraient changer leur com
 `k` ![:faic](arrow-right) dimensions de base
   - détermine la limite supérieure du nombre de fonctions de base utilisées pour construire la courbe.
   - contraint l'ondulation d'une fonction lisse.
-  - par défaut, `\(k\)` est 10 pour `s()`, et 5 pour chaque dimension de `te()` and `ti()`.
   - k devrait être &lt; au nombre de données uniques.
-  - la comlexité (ou la non-linéarité) d'une fonction lisse dans un modèle ajusté est reflétée par ses degrés de liberté effectifs (**EDF**)
+  - la complexité (ou la non-linéarité) d'une fonction lisse dans un modèle ajusté est reflétée par ses degrés de liberté effectifs (**EDF**)
 
 ---
 # Paramètres des fonctions lisses
 
 Les fonctions lisses ont beaucoup de paramètres qui pourraient changer leur comportement. Les paramètres les plus souvent utilisés sont les suivants :
 
-
+`bs` ![:faic](arrow-right) spécifie la fonction de base sous-jacente.
+  - pour `s()` on utilise `tp` (*thin plate regression spline*) et pour `te()` et `ti()` on utilise la base `cr` (*cubic regression spline*).
+  
 `d` ![:faic](arrow-right) spécifie quelles variables d'une intéraction se trouvent sur la même échelle lorsqu'on utilise `te()` and `ti()`.
   - Par exemple, `te(Temps, largeur, hauteur, d=c(1,2))`, indique que la `largeur` et la `hauteur` sont sur la même échelle, mais que `temps` ne l'est pas.
 
-`bs` ![:faic](arrow-right) spécifie la fonction de base sous-jacente.
-  - pour `s()` on utilise `tp` (*thin plate regression spline*) et pour `te()` et `ti()` on utilise la base `cr` (*cubic regression spline*).
-
-&lt;!--last 2 slides were a copy-paste from this websites: http://www.sfs.uni-tuebingen.de/~jvanrij/Tutorial/GAMM.html. However, as I'm not a specialist of GAM, I let them asis, but we should modify them or at least site the website--&gt;
-
 ---
-# Exemple avec des données cycliques
+# Exemple: Données cycliques
 
-Les données cycliques sont un bon exemple où changer la base est utile : vous voulez que le prédicteur corresponde à la fin.
+Lorsque l'on modélise des données cycliques, on souhaite généralement que le prédicteur soit identique aux deux bouts des phases. Pour y parvenir, nous devons modifier la fonction de base.
 
-Nous allons utiliser une série temporelle de données climatiques, divisées en mesures mensuelles, afin de déterminer s'il y a une tendance de température annuelle.
+Utilisons une série chronologique de données climatiques, divisées en mesures mensuelles, afin de déterminer s'il y a une tendance de température annuelle. Nous utiliserons la série temporelle de la température de Nottingham dans `R`: 
 
 
 ```r
-data(nottem) # Nottingham temperature time series
+data(nottem)
+```
+
+
+```r
+# nombre d'années de données (20 ans)
 n_years &lt;- length(nottem)/12
+
+# codage qualitatif pour les 12 mois de l'année,
+# pour chaque année échantillonnée (série de 1 à 12, répétée 20 fois)
 nottem_month &lt;- rep(1:12, times = n_years)
+
+# une variable où l'année correspondant à chaque mois dans nottem_month
 nottem_year &lt;- rep(1920:(1920 + n_years - 1), each = 12)
-qplot(nottem_month, nottem, colour = factor(nottem_year), geom = "line") +
+```
+
+
+```r
+# Visualiser la série temporelle
+qplot(x = nottem_month, y = nottem, colour = factor(nottem_year), geom = "line") +
   theme_bw()
 ```
 
+???
+
+Voir `?nottem` pour plus de détails sur le jeu de données.
+
 ---
-# Exemple avec des données cycliques
+# Exemple: Données cycliques
 
 &lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-86-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 ---
-# Exemple avec des données cycliques
+# Exemple: Données cycliques
 
 Nous pouvons modéliser le changement cyclique de température à travers les mois et la tendance non-linéaire à travers les années, en utilisant une spline cubique, ou `cc` pour modéliser les effets de mois ainsi qu'un terme non-linéaire pour la variable année.
 
@@ -1576,7 +1773,7 @@ summary(year_gam)$s.table
 ```
 
 ---
-# Exemple avec des données cycliques
+# Exemple: Données cycliques
 
 
 ```r
@@ -1584,28 +1781,34 @@ plot(year_gam, page = 1, scale = 0)
 ```
 
 &lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-88-1.png" width="576" style="display: block; margin: auto;" /&gt;
-Il y a une hausse d'environ 1-1.5 degrés au cours de la série, mais au cours d'une année, il y a une variation d'environ 20 degrés. Les données réelles varient autour de ces valeurs prédites et ceci représente donc la variance inexpliquée.
 
+Il y a une augmentation d'environ 1-1.5 degrés au cours de la série, mais au cours d'une année, il y a une variation d'environ 20 degrés. Les données réelles varient autour de ces valeurs prédites et ceci représente donc la variance inexpliquée.
+
+???
+
+Ici, nous pouvons voir l'un des avantages très intéressants de l'utilisation des GAMs. Nous pouvons soit tracer la surface réponse (valeurs prédites) ou les termes (contribution de chaque covariable) tel qu'indiqué ci-haut. Vous pouvez imaginer ce dernier en tant qu'une illustration de la variation des coefficients de régression et comment leur contribution (ou taille de leur effet) varie au fil du temps. Dans le premier graphique, nous voyons que les contributions positives de la température sont survenues après 1930.
 
 ---
 class: inverse, center, middle
 
-# 7. Intro rapide aux GAMMs
+# 7. Introduction rapide aux GAMMs
 
 ---
+
 # La non-indépendance des données
 
-Lorsque les observations ne sont pas indépendantes, les GAMs peuvent être utilisés soit pour incorporer :
+Lorsque les observations ne sont pas indépendantes, les GAMs peuvent
+être utilisés soit pour incorporer:
 
-- une structure de corrélation pour modéliser les résidus autocorrélés (autorégressif (AR), moyenne mobile (MA), ou une combinaison des deux (ARMA)) ,
-- des effets aléatoires qui modélisent l'indépendance entre les observations d'un même site.
+-   une structure de corrélation pour modéliser les résidus autocorrélés (autorégressif (AR), moyenne mobile (MA), ou une combinaison des deux (ARMA))
+-   des effets aléatoires qui modélisent l'indépendance entre les observations d'un même site.
 
 ---
-# Modèle avec erreurs autocorrélées
+# L'autocorrelation des résidus
 
-Pour commencer, nous allons jeter un coup d’œil au premier cas; un modèle avec autocorrélation temporelle dans les résidus.
+Pour commencer, nous allons jeter un coup d'œil à un modèle avec de l'autocorrélation temporelle dans les résidus.
 
-Ré-examinons le modèle de la température de Nottingham et vérifions si les résidus sont corrélés en faisant appel à la fonction (partielle) d'autocorrélation.
+Revenons au modèle de la température de Nottingham pour vérifier si les résidus sont corrélés en faisant appel à la fonction (partielle) d'autocorrélation.
 
 
 ```r
@@ -1615,43 +1818,52 @@ pacf(resid(year_gam), lag.max = 36, main = "pACF")
 ```
 
 ---
-# Modèle avec erreurs autocorrélées
+# L'autocorrelation des résidus
 
 &lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-90-1.png" width="612" style="display: block; margin: auto;" /&gt;
 
-.comment[ACF donne la corrélation croisée et pACF la corrélation partielle d'une série temporelle avec elle-même à différent décalage de temps.]
+.comment[__ACF__ évalue la corrélation croisée et __pACF__ la corrélation partielle d'une série temporelle entre points à différents décalages (donc, la similarité entre observations progressivement décalés).]
 
-ACF et pACF sont utilisés pour identifier combien d'intervalle de temps sont nécessaires pour que les observations commencent à être indépendantes.
+Les graphiques ACF et pACF sont donc utilisés pour identifier le temps nécessaire avant que les observations __ne sont plus autocorrélées__.
 
 --
+Un modèle AR de faible ordre semble nécessaire (donc, avec un ou deux intervalles de temps décalés).
 
-Les graphiques des fonctions d'autocorrélation suggèrent qu'un modèle AR de faible ordre est nécessaire (avec un ou deux intervalles de temps décalés).
+???
+
+La __fonction d'autocorrelaton__ (ACF; première figure) évalue la corrélation croisée d'une série temporelle entre points à différents décalages (donc, la similarité entre observations progressivement décalés).
+
+En contraste, la __fonction partielle d'autocorrelation__ (PACF: deuxième figure) évalue la corrélation croisée d'une série temporelle entre points à différents décalages, après avoir contrôlé les valeurs de la série temporelle à tous les décalages plus courts.
 
 ---
-# Modèle avec erreurs autocorrélées
+# L'autocorrelation des résidus
 
-Nous pouvons ajouter des structures d'autocorrelation au modèle :
+Ajoutons des structures d'autocorrelation au modèle de température de Nottingham:
 
 - **AR(1)** : corrélation avec un intervalle de temps décalé, ou
 - **AR(2)** : corrélation à 2 intervalles de temps décalés
 
 --
 
-
 ```r
+df &lt;- data.frame(nottem, nottem_year, nottem_month)
 
-year_gam &lt;- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"))
+year_gam &lt;- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"), data = df)
+
 year_gam_AR1 &lt;- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"),
                      correlation = corARMA(form = ~ 1|nottem_year, p = 1),
-                   data = data.frame(nottem, nottem_year, nottem_month))
+                     data = df)
+
 year_gam_AR2 &lt;- gamm(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"),
                      correlation = corARMA(form = ~ 1|nottem_year, p = 2),
-                   data = data.frame(nottem, nottem_year, nottem_month))
+                     data = df)
 ```
 
 ---
 
-# Modèle avec erreurs autocorrélées
+# L'autocorrelation des résidus
+
+Quel modèle est mieux ajusté?
 
 
 ```r
@@ -1662,15 +1874,17 @@ AIC(year_gam$lme, year_gam_AR1$lme, year_gam_AR2$lme)
 # year_gam_AR2$lme  7 1101.598
 ```
 
-Le modèle avec la structure AR(1) donne un meilleur ajustement au premier modèle. Mais il y a peu d'intérêt à considérer le modèle AR(2).
+Le modèle avec la structure AR(1) donne un meilleur ajustement comparé au premier modèle (`year_gam`), il y a très peu d'amélioration en passant au `AR(2)`. 
+
+Il est donc préférable d'inclure uniquement la structure `AR(1)` dans notre modèle.
 
 ---
-# Modélisation avec effets mixtes
+# Effets aléatoires
 
 Comme nous l'avons vu dans la section précédente, `bs` spécifie la fonction de base sous-jacente. Pour les facteurs aléatoires (origine et pente linéaire), nous utilisons `bs = "re"` et pour les pentes aléatoires non linéaires, nous utilisons `bs = "fs"`.
 
 ---
-# Modélisation avec effets mixtes
+# Effets aléatoires
 
 **3 types d'effets aléatoires différents** sont possibles lors de l'utilisation des GAMMs (où `fac` ![:faic](arrow-right) variable qualitative utilisée pour l'effet aléatoire; `x0` ![:faic](arrow-right) effet quantitatif fixe) :
 
@@ -1681,42 +1895,41 @@ Comme nous l'avons vu dans la section précédente, `bs` spécifie la fonction d
 ---
 # GAMM avec un intercepte aléatoire
 
-Tel que vu précédemment, nous allons utiliser `gamSim()` pour générer un ensemble de données, cette fois-ci avec une composante d'effet aléatoire. Ensuite, nous construirons un modèle avec un intercepte aléatoire en utilisant `fac` comme facteur aléatoire.
+Nous allons utiliser `gamSim()` pour simuler un ensemble de données, cette fois-ci avec un effet aléatoire. Ensuite, nous construirons un modèle avec un intercepte aléatoire en utilisant `fac` comme facteur aléatoire.
 
 
 ```r
+# Simuler des données
 gam_data2 &lt;- gamSim(eg = 6)
-# 4 term additive + random effectGu &amp; Wahba 4 term additive model
-str(gam_data2)
-# 'data.frame':	400 obs. of  11 variables:
-#  $ y  : num  11.94 10.75 13.28 18.35 9.17 ...
-#  $ x0 : num  0.51 0.233 0.924 0.787 0.215 ...
-#  $ x1 : num  0.347 0.842 0.279 0.523 0.867 ...
-#  $ x2 : num  0.116284 0.000876 0.589668 0.980535 0.0355 ...
-#  $ x3 : num  0.0273 0.9552 0.9076 0.7301 0.5248 ...
-#  $ f  : num  11.6 12.7 14.4 16.1 10.2 ...
-#  $ f0 : num  1.999 1.335 0.475 1.242 1.248 ...
-#  $ f1 : num  2 5.39 1.75 2.85 5.66 ...
-#  $ f2 : num  4.57 6.67e-06 3.14 8.76e-06 3.12e-01 ...
-#  $ f3 : num  0 0 0 0 0 0 0 0 0 0 ...
-#  $ fac: Factor w/ 4 levels "1","2","3","4": 1 2 3 4 1 2 3 4 1 2 ...
+head(gam_data2)
 ```
 
+
+```
+# 4 term additive + random effectGu &amp; Wahba 4 term additive model
+```
+
+
+```r
+# Rouler un modèle avec intercepte aléatoire
+gamm_intercept &lt;- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2, method = "REML")
+
+# Voir la sortie du modèle
+summary(gamm_intercept)$s.table
+#             edf   Ref.df          F      p-value
+# s(x0)  3.435762 4.254662   4.792654 0.0007338267
+# s(fac) 2.972848 3.000000 109.523464 0.0000000000
+```
 
 ---
 # GAMM avec un intercepte aléatoire
 
 
 ```r
-gamm_intercept &lt;- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2, method = "REML")
-summary(gamm_intercept)$s.table
-#             edf   Ref.df          F   p-value
-# s(x0)  1.922766 2.395078   1.364183 0.2704683
-# s(fac) 2.973268 3.000000 111.090473 0.0000000
 plot(gamm_intercept, select = 2)
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-94-1.png" width="396" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-96-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM avec un intercepte aléatoire
@@ -1727,17 +1940,23 @@ Nous allons premièrement tracer l'effet combiné de `x0` (sans les niveaux de l
 ```r
 par(mfrow = c(1,2), cex = 1.1)
 
-plot_smooth(gamm_intercept, view = "x0", rm.ranef = T,
+# Visualiser les effets combinés de x0 (sans effets aléatoires)
+plot_smooth(gamm_intercept, view = "x0", rm.ranef = TRUE,
             main = "intercept + s(x1)")
 
-plot_smooth(gamm_intercept, view = "x0", cond = list(fac="1"),
-            main = "... + s(fac)", col = 'orange', ylim = c(8,21))
-
-plot_smooth(gamm_intercept, view = "x0", cond = list(fac = "2"), add = T, col = 'red')
-
-plot_smooth(gamm_intercept, view="x0", cond = list(fac = "3"), add = T, col = 'purple')
-
-plot_smooth(gamm_intercept, view="x0", cond = list(fac = "4"), add = T, col = 'turquoise')
+# Visualiser chaque niveau de l'effet aléatoire
+plot_smooth(gamm_intercept, view = "x0", rm.ranef = FALSE,
+            cond = list(fac="1"),
+            main = "... + s(fac)", col = 'orange', ylim = c(0,25))
+plot_smooth(gamm_intercept, view = "x0", rm.ranef = FALSE,
+            cond = list(fac = "2"),
+            add = TRUE, col = 'red')
+plot_smooth(gamm_intercept, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "3"),
+            add = TRUE, col = 'purple')
+plot_smooth(gamm_intercept, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "4"),
+            add = TRUE, col = 'turquoise')
 ```
 
 ---
@@ -1745,9 +1964,9 @@ plot_smooth(gamm_intercept, view="x0", cond = list(fac = "4"), add = T, col = 't
 
 &lt;br&gt;
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-96-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-98-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
-.pull-right[
+.pull-right3[
 &amp;nbsp; &lt;font color="orange"&gt;fac1&lt;/font&gt; &amp;nbsp; &lt;font color="red"&gt;fac2&lt;/font&gt; &amp;nbsp; &lt;font color="purple"&gt;fac3&lt;/font&gt; &amp;nbsp; &lt;font color="turquoise"&gt;fac4&lt;/font&gt;
 ]
 
@@ -1755,16 +1974,17 @@ plot_smooth(gamm_intercept, view="x0", cond = list(fac = "4"), add = T, col = 't
 ---
 # GAMM avec une pente aléatoire
 
+Ensuite, spécifions un modèle avec une pente aléatoire:
+
 
 ```r
 gamm_slope &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2, method = "REML")
 
 summary(gamm_slope)$s.table
-#                edf   Ref.df          F   p-value
-# s(x0)     1.913643 2.384052  0.9918185 0.3966177
-# s(x0,fac) 2.951019 3.000000 60.3175042 0.0000000
+#                edf   Ref.df         F     p-value
+# s(x0)     3.121555 3.873413  3.838373 0.005756369
+# s(x0,fac) 2.959173 3.000000 72.591331 0.000000000
 ```
-
 
 ---
 # GAMM avec une pente aléatoire
@@ -1773,16 +1993,23 @@ summary(gamm_slope)$s.table
 ```r
 par(mfrow = c(1,2), cex = 1.1)
 
-plot_smooth(gamm_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)")
+# Visualiser les effets combinés de x0 (sans effets aléatoires)
+plot_smooth(gamm_slope, view = "x0", rm.ranef = TRUE,
+            main = "intercept + s(x1)")
 
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "1"),
-            main = "... + s(fac)", col = 'orange', ylim = c(7,22))
-
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "2"), add = T, col = 'red')
-
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "3"), add = T, col = 'purple')
-
-plot_smooth(gamm_slope, view = "x0", cond = list(fac = "4"), add = T, col = 'turquoise')
+# Visualiser chaque niveau de l'effet aléatoire
+plot_smooth(gamm_slope, view = "x0", rm.ranef = FALSE,
+            cond = list(fac="1"),
+            main = "... + s(fac, x0)", col = 'orange', ylim = c(0,25))
+plot_smooth(gamm_slope, view = "x0", rm.ranef = FALSE,
+            cond = list(fac = "2"),
+            add = TRUE, col = 'red')
+plot_smooth(gamm_slope, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "3"),
+            add = TRUE, col = 'purple')
+plot_smooth(gamm_slope, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "4"),
+            add = TRUE, col = 'turquoise')
 ```
 
 ---
@@ -1790,10 +2017,12 @@ plot_smooth(gamm_slope, view = "x0", cond = list(fac = "4"), add = T, col = 'tur
 
 &lt;br&gt;
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-99-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-101-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM avec un intercepte et une pente aléatoire
+
+On peut aussi inclure un intercept et une pente aléatoire.
 
 
 ```r
@@ -1801,10 +2030,10 @@ gamm_int_slope &lt;- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
                       data = gam_data2, method = "REML")
 
 summary(gamm_int_slope)$s.table
-#                   edf   Ref.df            F   p-value
-# s(x0)     1.922764280 2.395075 1.363989e+00 0.2705244
-# s(fac)    2.973240313 3.000000 1.112086e+02 0.0000000
-# s(fac,x0) 0.001177246 3.000000 2.071416e-04 0.6968754
+#                    edf   Ref.df            F      p-value
+# s(x0)     3.4357600177 4.254659 4.792646e+00 0.0007338415
+# s(fac)    2.9728363658 3.000000 1.095675e+02 0.0000000000
+# s(fac,x0) 0.0004719504 3.000000 1.499161e-04 0.4251473789
 ```
 
 ---
@@ -1814,16 +2043,23 @@ summary(gamm_int_slope)$s.table
 ```r
 par(mfrow = c(1,2), cex = 1.1)
 
-plot_smooth(gamm_int_slope, view = "x0", rm.ranef = T, main = "intercept + s(x0)")
+# Visualiser les effets combinés de x0 (sans effets aléatoires)
+plot_smooth(gamm_int_slope, view = "x0", rm.ranef = TRUE,
+            main = "intercept + s(x1)")
 
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "1"),
-            main="... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(7,22))
-
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "2"), add = T, col='red')
-
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "3"), add = T, col = 'purple')
-
-plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "4"), add = T, col = 'turquoise')
+# Visualiser chaque niveau de l'effet aléatoire
+plot_smooth(gamm_int_slope, view = "x0", rm.ranef = FALSE,
+            cond = list(fac="1"),
+            main = "... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(0,25))
+plot_smooth(gamm_int_slope, view = "x0", rm.ranef = FALSE,
+            cond = list(fac = "2"),
+            add = TRUE, col = 'red')
+plot_smooth(gamm_int_slope, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "3"),
+            add = TRUE, col = 'purple')
+plot_smooth(gamm_int_slope, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "4"),
+            add = TRUE, col = 'turquoise')
 ```
 
 ---
@@ -1831,7 +2067,7 @@ plot_smooth(gamm_int_slope, view = "x0", cond = list(fac = "4"), add = T, col = 
 
 &lt;br&gt;
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-102-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-104-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM avec un intercepte et une pente aléatoire
@@ -1843,10 +2079,16 @@ Notez que la pente aléatoire est statique dans ce cas :
 plot(gamm_int_slope, select = 3)
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-103-1.png" width="360" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-105-1.png" width="360" style="display: block; margin: auto;" /&gt;
+
+???
+
+select = 3 parce que la pente aléatoire est sur la troisième ligne de notre tableau sommaire.
 
 ---
 # GAMM avec une surface lisse aléatoire
+
+Finalement, spécifions un modèle avec une surface lisse aléatoire.
 
 
 ```r
@@ -1854,22 +2096,23 @@ gamm_smooth &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1),
                    data = gam_data2, method = "REML")
 
 summary(gamm_smooth)$s.table
-#                edf    Ref.df        F   p-value
-# s(x0)     1.922730  2.395008 1.363878 0.2705566
-# s(x0,fac) 2.975419 35.000000 9.522107 0.0000000
+#                edf    Ref.df        F      p-value
+# s(x0)     3.435630  4.254414 4.791095 0.0007360392
+# s(x0,fac) 2.980627 35.000000 9.388054 0.0000000000
 ```
 
 ---
 # GAMM avec une surface lisse aléatoire
 
-Ici, si les pentes aléatoires variaient selon `x0`, nous aurons des courbes variables pour chaque niveau :
-
 
 ```r
-plot(gamm_smooth, select = 1)
+plot(gamm_smooth, select=1)
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-105-1.png" width="360" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-107-1.png" width="432" style="display: block; margin: auto;" /&gt;
+
+???
+select = 1 parce que la surface lisse aléatoire est sur la première ligne de notre tableau sommaire.
 
 ---
 # GAMM avec une surface lisse aléatoire
@@ -1878,16 +2121,23 @@ plot(gamm_smooth, select = 1)
 ```r
 par(mfrow = c(1,2), cex = 1.1)
 
-plot_smooth(gamm_smooth, view = "x0", rm.ranef = T, main = "intercept + s(x0)")
+# Visualiser les effets combinés de x0 (sans effets aléatoires)
+plot_smooth(gamm_smooth, view = "x0", rm.ranef = TRUE,
+            main = "intercept + s(x1)")
 
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "1"),
-            main="... + s(x0, fac)", col = 'orange', ylim = c(7,22))
-
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "2"), add = T, col='red')
-
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "3"), add = T, col = 'purple')
-
-plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "4"), add = T, col = 'turquoise')
+# Visualiser chaque niveau de l'effet aléatoire
+plot_smooth(gamm_smooth, view = "x0", rm.ranef = FALSE,
+            cond = list(fac="1"),
+            main = "... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(0,25))
+plot_smooth(gamm_smooth, view = "x0", rm.ranef = FALSE,
+            cond = list(fac = "2"),
+            add = TRUE, col = 'red')
+plot_smooth(gamm_smooth, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "3"),
+            add = TRUE, col = 'purple')
+plot_smooth(gamm_smooth, view="x0", rm.ranef = FALSE,
+            cond = list(fac = "4"),
+            add = TRUE, col = 'turquoise')
 ```
 
 ---
@@ -1895,24 +2145,28 @@ plot_smooth(gamm_smooth, view = "x0", cond = list(fac = "4"), add = T, col = 'tu
 
 &lt;br&gt;
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-107-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-109-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
-.comment[Ici, si la pente aléatoire varie selon `x0`, nous aurons des courbes variables pour chaque niveau.]
+???
+
+Ici, si la pente aléatoire varie selon `x0`, nous aurions des courbes variables pour chaque niveau.
 
 ---
-# GAMM
+# Comparaison de GAMM
 
-Tous ces modèles mixtes peuvent être comparés en utilisant la fonction `AIC()` pour trouver le meilleur modèle.
+Tous les GAMMs de cette section peuvent être comparé avec `AIC()` pour trouver le modèle le mieux ajusté:
 
 
 ```r
 AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
 #                      df      AIC
-# gamm_intercept 7.394817 2192.987
-# gamm_slope     7.383185 2286.426
-# gamm_int_slope 7.397112 2192.991
-# gamm_smooth    7.399015 2192.993
+# gamm_intercept 9.254336 2232.906
+# gamm_slope     8.872670 2298.877
+# gamm_int_slope 9.255251 2232.907
+# gamm_smooth    9.269510 2232.923
 ```
+
+Le meilleur modèle de ces trois modèles serait donc le GAMM avec un intercept aléatoire.
 
 
 ---
@@ -1979,7 +2233,7 @@ avg &lt;- aggregate(prop ~ x1, data=gam_data3, mean)
 lines(avg$x1, avg$prop, col = "orange", lwd = 2)
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-110-1.png" width="288" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-112-1.png" width="288" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAM avec d'autres distributions
@@ -2063,7 +2317,7 @@ Cela représente comment le ratio de succès vs échecs change sur l'échelle de
 plot(prop_model)
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-117-1.png" width="309.6" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-119-1.png" width="309.6" style="display: block; margin: auto;" /&gt;
 
 ---
 # Visualiser la tendance au fil du temps
@@ -2079,7 +2333,7 @@ Il y a différente façon de représenter cette relation graphiquement :
 
 Que nous disent ces graphes sur les succès et échecs?
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-118-1.png" width="648" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-120-1.png" width="648" style="display: block; margin: auto;" /&gt;
 
 
 

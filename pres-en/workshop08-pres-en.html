@@ -1530,7 +1530,7 @@ In other words, have we chosen a `k` that is large enough?
 ```r
 k.check(smooth_interact)
 #                              k'      edf   k-index p-value
-# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883  0.0575
+# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883    0.05
 ```
 
 --
@@ -1570,7 +1570,7 @@ Is `k` large enough this time?
 ```r
 k.check(smooth_interact_k60)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626    0.89
+# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626    0.87
 ```
 
 --
@@ -1703,7 +1703,7 @@ Next, we should check the basis dimension:
 ```r
 k.check(smooth_interact_tw)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062  0.8125
+# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062  0.8175
 ```
 
 The trade-off between `\(k\)` and EDF is well balanced. Great!
@@ -2004,9 +2004,9 @@ gamm_intercept &lt;- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2, method
 
 # examine model output
 summary(gamm_intercept)$s.table
-#             edf   Ref.df           F   p-value
-# s(x0)  2.071105 2.578746   0.5868895 0.4961083
-# s(fac) 2.975771 3.000000 122.2654367 0.0000000
+#             edf   Ref.df         F      p-value
+# s(x0)  3.626902 4.489614  5.091176 0.0004175132
+# s(fac) 2.970220 3.000000 99.604801 0.0000000000
 ```
 
 ---
@@ -2069,9 +2069,9 @@ Next, we will run and plot a model with a random slope:
 gamm_slope &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2, method = "REML")
 
 summary(gamm_slope)$s.table
-#                edf   Ref.df           F   p-value
-# s(x0)     1.005685 1.011347  0.04105774 0.8482266
-# s(x0,fac) 2.952750 3.000000 61.18739380 0.0000000
+#                edf   Ref.df         F     p-value
+# s(x0)     3.269669 4.055547  3.664295 0.006263101
+# s(x0,fac) 2.953840 3.000000 62.131847 0.000000000
 ```
 
 
@@ -2117,10 +2117,10 @@ gamm_int_slope &lt;- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
                       data = gam_data2, method = "REML")
 
 summary(gamm_int_slope)$s.table
-#                 edf   Ref.df           F   p-value
-# s(x0)     2.0798123 2.589317   0.5904657 0.4940181
-# s(fac)    2.9720188 3.000000 147.1976464 0.0000000
-# s(fac,x0) 0.1817639 3.000000   0.9256892 0.4781224
+#                   edf   Ref.df            F      p-value
+# s(x0)     3.626894500 4.489598 5.091057e+00 0.0004176028
+# s(fac)    2.970160163 3.000000 9.978483e+01 0.0000000000
+# s(fac,x0) 0.002041938 3.000000 3.823371e-04 0.6764980257
 ```
 
 ---
@@ -2179,9 +2179,9 @@ gamm_smooth &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1),
                    data = gam_data2, method = "REML")
 
 summary(gamm_smooth)$s.table
-#                edf    Ref.df          F   p-value
-# s(x0)     2.072652  2.576493  0.5820573 0.4988207
-# s(x0,fac) 3.306815 35.000000 10.4999035 0.0000000
+#                edf    Ref.df        F      p-value
+# s(x0)     3.626888  4.489587 5.090959 0.0004176892
+# s(x0,fac) 2.971139 35.000000 8.537570 0.0000000000
 ```
 
 ---
@@ -2242,10 +2242,10 @@ All of the mixed models from this section can be compared using `AIC()` to deter
 ```r
 AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
 #                      df      AIC
-# gamm_intercept 7.578539 2205.059
-# gamm_slope     6.010599 2313.398
-# gamm_int_slope 7.933540 2205.310
-# gamm_smooth    8.218016 2205.628
+# gamm_intercept 9.489237 2217.399
+# gamm_slope     9.054690 2287.651
+# gamm_int_slope 9.493177 2217.405
+# gamm_smooth    9.491034 2217.402
 ```
 
 The best model among those we have built here would be a GAMM with a random effect on the intercept.

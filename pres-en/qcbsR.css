@@ -337,17 +337,17 @@ table, td, th {
   text-align: center;
 }
 
-.title-slide {
+/* .title-slide {
   background-image: url(https://qcbs.ca/wp-content/uploads/2010/05/QCBS_widescreen_background_white-01.png);
   background-size: cover;
-}
+} */
 
 .title-slide:before{
   position: absolute;
-  top: -35%;
-  left: 0%;
-  content: url(https://qcbs.ca/wp-content/uploads/2010/05/logo_small_grey-01.png);
-  transform: scale(.25);
+  top: 2%;
+  left: 10%;
+  content: url(https://github.com/QCBSRworkshops/QCBSRworkshops.github.io/blob/main/static/images/qcbs_logo_v2.png?raw=true);
+  transform: scale(.8);
 }
 
 /* Column */

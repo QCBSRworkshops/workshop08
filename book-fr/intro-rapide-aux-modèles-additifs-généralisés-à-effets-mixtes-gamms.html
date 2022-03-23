@@ -6,11 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapitre 11 Intro rapide aux modèles additifs généralisés à effets mixtes (GAMMs) | Atelier 8 : Modèles additifs généralisés en R</title>
   <meta name="description" content="Modèles additifs généralisés en R" />
-  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapitre 11 Intro rapide aux modèles additifs généralisés à effets mixtes (GAMMs) | Atelier 8 : Modèles additifs généralisés en R" />
   <meta property="og:type" content="book" />
-  <meta property="og:url" content="https://github.com/qcbsRworkshops/" />
   <meta property="og:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
   <meta property="og:description" content="Modèles additifs généralisés en R" />
   <meta name="github-repo" content="qcbsRworkshops/workshop08" />
@@ -50,8 +49,9 @@
 
 
 <script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
-<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
@@ -136,72 +136,72 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <link rel="icon" type="image/png" href="assets/images/favicon.ico"/>
 
 <li class="divider"></li>
-<li class="part"><span><b>Série d’ateliers R du CSBQ</b></span></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Préface</a><ul>
-<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#code-de-conduit"><i class="fa fa-check"></i><b>0.1</b> Code de conduit</a><ul>
-<li class="chapter" data-level="0.1.1" data-path="index.html"><a href="index.html#comportement-attendu"><i class="fa fa-check"></i><b>0.1.1</b> Comportement attendu</a></li>
-<li class="chapter" data-level="0.1.2" data-path="index.html"><a href="index.html#comportements-inacceptables"><i class="fa fa-check"></i><b>0.1.2</b> Comportements inacceptables</a></li>
+<li class="part"><span><b>Série d’ateliers R du CSBQ<span></span></b></span></li>
+<li><a href="index.html#préface">Préface<span></span></a><ul>
+<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>0.1</b> Code de conduit<span></span></a><ul>
+<li class="chapter" data-level="0.1.1" data-path="index.html"><a href="index.html#comportement-attendu"><i class="fa fa-check"></i><b>0.1.1</b> Comportement attendu<span></span></a></li>
+<li class="chapter" data-level="0.1.2" data-path="index.html"><a href="index.html#comportements-inacceptables"><i class="fa fa-check"></i><b>0.1.2</b> Comportements inacceptables<span></span></a></li>
 </ul></li>
-<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#contributeurs-et-contributrices"><i class="fa fa-check"></i><b>0.2</b> Contributeurs et contributrices</a></li>
-<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#contribuez-à-la-série"><i class="fa fa-check"></i><b>0.3</b> Contribuez à la série!</a></li>
+<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#contributeurs-et-contributrices"><i class="fa fa-check"></i><b>0.2</b> Contributeurs et contributrices<span></span></a></li>
+<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#contribuez-à-la-série"><i class="fa fa-check"></i><b>0.3</b> Contribuez à la série!<span></span></a></li>
 </ul></li>
-<li class="part"><span><b>Modèles additifs généralisés en <code>R</code></b></span></li>
-<li class="chapter" data-level="1" data-path="objectifs-dapprentissage.html"><a href="objectifs-dapprentissage.html"><i class="fa fa-check"></i><b>1</b> Objectifs d’apprentissage</a></li>
-<li class="chapter" data-level="2" data-path="préparez-vous-pour-cet-atelier.html"><a href="préparez-vous-pour-cet-atelier.html"><i class="fa fa-check"></i><b>2</b> Préparez-vous pour cet atelier</a></li>
-<li class="chapter" data-level="3" data-path="intro-linear-models.html"><a href="intro-linear-models.html"><i class="fa fa-check"></i><b>3</b> Le modèle linéaire… et où il échoue</a></li>
-<li class="chapter" data-level="4" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html"><i class="fa fa-check"></i><b>4</b> Introduction aux GAMs</a><ul>
-<li class="chapter" data-level="4.1" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#test-de-linéarité"><i class="fa fa-check"></i><b>4.1</b> Test de linéarité</a></li>
-<li class="chapter" data-level="4.2" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#défi-1"><i class="fa fa-check"></i><b>4.2</b> Défi 1</a><ul>
-<li class="chapter" data-level="4.2.1" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#défi-1-solution"><i class="fa fa-check"></i><b>4.2.1</b> Défi 1: Solution</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="5" data-path="fonctionnement.html"><a href="fonctionnement.html"><i class="fa fa-check"></i><b>5</b> Le fonctionnement des GAMs</a><ul>
-<li class="chapter" data-level="5.1" data-path="fonctionnement.html"><a href="fonctionnement.html#exemple-une-base-polynomiale"><i class="fa fa-check"></i><b>5.1</b> Exemple: une base polynomiale</a></li>
-<li class="chapter" data-level="5.2" data-path="fonctionnement.html"><a href="fonctionnement.html#exemple-une-base-de-spline-cubique"><i class="fa fa-check"></i><b>5.2</b> Exemple: une base de spline cubique</a><ul>
-<li class="chapter" data-level="5.2.1" data-path="fonctionnement.html"><a href="fonctionnement.html#contrôler-le-degré-de-lissage-avec-des-splines-de-régression-pénalisés"><i class="fa fa-check"></i><b>5.2.1</b> Contrôler le degré de lissage avec des splines de régression pénalisés</a></li>
+<li class="part"><span><b>Modèles additifs généralisés en <code>R</code><span></span></b></span></li>
+<li class="chapter" data-level="1" data-path="objectifs-dapprentissage.html"><a href="objectifs-dapprentissage.html"><i class="fa fa-check"></i><b>1</b> Objectifs d’apprentissage<span></span></a></li>
+<li class="chapter" data-level="2" data-path="préparez-vous-pour-cet-atelier.html"><a href="préparez-vous-pour-cet-atelier.html"><i class="fa fa-check"></i><b>2</b> Préparez-vous pour cet atelier<span></span></a></li>
+<li class="chapter" data-level="3" data-path="intro-linear-models.html"><a href="intro-linear-models.html"><i class="fa fa-check"></i><b>3</b> Le modèle linéaire… et où il échoue<span></span></a></li>
+<li class="chapter" data-level="4" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html"><i class="fa fa-check"></i><b>4</b> Introduction aux GAMs<span></span></a><ul>
+<li class="chapter" data-level="4.1" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#test-de-linéarité"><i class="fa fa-check"></i><b>4.1</b> Test de linéarité<span></span></a></li>
+<li class="chapter" data-level="4.2" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#défi-1"><i class="fa fa-check"></i><b>4.2</b> Défi 1<span></span></a><ul>
+<li class="chapter" data-level="4.2.1" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#défi-1-solution"><i class="fa fa-check"></i><b>4.2.1</b> Défi 1: Solution<span></span></a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html"><i class="fa fa-check"></i><b>6</b> GAM avec plusieurs termes non linéaires</a><ul>
-<li class="chapter" data-level="6.1" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-variables-linéaires-et-non-linéaires"><i class="fa fa-check"></i><b>6.1</b> GAM à variables linéaires et non linéaires</a></li>
-<li class="chapter" data-level="6.2" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#degrés-de-liberté-effectifs-edf"><i class="fa fa-check"></i><b>6.2</b> Degrés de liberté effectifs (edf)</a></li>
-<li class="chapter" data-level="6.3" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables-linéaires-et-lisses"><i class="fa fa-check"></i><b>6.3</b> GAM à plusieurs variables linéaires et lisses</a></li>
-<li class="chapter" data-level="6.4" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables-non-linéaires"><i class="fa fa-check"></i><b>6.4</b> GAM à plusieurs variables non linéaires</a></li>
-<li class="chapter" data-level="6.5" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#défi-2"><i class="fa fa-check"></i><b>6.5</b> Défi 2</a><ul>
-<li class="chapter" data-level="6.5.1" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#défi-2-solution"><i class="fa fa-check"></i><b>6.5.1</b> Défi 2: Solution</a></li>
+<li class="chapter" data-level="5" data-path="fonctionnement.html"><a href="fonctionnement.html"><i class="fa fa-check"></i><b>5</b> Le fonctionnement des GAMs<span></span></a><ul>
+<li class="chapter" data-level="5.1" data-path="fonctionnement.html"><a href="fonctionnement.html#exemple-une-base-polynomiale"><i class="fa fa-check"></i><b>5.1</b> Exemple: une base polynomiale<span></span></a></li>
+<li class="chapter" data-level="5.2" data-path="fonctionnement.html"><a href="fonctionnement.html#exemple-une-base-de-spline-cubique"><i class="fa fa-check"></i><b>5.2</b> Exemple: une base de spline cubique<span></span></a><ul>
+<li class="chapter" data-level="5.2.1" data-path="fonctionnement.html"><a href="fonctionnement.html#contrôler-le-degré-de-lissage-avec-des-splines-de-régression-pénalisés"><i class="fa fa-check"></i><b>5.2.1</b> Contrôler le degré de lissage avec des splines de régression pénalisés<span></span></a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html"><i class="fa fa-check"></i><b>7</b> GAM avec des termes d’interaction</a><ul>
-<li class="chapter" data-level="7.1" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html#interaction-entre-variables-non-linéaire-et-qualitatif"><i class="fa fa-check"></i><b>7.1</b> Interaction entre variables non-linéaire et qualitatif</a></li>
-<li class="chapter" data-level="7.2" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html#interaction-entre-variables-non-linéaires"><i class="fa fa-check"></i><b>7.2</b> Interaction entre variables non linéaires</a></li>
-</ul></li>
-<li class="part"><span><b>Généralisation du modèle additif</b></span></li>
-<li class="chapter" data-level="8" data-path="validation-gam.html"><a href="validation-gam.html"><i class="fa fa-check"></i><b>8</b> Validation d’un GAM</a><ul>
-<li class="chapter" data-level="8.1" data-path="validation-gam.html"><a href="validation-gam.html#choisir-k"><i class="fa fa-check"></i><b>8.1</b> Choisir <span class="math inline">\(k\)</span></a><ul>
-<li class="chapter" data-level="8.1.1" data-path="validation-gam.html"><a href="validation-gam.html#est-ce-que-notre-module-est-assez-flexible"><i class="fa fa-check"></i><b>8.1.1</b> Est-ce que notre module est assez flexible?</a></li>
-</ul></li>
-<li class="chapter" data-level="8.2" data-path="validation-gam.html"><a href="validation-gam.html#choisir-une-distribution"><i class="fa fa-check"></i><b>8.2</b> Choisir une distribution</a></li>
-</ul></li>
-<li class="chapter" data-level="9" data-path="autres-distributions.html"><a href="autres-distributions.html"><i class="fa fa-check"></i><b>9</b> Autres distributions</a><ul>
-<li class="chapter" data-level="9.1" data-path="autres-distributions.html"><a href="autres-distributions.html#défi-3"><i class="fa fa-check"></i><b>9.1</b> Défi 3</a><ul>
-<li class="chapter" data-level="9.1.1" data-path="autres-distributions.html"><a href="autres-distributions.html#défi-3-solution"><i class="fa fa-check"></i><b>9.1.1</b> Défi 3: Solution</a></li>
+<li class="chapter" data-level="6" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html"><i class="fa fa-check"></i><b>6</b> GAM avec plusieurs termes non linéaires<span></span></a><ul>
+<li class="chapter" data-level="6.1" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-variables-linéaires-et-non-linéaires"><i class="fa fa-check"></i><b>6.1</b> GAM à variables linéaires et non linéaires<span></span></a></li>
+<li class="chapter" data-level="6.2" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#degrés-de-liberté-effectifs-edf"><i class="fa fa-check"></i><b>6.2</b> Degrés de liberté effectifs (edf)<span></span></a></li>
+<li class="chapter" data-level="6.3" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables-linéaires-et-lisses"><i class="fa fa-check"></i><b>6.3</b> GAM à plusieurs variables linéaires et lisses<span></span></a></li>
+<li class="chapter" data-level="6.4" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables-non-linéaires"><i class="fa fa-check"></i><b>6.4</b> GAM à plusieurs variables non linéaires<span></span></a></li>
+<li class="chapter" data-level="6.5" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#défi-2"><i class="fa fa-check"></i><b>6.5</b> Défi 2<span></span></a><ul>
+<li class="chapter" data-level="6.5.1" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#défi-2-solution"><i class="fa fa-check"></i><b>6.5.1</b> Défi 2: Solution<span></span></a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="changer-la-fonction-de-base.html"><a href="changer-la-fonction-de-base.html"><i class="fa fa-check"></i><b>10</b> Changer la fonction de base</a><ul>
-<li class="chapter" data-level="10.1" data-path="changer-la-fonction-de-base.html"><a href="changer-la-fonction-de-base.html#exemple-données-cycliques"><i class="fa fa-check"></i><b>10.1</b> Exemple: Données cycliques</a></li>
+<li class="chapter" data-level="7" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html"><i class="fa fa-check"></i><b>7</b> GAM avec des termes d’interaction<span></span></a><ul>
+<li class="chapter" data-level="7.1" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html#interaction-entre-variables-non-linéaire-et-qualitatif"><i class="fa fa-check"></i><b>7.1</b> Interaction entre variables non-linéaire et qualitatif<span></span></a></li>
+<li class="chapter" data-level="7.2" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html#interaction-entre-variables-non-linéaires"><i class="fa fa-check"></i><b>7.2</b> Interaction entre variables non linéaires<span></span></a></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><i class="fa fa-check"></i><b>11</b> Intro rapide aux modèles additifs généralisés à effets mixtes (GAMMs)</a><ul>
-<li class="chapter" data-level="11.1" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#lautocorrelation-des-résidus"><i class="fa fa-check"></i><b>11.1</b> L’autocorrelation des résidus</a></li>
-<li class="chapter" data-level="11.2" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#modélisation-avec-effets-mixtes"><i class="fa fa-check"></i><b>11.2</b> Modélisation avec effets mixtes</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-un-intercepte-aléatoire"><i class="fa fa-check"></i><b>11.2.1</b> GAMM avec un intercepte aléatoire</a></li>
-<li class="chapter" data-level="11.2.2" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-une-pente-aléatoire"><i class="fa fa-check"></i><b>11.2.2</b> GAMM avec une pente aléatoire</a></li>
-<li class="chapter" data-level="11.2.3" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-un-intercept-et-une-pente-aléatoire"><i class="fa fa-check"></i><b>11.2.3</b> GAMM avec un intercept et une pente aléatoire</a></li>
-<li class="chapter" data-level="11.2.4" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-une-surface-lisse-aléatoire"><i class="fa fa-check"></i><b>11.2.4</b> GAMM avec une surface lisse aléatoire</a></li>
-<li class="chapter" data-level="11.2.5" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#comparaison-de-gamm"><i class="fa fa-check"></i><b>11.2.5</b> Comparaison de GAMM</a></li>
+<li class="part"><span><b>Généralisation du modèle additif<span></span></b></span></li>
+<li class="chapter" data-level="8" data-path="validation-gam.html"><a href="validation-gam.html"><i class="fa fa-check"></i><b>8</b> Validation d’un GAM<span></span></a><ul>
+<li class="chapter" data-level="8.1" data-path="validation-gam.html"><a href="validation-gam.html#choisir-k"><i class="fa fa-check"></i><b>8.1</b> Choisir <span class="math inline">\(k\)</span><span></span></a><ul>
+<li class="chapter" data-level="8.1.1" data-path="validation-gam.html"><a href="validation-gam.html#est-ce-que-notre-module-est-assez-flexible"><i class="fa fa-check"></i><b>8.1.1</b> Est-ce que notre module est assez flexible?<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="validation-gam.html"><a href="validation-gam.html#choisir-une-distribution"><i class="fa fa-check"></i><b>8.2</b> Choisir une distribution<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="autres-distributions.html"><a href="autres-distributions.html"><i class="fa fa-check"></i><b>9</b> Autres distributions<span></span></a><ul>
+<li class="chapter" data-level="9.1" data-path="autres-distributions.html"><a href="autres-distributions.html#défi-3"><i class="fa fa-check"></i><b>9.1</b> Défi 3<span></span></a><ul>
+<li class="chapter" data-level="9.1.1" data-path="autres-distributions.html"><a href="autres-distributions.html#défi-3-solution"><i class="fa fa-check"></i><b>9.1.1</b> Défi 3: Solution<span></span></a></li>
 </ul></li>
 </ul></li>
-<li class="part"><span><b>Ressources &amp; Références</b></span></li>
-<li class="chapter" data-level="12" data-path="ressources.html"><a href="ressources.html"><i class="fa fa-check"></i><b>12</b> Ressources</a></li>
-<li class="chapter" data-level="13" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>13</b> References</a></li>
+<li class="chapter" data-level="10" data-path="changer-la-fonction-de-base.html"><a href="changer-la-fonction-de-base.html"><i class="fa fa-check"></i><b>10</b> Changer la fonction de base<span></span></a><ul>
+<li class="chapter" data-level="10.1" data-path="changer-la-fonction-de-base.html"><a href="changer-la-fonction-de-base.html#exemple-données-cycliques"><i class="fa fa-check"></i><b>10.1</b> Exemple: Données cycliques<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><i class="fa fa-check"></i><b>11</b> Intro rapide aux modèles additifs généralisés à effets mixtes (GAMMs)<span></span></a><ul>
+<li class="chapter" data-level="11.1" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#lautocorrelation-des-résidus"><i class="fa fa-check"></i><b>11.1</b> L’autocorrelation des résidus<span></span></a></li>
+<li class="chapter" data-level="11.2" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#modélisation-avec-effets-mixtes"><i class="fa fa-check"></i><b>11.2</b> Modélisation avec effets mixtes<span></span></a><ul>
+<li class="chapter" data-level="11.2.1" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-un-intercepte-aléatoire"><i class="fa fa-check"></i><b>11.2.1</b> GAMM avec un intercepte aléatoire<span></span></a></li>
+<li class="chapter" data-level="11.2.2" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-une-pente-aléatoire"><i class="fa fa-check"></i><b>11.2.2</b> GAMM avec une pente aléatoire<span></span></a></li>
+<li class="chapter" data-level="11.2.3" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-un-intercept-et-une-pente-aléatoire"><i class="fa fa-check"></i><b>11.2.3</b> GAMM avec un intercept et une pente aléatoire<span></span></a></li>
+<li class="chapter" data-level="11.2.4" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-une-surface-lisse-aléatoire"><i class="fa fa-check"></i><b>11.2.4</b> GAMM avec une surface lisse aléatoire<span></span></a></li>
+<li class="chapter" data-level="11.2.5" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#comparaison-de-gamm"><i class="fa fa-check"></i><b>11.2.5</b> Comparaison de GAMM<span></span></a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>Ressources &amp; Références<span></span></b></span></li>
+<li class="chapter" data-level="12" data-path="ressources.html"><a href="ressources.html"><i class="fa fa-check"></i><b>12</b> Ressources<span></span></a></li>
+<li class="chapter" data-level="13" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>13</b> References<span></span></a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/qcbsRworkshops" target="blank">QCBS R Workshop Series</a></li>
 
@@ -237,8 +237,8 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
   <img class= "hero-image" src="assets/images/jean-philippe-delberghe-75xPHEQBmvA-unsplash_hero_image.jpg">
 </div>
 --!>
-<div id="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms" class="section level1">
-<h1><span class="header-section-number">Chapitre 11</span> Intro rapide aux modèles additifs généralisés à effets mixtes (GAMMs)</h1>
+<div id="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms" class="section level1 hasAnchor">
+<h1><span class="header-section-number">Chapitre 11</span> Intro rapide aux modèles additifs généralisés à effets mixtes (GAMMs)<a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>Lorsque les observations ne sont pas indépendantes, les GAMs peuvent
 être utilisés soit pour incorporer:</p>
 <ul>
@@ -251,8 +251,8 @@ observations d’un même site.</li>
 <p>En plus de changer la fonction de base, nous pouvons aussi complexifier
 le modèle en intégrant une structure d’auto-corrélation (ou même des
 effets mixtes) en utilisant les fonctions <code>gamm()</code> dans la librairie <code>mgcv</code>. Bien que nous ne l’utilisions pas ici, la librairie <a href="https://cran.r-project.org/web/packages/gamm4/gamm4.pdf"><code>gamm4</code></a> peut également être utilisé pour estimer des modèles GAMMs dans R.</p>
-<div id="lautocorrelation-des-résidus" class="section level2">
-<h2><span class="header-section-number">11.1</span> L’autocorrelation des résidus</h2>
+<div id="lautocorrelation-des-résidus" class="section level2 hasAnchor">
+<h2><span class="header-section-number">11.1</span> L’autocorrelation des résidus<a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#lautocorrelation-des-résidus" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Pour commencer, nous allons jeter un coup d’œil à un modèle avec de l’autocorrélation temporelle dans les résidus. Revenons au modèle
 de la température de Nottingham pour vérifier si les résidus sont corrélés en faisant appel à la fonction (partielle) d’autocorrélation.</p>
 <div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb98-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
@@ -283,8 +283,8 @@ de la température de Nottingham pour vérifier si les résidus sont corrélés 
 ## year_gam_AR2$lme  7 1101.598</code></pre>
 <p>Le modèle avec la structure AR(1) donne un meilleur ajustement comparé au premier modèle (<code>year_gam</code>), il y a très peu d’amélioration en passant au <code>AR(2)</code>. Il est donc préférable d’inclure uniquement la structure <code>AR(1)</code> dans notre modèle.</p>
 </div>
-<div id="modélisation-avec-effets-mixtes" class="section level2">
-<h2><span class="header-section-number">11.2</span> Modélisation avec effets mixtes</h2>
+<div id="modélisation-avec-effets-mixtes" class="section level2 hasAnchor">
+<h2><span class="header-section-number">11.2</span> Modélisation avec effets mixtes<a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#modélisation-avec-effets-mixtes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Comme nous l’avons vu dans la section précédente, <code>bs</code> spécifie la
 fonction de base sous-jacente. Pour les facteurs aléatoires (origine et
 pente linéaire), nous utilisons <code>bs = "re"</code> et pour les pentes
@@ -308,39 +308,39 @@ s’éloigne de 0, ce qui entraîne un retrait vers la moyenne.</li>
 <div class="noway">
 <p>Ceci est une introduction (très!) brève aux effets aléatoires dans les GAMMs. Pour plus de détails, nous recommandons <em>fortement</em> <span class="citation">Pedersen et al. (<a href="#ref-pedersen2019hierarchical" role="doc-biblioref">2019</a>)</span>, un article très accessible qui décrit plusieurs façons de spécifier des GAMMs pour répondre à des questions écologiques.</p>
 </div>
-<div id="gamm-avec-un-intercepte-aléatoire" class="section level3">
-<h3><span class="header-section-number">11.2.1</span> GAMM avec un intercepte aléatoire</h3>
+<div id="gamm-avec-un-intercepte-aléatoire" class="section level3 hasAnchor">
+<h3><span class="header-section-number">11.2.1</span> GAMM avec un intercepte aléatoire<a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-un-intercepte-aléatoire" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Nous allons utiliser <code>gamSim()</code> pour générer un ensemble de données, cette fois-ci avec un effet aléatoire. Ensuite, nous construirons un modèle avec un intercepte aléatoire en utilisant <code>fac</code> comme facteur aléatoire.</p>
 <div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb102-1"></a><span class="co"># Simuler des données</span></span>
 <span id="cb102-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb102-2"></a>gam_data2 &lt;-<span class="st"> </span><span class="kw">gamSim</span>(<span class="dt">eg =</span> <span class="dv">6</span>)</span></code></pre></div>
 <pre><code>## 4 term additive + random effectGu &amp; Wahba 4 term additive model</code></pre>
 <div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb104-1"></a><span class="kw">head</span>(gam_data2)</span></code></pre></div>
-<pre><code>##           y        x0        x1         x2        x3        f        f0
-## 1 12.290930 0.8402675 0.9595520 0.96599694 0.1078006 10.77710 0.9620342
-## 2 12.192413 0.4725085 0.2670359 0.55952767 0.9639965 12.63795 1.9925454
-## 3 21.066054 0.8421021 0.6262121 0.49217930 0.6237644 16.21867 0.9519123
-## 4 19.739212 0.6815085 0.5358009 0.06629513 0.8619820 18.07099 1.6835584
-## 5 15.572680 0.8219377 0.1477501 0.29689148 0.3679292 13.17043 1.0613540
-## 6  6.772561 0.2057262 0.4126663 0.81448239 0.3749888 10.34056 1.2044861
-##         f1           f2 f3 fac
-## 1 6.814850 0.0002112864  0   1
-## 2 1.705864 2.9395446218  0   2
-## 3 3.498814 2.7679477124  0   3
-## 4 2.920053 1.4673751433  0   4
-## 5 1.343798 7.7652763468  0   1
-## 6 2.282640 0.8534387285  0   2</code></pre>
+<pre><code>##           y        x0        x1         x2        x3         f        f0
+## 1 15.543084 0.2836784 0.9678011 0.07470757 0.7212896 13.402026 1.5556553
+## 2  9.679579 0.6429449 0.2477467 0.04217969 0.7107154  9.930704 1.8016983
+## 3 14.234737 0.7728427 0.3225161 0.74580754 0.5211371 14.362293 1.3091732
+## 4 18.414209 0.3699114 0.7085314 0.49652103 0.9870318 20.714602 1.8352881
+## 5  9.112216 0.1276116 0.6574066 0.65561401 0.9661671 10.780157 0.7805009
+## 6 11.474683 0.7743484 0.6852275 0.83592880 0.1025187 11.782589 1.3020065
+##         f1        f2 f3 fac
+## 1 6.928215 1.9181561  0   1
+## 2 1.641308 0.4876976  0   2
+## 3 1.906048 2.1470715  0   3
+## 4 4.124986 2.7543273  0   4
+## 5 3.724056 3.2756002  0   1
+## 6 3.937142 0.5434408  0   2</code></pre>
 <div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb106-1"></a><span class="co"># Rouler un modèle avec intercepte aléatoire</span></span>
 <span id="cb106-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb106-2"></a>gamm_intercept &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(x0) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(fac, <span class="dt">bs =</span> <span class="st">&quot;re&quot;</span>), <span class="dt">data =</span> gam_data2,</span>
 <span id="cb106-3"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb106-3"></a>    <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
 <span id="cb106-4"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb106-4"></a></span>
 <span id="cb106-5"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb106-5"></a><span class="co"># Voir la sortie du modèle</span></span>
 <span id="cb106-6"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb106-6"></a><span class="kw">summary</span>(gamm_intercept)<span class="op">$</span>s.table</span></code></pre></div>
-<pre><code>##             edf   Ref.df         F     p-value
-## s(x0)  2.764585 3.422527  4.774552 0.001941979
-## s(fac) 2.967028 3.000000 89.924751 0.000000000</code></pre>
+<pre><code>##             edf   Ref.df          F   p-value
+## s(x0)  2.472448 3.080013   1.860428 0.1270148
+## s(fac) 2.971899 3.000000 105.897866 0.0000000</code></pre>
 <p>Notez qu’il y a maintenant un terme aléatoire dans le sommaire du modèle. Vous pouvez visualiser les intercepts aléatoires pour chaque niveau de <code>fac</code> comme ceci:</p>
 <div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb108-1"></a><span class="kw">plot</span>(gamm_intercept, <span class="dt">select =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="book-fr_files/figure-html/unnamed-chunk-77-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="book-fr_files/figure-html/unnamed-chunk-78-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb109-1"></a><span class="co"># select = 2 parce que le terme aléatoire se trouve sur la</span></span>
 <span id="cb109-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb109-2"></a><span class="co"># 2e ligne du tableau sommaire.</span></span></code></pre></div>
 <p>Nous pouvons également utiliser la fonction <code>plot_smooth</code> pour visualiser le modèle, qui nous permet de visualisés des
@@ -361,18 +361,18 @@ effets sommés d’un GAM (basé sur les prédictions). Cette fonction permet é
 <span id="cb110-13"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb110-13"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;purple&quot;</span>)</span>
 <span id="cb110-14"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb110-14"></a><span class="kw">plot_smooth</span>(gamm_intercept, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">rm.ranef =</span> <span class="ot">FALSE</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;4&quot;</span>),</span>
 <span id="cb110-15"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb110-15"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;turquoise&quot;</span>)</span></code></pre></div>
-<p><img src="book-fr_files/figure-html/unnamed-chunk-78-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="book-fr_files/figure-html/unnamed-chunk-79-1.png" width="960" style="display: block; margin: auto;" /></p>
 </div>
-<div id="gamm-avec-une-pente-aléatoire" class="section level3">
-<h3><span class="header-section-number">11.2.2</span> GAMM avec une pente aléatoire</h3>
+<div id="gamm-avec-une-pente-aléatoire" class="section level3 hasAnchor">
+<h3><span class="header-section-number">11.2.2</span> GAMM avec une pente aléatoire<a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-une-pente-aléatoire" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Ensuite, spécifions un modèle avec une pente aléatoire:</p>
 <div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb111-1"></a>gamm_slope &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(x0) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x0, fac, <span class="dt">bs =</span> <span class="st">&quot;re&quot;</span>), <span class="dt">data =</span> gam_data2,</span>
 <span id="cb111-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb111-2"></a>    <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
 <span id="cb111-3"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb111-3"></a></span>
 <span id="cb111-4"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb111-4"></a><span class="kw">summary</span>(gamm_slope)<span class="op">$</span>s.table</span></code></pre></div>
-<pre><code>##               edf  Ref.df         F      p-value
-## s(x0)     2.89165 3.57955  5.472636 0.0005893539
-## s(x0,fac) 2.95423 3.00000 63.969219 0.0000000000</code></pre>
+<pre><code>##                edf   Ref.df         F   p-value
+## s(x0)     2.359863 2.940753  1.879359 0.1602494
+## s(x0,fac) 2.952966 3.000000 62.232298 0.0000000</code></pre>
 <p>On peut encore une fois visualiser l’effet combiné de <code>x0</code> sans les niveaux de l’effet aléatoire, et ensuite une courbe pour chacun de quatre niveaux de l’effet aléatoire <code>fac</code>:</p>
 <div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb113-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="dt">cex =</span> <span class="fl">1.1</span>)</span>
 <span id="cb113-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb113-2"></a></span>
@@ -389,19 +389,19 @@ effets sommés d’un GAM (basé sur les prédictions). Cette fonction permet é
 <span id="cb113-13"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb113-13"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;purple&quot;</span>)</span>
 <span id="cb113-14"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb113-14"></a><span class="kw">plot_smooth</span>(gamm_slope, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">rm.ranef =</span> <span class="ot">FALSE</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;4&quot;</span>),</span>
 <span id="cb113-15"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb113-15"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;turquoise&quot;</span>)</span></code></pre></div>
-<p><img src="book-fr_files/figure-html/unnamed-chunk-80-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="book-fr_files/figure-html/unnamed-chunk-81-1.png" width="960" style="display: block; margin: auto;" /></p>
 </div>
-<div id="gamm-avec-un-intercept-et-une-pente-aléatoire" class="section level3">
-<h3><span class="header-section-number">11.2.3</span> GAMM avec un intercept et une pente aléatoire</h3>
+<div id="gamm-avec-un-intercept-et-une-pente-aléatoire" class="section level3 hasAnchor">
+<h3><span class="header-section-number">11.2.3</span> GAMM avec un intercept et une pente aléatoire<a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-un-intercept-et-une-pente-aléatoire" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>On peut aussi inclure un intercept et une pente aléatoire.</p>
 <div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb114-1"></a>gamm_int_slope &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(x0) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(fac, <span class="dt">bs =</span> <span class="st">&quot;re&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(fac,</span>
 <span id="cb114-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb114-2"></a>    x0, <span class="dt">bs =</span> <span class="st">&quot;re&quot;</span>), <span class="dt">data =</span> gam_data2, <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
 <span id="cb114-3"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb114-3"></a></span>
 <span id="cb114-4"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb114-4"></a><span class="kw">summary</span>(gamm_int_slope)<span class="op">$</span>s.table</span></code></pre></div>
-<pre><code>##                edf   Ref.df          F     p-value
-## s(x0)     2.795084 3.458283   4.913383 0.001533757
-## s(fac)    2.928541 3.000000 206.070879 0.000000000
-## s(fac,x0) 1.069337 3.000000  26.014266 0.304806930</code></pre>
+<pre><code>##                 edf   Ref.df            F   p-value
+## s(x0)     2.4724535 3.080003 1.860727e+00 0.1269658
+## s(fac)    2.9715834 3.000000 1.070303e+02 0.0000000
+## s(fac,x0) 0.0122413 3.000000 6.982757e-03 0.4387567</code></pre>
 <p>On peut encore une fois visualiser l’effet combiné de <code>x0</code> sans les niveaux de l’effet aléatoire, et ensuite une courbe pour chacun de quatre niveaux de l’effet aléatoire <code>fac</code>:</p>
 <div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb116-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="dt">cex =</span> <span class="fl">1.1</span>)</span>
 <span id="cb116-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb116-2"></a></span>
@@ -419,27 +419,27 @@ effets sommés d’un GAM (basé sur les prédictions). Cette fonction permet é
 <span id="cb116-14"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb116-14"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;purple&quot;</span>)</span>
 <span id="cb116-15"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb116-15"></a><span class="kw">plot_smooth</span>(gamm_int_slope, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">rm.ranef =</span> <span class="ot">FALSE</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;4&quot;</span>),</span>
 <span id="cb116-16"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb116-16"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;turquoise&quot;</span>)</span></code></pre></div>
-<p><img src="book-fr_files/figure-html/unnamed-chunk-82-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="book-fr_files/figure-html/unnamed-chunk-83-1.png" width="960" style="display: block; margin: auto;" /></p>
 <p>Notez que la pente aléatoire est statique dans ce cas:</p>
 <div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb117-1"></a><span class="kw">plot</span>(gamm_int_slope, <span class="dt">select =</span> <span class="dv">3</span>)</span></code></pre></div>
-<p><img src="book-fr_files/figure-html/unnamed-chunk-83-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="book-fr_files/figure-html/unnamed-chunk-84-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb118-1"></a><span class="co"># select = 3 parce que la pente aléatoire est sur la</span></span>
 <span id="cb118-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb118-2"></a><span class="co"># troisième ligne de notre tableau sommaire.</span></span></code></pre></div>
 </div>
-<div id="gamm-avec-une-surface-lisse-aléatoire" class="section level3">
-<h3><span class="header-section-number">11.2.4</span> GAMM avec une surface lisse aléatoire</h3>
+<div id="gamm-avec-une-surface-lisse-aléatoire" class="section level3 hasAnchor">
+<h3><span class="header-section-number">11.2.4</span> GAMM avec une surface lisse aléatoire<a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-une-surface-lisse-aléatoire" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Finalement, spécifions un modèle avec une surface lisse aléatoire.</p>
 <div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb119-1"></a>gamm_smooth &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(x0) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x0, fac, <span class="dt">bs =</span> <span class="st">&quot;fs&quot;</span>, <span class="dt">m =</span> <span class="dv">1</span>),</span>
 <span id="cb119-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb119-2"></a>    <span class="dt">data =</span> gam_data2, <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span></code></pre></div>
 <pre><code>## Warning in gam.side(sm, X, tol = .Machine$double.eps^0.5): model has repeated 1-
 ## d smooths of same variable.</code></pre>
 <div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb121-1"></a><span class="kw">summary</span>(gamm_smooth)<span class="op">$</span>s.table</span></code></pre></div>
-<pre><code>##                edf    Ref.df        F     p-value
-## s(x0)     2.757829  3.398467 4.517449 0.002877157
-## s(x0,fac) 4.234748 35.000000 7.783552 0.000000000</code></pre>
+<pre><code>##                edf    Ref.df        F   p-value
+## s(x0)     2.472354  3.079833 1.860089 0.1270819
+## s(x0,fac) 2.977596 35.000000 9.077190 0.0000000</code></pre>
 <p>Si la pente aléatoire variait selon <code>x0</code>, on verrait différentes courbes pour chaque niveau:</p>
 <div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb123-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb123-1"></a><span class="kw">plot</span>(gamm_smooth, <span class="dt">select =</span> <span class="dv">1</span>)</span></code></pre></div>
-<p><img src="book-fr_files/figure-html/unnamed-chunk-85-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="book-fr_files/figure-html/unnamed-chunk-86-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb124-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb124-1"></a><span class="co"># select = 1 parce que la surface lisse aléatoire est sur</span></span>
 <span id="cb124-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb124-2"></a><span class="co"># la première ligne de notre tableau sommaire.</span></span></code></pre></div>
 <p>On peut encore une fois visualiser l’effet combiné de <code>x0</code> sans les niveaux de l’effet aléatoire, et ensuite une courbe pour chacun de quatre niveaux de l’effet aléatoire <code>fac</code>:</p>
@@ -459,17 +459,17 @@ effets sommés d’un GAM (basé sur les prédictions). Cette fonction permet é
 <span id="cb125-14"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb125-14"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;purple&quot;</span>)</span>
 <span id="cb125-15"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb125-15"></a><span class="kw">plot_smooth</span>(gamm_smooth, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">rm.ranef =</span> <span class="ot">FALSE</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;4&quot;</span>),</span>
 <span id="cb125-16"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb125-16"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;turquoise&quot;</span>)</span></code></pre></div>
-<p><img src="book-fr_files/figure-html/unnamed-chunk-86-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="book-fr_files/figure-html/unnamed-chunk-87-1.png" width="960" style="display: block; margin: auto;" /></p>
 </div>
-<div id="comparaison-de-gamm" class="section level3">
-<h3><span class="header-section-number">11.2.5</span> Comparaison de GAMM</h3>
+<div id="comparaison-de-gamm" class="section level3 hasAnchor">
+<h3><span class="header-section-number">11.2.5</span> Comparaison de GAMM<a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#comparaison-de-gamm" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Tous les GAMMs de cette section peuvent être comparé avec <code>AIC()</code> pour trouver le modèle le mieux ajusté:</p>
 <div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb126-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb126-1"></a><span class="kw">AIC</span>(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)</span></code></pre></div>
-<pre><code>##                       df      AIC
-## gamm_intercept  8.080981 2280.422
-## gamm_slope      8.184440 2329.937
-## gamm_int_slope 10.165894 2282.002
-## gamm_smooth    10.711922 2282.791</code></pre>
+<pre><code>##                      df      AIC
+## gamm_intercept 8.079703 2249.653
+## gamm_slope     7.939917 2330.614
+## gamm_int_slope 8.103496 2249.677
+## gamm_smooth    8.090818 2249.666</code></pre>
 <p>Le meilleur modèle de ces trois modèles serait donc le GAMM avec un intercept aléatoire.</p>
 
 </div>
@@ -478,7 +478,7 @@ effets sommés d’un GAM (basé sur les prédictions). Cette fonction permet é
 
 
 
-<h3> References</h3>
+<h3> References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div id="refs" class="references">
 <div id="ref-pedersen2019hierarchical">
 <p>Pedersen, Eric J, David L Miller, Gavin L Simpson, and Noam Ross. 2019. “Hierarchical Generalized Additive Models in Ecology: An Introduction with Mgcv.” <em>PeerJ</em> 7: e6876.</p>

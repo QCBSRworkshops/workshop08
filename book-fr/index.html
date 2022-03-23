@@ -6,11 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Atelier 8 : Modèles additifs généralisés en R</title>
   <meta name="description" content="Modèles additifs généralisés en R" />
-  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Atelier 8 : Modèles additifs généralisés en R" />
   <meta property="og:type" content="book" />
-  <meta property="og:url" content="https://github.com/qcbsRworkshops/" />
   <meta property="og:image" content="https://github.com/qcbsRworkshops/assets/images/logo/csbq_logo_accueil.png" />
   <meta property="og:description" content="Modèles additifs généralisés en R" />
   <meta name="github-repo" content="qcbsRworkshops/workshop08" />
@@ -50,8 +49,9 @@
 
 
 <script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
-<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
@@ -136,72 +136,72 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <link rel="icon" type="image/png" href="assets/images/favicon.ico"/>
 
 <li class="divider"></li>
-<li class="part"><span><b>Série d’ateliers R du CSBQ</b></span></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Préface</a><ul>
-<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#code-de-conduit"><i class="fa fa-check"></i><b>0.1</b> Code de conduit</a><ul>
-<li class="chapter" data-level="0.1.1" data-path="index.html"><a href="index.html#comportement-attendu"><i class="fa fa-check"></i><b>0.1.1</b> Comportement attendu</a></li>
-<li class="chapter" data-level="0.1.2" data-path="index.html"><a href="index.html#comportements-inacceptables"><i class="fa fa-check"></i><b>0.1.2</b> Comportements inacceptables</a></li>
+<li class="part"><span><b>Série d’ateliers R du CSBQ<span></span></b></span></li>
+<li><a href="index.html#préface">Préface<span></span></a><ul>
+<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>0.1</b> Code de conduit<span></span></a><ul>
+<li class="chapter" data-level="0.1.1" data-path="index.html"><a href="index.html#comportement-attendu"><i class="fa fa-check"></i><b>0.1.1</b> Comportement attendu<span></span></a></li>
+<li class="chapter" data-level="0.1.2" data-path="index.html"><a href="index.html#comportements-inacceptables"><i class="fa fa-check"></i><b>0.1.2</b> Comportements inacceptables<span></span></a></li>
 </ul></li>
-<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#contributeurs-et-contributrices"><i class="fa fa-check"></i><b>0.2</b> Contributeurs et contributrices</a></li>
-<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#contribuez-à-la-série"><i class="fa fa-check"></i><b>0.3</b> Contribuez à la série!</a></li>
+<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#contributeurs-et-contributrices"><i class="fa fa-check"></i><b>0.2</b> Contributeurs et contributrices<span></span></a></li>
+<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#contribuez-à-la-série"><i class="fa fa-check"></i><b>0.3</b> Contribuez à la série!<span></span></a></li>
 </ul></li>
-<li class="part"><span><b>Modèles additifs généralisés en <code>R</code></b></span></li>
-<li class="chapter" data-level="1" data-path="objectifs-dapprentissage.html"><a href="objectifs-dapprentissage.html"><i class="fa fa-check"></i><b>1</b> Objectifs d’apprentissage</a></li>
-<li class="chapter" data-level="2" data-path="préparez-vous-pour-cet-atelier.html"><a href="préparez-vous-pour-cet-atelier.html"><i class="fa fa-check"></i><b>2</b> Préparez-vous pour cet atelier</a></li>
-<li class="chapter" data-level="3" data-path="intro-linear-models.html"><a href="intro-linear-models.html"><i class="fa fa-check"></i><b>3</b> Le modèle linéaire… et où il échoue</a></li>
-<li class="chapter" data-level="4" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html"><i class="fa fa-check"></i><b>4</b> Introduction aux GAMs</a><ul>
-<li class="chapter" data-level="4.1" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#test-de-linéarité"><i class="fa fa-check"></i><b>4.1</b> Test de linéarité</a></li>
-<li class="chapter" data-level="4.2" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#défi-1"><i class="fa fa-check"></i><b>4.2</b> Défi 1</a><ul>
-<li class="chapter" data-level="4.2.1" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#défi-1-solution"><i class="fa fa-check"></i><b>4.2.1</b> Défi 1: Solution</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="5" data-path="fonctionnement.html"><a href="fonctionnement.html"><i class="fa fa-check"></i><b>5</b> Le fonctionnement des GAMs</a><ul>
-<li class="chapter" data-level="5.1" data-path="fonctionnement.html"><a href="fonctionnement.html#exemple-une-base-polynomiale"><i class="fa fa-check"></i><b>5.1</b> Exemple: une base polynomiale</a></li>
-<li class="chapter" data-level="5.2" data-path="fonctionnement.html"><a href="fonctionnement.html#exemple-une-base-de-spline-cubique"><i class="fa fa-check"></i><b>5.2</b> Exemple: une base de spline cubique</a><ul>
-<li class="chapter" data-level="5.2.1" data-path="fonctionnement.html"><a href="fonctionnement.html#contrôler-le-degré-de-lissage-avec-des-splines-de-régression-pénalisés"><i class="fa fa-check"></i><b>5.2.1</b> Contrôler le degré de lissage avec des splines de régression pénalisés</a></li>
+<li class="part"><span><b>Modèles additifs généralisés en <code>R</code><span></span></b></span></li>
+<li class="chapter" data-level="1" data-path="objectifs-dapprentissage.html"><a href="objectifs-dapprentissage.html"><i class="fa fa-check"></i><b>1</b> Objectifs d’apprentissage<span></span></a></li>
+<li class="chapter" data-level="2" data-path="préparez-vous-pour-cet-atelier.html"><a href="préparez-vous-pour-cet-atelier.html"><i class="fa fa-check"></i><b>2</b> Préparez-vous pour cet atelier<span></span></a></li>
+<li class="chapter" data-level="3" data-path="intro-linear-models.html"><a href="intro-linear-models.html"><i class="fa fa-check"></i><b>3</b> Le modèle linéaire… et où il échoue<span></span></a></li>
+<li class="chapter" data-level="4" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html"><i class="fa fa-check"></i><b>4</b> Introduction aux GAMs<span></span></a><ul>
+<li class="chapter" data-level="4.1" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#test-de-linéarité"><i class="fa fa-check"></i><b>4.1</b> Test de linéarité<span></span></a></li>
+<li class="chapter" data-level="4.2" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#défi-1"><i class="fa fa-check"></i><b>4.2</b> Défi 1<span></span></a><ul>
+<li class="chapter" data-level="4.2.1" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#défi-1-solution"><i class="fa fa-check"></i><b>4.2.1</b> Défi 1: Solution<span></span></a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html"><i class="fa fa-check"></i><b>6</b> GAM avec plusieurs termes non linéaires</a><ul>
-<li class="chapter" data-level="6.1" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-variables-linéaires-et-non-linéaires"><i class="fa fa-check"></i><b>6.1</b> GAM à variables linéaires et non linéaires</a></li>
-<li class="chapter" data-level="6.2" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#degrés-de-liberté-effectifs-edf"><i class="fa fa-check"></i><b>6.2</b> Degrés de liberté effectifs (edf)</a></li>
-<li class="chapter" data-level="6.3" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables-linéaires-et-lisses"><i class="fa fa-check"></i><b>6.3</b> GAM à plusieurs variables linéaires et lisses</a></li>
-<li class="chapter" data-level="6.4" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables-non-linéaires"><i class="fa fa-check"></i><b>6.4</b> GAM à plusieurs variables non linéaires</a></li>
-<li class="chapter" data-level="6.5" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#défi-2"><i class="fa fa-check"></i><b>6.5</b> Défi 2</a><ul>
-<li class="chapter" data-level="6.5.1" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#défi-2-solution"><i class="fa fa-check"></i><b>6.5.1</b> Défi 2: Solution</a></li>
+<li class="chapter" data-level="5" data-path="fonctionnement.html"><a href="fonctionnement.html"><i class="fa fa-check"></i><b>5</b> Le fonctionnement des GAMs<span></span></a><ul>
+<li class="chapter" data-level="5.1" data-path="fonctionnement.html"><a href="fonctionnement.html#exemple-une-base-polynomiale"><i class="fa fa-check"></i><b>5.1</b> Exemple: une base polynomiale<span></span></a></li>
+<li class="chapter" data-level="5.2" data-path="fonctionnement.html"><a href="fonctionnement.html#exemple-une-base-de-spline-cubique"><i class="fa fa-check"></i><b>5.2</b> Exemple: une base de spline cubique<span></span></a><ul>
+<li class="chapter" data-level="5.2.1" data-path="fonctionnement.html"><a href="fonctionnement.html#contrôler-le-degré-de-lissage-avec-des-splines-de-régression-pénalisés"><i class="fa fa-check"></i><b>5.2.1</b> Contrôler le degré de lissage avec des splines de régression pénalisés<span></span></a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html"><i class="fa fa-check"></i><b>7</b> GAM avec des termes d’interaction</a><ul>
-<li class="chapter" data-level="7.1" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html#interaction-entre-variables-non-linéaire-et-qualitatif"><i class="fa fa-check"></i><b>7.1</b> Interaction entre variables non-linéaire et qualitatif</a></li>
-<li class="chapter" data-level="7.2" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html#interaction-entre-variables-non-linéaires"><i class="fa fa-check"></i><b>7.2</b> Interaction entre variables non linéaires</a></li>
-</ul></li>
-<li class="part"><span><b>Généralisation du modèle additif</b></span></li>
-<li class="chapter" data-level="8" data-path="validation-gam.html"><a href="validation-gam.html"><i class="fa fa-check"></i><b>8</b> Validation d’un GAM</a><ul>
-<li class="chapter" data-level="8.1" data-path="validation-gam.html"><a href="validation-gam.html#choisir-k"><i class="fa fa-check"></i><b>8.1</b> Choisir <span class="math inline">\(k\)</span></a><ul>
-<li class="chapter" data-level="8.1.1" data-path="validation-gam.html"><a href="validation-gam.html#est-ce-que-notre-module-est-assez-flexible"><i class="fa fa-check"></i><b>8.1.1</b> Est-ce que notre module est assez flexible?</a></li>
-</ul></li>
-<li class="chapter" data-level="8.2" data-path="validation-gam.html"><a href="validation-gam.html#choisir-une-distribution"><i class="fa fa-check"></i><b>8.2</b> Choisir une distribution</a></li>
-</ul></li>
-<li class="chapter" data-level="9" data-path="autres-distributions.html"><a href="autres-distributions.html"><i class="fa fa-check"></i><b>9</b> Autres distributions</a><ul>
-<li class="chapter" data-level="9.1" data-path="autres-distributions.html"><a href="autres-distributions.html#défi-3"><i class="fa fa-check"></i><b>9.1</b> Défi 3</a><ul>
-<li class="chapter" data-level="9.1.1" data-path="autres-distributions.html"><a href="autres-distributions.html#défi-3-solution"><i class="fa fa-check"></i><b>9.1.1</b> Défi 3: Solution</a></li>
+<li class="chapter" data-level="6" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html"><i class="fa fa-check"></i><b>6</b> GAM avec plusieurs termes non linéaires<span></span></a><ul>
+<li class="chapter" data-level="6.1" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-variables-linéaires-et-non-linéaires"><i class="fa fa-check"></i><b>6.1</b> GAM à variables linéaires et non linéaires<span></span></a></li>
+<li class="chapter" data-level="6.2" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#degrés-de-liberté-effectifs-edf"><i class="fa fa-check"></i><b>6.2</b> Degrés de liberté effectifs (edf)<span></span></a></li>
+<li class="chapter" data-level="6.3" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables-linéaires-et-lisses"><i class="fa fa-check"></i><b>6.3</b> GAM à plusieurs variables linéaires et lisses<span></span></a></li>
+<li class="chapter" data-level="6.4" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables-non-linéaires"><i class="fa fa-check"></i><b>6.4</b> GAM à plusieurs variables non linéaires<span></span></a></li>
+<li class="chapter" data-level="6.5" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#défi-2"><i class="fa fa-check"></i><b>6.5</b> Défi 2<span></span></a><ul>
+<li class="chapter" data-level="6.5.1" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#défi-2-solution"><i class="fa fa-check"></i><b>6.5.1</b> Défi 2: Solution<span></span></a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="changer-la-fonction-de-base.html"><a href="changer-la-fonction-de-base.html"><i class="fa fa-check"></i><b>10</b> Changer la fonction de base</a><ul>
-<li class="chapter" data-level="10.1" data-path="changer-la-fonction-de-base.html"><a href="changer-la-fonction-de-base.html#exemple-données-cycliques"><i class="fa fa-check"></i><b>10.1</b> Exemple: Données cycliques</a></li>
+<li class="chapter" data-level="7" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html"><i class="fa fa-check"></i><b>7</b> GAM avec des termes d’interaction<span></span></a><ul>
+<li class="chapter" data-level="7.1" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html#interaction-entre-variables-non-linéaire-et-qualitatif"><i class="fa fa-check"></i><b>7.1</b> Interaction entre variables non-linéaire et qualitatif<span></span></a></li>
+<li class="chapter" data-level="7.2" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html#interaction-entre-variables-non-linéaires"><i class="fa fa-check"></i><b>7.2</b> Interaction entre variables non linéaires<span></span></a></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><i class="fa fa-check"></i><b>11</b> Intro rapide aux modèles additifs généralisés à effets mixtes (GAMMs)</a><ul>
-<li class="chapter" data-level="11.1" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#lautocorrelation-des-résidus"><i class="fa fa-check"></i><b>11.1</b> L’autocorrelation des résidus</a></li>
-<li class="chapter" data-level="11.2" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#modélisation-avec-effets-mixtes"><i class="fa fa-check"></i><b>11.2</b> Modélisation avec effets mixtes</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-un-intercepte-aléatoire"><i class="fa fa-check"></i><b>11.2.1</b> GAMM avec un intercepte aléatoire</a></li>
-<li class="chapter" data-level="11.2.2" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-une-pente-aléatoire"><i class="fa fa-check"></i><b>11.2.2</b> GAMM avec une pente aléatoire</a></li>
-<li class="chapter" data-level="11.2.3" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-un-intercept-et-une-pente-aléatoire"><i class="fa fa-check"></i><b>11.2.3</b> GAMM avec un intercept et une pente aléatoire</a></li>
-<li class="chapter" data-level="11.2.4" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-une-surface-lisse-aléatoire"><i class="fa fa-check"></i><b>11.2.4</b> GAMM avec une surface lisse aléatoire</a></li>
-<li class="chapter" data-level="11.2.5" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#comparaison-de-gamm"><i class="fa fa-check"></i><b>11.2.5</b> Comparaison de GAMM</a></li>
+<li class="part"><span><b>Généralisation du modèle additif<span></span></b></span></li>
+<li class="chapter" data-level="8" data-path="validation-gam.html"><a href="validation-gam.html"><i class="fa fa-check"></i><b>8</b> Validation d’un GAM<span></span></a><ul>
+<li class="chapter" data-level="8.1" data-path="validation-gam.html"><a href="validation-gam.html#choisir-k"><i class="fa fa-check"></i><b>8.1</b> Choisir <span class="math inline">\(k\)</span><span></span></a><ul>
+<li class="chapter" data-level="8.1.1" data-path="validation-gam.html"><a href="validation-gam.html#est-ce-que-notre-module-est-assez-flexible"><i class="fa fa-check"></i><b>8.1.1</b> Est-ce que notre module est assez flexible?<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="validation-gam.html"><a href="validation-gam.html#choisir-une-distribution"><i class="fa fa-check"></i><b>8.2</b> Choisir une distribution<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="autres-distributions.html"><a href="autres-distributions.html"><i class="fa fa-check"></i><b>9</b> Autres distributions<span></span></a><ul>
+<li class="chapter" data-level="9.1" data-path="autres-distributions.html"><a href="autres-distributions.html#défi-3"><i class="fa fa-check"></i><b>9.1</b> Défi 3<span></span></a><ul>
+<li class="chapter" data-level="9.1.1" data-path="autres-distributions.html"><a href="autres-distributions.html#défi-3-solution"><i class="fa fa-check"></i><b>9.1.1</b> Défi 3: Solution<span></span></a></li>
 </ul></li>
 </ul></li>
-<li class="part"><span><b>Ressources &amp; Références</b></span></li>
-<li class="chapter" data-level="12" data-path="ressources.html"><a href="ressources.html"><i class="fa fa-check"></i><b>12</b> Ressources</a></li>
-<li class="chapter" data-level="13" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>13</b> References</a></li>
+<li class="chapter" data-level="10" data-path="changer-la-fonction-de-base.html"><a href="changer-la-fonction-de-base.html"><i class="fa fa-check"></i><b>10</b> Changer la fonction de base<span></span></a><ul>
+<li class="chapter" data-level="10.1" data-path="changer-la-fonction-de-base.html"><a href="changer-la-fonction-de-base.html#exemple-données-cycliques"><i class="fa fa-check"></i><b>10.1</b> Exemple: Données cycliques<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><i class="fa fa-check"></i><b>11</b> Intro rapide aux modèles additifs généralisés à effets mixtes (GAMMs)<span></span></a><ul>
+<li class="chapter" data-level="11.1" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#lautocorrelation-des-résidus"><i class="fa fa-check"></i><b>11.1</b> L’autocorrelation des résidus<span></span></a></li>
+<li class="chapter" data-level="11.2" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#modélisation-avec-effets-mixtes"><i class="fa fa-check"></i><b>11.2</b> Modélisation avec effets mixtes<span></span></a><ul>
+<li class="chapter" data-level="11.2.1" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-un-intercepte-aléatoire"><i class="fa fa-check"></i><b>11.2.1</b> GAMM avec un intercepte aléatoire<span></span></a></li>
+<li class="chapter" data-level="11.2.2" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-une-pente-aléatoire"><i class="fa fa-check"></i><b>11.2.2</b> GAMM avec une pente aléatoire<span></span></a></li>
+<li class="chapter" data-level="11.2.3" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-un-intercept-et-une-pente-aléatoire"><i class="fa fa-check"></i><b>11.2.3</b> GAMM avec un intercept et une pente aléatoire<span></span></a></li>
+<li class="chapter" data-level="11.2.4" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-une-surface-lisse-aléatoire"><i class="fa fa-check"></i><b>11.2.4</b> GAMM avec une surface lisse aléatoire<span></span></a></li>
+<li class="chapter" data-level="11.2.5" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#comparaison-de-gamm"><i class="fa fa-check"></i><b>11.2.5</b> Comparaison de GAMM<span></span></a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>Ressources &amp; Références<span></span></b></span></li>
+<li class="chapter" data-level="12" data-path="ressources.html"><a href="ressources.html"><i class="fa fa-check"></i><b>12</b> Ressources<span></span></a></li>
+<li class="chapter" data-level="13" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>13</b> References<span></span></a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/qcbsRworkshops" target="blank">QCBS R Workshop Series</a></li>
 
@@ -241,21 +241,21 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <h1 class="title">Atelier 8 : Modèles additifs généralisés en <code>R</code></h1>
 <h2 class="subtitle"><em>Série d’ateliers R du CSBQ</em></h2>
 <p class="author"><em>Développé et maintenu par les contributeurs et contributrices de la Série d’ateliers R du CSBQ<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</em></p>
-<p class="date"><em>2022-02-25 19:12:04</em></p>
+<p class="date"><em>2022-03-23 22:20:27</em></p>
 </div>
-<div id="préface" class="section level1 unnumbered">
-<h1>Préface</h1>
+<div id="préface" class="section level1 unnumbered hasAnchor">
+<h1>Préface<a href="index.html#préface" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>La <strong>Série d’ateliers R du CSBQ</strong> est une série de 10 ateliers qui guide les participants à travers les étapes nécessaires à l’utilisation de R pour un large éventail d’analyses statistiques pertinentes pour la recherche en biologie et en écologie. Ces ateliers en accès libre ont été créés par des membres du CSBQ, à la fois pour les membres du CSBQ et pour la communauté au sens large.</p>
 <p>Le contenu de cet atelier a été revu par plusieurs membres du CSBQ. Si vous souhaitez suggérer des modifications, veuillez contacter les coordinateurs de la série actuelle, dont la liste figure sur la page principale de Github</p>
-<div id="code-de-conduit" class="section level2">
-<h2><span class="header-section-number">0.1</span> Code de conduit</h2>
+<div id="code-de-conduit" class="section level2 hasAnchor">
+<h2><span class="header-section-number">0.1</span> Code de conduit<a href="index.html#code-de-conduit" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>La Série d’ateliers R du CSBQ et le Symposium R du CSBQ sont des lieux dédiés à fournir un environnement accueillant et favorable à toutes les personnes, indépendamment de leurs origines ou de leur identité.</p>
 <p>Les participants, les présentateurs et les organisateurs de la série d’ateliers et d’autres activités connexes acceptent le présent code de conduite lorsqu’ils assistent à des activités liées aux ateliers.</p>
 <p>Nous ne tolérons pas les comportements irrespectueux ou qui excluent, intimident ou gênent les autres.</p>
 <p>Nous ne tolérons pas la discrimination ou le harcèlement fondés sur des caractéristiques telles que, mais sans s’y limiter, l’identité et l’expression du genre, l’orientation sexuelle, le handicap, l’apparence physique, la taille du corps, la citoyenneté, la nationalité, les origines ethniques ou sociales, la grossesse, le statut familial, les informations génétiques, la religion ou les convictions (ou l’absence de celles-ci), l’appartenance à une minorité nationale, la propriété, l’âge, l’éducation, le statut socio-économique, les choix techniques et le niveau d’expérience.</p>
 <p>Il s’applique à tous les espaces gérés par l’atelier ou affiliés à celui-ci, y compris, mais sans s’y limiter, les ateliers, les listes de diffusion et les forums en ligne tels que GitHub, Slack et Twitter.</p>
-<div id="comportement-attendu" class="section level3">
-<h3><span class="header-section-number">0.1.1</span> Comportement attendu</h3>
+<div id="comportement-attendu" class="section level3 hasAnchor">
+<h3><span class="header-section-number">0.1.1</span> Comportement attendu<a href="index.html#comportement-attendu" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Tous les participants sont tenus de faire preuve de respect et de courtoisie envers les autres. Toutes les interactions doivent être professionnelles, quelle que soit la plateforme utilisée : en ligne ou en personne.</p>
 <p>Afin de favoriser un environnement d’apprentissage positif et professionnel, nous encourageons les types de comportements suivants dans tous les événements et plates-formes des ateliers :</p>
 <ul>
@@ -266,8 +266,8 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li>Faire preuve de courtoisie et de respect envers les autres membres de la communauté.</li>
 </ul>
 </div>
-<div id="comportements-inacceptables" class="section level3">
-<h3><span class="header-section-number">0.1.2</span> Comportements inacceptables</h3>
+<div id="comportements-inacceptables" class="section level3 hasAnchor">
+<h3><span class="header-section-number">0.1.2</span> Comportements inacceptables<a href="index.html#comportements-inacceptables" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Voici quelques exemples de comportements inacceptables de la part des participants à tout événement ou plateforme d’atelier :</p>
 <ul>
 <li>les commentaires écrits ou verbaux qui ont pour effet d’exclure des personnes sur la base de leur appartenance à un groupe spécifique ;</li>
@@ -284,14 +284,14 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 </ul>
 </div>
 </div>
-<div id="contributeurs-et-contributrices" class="section level2">
-<h2><span class="header-section-number">0.2</span> Contributeurs et contributrices</h2>
+<div id="contributeurs-et-contributrices" class="section level2 hasAnchor">
+<h2><span class="header-section-number">0.2</span> Contributeurs et contributrices<a href="index.html#contributeurs-et-contributrices" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Cet atelier a été développé à l’origine par Eric Pedersen et Zofia Taranu, et originalement révisé en français by Cédric Frenette Dussault.</p>
 <p>Depuis 2014, plusieurs membres du CSBQ ont contribué à développer et à mettre à jour cet atelier collaborativement sur une base régulière, dans le cadre du Prix d’apprentissage et de développement du Centre de science de la biodiversité du Québec. Ces membres sont:</p>
 <p>Daniel Schoenig, Laurie Maynard, Marie-Hélène Brice, Kevin Cazelles, Pedro Henrique P. Braga, Esteban Gongora, Linley Sherin, Eric Pedersen, Zofia Taranu, Cédric Frenette Dussault, Emmanuelle Chrétien, Vincent Fugère.</p>
 </div>
-<div id="contribuez-à-la-série" class="section level2">
-<h2><span class="header-section-number">0.3</span> Contribuez à la série!</h2>
+<div id="contribuez-à-la-série" class="section level2 hasAnchor">
+<h2><span class="header-section-number">0.3</span> Contribuez à la série!<a href="index.html#contribuez-à-la-série" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>En construction.</p>
 
 </div>

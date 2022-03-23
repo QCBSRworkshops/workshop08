@@ -1,5 +1,20 @@
 ##Section: 01-preparing-for-the-workshop.R 
 
+###Notice ###
+#                                                                            #
+#This is an automatically generated script based on the code chunks from the #
+#book for this workshop.                                                     #
+#                                                                            #
+#It is minimally annotated to allow participants to provide their comments:  #
+#a practice that we highly encourage.                                        #
+#                                                                            #
+#Note that the solutions to the challenges are also included in this script. #
+#When solving the challenges by yourself, attempt to not scroll and peek at  #
+#the solutions.                                                              #
+#                                                                            #
+#Happy coding!                                                               #
+
+
 install.packages("ggplot2")
 install.packages("mgcv")
 install.packages("itsadug")

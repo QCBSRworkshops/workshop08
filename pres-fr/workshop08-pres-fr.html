@@ -14,9 +14,15 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
+.title[
 # Atelier 8: Modèles additifs généralisés
+]
+.subtitle[
 ## Série d’ateliers R
+]
+.author[
 ### Centre de la Science de la Biodiversité du Québec
+]
 
 ---
 
@@ -1461,7 +1467,7 @@ En d'autres mots, est-ce que le `k` est assez grand?
 ```r
 k.check(smooth_interact)
 #                              k'      edf   k-index p-value
-# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883   0.065
+# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883  0.0625
 ```
 
 --
@@ -1502,7 +1508,7 @@ Est-ce que `k` est assez grand maintenant?
 ```r
 k.check(smooth_interact_k60)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626  0.8675
+# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626     0.9
 ```
 
 --
@@ -1633,7 +1639,7 @@ Ensuite, on devrait vérifier le choix des dimensions de bases `k`:
 ```r
 k.check(smooth_interact_tw)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062  0.8175
+# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062  0.8325
 ```
 
 On a un équilibre entre `\(k\)` et les EDF. Super!
@@ -1916,9 +1922,9 @@ gamm_intercept &lt;- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2, method
 
 # Voir la sortie du modèle
 summary(gamm_intercept)$s.table
-#             edf   Ref.df         F     p-value
-# s(x0)  2.831089 3.512996  4.515742 0.002564636
-# s(fac) 2.967738 3.000000 91.918926 0.000000000
+#             edf   Ref.df          F     p-value
+# s(x0)  2.838419 3.524261   4.850861 0.001570022
+# s(fac) 2.973244 3.000000 111.405766 0.000000000
 ```
 
 ---
@@ -1981,9 +1987,9 @@ Ensuite, spécifions un modèle avec une pente aléatoire:
 gamm_slope &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2, method = "REML")
 
 summary(gamm_slope)$s.table
-#                edf   Ref.df         F     p-value
-# s(x0)     2.739357 3.401507  4.071509 0.005389478
-# s(x0,fac) 2.946230 3.000000 55.363059 0.000000000
+#                edf   Ref.df         F    p-value
+# s(x0)     2.687134 3.338558  3.524054 0.01218623
+# s(x0,fac) 2.961610 3.000000 73.471240 0.00000000
 ```
 
 ---
@@ -2030,10 +2036,10 @@ gamm_int_slope &lt;- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
                       data = gam_data2, method = "REML")
 
 summary(gamm_int_slope)$s.table
-#                 edf   Ref.df           F     p-value
-# s(x0)     2.8321223 3.513915   4.5137395 0.002569707
-# s(fac)    2.9625250 3.000000 109.0859477 0.000000000
-# s(fac,x0) 0.1805397 3.000000   0.9372315 0.302343470
+#                edf   Ref.df          F     p-value
+# s(x0)     2.840825 3.526325   4.564027 0.002407426
+# s(fac)    2.943985 3.000000 241.534209 0.000000000
+# s(fac,x0) 1.017578 3.000000  45.732301 0.145394427
 ```
 
 ---
@@ -2097,8 +2103,8 @@ gamm_smooth &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1),
 
 summary(gamm_smooth)$s.table
 #                edf    Ref.df        F     p-value
-# s(x0)     2.828511  3.507551 4.473211 0.002743504
-# s(x0,fac) 3.168910 35.000000 7.889401 0.000000000
+# s(x0)     2.795875  3.452825 4.236642 0.004202589
+# s(x0,fac) 4.568029 35.000000 9.655101 0.000000000
 ```
 
 ---
@@ -2159,11 +2165,11 @@ Tous les GAMMs de cette section peuvent être comparé avec `AIC()` pour trouver
 
 ```r
 AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
-#                      df      AIC
-# gamm_intercept 8.200022 2200.400
-# gamm_slope     8.092271 2271.530
-# gamm_int_slope 8.853209 2201.316
-# gamm_smooth    8.900318 2201.377
+#                       df      AIC
+# gamm_intercept  8.283989 2200.545
+# gamm_slope      8.105535 2268.143
+# gamm_int_slope 10.178125 2201.980
+# gamm_smooth    11.303990 2202.998
 ```
 
 Le meilleur modèle de ces trois modèles serait donc le GAMM avec un intercept aléatoire.
@@ -2413,6 +2419,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable

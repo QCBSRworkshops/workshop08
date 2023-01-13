@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapitre 11 Intro rapide aux modèles additifs généralisés à effets mixtes (GAMMs) | Atelier 8 : Modèles additifs généralisés en R</title>
   <meta name="description" content="Modèles additifs généralisés en R" />
-  <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.31 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapitre 11 Intro rapide aux modèles additifs généralisés à effets mixtes (GAMMs) | Atelier 8 : Modèles additifs généralisés en R" />
   <meta property="og:type" content="book" />
@@ -48,25 +48,24 @@
 
 
 
-<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -86,7 +85,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-le
 div.sourceCode
   {  background-color: #f8f8f8; }
 @media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ef2929; } /* Alert */
 code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
@@ -118,6 +117,28 @@ code span.vs { color: #4e9a06; } /* VerbatimString */
 code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 <link rel="stylesheet" href="assets/qcbs-style.css" type="text/css" />
 </head>
@@ -136,72 +157,88 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <link rel="icon" type="image/png" href="assets/images/favicon.ico"/>
 
 <li class="divider"></li>
-<li class="part"><span><b>Série d’ateliers R du CSBQ<span></span></b></span></li>
-<li><a href="index.html#préface">Préface<span></span></a><ul>
-<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>0.1</b> Code de conduit<span></span></a><ul>
-<li class="chapter" data-level="0.1.1" data-path="index.html"><a href="index.html#comportement-attendu"><i class="fa fa-check"></i><b>0.1.1</b> Comportement attendu<span></span></a></li>
-<li class="chapter" data-level="0.1.2" data-path="index.html"><a href="index.html#comportements-inacceptables"><i class="fa fa-check"></i><b>0.1.2</b> Comportements inacceptables<span></span></a></li>
+<li class="part"><span><b>Série d’ateliers R du CSBQ</b></span></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Préface</a>
+<ul>
+<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#code-de-conduit"><i class="fa fa-check"></i><b>0.1</b> Code de conduit</a>
+<ul>
+<li class="chapter" data-level="0.1.1" data-path="index.html"><a href="index.html#comportement-attendu"><i class="fa fa-check"></i><b>0.1.1</b> Comportement attendu</a></li>
+<li class="chapter" data-level="0.1.2" data-path="index.html"><a href="index.html#comportements-inacceptables"><i class="fa fa-check"></i><b>0.1.2</b> Comportements inacceptables</a></li>
 </ul></li>
-<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#contributeurs-et-contributrices"><i class="fa fa-check"></i><b>0.2</b> Contributeurs et contributrices<span></span></a></li>
-<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#contribuez-à-la-série"><i class="fa fa-check"></i><b>0.3</b> Contribuez à la série!<span></span></a></li>
+<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#contributeurs-et-contributrices"><i class="fa fa-check"></i><b>0.2</b> Contributeurs et contributrices</a></li>
+<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#contribuez-à-la-série"><i class="fa fa-check"></i><b>0.3</b> Contribuez à la série!</a></li>
 </ul></li>
-<li class="part"><span><b>Modèles additifs généralisés en <code>R</code><span></span></b></span></li>
-<li class="chapter" data-level="1" data-path="objectifs-dapprentissage.html"><a href="objectifs-dapprentissage.html"><i class="fa fa-check"></i><b>1</b> Objectifs d’apprentissage<span></span></a></li>
-<li class="chapter" data-level="2" data-path="préparez-vous-pour-cet-atelier.html"><a href="préparez-vous-pour-cet-atelier.html"><i class="fa fa-check"></i><b>2</b> Préparez-vous pour cet atelier<span></span></a></li>
-<li class="chapter" data-level="3" data-path="intro-linear-models.html"><a href="intro-linear-models.html"><i class="fa fa-check"></i><b>3</b> Le modèle linéaire… et où il échoue<span></span></a></li>
-<li class="chapter" data-level="4" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html"><i class="fa fa-check"></i><b>4</b> Introduction aux GAMs<span></span></a><ul>
-<li class="chapter" data-level="4.1" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#test-de-linéarité"><i class="fa fa-check"></i><b>4.1</b> Test de linéarité<span></span></a></li>
-<li class="chapter" data-level="4.2" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#défi-1"><i class="fa fa-check"></i><b>4.2</b> Défi 1<span></span></a><ul>
-<li class="chapter" data-level="4.2.1" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#défi-1-solution"><i class="fa fa-check"></i><b>4.2.1</b> Défi 1: Solution<span></span></a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="5" data-path="fonctionnement.html"><a href="fonctionnement.html"><i class="fa fa-check"></i><b>5</b> Le fonctionnement des GAMs<span></span></a><ul>
-<li class="chapter" data-level="5.1" data-path="fonctionnement.html"><a href="fonctionnement.html#exemple-une-base-polynomiale"><i class="fa fa-check"></i><b>5.1</b> Exemple: une base polynomiale<span></span></a></li>
-<li class="chapter" data-level="5.2" data-path="fonctionnement.html"><a href="fonctionnement.html#exemple-une-base-de-spline-cubique"><i class="fa fa-check"></i><b>5.2</b> Exemple: une base de spline cubique<span></span></a><ul>
-<li class="chapter" data-level="5.2.1" data-path="fonctionnement.html"><a href="fonctionnement.html#contrôler-le-degré-de-lissage-avec-des-splines-de-régression-pénalisés"><i class="fa fa-check"></i><b>5.2.1</b> Contrôler le degré de lissage avec des splines de régression pénalisés<span></span></a></li>
+<li class="part"><span><b>Modèles additifs généralisés en <code>R</code></b></span></li>
+<li class="chapter" data-level="1" data-path="objectifs-dapprentissage.html"><a href="objectifs-dapprentissage.html"><i class="fa fa-check"></i><b>1</b> Objectifs d’apprentissage</a></li>
+<li class="chapter" data-level="2" data-path="préparez-vous-pour-cet-atelier.html"><a href="préparez-vous-pour-cet-atelier.html"><i class="fa fa-check"></i><b>2</b> Préparez-vous pour cet atelier</a></li>
+<li class="chapter" data-level="3" data-path="intro-linear-models.html"><a href="intro-linear-models.html"><i class="fa fa-check"></i><b>3</b> Le modèle linéaire… et où il échoue</a></li>
+<li class="chapter" data-level="4" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html"><i class="fa fa-check"></i><b>4</b> Introduction aux GAMs</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#test-de-linéarité"><i class="fa fa-check"></i><b>4.1</b> Test de linéarité</a></li>
+<li class="chapter" data-level="4.2" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#défi-1"><i class="fa fa-check"></i><b>4.2</b> Défi 1</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#défi-1-solution"><i class="fa fa-check"></i><b>4.2.1</b> Défi 1: Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html"><i class="fa fa-check"></i><b>6</b> GAM avec plusieurs termes non linéaires<span></span></a><ul>
-<li class="chapter" data-level="6.1" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-variables-linéaires-et-non-linéaires"><i class="fa fa-check"></i><b>6.1</b> GAM à variables linéaires et non linéaires<span></span></a></li>
-<li class="chapter" data-level="6.2" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#degrés-de-liberté-effectifs-edf"><i class="fa fa-check"></i><b>6.2</b> Degrés de liberté effectifs (edf)<span></span></a></li>
-<li class="chapter" data-level="6.3" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables-linéaires-et-lisses"><i class="fa fa-check"></i><b>6.3</b> GAM à plusieurs variables linéaires et lisses<span></span></a></li>
-<li class="chapter" data-level="6.4" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables-non-linéaires"><i class="fa fa-check"></i><b>6.4</b> GAM à plusieurs variables non linéaires<span></span></a></li>
-<li class="chapter" data-level="6.5" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#défi-2"><i class="fa fa-check"></i><b>6.5</b> Défi 2<span></span></a><ul>
-<li class="chapter" data-level="6.5.1" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#défi-2-solution"><i class="fa fa-check"></i><b>6.5.1</b> Défi 2: Solution<span></span></a></li>
+<li class="chapter" data-level="5" data-path="fonctionnement.html"><a href="fonctionnement.html"><i class="fa fa-check"></i><b>5</b> Le fonctionnement des GAMs</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="fonctionnement.html"><a href="fonctionnement.html#exemple-une-base-polynomiale"><i class="fa fa-check"></i><b>5.1</b> Exemple: une base polynomiale</a></li>
+<li class="chapter" data-level="5.2" data-path="fonctionnement.html"><a href="fonctionnement.html#exemple-une-base-de-spline-cubique"><i class="fa fa-check"></i><b>5.2</b> Exemple: une base de spline cubique</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="fonctionnement.html"><a href="fonctionnement.html#contrôler-le-degré-de-lissage-avec-des-splines-de-régression-pénalisés"><i class="fa fa-check"></i><b>5.2.1</b> Contrôler le degré de lissage avec des splines de régression pénalisés</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html"><i class="fa fa-check"></i><b>7</b> GAM avec des termes d’interaction<span></span></a><ul>
-<li class="chapter" data-level="7.1" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html#interaction-entre-variables-non-linéaire-et-qualitatif"><i class="fa fa-check"></i><b>7.1</b> Interaction entre variables non-linéaire et qualitatif<span></span></a></li>
-<li class="chapter" data-level="7.2" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html#interaction-entre-variables-non-linéaires"><i class="fa fa-check"></i><b>7.2</b> Interaction entre variables non linéaires<span></span></a></li>
-</ul></li>
-<li class="part"><span><b>Généralisation du modèle additif<span></span></b></span></li>
-<li class="chapter" data-level="8" data-path="validation-gam.html"><a href="validation-gam.html"><i class="fa fa-check"></i><b>8</b> Validation d’un GAM<span></span></a><ul>
-<li class="chapter" data-level="8.1" data-path="validation-gam.html"><a href="validation-gam.html#choisir-k"><i class="fa fa-check"></i><b>8.1</b> Choisir <span class="math inline">\(k\)</span><span></span></a><ul>
-<li class="chapter" data-level="8.1.1" data-path="validation-gam.html"><a href="validation-gam.html#est-ce-que-notre-module-est-assez-flexible"><i class="fa fa-check"></i><b>8.1.1</b> Est-ce que notre module est assez flexible?<span></span></a></li>
-</ul></li>
-<li class="chapter" data-level="8.2" data-path="validation-gam.html"><a href="validation-gam.html#choisir-une-distribution"><i class="fa fa-check"></i><b>8.2</b> Choisir une distribution<span></span></a></li>
-</ul></li>
-<li class="chapter" data-level="9" data-path="autres-distributions.html"><a href="autres-distributions.html"><i class="fa fa-check"></i><b>9</b> Autres distributions<span></span></a><ul>
-<li class="chapter" data-level="9.1" data-path="autres-distributions.html"><a href="autres-distributions.html#défi-3"><i class="fa fa-check"></i><b>9.1</b> Défi 3<span></span></a><ul>
-<li class="chapter" data-level="9.1.1" data-path="autres-distributions.html"><a href="autres-distributions.html#défi-3-solution"><i class="fa fa-check"></i><b>9.1.1</b> Défi 3: Solution<span></span></a></li>
+<li class="chapter" data-level="6" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html"><i class="fa fa-check"></i><b>6</b> GAM avec plusieurs termes non linéaires</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-variables-linéaires-et-non-linéaires"><i class="fa fa-check"></i><b>6.1</b> GAM à variables linéaires et non linéaires</a></li>
+<li class="chapter" data-level="6.2" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#degrés-de-liberté-effectifs-edf"><i class="fa fa-check"></i><b>6.2</b> Degrés de liberté effectifs (edf)</a></li>
+<li class="chapter" data-level="6.3" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables-linéaires-et-lisses"><i class="fa fa-check"></i><b>6.3</b> GAM à plusieurs variables linéaires et lisses</a></li>
+<li class="chapter" data-level="6.4" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables-non-linéaires"><i class="fa fa-check"></i><b>6.4</b> GAM à plusieurs variables non linéaires</a></li>
+<li class="chapter" data-level="6.5" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#défi-2"><i class="fa fa-check"></i><b>6.5</b> Défi 2</a>
+<ul>
+<li class="chapter" data-level="6.5.1" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#défi-2-solution"><i class="fa fa-check"></i><b>6.5.1</b> Défi 2: Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="changer-la-fonction-de-base.html"><a href="changer-la-fonction-de-base.html"><i class="fa fa-check"></i><b>10</b> Changer la fonction de base<span></span></a><ul>
-<li class="chapter" data-level="10.1" data-path="changer-la-fonction-de-base.html"><a href="changer-la-fonction-de-base.html#exemple-données-cycliques"><i class="fa fa-check"></i><b>10.1</b> Exemple: Données cycliques<span></span></a></li>
+<li class="chapter" data-level="7" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html"><i class="fa fa-check"></i><b>7</b> GAM avec des termes d’interaction</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html#interaction-entre-variables-non-linéaire-et-qualitatif"><i class="fa fa-check"></i><b>7.1</b> Interaction entre variables non-linéaire et qualitatif</a></li>
+<li class="chapter" data-level="7.2" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html#interaction-entre-variables-non-linéaires"><i class="fa fa-check"></i><b>7.2</b> Interaction entre variables non linéaires</a></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><i class="fa fa-check"></i><b>11</b> Intro rapide aux modèles additifs généralisés à effets mixtes (GAMMs)<span></span></a><ul>
-<li class="chapter" data-level="11.1" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#lautocorrelation-des-résidus"><i class="fa fa-check"></i><b>11.1</b> L’autocorrelation des résidus<span></span></a></li>
-<li class="chapter" data-level="11.2" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#modélisation-avec-effets-mixtes"><i class="fa fa-check"></i><b>11.2</b> Modélisation avec effets mixtes<span></span></a><ul>
-<li class="chapter" data-level="11.2.1" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-un-intercepte-aléatoire"><i class="fa fa-check"></i><b>11.2.1</b> GAMM avec un intercepte aléatoire<span></span></a></li>
-<li class="chapter" data-level="11.2.2" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-une-pente-aléatoire"><i class="fa fa-check"></i><b>11.2.2</b> GAMM avec une pente aléatoire<span></span></a></li>
-<li class="chapter" data-level="11.2.3" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-un-intercept-et-une-pente-aléatoire"><i class="fa fa-check"></i><b>11.2.3</b> GAMM avec un intercept et une pente aléatoire<span></span></a></li>
-<li class="chapter" data-level="11.2.4" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-une-surface-lisse-aléatoire"><i class="fa fa-check"></i><b>11.2.4</b> GAMM avec une surface lisse aléatoire<span></span></a></li>
-<li class="chapter" data-level="11.2.5" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#comparaison-de-gamm"><i class="fa fa-check"></i><b>11.2.5</b> Comparaison de GAMM<span></span></a></li>
+<li class="part"><span><b>Généralisation du modèle additif</b></span></li>
+<li class="chapter" data-level="8" data-path="validation-gam.html"><a href="validation-gam.html"><i class="fa fa-check"></i><b>8</b> Validation d’un GAM</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="validation-gam.html"><a href="validation-gam.html#choisir-k"><i class="fa fa-check"></i><b>8.1</b> Choisir <span class="math inline">\(k\)</span></a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="validation-gam.html"><a href="validation-gam.html#est-ce-que-notre-module-est-assez-flexible"><i class="fa fa-check"></i><b>8.1.1</b> Est-ce que notre module est assez flexible?</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="validation-gam.html"><a href="validation-gam.html#choisir-une-distribution"><i class="fa fa-check"></i><b>8.2</b> Choisir une distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="autres-distributions.html"><a href="autres-distributions.html"><i class="fa fa-check"></i><b>9</b> Autres distributions</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="autres-distributions.html"><a href="autres-distributions.html#défi-3"><i class="fa fa-check"></i><b>9.1</b> Défi 3</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="autres-distributions.html"><a href="autres-distributions.html#défi-3-solution"><i class="fa fa-check"></i><b>9.1.1</b> Défi 3: Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="part"><span><b>Ressources &amp; Références<span></span></b></span></li>
-<li class="chapter" data-level="12" data-path="ressources.html"><a href="ressources.html"><i class="fa fa-check"></i><b>12</b> Ressources<span></span></a></li>
-<li class="chapter" data-level="13" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>13</b> References<span></span></a></li>
+<li class="chapter" data-level="10" data-path="changer-la-fonction-de-base.html"><a href="changer-la-fonction-de-base.html"><i class="fa fa-check"></i><b>10</b> Changer la fonction de base</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="changer-la-fonction-de-base.html"><a href="changer-la-fonction-de-base.html#exemple-données-cycliques"><i class="fa fa-check"></i><b>10.1</b> Exemple: Données cycliques</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><i class="fa fa-check"></i><b>11</b> Intro rapide aux modèles additifs généralisés à effets mixtes (GAMMs)</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#lautocorrelation-des-résidus"><i class="fa fa-check"></i><b>11.1</b> L’autocorrelation des résidus</a></li>
+<li class="chapter" data-level="11.2" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#modélisation-avec-effets-mixtes"><i class="fa fa-check"></i><b>11.2</b> Modélisation avec effets mixtes</a>
+<ul>
+<li class="chapter" data-level="11.2.1" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-un-intercepte-aléatoire"><i class="fa fa-check"></i><b>11.2.1</b> GAMM avec un intercepte aléatoire</a></li>
+<li class="chapter" data-level="11.2.2" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-une-pente-aléatoire"><i class="fa fa-check"></i><b>11.2.2</b> GAMM avec une pente aléatoire</a></li>
+<li class="chapter" data-level="11.2.3" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-un-intercept-et-une-pente-aléatoire"><i class="fa fa-check"></i><b>11.2.3</b> GAMM avec un intercept et une pente aléatoire</a></li>
+<li class="chapter" data-level="11.2.4" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-une-surface-lisse-aléatoire"><i class="fa fa-check"></i><b>11.2.4</b> GAMM avec une surface lisse aléatoire</a></li>
+<li class="chapter" data-level="11.2.5" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#comparaison-de-gamm"><i class="fa fa-check"></i><b>11.2.5</b> Comparaison de GAMM</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>Ressources &amp; Références</b></span></li>
+<li class="chapter" data-level="12" data-path="ressources.html"><a href="ressources.html"><i class="fa fa-check"></i><b>12</b> Ressources</a></li>
+<li class="chapter" data-level="13" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>13</b> References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/qcbsRworkshops" target="blank">QCBS R Workshop Series</a></li>
 
@@ -237,7 +274,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
   <img class= "hero-image" src="assets/images/jean-philippe-delberghe-75xPHEQBmvA-unsplash_hero_image.jpg">
 </div>
 --!>
-<div id="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms" class="section level1 hasAnchor">
+<div id="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms" class="section level1 hasAnchor" number="11">
 <h1><span class="header-section-number">Chapitre 11</span> Intro rapide aux modèles additifs généralisés à effets mixtes (GAMMs)<a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>Lorsque les observations ne sont pas indépendantes, les GAMs peuvent
 être utilisés soit pour incorporer:</p>
@@ -251,39 +288,39 @@ observations d’un même site.</li>
 <p>En plus de changer la fonction de base, nous pouvons aussi complexifier
 le modèle en intégrant une structure d’auto-corrélation (ou même des
 effets mixtes) en utilisant les fonctions <code>gamm()</code> dans la librairie <code>mgcv</code>. Bien que nous ne l’utilisions pas ici, la librairie <a href="https://cran.r-project.org/web/packages/gamm4/gamm4.pdf"><code>gamm4</code></a> peut également être utilisé pour estimer des modèles GAMMs dans R.</p>
-<div id="lautocorrelation-des-résidus" class="section level2 hasAnchor">
+<div id="lautocorrelation-des-résidus" class="section level2 hasAnchor" number="11.1">
 <h2><span class="header-section-number">11.1</span> L’autocorrelation des résidus<a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#lautocorrelation-des-résidus" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Pour commencer, nous allons jeter un coup d’œil à un modèle avec de l’autocorrélation temporelle dans les résidus. Revenons au modèle
 de la température de Nottingham pour vérifier si les résidus sont corrélés en faisant appel à la fonction (partielle) d’autocorrélation.</p>
-<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb98-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb98-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb98-2"></a><span class="kw">acf</span>(<span class="kw">resid</span>(year_gam), <span class="dt">lag.max =</span> <span class="dv">36</span>, <span class="dt">main =</span> <span class="st">&quot;ACF&quot;</span>)</span>
-<span id="cb98-3"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb98-3"></a><span class="kw">pacf</span>(<span class="kw">resid</span>(year_gam), <span class="dt">lag.max =</span> <span class="dv">36</span>, <span class="dt">main =</span> <span class="st">&quot;pACF&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb100-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb100-2" aria-hidden="true" tabindex="-1"></a><span class="fu">acf</span>(<span class="fu">resid</span>(year_gam), <span class="at">lag.max =</span> <span class="dv">36</span>, <span class="at">main =</span> <span class="st">&quot;ACF&quot;</span>)</span>
+<span id="cb100-3"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb100-3" aria-hidden="true" tabindex="-1"></a><span class="fu">pacf</span>(<span class="fu">resid</span>(year_gam), <span class="at">lag.max =</span> <span class="dv">36</span>, <span class="at">main =</span> <span class="st">&quot;pACF&quot;</span>)</span></code></pre></div>
 <p>La <strong>fonction d’autocorrelaton</strong> (ACF; première figure) évalue la corrélation croisée d’une série temporelle entre points à différents décalages (donc, la similarité entre observations progressivement décalés).</p>
 <p>En contraste, la <strong>fonction partielle d’autocorrelation</strong> (PACF: deuxième figure) évalue la corrélation croisée d’une série temporelle entre points à différents décalages, après avoir contrôlé les valeurs de la série temporelle à tous les décalages plus courts.</p>
 <p>Les graphiques ACF et pACF sont donc utilisés pour identifier le temps nécessaire avant que les observations ne sont plus autocorrélées.</p>
 <p>Les graphiques des fonctions d’autocorrélation suggèrent qu’un modèle AR de faible ordre est nécessaire (avec un ou deux intervalles de temps décalés).</p>
 <p>Nous pouvons tester cet hypothèse en ajoutant des structures d’autocorrelation au modèle de température de Nottingham. Créons un modèle <code>AR(1)</code> (corrélation à 1 intervalle de temps décalé), et un modèle <code>AR(2)</code> (corrélation à 2 intervalles de temps décalés), et comparons-les avec AIC pour déterminer le modèle le mieux ajusté.</p>
-<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb99-1"></a>df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(nottem, nottem_year, nottem_month)</span>
-<span id="cb99-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb99-2"></a></span>
-<span id="cb99-3"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb99-3"></a>year_gam &lt;-<span class="st"> </span><span class="kw">gamm</span>(nottem <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(nottem_year) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(nottem_month, <span class="dt">bs =</span> <span class="st">&quot;cc&quot;</span>),</span>
-<span id="cb99-4"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb99-4"></a>    <span class="dt">data =</span> df)</span>
-<span id="cb99-5"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb99-5"></a></span>
-<span id="cb99-6"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb99-6"></a>year_gam_AR1 &lt;-<span class="st"> </span><span class="kw">gamm</span>(nottem <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(nottem_year) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(nottem_month,</span>
-<span id="cb99-7"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb99-7"></a>    <span class="dt">bs =</span> <span class="st">&quot;cc&quot;</span>), <span class="dt">correlation =</span> <span class="kw">corARMA</span>(<span class="dt">form =</span> <span class="op">~</span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span>nottem_year,</span>
-<span id="cb99-8"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb99-8"></a>    <span class="dt">p =</span> <span class="dv">1</span>), <span class="dt">data =</span> df)</span>
-<span id="cb99-9"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb99-9"></a></span>
-<span id="cb99-10"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb99-10"></a>year_gam_AR2 &lt;-<span class="st"> </span><span class="kw">gamm</span>(nottem <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(nottem_year) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(nottem_month,</span>
-<span id="cb99-11"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb99-11"></a>    <span class="dt">bs =</span> <span class="st">&quot;cc&quot;</span>), <span class="dt">correlation =</span> <span class="kw">corARMA</span>(<span class="dt">form =</span> <span class="op">~</span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span>nottem_year,</span>
-<span id="cb99-12"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb99-12"></a>    <span class="dt">p =</span> <span class="dv">2</span>), <span class="dt">data =</span> df)</span></code></pre></div>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb101-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(nottem, nottem_year, nottem_month)</span>
+<span id="cb101-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb101-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-3"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb101-3" aria-hidden="true" tabindex="-1"></a>year_gam <span class="ot">&lt;-</span> <span class="fu">gamm</span>(nottem <span class="sc">~</span> <span class="fu">s</span>(nottem_year) <span class="sc">+</span> <span class="fu">s</span>(nottem_month, <span class="at">bs =</span> <span class="st">&quot;cc&quot;</span>),</span>
+<span id="cb101-4"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb101-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> df)</span>
+<span id="cb101-5"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb101-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-6"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb101-6" aria-hidden="true" tabindex="-1"></a>year_gam_AR1 <span class="ot">&lt;-</span> <span class="fu">gamm</span>(nottem <span class="sc">~</span> <span class="fu">s</span>(nottem_year) <span class="sc">+</span> <span class="fu">s</span>(nottem_month,</span>
+<span id="cb101-7"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb101-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">bs =</span> <span class="st">&quot;cc&quot;</span>), <span class="at">correlation =</span> <span class="fu">corARMA</span>(<span class="at">form =</span> <span class="sc">~</span><span class="dv">1</span> <span class="sc">|</span> nottem_year,</span>
+<span id="cb101-8"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb101-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">p =</span> <span class="dv">1</span>), <span class="at">data =</span> df)</span>
+<span id="cb101-9"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb101-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-10"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb101-10" aria-hidden="true" tabindex="-1"></a>year_gam_AR2 <span class="ot">&lt;-</span> <span class="fu">gamm</span>(nottem <span class="sc">~</span> <span class="fu">s</span>(nottem_year) <span class="sc">+</span> <span class="fu">s</span>(nottem_month,</span>
+<span id="cb101-11"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb101-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">bs =</span> <span class="st">&quot;cc&quot;</span>), <span class="at">correlation =</span> <span class="fu">corARMA</span>(<span class="at">form =</span> <span class="sc">~</span><span class="dv">1</span> <span class="sc">|</span> nottem_year,</span>
+<span id="cb101-12"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb101-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">p =</span> <span class="dv">2</span>), <span class="at">data =</span> df)</span></code></pre></div>
 <p>Quel modèle est mieux ajusté?</p>
-<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb100-1"></a><span class="kw">AIC</span>(year_gam<span class="op">$</span>lme, year_gam_AR1<span class="op">$</span>lme, year_gam_AR2<span class="op">$</span>lme)</span></code></pre></div>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb102-1" aria-hidden="true" tabindex="-1"></a><span class="fu">AIC</span>(year_gam<span class="sc">$</span>lme, year_gam_AR1<span class="sc">$</span>lme, year_gam_AR2<span class="sc">$</span>lme)</span></code></pre></div>
 <pre><code>##                  df      AIC
 ## year_gam$lme      5 1109.908
 ## year_gam_AR1$lme  6 1101.218
 ## year_gam_AR2$lme  7 1101.598</code></pre>
 <p>Le modèle avec la structure AR(1) donne un meilleur ajustement comparé au premier modèle (<code>year_gam</code>), il y a très peu d’amélioration en passant au <code>AR(2)</code>. Il est donc préférable d’inclure uniquement la structure <code>AR(1)</code> dans notre modèle.</p>
 </div>
-<div id="modélisation-avec-effets-mixtes" class="section level2 hasAnchor">
+<div id="modélisation-avec-effets-mixtes" class="section level2 hasAnchor" number="11.2">
 <h2><span class="header-section-number">11.2</span> Modélisation avec effets mixtes<a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#modélisation-avec-effets-mixtes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Comme nous l’avons vu dans la section précédente, <code>bs</code> spécifie la
 fonction de base sous-jacente. Pour les facteurs aléatoires (origine et
@@ -308,168 +345,168 @@ s’éloigne de 0, ce qui entraîne un retrait vers la moyenne.</li>
 <div class="noway">
 <p>Ceci est une introduction (très!) brève aux effets aléatoires dans les GAMMs. Pour plus de détails, nous recommandons <em>fortement</em> <span class="citation">Pedersen et al. (<a href="#ref-pedersen2019hierarchical" role="doc-biblioref">2019</a>)</span>, un article très accessible qui décrit plusieurs façons de spécifier des GAMMs pour répondre à des questions écologiques.</p>
 </div>
-<div id="gamm-avec-un-intercepte-aléatoire" class="section level3 hasAnchor">
+<div id="gamm-avec-un-intercepte-aléatoire" class="section level3 hasAnchor" number="11.2.1">
 <h3><span class="header-section-number">11.2.1</span> GAMM avec un intercepte aléatoire<a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-un-intercepte-aléatoire" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Nous allons utiliser <code>gamSim()</code> pour générer un ensemble de données, cette fois-ci avec un effet aléatoire. Ensuite, nous construirons un modèle avec un intercepte aléatoire en utilisant <code>fac</code> comme facteur aléatoire.</p>
-<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb102-1"></a><span class="co"># Simuler des données</span></span>
-<span id="cb102-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb102-2"></a>gam_data2 &lt;-<span class="st"> </span><span class="kw">gamSim</span>(<span class="dt">eg =</span> <span class="dv">6</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simuler des données</span></span>
+<span id="cb104-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb104-2" aria-hidden="true" tabindex="-1"></a>gam_data2 <span class="ot">&lt;-</span> <span class="fu">gamSim</span>(<span class="at">eg =</span> <span class="dv">6</span>)</span></code></pre></div>
 <pre><code>## 4 term additive + random effectGu &amp; Wahba 4 term additive model</code></pre>
-<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb104-1"></a><span class="kw">head</span>(gam_data2)</span></code></pre></div>
-<pre><code>##           y        x0        x1         x2        x3         f        f0
-## 1 15.543084 0.2836784 0.9678011 0.07470757 0.7212896 13.402026 1.5556553
-## 2  9.679579 0.6429449 0.2477467 0.04217969 0.7107154  9.930704 1.8016983
-## 3 14.234737 0.7728427 0.3225161 0.74580754 0.5211371 14.362293 1.3091732
-## 4 18.414209 0.3699114 0.7085314 0.49652103 0.9870318 20.714602 1.8352881
-## 5  9.112216 0.1276116 0.6574066 0.65561401 0.9661671 10.780157 0.7805009
-## 6 11.474683 0.7743484 0.6852275 0.83592880 0.1025187 11.782589 1.3020065
-##         f1        f2 f3 fac
-## 1 6.928215 1.9181561  0   1
-## 2 1.641308 0.4876976  0   2
-## 3 1.906048 2.1470715  0   3
-## 4 4.124986 2.7543273  0   4
-## 5 3.724056 3.2756002  0   1
-## 6 3.937142 0.5434408  0   2</code></pre>
-<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb106-1"></a><span class="co"># Rouler un modèle avec intercepte aléatoire</span></span>
-<span id="cb106-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb106-2"></a>gamm_intercept &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(x0) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(fac, <span class="dt">bs =</span> <span class="st">&quot;re&quot;</span>), <span class="dt">data =</span> gam_data2,</span>
-<span id="cb106-3"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb106-3"></a>    <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
-<span id="cb106-4"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb106-4"></a></span>
-<span id="cb106-5"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb106-5"></a><span class="co"># Voir la sortie du modèle</span></span>
-<span id="cb106-6"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb106-6"></a><span class="kw">summary</span>(gamm_intercept)<span class="op">$</span>s.table</span></code></pre></div>
-<pre><code>##             edf   Ref.df          F   p-value
-## s(x0)  2.472448 3.080013   1.860428 0.1270148
-## s(fac) 2.971899 3.000000 105.897866 0.0000000</code></pre>
+<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(gam_data2)</span></code></pre></div>
+<pre><code>##           y         x0        x1        x2         x3         f         f0
+## 1  7.447214 0.01187972 0.2035120 0.4945059 0.73141941  7.337059 0.07462514
+## 2 22.628251 0.68667889 0.9666880 0.2213280 0.67339805 23.466335 1.66579998
+## 3 23.781802 0.58399076 0.2748391 0.1986483 0.45359493 21.224725 1.93077842
+## 4 19.418014 0.92468357 0.4035589 0.3976822 0.06634208 19.038438 0.46882376
+## 5 15.768860 0.86561852 0.8469147 0.2192735 0.33276781 18.132802 0.81948517
+## 6 11.283497 0.21012765 0.3788559 0.4912578 0.21573884 12.131255 1.22644773
+##         f1       f2 f3 fac
+## 1 1.502340 2.760094  0   1
+## 2 6.912808 8.887727  0   2
+## 3 1.732695 8.561251  0   3
+## 4 2.241438 4.328176  0   4
+## 5 5.440274 8.873043  0   1
+## 6 2.133389 2.771418  0   2</code></pre>
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb108-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Rouler un modèle avec intercepte aléatoire</span></span>
+<span id="cb108-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb108-2" aria-hidden="true" tabindex="-1"></a>gamm_intercept <span class="ot">&lt;-</span> <span class="fu">gam</span>(y <span class="sc">~</span> <span class="fu">s</span>(x0) <span class="sc">+</span> <span class="fu">s</span>(fac, <span class="at">bs =</span> <span class="st">&quot;re&quot;</span>), <span class="at">data =</span> gam_data2,</span>
+<span id="cb108-3"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb108-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
+<span id="cb108-4"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb108-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb108-5"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb108-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Voir la sortie du modèle</span></span>
+<span id="cb108-6"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb108-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gamm_intercept)<span class="sc">$</span>s.table</span></code></pre></div>
+<pre><code>##             edf   Ref.df         F     p-value
+## s(x0)  2.638784 3.277115  3.800617 0.008627317
+## s(fac) 2.969756 3.000000 98.050964 0.000000000</code></pre>
 <p>Notez qu’il y a maintenant un terme aléatoire dans le sommaire du modèle. Vous pouvez visualiser les intercepts aléatoires pour chaque niveau de <code>fac</code> comme ceci:</p>
-<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb108-1"></a><span class="kw">plot</span>(gamm_intercept, <span class="dt">select =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb110-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(gamm_intercept, <span class="at">select =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="book-fr_files/figure-html/unnamed-chunk-78-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb109-1"></a><span class="co"># select = 2 parce que le terme aléatoire se trouve sur la</span></span>
-<span id="cb109-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb109-2"></a><span class="co"># 2e ligne du tableau sommaire.</span></span></code></pre></div>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb111-1" aria-hidden="true" tabindex="-1"></a><span class="co"># select = 2 parce que le terme aléatoire se trouve sur la</span></span>
+<span id="cb111-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb111-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 2e ligne du tableau sommaire.</span></span></code></pre></div>
 <p>Nous pouvons également utiliser la fonction <code>plot_smooth</code> pour visualiser le modèle, qui nous permet de visualisés des
 effets sommés d’un GAM (basé sur les prédictions). Cette fonction permet également de supprimer les effets aléatoires en définissant <code>rm.ranef = TRUE</code>.</p>
 <p>On peut premièrement visualiser l’effet combiné de <code>x0</code> sans les niveaux de l’effet aléatoire, et ensuite une courbe pour chacun de quatre niveaux de l’effet aléatoire <code>fac</code>:</p>
-<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb110-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="dt">cex =</span> <span class="fl">1.1</span>)</span>
-<span id="cb110-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb110-2"></a></span>
-<span id="cb110-3"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb110-3"></a><span class="co"># Visualiser les effets combinés de x0 (sans effets</span></span>
-<span id="cb110-4"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb110-4"></a><span class="co"># aléatoires)</span></span>
-<span id="cb110-5"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb110-5"></a><span class="kw">plot_smooth</span>(gamm_intercept, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">rm.ranef =</span> <span class="ot">TRUE</span>, <span class="dt">main =</span> <span class="st">&quot;intercept + s(x1)&quot;</span>)</span>
-<span id="cb110-6"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb110-6"></a></span>
-<span id="cb110-7"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb110-7"></a><span class="co"># Visualiser chaque niveau de l&#39;effet aléatoire</span></span>
-<span id="cb110-8"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb110-8"></a><span class="kw">plot_smooth</span>(gamm_intercept, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">rm.ranef =</span> <span class="ot">FALSE</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;1&quot;</span>),</span>
-<span id="cb110-9"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb110-9"></a>    <span class="dt">main =</span> <span class="st">&quot;... + s(fac)&quot;</span>, <span class="dt">col =</span> <span class="st">&quot;orange&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">25</span>))</span>
-<span id="cb110-10"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb110-10"></a><span class="kw">plot_smooth</span>(gamm_intercept, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">rm.ranef =</span> <span class="ot">FALSE</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;2&quot;</span>),</span>
-<span id="cb110-11"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb110-11"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span>
-<span id="cb110-12"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb110-12"></a><span class="kw">plot_smooth</span>(gamm_intercept, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">rm.ranef =</span> <span class="ot">FALSE</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;3&quot;</span>),</span>
-<span id="cb110-13"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb110-13"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;purple&quot;</span>)</span>
-<span id="cb110-14"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb110-14"></a><span class="kw">plot_smooth</span>(gamm_intercept, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">rm.ranef =</span> <span class="ot">FALSE</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;4&quot;</span>),</span>
-<span id="cb110-15"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb110-15"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;turquoise&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb112-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="at">cex =</span> <span class="fl">1.1</span>)</span>
+<span id="cb112-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb112-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb112-3"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb112-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualiser les effets combinés de x0 (sans effets</span></span>
+<span id="cb112-4"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb112-4" aria-hidden="true" tabindex="-1"></a><span class="co"># aléatoires)</span></span>
+<span id="cb112-5"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb112-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_smooth</span>(gamm_intercept, <span class="at">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="at">rm.ranef =</span> <span class="cn">TRUE</span>, <span class="at">main =</span> <span class="st">&quot;intercept + s(x1)&quot;</span>)</span>
+<span id="cb112-6"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb112-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb112-7"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb112-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualiser chaque niveau de l&#39;effet aléatoire</span></span>
+<span id="cb112-8"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb112-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_smooth</span>(gamm_intercept, <span class="at">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="at">rm.ranef =</span> <span class="cn">FALSE</span>, <span class="at">cond =</span> <span class="fu">list</span>(<span class="at">fac =</span> <span class="st">&quot;1&quot;</span>),</span>
+<span id="cb112-9"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb112-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">main =</span> <span class="st">&quot;... + s(fac)&quot;</span>, <span class="at">col =</span> <span class="st">&quot;orange&quot;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">25</span>))</span>
+<span id="cb112-10"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb112-10" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_smooth</span>(gamm_intercept, <span class="at">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="at">rm.ranef =</span> <span class="cn">FALSE</span>, <span class="at">cond =</span> <span class="fu">list</span>(<span class="at">fac =</span> <span class="st">&quot;2&quot;</span>),</span>
+<span id="cb112-11"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb112-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb112-12"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb112-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_smooth</span>(gamm_intercept, <span class="at">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="at">rm.ranef =</span> <span class="cn">FALSE</span>, <span class="at">cond =</span> <span class="fu">list</span>(<span class="at">fac =</span> <span class="st">&quot;3&quot;</span>),</span>
+<span id="cb112-13"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb112-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">&quot;purple&quot;</span>)</span>
+<span id="cb112-14"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb112-14" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_smooth</span>(gamm_intercept, <span class="at">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="at">rm.ranef =</span> <span class="cn">FALSE</span>, <span class="at">cond =</span> <span class="fu">list</span>(<span class="at">fac =</span> <span class="st">&quot;4&quot;</span>),</span>
+<span id="cb112-15"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb112-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">&quot;turquoise&quot;</span>)</span></code></pre></div>
 <p><img src="book-fr_files/figure-html/unnamed-chunk-79-1.png" width="960" style="display: block; margin: auto;" /></p>
 </div>
-<div id="gamm-avec-une-pente-aléatoire" class="section level3 hasAnchor">
+<div id="gamm-avec-une-pente-aléatoire" class="section level3 hasAnchor" number="11.2.2">
 <h3><span class="header-section-number">11.2.2</span> GAMM avec une pente aléatoire<a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-une-pente-aléatoire" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Ensuite, spécifions un modèle avec une pente aléatoire:</p>
-<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb111-1"></a>gamm_slope &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(x0) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x0, fac, <span class="dt">bs =</span> <span class="st">&quot;re&quot;</span>), <span class="dt">data =</span> gam_data2,</span>
-<span id="cb111-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb111-2"></a>    <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
-<span id="cb111-3"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb111-3"></a></span>
-<span id="cb111-4"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb111-4"></a><span class="kw">summary</span>(gamm_slope)<span class="op">$</span>s.table</span></code></pre></div>
-<pre><code>##                edf   Ref.df         F   p-value
-## s(x0)     2.359863 2.940753  1.879359 0.1602494
-## s(x0,fac) 2.952966 3.000000 62.232298 0.0000000</code></pre>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb113-1" aria-hidden="true" tabindex="-1"></a>gamm_slope <span class="ot">&lt;-</span> <span class="fu">gam</span>(y <span class="sc">~</span> <span class="fu">s</span>(x0) <span class="sc">+</span> <span class="fu">s</span>(x0, fac, <span class="at">bs =</span> <span class="st">&quot;re&quot;</span>), <span class="at">data =</span> gam_data2,</span>
+<span id="cb113-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb113-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
+<span id="cb113-3"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb113-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-4"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb113-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gamm_slope)<span class="sc">$</span>s.table</span></code></pre></div>
+<pre><code>##                edf   Ref.df         F    p-value
+## s(x0)     2.450294 3.043891  2.207364 0.08440636
+## s(x0,fac) 2.962920 3.000000 83.852918 0.00000000</code></pre>
 <p>On peut encore une fois visualiser l’effet combiné de <code>x0</code> sans les niveaux de l’effet aléatoire, et ensuite une courbe pour chacun de quatre niveaux de l’effet aléatoire <code>fac</code>:</p>
-<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb113-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="dt">cex =</span> <span class="fl">1.1</span>)</span>
-<span id="cb113-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb113-2"></a></span>
-<span id="cb113-3"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb113-3"></a><span class="co"># Visualiser les effets combinés de x0 (sans effets</span></span>
-<span id="cb113-4"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb113-4"></a><span class="co"># aléatoires)</span></span>
-<span id="cb113-5"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb113-5"></a><span class="kw">plot_smooth</span>(gamm_slope, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">rm.ranef =</span> <span class="ot">TRUE</span>, <span class="dt">main =</span> <span class="st">&quot;intercept + s(x1)&quot;</span>)</span>
-<span id="cb113-6"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb113-6"></a></span>
-<span id="cb113-7"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb113-7"></a><span class="co"># Visualiser chaque niveau de l&#39;effet aléatoire</span></span>
-<span id="cb113-8"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb113-8"></a><span class="kw">plot_smooth</span>(gamm_slope, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">rm.ranef =</span> <span class="ot">FALSE</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;1&quot;</span>),</span>
-<span id="cb113-9"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb113-9"></a>    <span class="dt">main =</span> <span class="st">&quot;... + s(fac, x0)&quot;</span>, <span class="dt">col =</span> <span class="st">&quot;orange&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">25</span>))</span>
-<span id="cb113-10"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb113-10"></a><span class="kw">plot_smooth</span>(gamm_slope, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">rm.ranef =</span> <span class="ot">FALSE</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;2&quot;</span>),</span>
-<span id="cb113-11"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb113-11"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span>
-<span id="cb113-12"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb113-12"></a><span class="kw">plot_smooth</span>(gamm_slope, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">rm.ranef =</span> <span class="ot">FALSE</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;3&quot;</span>),</span>
-<span id="cb113-13"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb113-13"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;purple&quot;</span>)</span>
-<span id="cb113-14"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb113-14"></a><span class="kw">plot_smooth</span>(gamm_slope, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">rm.ranef =</span> <span class="ot">FALSE</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;4&quot;</span>),</span>
-<span id="cb113-15"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb113-15"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;turquoise&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb115-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="at">cex =</span> <span class="fl">1.1</span>)</span>
+<span id="cb115-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb115-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb115-3"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb115-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualiser les effets combinés de x0 (sans effets</span></span>
+<span id="cb115-4"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb115-4" aria-hidden="true" tabindex="-1"></a><span class="co"># aléatoires)</span></span>
+<span id="cb115-5"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb115-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_smooth</span>(gamm_slope, <span class="at">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="at">rm.ranef =</span> <span class="cn">TRUE</span>, <span class="at">main =</span> <span class="st">&quot;intercept + s(x1)&quot;</span>)</span>
+<span id="cb115-6"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb115-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb115-7"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb115-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualiser chaque niveau de l&#39;effet aléatoire</span></span>
+<span id="cb115-8"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb115-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_smooth</span>(gamm_slope, <span class="at">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="at">rm.ranef =</span> <span class="cn">FALSE</span>, <span class="at">cond =</span> <span class="fu">list</span>(<span class="at">fac =</span> <span class="st">&quot;1&quot;</span>),</span>
+<span id="cb115-9"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb115-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">main =</span> <span class="st">&quot;... + s(fac, x0)&quot;</span>, <span class="at">col =</span> <span class="st">&quot;orange&quot;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">25</span>))</span>
+<span id="cb115-10"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb115-10" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_smooth</span>(gamm_slope, <span class="at">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="at">rm.ranef =</span> <span class="cn">FALSE</span>, <span class="at">cond =</span> <span class="fu">list</span>(<span class="at">fac =</span> <span class="st">&quot;2&quot;</span>),</span>
+<span id="cb115-11"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb115-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb115-12"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb115-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_smooth</span>(gamm_slope, <span class="at">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="at">rm.ranef =</span> <span class="cn">FALSE</span>, <span class="at">cond =</span> <span class="fu">list</span>(<span class="at">fac =</span> <span class="st">&quot;3&quot;</span>),</span>
+<span id="cb115-13"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb115-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">&quot;purple&quot;</span>)</span>
+<span id="cb115-14"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb115-14" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_smooth</span>(gamm_slope, <span class="at">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="at">rm.ranef =</span> <span class="cn">FALSE</span>, <span class="at">cond =</span> <span class="fu">list</span>(<span class="at">fac =</span> <span class="st">&quot;4&quot;</span>),</span>
+<span id="cb115-15"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb115-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">&quot;turquoise&quot;</span>)</span></code></pre></div>
 <p><img src="book-fr_files/figure-html/unnamed-chunk-81-1.png" width="960" style="display: block; margin: auto;" /></p>
 </div>
-<div id="gamm-avec-un-intercept-et-une-pente-aléatoire" class="section level3 hasAnchor">
+<div id="gamm-avec-un-intercept-et-une-pente-aléatoire" class="section level3 hasAnchor" number="11.2.3">
 <h3><span class="header-section-number">11.2.3</span> GAMM avec un intercept et une pente aléatoire<a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-un-intercept-et-une-pente-aléatoire" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>On peut aussi inclure un intercept et une pente aléatoire.</p>
-<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb114-1"></a>gamm_int_slope &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(x0) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(fac, <span class="dt">bs =</span> <span class="st">&quot;re&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(fac,</span>
-<span id="cb114-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb114-2"></a>    x0, <span class="dt">bs =</span> <span class="st">&quot;re&quot;</span>), <span class="dt">data =</span> gam_data2, <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
-<span id="cb114-3"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb114-3"></a></span>
-<span id="cb114-4"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb114-4"></a><span class="kw">summary</span>(gamm_int_slope)<span class="op">$</span>s.table</span></code></pre></div>
-<pre><code>##                 edf   Ref.df            F   p-value
-## s(x0)     2.4724535 3.080003 1.860727e+00 0.1269658
-## s(fac)    2.9715834 3.000000 1.070303e+02 0.0000000
-## s(fac,x0) 0.0122413 3.000000 6.982757e-03 0.4387567</code></pre>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb116-1" aria-hidden="true" tabindex="-1"></a>gamm_int_slope <span class="ot">&lt;-</span> <span class="fu">gam</span>(y <span class="sc">~</span> <span class="fu">s</span>(x0) <span class="sc">+</span> <span class="fu">s</span>(fac, <span class="at">bs =</span> <span class="st">&quot;re&quot;</span>) <span class="sc">+</span> <span class="fu">s</span>(fac,</span>
+<span id="cb116-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb116-2" aria-hidden="true" tabindex="-1"></a>    x0, <span class="at">bs =</span> <span class="st">&quot;re&quot;</span>), <span class="at">data =</span> gam_data2, <span class="at">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
+<span id="cb116-3"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb116-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-4"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb116-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gamm_int_slope)<span class="sc">$</span>s.table</span></code></pre></div>
+<pre><code>##                edf  Ref.df          F     p-value
+## s(x0)     2.579562 3.20239   3.145117 0.022324891
+## s(fac)    2.839378 3.00000 508.130983 0.000000000
+## s(fac,x0) 2.303797 3.00000 296.365269 0.004959271</code></pre>
 <p>On peut encore une fois visualiser l’effet combiné de <code>x0</code> sans les niveaux de l’effet aléatoire, et ensuite une courbe pour chacun de quatre niveaux de l’effet aléatoire <code>fac</code>:</p>
-<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb116-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="dt">cex =</span> <span class="fl">1.1</span>)</span>
-<span id="cb116-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb116-2"></a></span>
-<span id="cb116-3"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb116-3"></a><span class="co"># Visualiser les effets combinés de x0 (sans effets</span></span>
-<span id="cb116-4"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb116-4"></a><span class="co"># aléatoires)</span></span>
-<span id="cb116-5"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb116-5"></a><span class="kw">plot_smooth</span>(gamm_int_slope, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">rm.ranef =</span> <span class="ot">TRUE</span>, <span class="dt">main =</span> <span class="st">&quot;intercept + s(x1)&quot;</span>)</span>
-<span id="cb116-6"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb116-6"></a></span>
-<span id="cb116-7"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb116-7"></a><span class="co"># Visualiser chaque niveau de l&#39;effet aléatoire</span></span>
-<span id="cb116-8"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb116-8"></a><span class="kw">plot_smooth</span>(gamm_int_slope, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">rm.ranef =</span> <span class="ot">FALSE</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;1&quot;</span>),</span>
-<span id="cb116-9"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb116-9"></a>    <span class="dt">main =</span> <span class="st">&quot;... + s(fac) + s(fac, x0)&quot;</span>, <span class="dt">col =</span> <span class="st">&quot;orange&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>,</span>
-<span id="cb116-10"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb116-10"></a>        <span class="dv">25</span>))</span>
-<span id="cb116-11"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb116-11"></a><span class="kw">plot_smooth</span>(gamm_int_slope, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">rm.ranef =</span> <span class="ot">FALSE</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;2&quot;</span>),</span>
-<span id="cb116-12"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb116-12"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span>
-<span id="cb116-13"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb116-13"></a><span class="kw">plot_smooth</span>(gamm_int_slope, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">rm.ranef =</span> <span class="ot">FALSE</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;3&quot;</span>),</span>
-<span id="cb116-14"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb116-14"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;purple&quot;</span>)</span>
-<span id="cb116-15"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb116-15"></a><span class="kw">plot_smooth</span>(gamm_int_slope, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">rm.ranef =</span> <span class="ot">FALSE</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;4&quot;</span>),</span>
-<span id="cb116-16"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb116-16"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;turquoise&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb118-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="at">cex =</span> <span class="fl">1.1</span>)</span>
+<span id="cb118-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb118-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb118-3"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb118-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualiser les effets combinés de x0 (sans effets</span></span>
+<span id="cb118-4"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb118-4" aria-hidden="true" tabindex="-1"></a><span class="co"># aléatoires)</span></span>
+<span id="cb118-5"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb118-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_smooth</span>(gamm_int_slope, <span class="at">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="at">rm.ranef =</span> <span class="cn">TRUE</span>, <span class="at">main =</span> <span class="st">&quot;intercept + s(x1)&quot;</span>)</span>
+<span id="cb118-6"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb118-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb118-7"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb118-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualiser chaque niveau de l&#39;effet aléatoire</span></span>
+<span id="cb118-8"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb118-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_smooth</span>(gamm_int_slope, <span class="at">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="at">rm.ranef =</span> <span class="cn">FALSE</span>, <span class="at">cond =</span> <span class="fu">list</span>(<span class="at">fac =</span> <span class="st">&quot;1&quot;</span>),</span>
+<span id="cb118-9"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb118-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">main =</span> <span class="st">&quot;... + s(fac) + s(fac, x0)&quot;</span>, <span class="at">col =</span> <span class="st">&quot;orange&quot;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>,</span>
+<span id="cb118-10"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb118-10" aria-hidden="true" tabindex="-1"></a>        <span class="dv">25</span>))</span>
+<span id="cb118-11"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb118-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_smooth</span>(gamm_int_slope, <span class="at">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="at">rm.ranef =</span> <span class="cn">FALSE</span>, <span class="at">cond =</span> <span class="fu">list</span>(<span class="at">fac =</span> <span class="st">&quot;2&quot;</span>),</span>
+<span id="cb118-12"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb118-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb118-13"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb118-13" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_smooth</span>(gamm_int_slope, <span class="at">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="at">rm.ranef =</span> <span class="cn">FALSE</span>, <span class="at">cond =</span> <span class="fu">list</span>(<span class="at">fac =</span> <span class="st">&quot;3&quot;</span>),</span>
+<span id="cb118-14"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb118-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">&quot;purple&quot;</span>)</span>
+<span id="cb118-15"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb118-15" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_smooth</span>(gamm_int_slope, <span class="at">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="at">rm.ranef =</span> <span class="cn">FALSE</span>, <span class="at">cond =</span> <span class="fu">list</span>(<span class="at">fac =</span> <span class="st">&quot;4&quot;</span>),</span>
+<span id="cb118-16"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb118-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">&quot;turquoise&quot;</span>)</span></code></pre></div>
 <p><img src="book-fr_files/figure-html/unnamed-chunk-83-1.png" width="960" style="display: block; margin: auto;" /></p>
 <p>Notez que la pente aléatoire est statique dans ce cas:</p>
-<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb117-1"></a><span class="kw">plot</span>(gamm_int_slope, <span class="dt">select =</span> <span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb119-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(gamm_int_slope, <span class="at">select =</span> <span class="dv">3</span>)</span></code></pre></div>
 <p><img src="book-fr_files/figure-html/unnamed-chunk-84-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb118-1"></a><span class="co"># select = 3 parce que la pente aléatoire est sur la</span></span>
-<span id="cb118-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb118-2"></a><span class="co"># troisième ligne de notre tableau sommaire.</span></span></code></pre></div>
+<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb120-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb120-1" aria-hidden="true" tabindex="-1"></a><span class="co"># select = 3 parce que la pente aléatoire est sur la</span></span>
+<span id="cb120-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb120-2" aria-hidden="true" tabindex="-1"></a><span class="co"># troisième ligne de notre tableau sommaire.</span></span></code></pre></div>
 </div>
-<div id="gamm-avec-une-surface-lisse-aléatoire" class="section level3 hasAnchor">
+<div id="gamm-avec-une-surface-lisse-aléatoire" class="section level3 hasAnchor" number="11.2.4">
 <h3><span class="header-section-number">11.2.4</span> GAMM avec une surface lisse aléatoire<a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-une-surface-lisse-aléatoire" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Finalement, spécifions un modèle avec une surface lisse aléatoire.</p>
-<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb119-1"></a>gamm_smooth &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(x0) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(x0, fac, <span class="dt">bs =</span> <span class="st">&quot;fs&quot;</span>, <span class="dt">m =</span> <span class="dv">1</span>),</span>
-<span id="cb119-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb119-2"></a>    <span class="dt">data =</span> gam_data2, <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span></code></pre></div>
-<pre><code>## Warning in gam.side(sm, X, tol = .Machine$double.eps^0.5): model has repeated 1-
-## d smooths of same variable.</code></pre>
-<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb121-1"></a><span class="kw">summary</span>(gamm_smooth)<span class="op">$</span>s.table</span></code></pre></div>
-<pre><code>##                edf    Ref.df        F   p-value
-## s(x0)     2.472354  3.079833 1.860089 0.1270819
-## s(x0,fac) 2.977596 35.000000 9.077190 0.0000000</code></pre>
+<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb121-1" aria-hidden="true" tabindex="-1"></a>gamm_smooth <span class="ot">&lt;-</span> <span class="fu">gam</span>(y <span class="sc">~</span> <span class="fu">s</span>(x0) <span class="sc">+</span> <span class="fu">s</span>(x0, fac, <span class="at">bs =</span> <span class="st">&quot;fs&quot;</span>, <span class="at">m =</span> <span class="dv">1</span>),</span>
+<span id="cb121-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb121-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> gam_data2, <span class="at">method =</span> <span class="st">&quot;REML&quot;</span>)</span></code></pre></div>
+<pre><code>## Warning in gam.side(sm, X, tol = .Machine$double.eps^0.5): model has repeated
+## 1-d smooths of same variable.</code></pre>
+<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb123-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb123-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gamm_smooth)<span class="sc">$</span>s.table</span></code></pre></div>
+<pre><code>##                edf    Ref.df       F   p-value
+## s(x0)     2.423260  2.942415 2.43033 0.0764996
+## s(x0,fac) 7.292933 35.000000 8.85519 0.0000000</code></pre>
 <p>Si la pente aléatoire variait selon <code>x0</code>, on verrait différentes courbes pour chaque niveau:</p>
-<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb123-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb123-1"></a><span class="kw">plot</span>(gamm_smooth, <span class="dt">select =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb125-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb125-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(gamm_smooth, <span class="at">select =</span> <span class="dv">1</span>)</span></code></pre></div>
 <p><img src="book-fr_files/figure-html/unnamed-chunk-86-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb124-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb124-1"></a><span class="co"># select = 1 parce que la surface lisse aléatoire est sur</span></span>
-<span id="cb124-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb124-2"></a><span class="co"># la première ligne de notre tableau sommaire.</span></span></code></pre></div>
+<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb126-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb126-1" aria-hidden="true" tabindex="-1"></a><span class="co"># select = 1 parce que la surface lisse aléatoire est sur</span></span>
+<span id="cb126-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb126-2" aria-hidden="true" tabindex="-1"></a><span class="co"># la première ligne de notre tableau sommaire.</span></span></code></pre></div>
 <p>On peut encore une fois visualiser l’effet combiné de <code>x0</code> sans les niveaux de l’effet aléatoire, et ensuite une courbe pour chacun de quatre niveaux de l’effet aléatoire <code>fac</code>:</p>
-<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb125-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb125-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="dt">cex =</span> <span class="fl">1.1</span>)</span>
-<span id="cb125-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb125-2"></a></span>
-<span id="cb125-3"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb125-3"></a><span class="co"># Visualiser les effets combinés de x0 (sans effets</span></span>
-<span id="cb125-4"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb125-4"></a><span class="co"># aléatoires)</span></span>
-<span id="cb125-5"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb125-5"></a><span class="kw">plot_smooth</span>(gamm_smooth, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">rm.ranef =</span> <span class="ot">TRUE</span>, <span class="dt">main =</span> <span class="st">&quot;intercept + s(x1)&quot;</span>)</span>
-<span id="cb125-6"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb125-6"></a></span>
-<span id="cb125-7"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb125-7"></a><span class="co"># Visualiser chaque niveau de l&#39;effet aléatoire</span></span>
-<span id="cb125-8"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb125-8"></a><span class="kw">plot_smooth</span>(gamm_smooth, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">rm.ranef =</span> <span class="ot">FALSE</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;1&quot;</span>),</span>
-<span id="cb125-9"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb125-9"></a>    <span class="dt">main =</span> <span class="st">&quot;... + s(fac) + s(fac, x0)&quot;</span>, <span class="dt">col =</span> <span class="st">&quot;orange&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>,</span>
-<span id="cb125-10"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb125-10"></a>        <span class="dv">25</span>))</span>
-<span id="cb125-11"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb125-11"></a><span class="kw">plot_smooth</span>(gamm_smooth, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">rm.ranef =</span> <span class="ot">FALSE</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;2&quot;</span>),</span>
-<span id="cb125-12"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb125-12"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span>
-<span id="cb125-13"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb125-13"></a><span class="kw">plot_smooth</span>(gamm_smooth, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">rm.ranef =</span> <span class="ot">FALSE</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;3&quot;</span>),</span>
-<span id="cb125-14"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb125-14"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;purple&quot;</span>)</span>
-<span id="cb125-15"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb125-15"></a><span class="kw">plot_smooth</span>(gamm_smooth, <span class="dt">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="dt">rm.ranef =</span> <span class="ot">FALSE</span>, <span class="dt">cond =</span> <span class="kw">list</span>(<span class="dt">fac =</span> <span class="st">&quot;4&quot;</span>),</span>
-<span id="cb125-16"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb125-16"></a>    <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;turquoise&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb127-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb127-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="at">cex =</span> <span class="fl">1.1</span>)</span>
+<span id="cb127-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb127-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb127-3"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb127-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualiser les effets combinés de x0 (sans effets</span></span>
+<span id="cb127-4"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb127-4" aria-hidden="true" tabindex="-1"></a><span class="co"># aléatoires)</span></span>
+<span id="cb127-5"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb127-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_smooth</span>(gamm_smooth, <span class="at">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="at">rm.ranef =</span> <span class="cn">TRUE</span>, <span class="at">main =</span> <span class="st">&quot;intercept + s(x1)&quot;</span>)</span>
+<span id="cb127-6"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb127-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb127-7"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb127-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualiser chaque niveau de l&#39;effet aléatoire</span></span>
+<span id="cb127-8"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb127-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_smooth</span>(gamm_smooth, <span class="at">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="at">rm.ranef =</span> <span class="cn">FALSE</span>, <span class="at">cond =</span> <span class="fu">list</span>(<span class="at">fac =</span> <span class="st">&quot;1&quot;</span>),</span>
+<span id="cb127-9"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb127-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">main =</span> <span class="st">&quot;... + s(fac) + s(fac, x0)&quot;</span>, <span class="at">col =</span> <span class="st">&quot;orange&quot;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>,</span>
+<span id="cb127-10"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb127-10" aria-hidden="true" tabindex="-1"></a>        <span class="dv">25</span>))</span>
+<span id="cb127-11"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb127-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_smooth</span>(gamm_smooth, <span class="at">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="at">rm.ranef =</span> <span class="cn">FALSE</span>, <span class="at">cond =</span> <span class="fu">list</span>(<span class="at">fac =</span> <span class="st">&quot;2&quot;</span>),</span>
+<span id="cb127-12"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb127-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb127-13"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb127-13" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_smooth</span>(gamm_smooth, <span class="at">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="at">rm.ranef =</span> <span class="cn">FALSE</span>, <span class="at">cond =</span> <span class="fu">list</span>(<span class="at">fac =</span> <span class="st">&quot;3&quot;</span>),</span>
+<span id="cb127-14"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb127-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">&quot;purple&quot;</span>)</span>
+<span id="cb127-15"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb127-15" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_smooth</span>(gamm_smooth, <span class="at">view =</span> <span class="st">&quot;x0&quot;</span>, <span class="at">rm.ranef =</span> <span class="cn">FALSE</span>, <span class="at">cond =</span> <span class="fu">list</span>(<span class="at">fac =</span> <span class="st">&quot;4&quot;</span>),</span>
+<span id="cb127-16"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb127-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">&quot;turquoise&quot;</span>)</span></code></pre></div>
 <p><img src="book-fr_files/figure-html/unnamed-chunk-87-1.png" width="960" style="display: block; margin: auto;" /></p>
 </div>
-<div id="comparaison-de-gamm" class="section level3 hasAnchor">
+<div id="comparaison-de-gamm" class="section level3 hasAnchor" number="11.2.5">
 <h3><span class="header-section-number">11.2.5</span> Comparaison de GAMM<a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#comparaison-de-gamm" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Tous les GAMMs de cette section peuvent être comparé avec <code>AIC()</code> pour trouver le modèle le mieux ajusté:</p>
-<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb126-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb126-1"></a><span class="kw">AIC</span>(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)</span></code></pre></div>
-<pre><code>##                      df      AIC
-## gamm_intercept 8.079703 2249.653
-## gamm_slope     7.939917 2330.614
-## gamm_int_slope 8.103496 2249.677
-## gamm_smooth    8.090818 2249.666</code></pre>
+<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb128-1" aria-hidden="true" tabindex="-1"></a><span class="fu">AIC</span>(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)</span></code></pre></div>
+<pre><code>##                       df      AIC
+## gamm_intercept  8.064772 2241.613
+## gamm_slope      8.043350 2267.827
+## gamm_int_slope 10.876422 2237.523
+## gamm_smooth    13.408792 2239.421</code></pre>
 <p>Le meilleur modèle de ces trois modèles serait donc le GAMM avec un intercept aléatoire.</p>
 
 </div>
@@ -479,9 +516,9 @@ effets sommés d’un GAM (basé sur les prédictions). Cette fonction permet é
 
 
 <h3> References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div id="refs" class="references">
-<div id="ref-pedersen2019hierarchical">
-<p>Pedersen, Eric J, David L Miller, Gavin L Simpson, and Noam Ross. 2019. “Hierarchical Generalized Additive Models in Ecology: An Introduction with Mgcv.” <em>PeerJ</em> 7: e6876.</p>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-pedersen2019hierarchical" class="csl-entry">
+Pedersen, Eric J, David L Miller, Gavin L Simpson, and Noam Ross. 2019. <span>“Hierarchical Generalized Additive Models in Ecology: An Introduction with Mgcv.”</span> <em>PeerJ</em> 7: e6876.
 </div>
 </div>
 <hr>
@@ -556,7 +593,7 @@ gitbook.start({
     var script = document.createElement("script");
     script.type = "text/javascript";
     var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:")
       if (/^https?:/.test(src))
         src = src.replace(/^https?:/, '');

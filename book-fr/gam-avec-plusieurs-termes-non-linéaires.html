@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapitre 6 GAM avec plusieurs termes non linéaires | Atelier 8 : Modèles additifs généralisés en R</title>
   <meta name="description" content="Modèles additifs généralisés en R" />
-  <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.31 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapitre 6 GAM avec plusieurs termes non linéaires | Atelier 8 : Modèles additifs généralisés en R" />
   <meta property="og:type" content="book" />
@@ -48,25 +48,24 @@
 
 
 
-<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -86,7 +85,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-le
 div.sourceCode
   {  background-color: #f8f8f8; }
 @media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ef2929; } /* Alert */
 code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
@@ -118,6 +117,28 @@ code span.vs { color: #4e9a06; } /* VerbatimString */
 code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 <link rel="stylesheet" href="assets/qcbs-style.css" type="text/css" />
 </head>
@@ -136,72 +157,88 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <link rel="icon" type="image/png" href="assets/images/favicon.ico"/>
 
 <li class="divider"></li>
-<li class="part"><span><b>Série d’ateliers R du CSBQ<span></span></b></span></li>
-<li><a href="index.html#préface">Préface<span></span></a><ul>
-<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>0.1</b> Code de conduit<span></span></a><ul>
-<li class="chapter" data-level="0.1.1" data-path="index.html"><a href="index.html#comportement-attendu"><i class="fa fa-check"></i><b>0.1.1</b> Comportement attendu<span></span></a></li>
-<li class="chapter" data-level="0.1.2" data-path="index.html"><a href="index.html#comportements-inacceptables"><i class="fa fa-check"></i><b>0.1.2</b> Comportements inacceptables<span></span></a></li>
+<li class="part"><span><b>Série d’ateliers R du CSBQ</b></span></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Préface</a>
+<ul>
+<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#code-de-conduit"><i class="fa fa-check"></i><b>0.1</b> Code de conduit</a>
+<ul>
+<li class="chapter" data-level="0.1.1" data-path="index.html"><a href="index.html#comportement-attendu"><i class="fa fa-check"></i><b>0.1.1</b> Comportement attendu</a></li>
+<li class="chapter" data-level="0.1.2" data-path="index.html"><a href="index.html#comportements-inacceptables"><i class="fa fa-check"></i><b>0.1.2</b> Comportements inacceptables</a></li>
 </ul></li>
-<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#contributeurs-et-contributrices"><i class="fa fa-check"></i><b>0.2</b> Contributeurs et contributrices<span></span></a></li>
-<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#contribuez-à-la-série"><i class="fa fa-check"></i><b>0.3</b> Contribuez à la série!<span></span></a></li>
+<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#contributeurs-et-contributrices"><i class="fa fa-check"></i><b>0.2</b> Contributeurs et contributrices</a></li>
+<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#contribuez-à-la-série"><i class="fa fa-check"></i><b>0.3</b> Contribuez à la série!</a></li>
 </ul></li>
-<li class="part"><span><b>Modèles additifs généralisés en <code>R</code><span></span></b></span></li>
-<li class="chapter" data-level="1" data-path="objectifs-dapprentissage.html"><a href="objectifs-dapprentissage.html"><i class="fa fa-check"></i><b>1</b> Objectifs d’apprentissage<span></span></a></li>
-<li class="chapter" data-level="2" data-path="préparez-vous-pour-cet-atelier.html"><a href="préparez-vous-pour-cet-atelier.html"><i class="fa fa-check"></i><b>2</b> Préparez-vous pour cet atelier<span></span></a></li>
-<li class="chapter" data-level="3" data-path="intro-linear-models.html"><a href="intro-linear-models.html"><i class="fa fa-check"></i><b>3</b> Le modèle linéaire… et où il échoue<span></span></a></li>
-<li class="chapter" data-level="4" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html"><i class="fa fa-check"></i><b>4</b> Introduction aux GAMs<span></span></a><ul>
-<li class="chapter" data-level="4.1" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#test-de-linéarité"><i class="fa fa-check"></i><b>4.1</b> Test de linéarité<span></span></a></li>
-<li class="chapter" data-level="4.2" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#défi-1"><i class="fa fa-check"></i><b>4.2</b> Défi 1<span></span></a><ul>
-<li class="chapter" data-level="4.2.1" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#défi-1-solution"><i class="fa fa-check"></i><b>4.2.1</b> Défi 1: Solution<span></span></a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="5" data-path="fonctionnement.html"><a href="fonctionnement.html"><i class="fa fa-check"></i><b>5</b> Le fonctionnement des GAMs<span></span></a><ul>
-<li class="chapter" data-level="5.1" data-path="fonctionnement.html"><a href="fonctionnement.html#exemple-une-base-polynomiale"><i class="fa fa-check"></i><b>5.1</b> Exemple: une base polynomiale<span></span></a></li>
-<li class="chapter" data-level="5.2" data-path="fonctionnement.html"><a href="fonctionnement.html#exemple-une-base-de-spline-cubique"><i class="fa fa-check"></i><b>5.2</b> Exemple: une base de spline cubique<span></span></a><ul>
-<li class="chapter" data-level="5.2.1" data-path="fonctionnement.html"><a href="fonctionnement.html#contrôler-le-degré-de-lissage-avec-des-splines-de-régression-pénalisés"><i class="fa fa-check"></i><b>5.2.1</b> Contrôler le degré de lissage avec des splines de régression pénalisés<span></span></a></li>
+<li class="part"><span><b>Modèles additifs généralisés en <code>R</code></b></span></li>
+<li class="chapter" data-level="1" data-path="objectifs-dapprentissage.html"><a href="objectifs-dapprentissage.html"><i class="fa fa-check"></i><b>1</b> Objectifs d’apprentissage</a></li>
+<li class="chapter" data-level="2" data-path="préparez-vous-pour-cet-atelier.html"><a href="préparez-vous-pour-cet-atelier.html"><i class="fa fa-check"></i><b>2</b> Préparez-vous pour cet atelier</a></li>
+<li class="chapter" data-level="3" data-path="intro-linear-models.html"><a href="intro-linear-models.html"><i class="fa fa-check"></i><b>3</b> Le modèle linéaire… et où il échoue</a></li>
+<li class="chapter" data-level="4" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html"><i class="fa fa-check"></i><b>4</b> Introduction aux GAMs</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#test-de-linéarité"><i class="fa fa-check"></i><b>4.1</b> Test de linéarité</a></li>
+<li class="chapter" data-level="4.2" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#défi-1"><i class="fa fa-check"></i><b>4.2</b> Défi 1</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#défi-1-solution"><i class="fa fa-check"></i><b>4.2.1</b> Défi 1: Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html"><i class="fa fa-check"></i><b>6</b> GAM avec plusieurs termes non linéaires<span></span></a><ul>
-<li class="chapter" data-level="6.1" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-variables-linéaires-et-non-linéaires"><i class="fa fa-check"></i><b>6.1</b> GAM à variables linéaires et non linéaires<span></span></a></li>
-<li class="chapter" data-level="6.2" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#degrés-de-liberté-effectifs-edf"><i class="fa fa-check"></i><b>6.2</b> Degrés de liberté effectifs (edf)<span></span></a></li>
-<li class="chapter" data-level="6.3" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables-linéaires-et-lisses"><i class="fa fa-check"></i><b>6.3</b> GAM à plusieurs variables linéaires et lisses<span></span></a></li>
-<li class="chapter" data-level="6.4" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables-non-linéaires"><i class="fa fa-check"></i><b>6.4</b> GAM à plusieurs variables non linéaires<span></span></a></li>
-<li class="chapter" data-level="6.5" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#défi-2"><i class="fa fa-check"></i><b>6.5</b> Défi 2<span></span></a><ul>
-<li class="chapter" data-level="6.5.1" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#défi-2-solution"><i class="fa fa-check"></i><b>6.5.1</b> Défi 2: Solution<span></span></a></li>
+<li class="chapter" data-level="5" data-path="fonctionnement.html"><a href="fonctionnement.html"><i class="fa fa-check"></i><b>5</b> Le fonctionnement des GAMs</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="fonctionnement.html"><a href="fonctionnement.html#exemple-une-base-polynomiale"><i class="fa fa-check"></i><b>5.1</b> Exemple: une base polynomiale</a></li>
+<li class="chapter" data-level="5.2" data-path="fonctionnement.html"><a href="fonctionnement.html#exemple-une-base-de-spline-cubique"><i class="fa fa-check"></i><b>5.2</b> Exemple: une base de spline cubique</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="fonctionnement.html"><a href="fonctionnement.html#contrôler-le-degré-de-lissage-avec-des-splines-de-régression-pénalisés"><i class="fa fa-check"></i><b>5.2.1</b> Contrôler le degré de lissage avec des splines de régression pénalisés</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html"><i class="fa fa-check"></i><b>7</b> GAM avec des termes d’interaction<span></span></a><ul>
-<li class="chapter" data-level="7.1" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html#interaction-entre-variables-non-linéaire-et-qualitatif"><i class="fa fa-check"></i><b>7.1</b> Interaction entre variables non-linéaire et qualitatif<span></span></a></li>
-<li class="chapter" data-level="7.2" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html#interaction-entre-variables-non-linéaires"><i class="fa fa-check"></i><b>7.2</b> Interaction entre variables non linéaires<span></span></a></li>
-</ul></li>
-<li class="part"><span><b>Généralisation du modèle additif<span></span></b></span></li>
-<li class="chapter" data-level="8" data-path="validation-gam.html"><a href="validation-gam.html"><i class="fa fa-check"></i><b>8</b> Validation d’un GAM<span></span></a><ul>
-<li class="chapter" data-level="8.1" data-path="validation-gam.html"><a href="validation-gam.html#choisir-k"><i class="fa fa-check"></i><b>8.1</b> Choisir <span class="math inline">\(k\)</span><span></span></a><ul>
-<li class="chapter" data-level="8.1.1" data-path="validation-gam.html"><a href="validation-gam.html#est-ce-que-notre-module-est-assez-flexible"><i class="fa fa-check"></i><b>8.1.1</b> Est-ce que notre module est assez flexible?<span></span></a></li>
-</ul></li>
-<li class="chapter" data-level="8.2" data-path="validation-gam.html"><a href="validation-gam.html#choisir-une-distribution"><i class="fa fa-check"></i><b>8.2</b> Choisir une distribution<span></span></a></li>
-</ul></li>
-<li class="chapter" data-level="9" data-path="autres-distributions.html"><a href="autres-distributions.html"><i class="fa fa-check"></i><b>9</b> Autres distributions<span></span></a><ul>
-<li class="chapter" data-level="9.1" data-path="autres-distributions.html"><a href="autres-distributions.html#défi-3"><i class="fa fa-check"></i><b>9.1</b> Défi 3<span></span></a><ul>
-<li class="chapter" data-level="9.1.1" data-path="autres-distributions.html"><a href="autres-distributions.html#défi-3-solution"><i class="fa fa-check"></i><b>9.1.1</b> Défi 3: Solution<span></span></a></li>
+<li class="chapter" data-level="6" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html"><i class="fa fa-check"></i><b>6</b> GAM avec plusieurs termes non linéaires</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-variables-linéaires-et-non-linéaires"><i class="fa fa-check"></i><b>6.1</b> GAM à variables linéaires et non linéaires</a></li>
+<li class="chapter" data-level="6.2" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#degrés-de-liberté-effectifs-edf"><i class="fa fa-check"></i><b>6.2</b> Degrés de liberté effectifs (edf)</a></li>
+<li class="chapter" data-level="6.3" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables-linéaires-et-lisses"><i class="fa fa-check"></i><b>6.3</b> GAM à plusieurs variables linéaires et lisses</a></li>
+<li class="chapter" data-level="6.4" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables-non-linéaires"><i class="fa fa-check"></i><b>6.4</b> GAM à plusieurs variables non linéaires</a></li>
+<li class="chapter" data-level="6.5" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#défi-2"><i class="fa fa-check"></i><b>6.5</b> Défi 2</a>
+<ul>
+<li class="chapter" data-level="6.5.1" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#défi-2-solution"><i class="fa fa-check"></i><b>6.5.1</b> Défi 2: Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="changer-la-fonction-de-base.html"><a href="changer-la-fonction-de-base.html"><i class="fa fa-check"></i><b>10</b> Changer la fonction de base<span></span></a><ul>
-<li class="chapter" data-level="10.1" data-path="changer-la-fonction-de-base.html"><a href="changer-la-fonction-de-base.html#exemple-données-cycliques"><i class="fa fa-check"></i><b>10.1</b> Exemple: Données cycliques<span></span></a></li>
+<li class="chapter" data-level="7" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html"><i class="fa fa-check"></i><b>7</b> GAM avec des termes d’interaction</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html#interaction-entre-variables-non-linéaire-et-qualitatif"><i class="fa fa-check"></i><b>7.1</b> Interaction entre variables non-linéaire et qualitatif</a></li>
+<li class="chapter" data-level="7.2" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html#interaction-entre-variables-non-linéaires"><i class="fa fa-check"></i><b>7.2</b> Interaction entre variables non linéaires</a></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><i class="fa fa-check"></i><b>11</b> Intro rapide aux modèles additifs généralisés à effets mixtes (GAMMs)<span></span></a><ul>
-<li class="chapter" data-level="11.1" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#lautocorrelation-des-résidus"><i class="fa fa-check"></i><b>11.1</b> L’autocorrelation des résidus<span></span></a></li>
-<li class="chapter" data-level="11.2" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#modélisation-avec-effets-mixtes"><i class="fa fa-check"></i><b>11.2</b> Modélisation avec effets mixtes<span></span></a><ul>
-<li class="chapter" data-level="11.2.1" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-un-intercepte-aléatoire"><i class="fa fa-check"></i><b>11.2.1</b> GAMM avec un intercepte aléatoire<span></span></a></li>
-<li class="chapter" data-level="11.2.2" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-une-pente-aléatoire"><i class="fa fa-check"></i><b>11.2.2</b> GAMM avec une pente aléatoire<span></span></a></li>
-<li class="chapter" data-level="11.2.3" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-un-intercept-et-une-pente-aléatoire"><i class="fa fa-check"></i><b>11.2.3</b> GAMM avec un intercept et une pente aléatoire<span></span></a></li>
-<li class="chapter" data-level="11.2.4" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-une-surface-lisse-aléatoire"><i class="fa fa-check"></i><b>11.2.4</b> GAMM avec une surface lisse aléatoire<span></span></a></li>
-<li class="chapter" data-level="11.2.5" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#comparaison-de-gamm"><i class="fa fa-check"></i><b>11.2.5</b> Comparaison de GAMM<span></span></a></li>
+<li class="part"><span><b>Généralisation du modèle additif</b></span></li>
+<li class="chapter" data-level="8" data-path="validation-gam.html"><a href="validation-gam.html"><i class="fa fa-check"></i><b>8</b> Validation d’un GAM</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="validation-gam.html"><a href="validation-gam.html#choisir-k"><i class="fa fa-check"></i><b>8.1</b> Choisir <span class="math inline">\(k\)</span></a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="validation-gam.html"><a href="validation-gam.html#est-ce-que-notre-module-est-assez-flexible"><i class="fa fa-check"></i><b>8.1.1</b> Est-ce que notre module est assez flexible?</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="validation-gam.html"><a href="validation-gam.html#choisir-une-distribution"><i class="fa fa-check"></i><b>8.2</b> Choisir une distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="autres-distributions.html"><a href="autres-distributions.html"><i class="fa fa-check"></i><b>9</b> Autres distributions</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="autres-distributions.html"><a href="autres-distributions.html#défi-3"><i class="fa fa-check"></i><b>9.1</b> Défi 3</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="autres-distributions.html"><a href="autres-distributions.html#défi-3-solution"><i class="fa fa-check"></i><b>9.1.1</b> Défi 3: Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="part"><span><b>Ressources &amp; Références<span></span></b></span></li>
-<li class="chapter" data-level="12" data-path="ressources.html"><a href="ressources.html"><i class="fa fa-check"></i><b>12</b> Ressources<span></span></a></li>
-<li class="chapter" data-level="13" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>13</b> References<span></span></a></li>
+<li class="chapter" data-level="10" data-path="changer-la-fonction-de-base.html"><a href="changer-la-fonction-de-base.html"><i class="fa fa-check"></i><b>10</b> Changer la fonction de base</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="changer-la-fonction-de-base.html"><a href="changer-la-fonction-de-base.html#exemple-données-cycliques"><i class="fa fa-check"></i><b>10.1</b> Exemple: Données cycliques</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><i class="fa fa-check"></i><b>11</b> Intro rapide aux modèles additifs généralisés à effets mixtes (GAMMs)</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#lautocorrelation-des-résidus"><i class="fa fa-check"></i><b>11.1</b> L’autocorrelation des résidus</a></li>
+<li class="chapter" data-level="11.2" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#modélisation-avec-effets-mixtes"><i class="fa fa-check"></i><b>11.2</b> Modélisation avec effets mixtes</a>
+<ul>
+<li class="chapter" data-level="11.2.1" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-un-intercepte-aléatoire"><i class="fa fa-check"></i><b>11.2.1</b> GAMM avec un intercepte aléatoire</a></li>
+<li class="chapter" data-level="11.2.2" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-une-pente-aléatoire"><i class="fa fa-check"></i><b>11.2.2</b> GAMM avec une pente aléatoire</a></li>
+<li class="chapter" data-level="11.2.3" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-un-intercept-et-une-pente-aléatoire"><i class="fa fa-check"></i><b>11.2.3</b> GAMM avec un intercept et une pente aléatoire</a></li>
+<li class="chapter" data-level="11.2.4" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-une-surface-lisse-aléatoire"><i class="fa fa-check"></i><b>11.2.4</b> GAMM avec une surface lisse aléatoire</a></li>
+<li class="chapter" data-level="11.2.5" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#comparaison-de-gamm"><i class="fa fa-check"></i><b>11.2.5</b> Comparaison de GAMM</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>Ressources &amp; Références</b></span></li>
+<li class="chapter" data-level="12" data-path="ressources.html"><a href="ressources.html"><i class="fa fa-check"></i><b>12</b> Ressources</a></li>
+<li class="chapter" data-level="13" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>13</b> References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/qcbsRworkshops" target="blank">QCBS R Workshop Series</a></li>
 
@@ -237,9 +274,9 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
   <img class= "hero-image" src="assets/images/jean-philippe-delberghe-75xPHEQBmvA-unsplash_hero_image.jpg">
 </div>
 --!>
-<div id="gam-avec-plusieurs-termes-non-linéaires" class="section level1 hasAnchor">
+<div id="gam-avec-plusieurs-termes-non-linéaires" class="section level1 hasAnchor" number="6">
 <h1><span class="header-section-number">Chapitre 6</span> GAM avec plusieurs termes non linéaires<a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-avec-plusieurs-termes-non-linéaires" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div id="gam-à-variables-linéaires-et-non-linéaires" class="section level2 hasAnchor">
+<div id="gam-à-variables-linéaires-et-non-linéaires" class="section level2 hasAnchor" number="6.1">
 <h2><span class="header-section-number">6.1</span> GAM à variables linéaires et non linéaires<a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-variables-linéaires-et-non-linéaires" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Avec les GAMs, il est facile d’ajouter des termes non-linéaires et linéaires dans un seul modèle, plusieurs termes non-linéaires ou même des interactions non-linéaires.</p>
 <p>Dans cette section, nous allons utiliser les données de <code>ISIT</code> de nouveau. Nous allons essayer de modéliser la réponse <code>Sources</code> avec les prédicteurs <code>Season</code> and <code>SampleDepth</code> simultanément.</p>
@@ -247,7 +284,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <p>Rappelez-vous de ce jeu de données présenté dans les sections précédentes? Le jeu de données ISIT est composé des niveaux de bioluminescence (<code>Sources</code>) en fonction de la profondeur, des saisons et des différentes stations.</p>
 </div>
 <p>Tout d’abord, nous devons convertir notre prédicteur qualitatif (<code>Season</code>) en facteur.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb21-1"></a><span class="kw">head</span>(isit)</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(isit)</span></code></pre></div>
 <pre><code>##   SampleDepth Sources Station Time Latitude Longitude     Xkm    Ykm Month Year
 ## 1         517   28.73       1    3  50.1508  -14.4792 -34.106 16.779     4 2001
 ## 2         582   27.90       1    3  50.1508  -14.4792 -34.106 16.779     4 2001
@@ -262,18 +299,18 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 ## 4        3939      1       252          3325
 ## 5        3939      1       252          2871
 ## 6        3939      1       252          2934</code></pre>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb23-1"></a>isit<span class="op">$</span>Season &lt;-<span class="st"> </span><span class="kw">as.factor</span>(isit<span class="op">$</span>Season)</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb25-1" aria-hidden="true" tabindex="-1"></a>isit<span class="sc">$</span>Season <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(isit<span class="sc">$</span>Season)</span></code></pre></div>
 <p>Commençons par un modèle de base comprenant un terme non-linéaire (<code>SampleDepth</code>) et un facteur qualitatif (<code>Season</code> avec 2 niveaux).</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb24-1"></a>basic_model &lt;-<span class="st"> </span><span class="kw">gam</span>(Sources <span class="op">~</span><span class="st"> </span>Season <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(SampleDepth), <span class="dt">data =</span> isit,</span>
-<span id="cb24-2"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb24-2"></a>    <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
-<span id="cb24-3"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb24-3"></a>basic_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(basic_model)</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb26-1" aria-hidden="true" tabindex="-1"></a>basic_model <span class="ot">&lt;-</span> <span class="fu">gam</span>(Sources <span class="sc">~</span> Season <span class="sc">+</span> <span class="fu">s</span>(SampleDepth), <span class="at">data =</span> isit,</span>
+<span id="cb26-2"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb26-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
+<span id="cb26-3"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb26-3" aria-hidden="true" tabindex="-1"></a>basic_summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(basic_model)</span></code></pre></div>
 <p>La sortie de <code>p.table</code> donne des informations sur les termes linéaires:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb25-1"></a>basic_summary<span class="op">$</span>p.table</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb27-1" aria-hidden="true" tabindex="-1"></a>basic_summary<span class="sc">$</span>p.table</span></code></pre></div>
 <pre><code>##             Estimate Std. Error  t value     Pr(&gt;|t|)
 ## (Intercept) 7.253273  0.3612666 20.07734 1.430234e-72
 ## Season2     6.156130  0.4825491 12.75752 5.525673e-34</code></pre>
 <p>Le tableau <code>s.table</code> nous donne donne des informations sur le terme non-linéaire:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb27-1"></a>basic_summary<span class="op">$</span>s.table</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb29-1" aria-hidden="true" tabindex="-1"></a>basic_summary<span class="sc">$</span>s.table</span></code></pre></div>
 <pre><code>##                     edf   Ref.df        F p-value
 ## s(SampleDepth) 8.706426 8.975172 184.3583       0</code></pre>
 <div class="explanation">
@@ -282,8 +319,8 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>Dans notre modèle de base, les EDF de la fonction lisse <code>s(SampleDepth)</code> sont ~9, ce qui suggère une courbe fortement non-linéaire.</p>
 <p>Traçons les termes lissés (<code>s(SampleDepth)</code>) et linéaires (<code>Season</code>) de notre modèle ajusté:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb29-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb29-2"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb29-2"></a><span class="kw">plot</span>(basic_model, <span class="dt">all.terms =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb31-2"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(basic_model, <span class="at">all.terms =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p><img src="book-fr_files/figure-html/unnamed-chunk-29-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="puzzle">
 <p>Que nous montrent ces graphiques sur la relation entre la bioluminescence, la profondeur de l’échantillon et les saisons?</p>
@@ -291,7 +328,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <p>La bioluminescence varie de manière non-linéaire sur le gradient <code>SampleDepth</code>, avec des niveaux de bioluminescence les plus élevés à la surface, suivis d’un second maximum plus petit, juste au-dessus d’une profondeur de 1500, avec des niveaux décroissants à des profondeurs plus basses.</p>
 <p>Il y a également une différence prononcée dans la bioluminescence entre les saisons, avec des niveaux élevés pendant la saison 2, par rapport à la saison 1.</p>
 </div>
-<div id="degrés-de-liberté-effectifs-edf" class="section level2 hasAnchor">
+<div id="degrés-de-liberté-effectifs-edf" class="section level2 hasAnchor" number="6.2">
 <h2><span class="header-section-number">6.2</span> Degrés de liberté effectifs (edf)<a href="gam-avec-plusieurs-termes-non-linéaires.html#degrés-de-liberté-effectifs-edf" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Revenons sur le concept de degrés de liberté effectifs (EDF).</p>
 <p>Les degrés de liberté effectifs nous donnent beaucoup d’informations sur la relation entre les prédicteurs du modèle et les variables de réponse. Vous reconnaissez peut-être le terme “degrés de liberté” suite à des ateliers précédents sur les modèles linéaires, mais attention ! Les degrés de liberté effectifs d’un GAM sont estimés différemment des degrés de liberté d’une régression linéaire, et sont interprétés différemment.</p>
@@ -304,71 +341,71 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <p>Lorsqu’un terme a une valeur EDF proche de 1, il est sur le point d’être un terme linéaire. Des valeurs plus élevées indiquent que le terme est plus ondulé, ou en d’autres termes, plus non-linéaire!</p>
 </div>
 </div>
-<div id="gam-à-plusieurs-variables-linéaires-et-lisses" class="section level2 hasAnchor">
+<div id="gam-à-plusieurs-variables-linéaires-et-lisses" class="section level2 hasAnchor" number="6.3">
 <h2><span class="header-section-number">6.3</span> GAM à plusieurs variables linéaires et lisses<a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables-linéaires-et-lisses" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Nous pouvons ajouter un second terme, <code>RelativeDepth</code>, mais spécifier une relation linéaire avec <code>Sources</code>.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb30-1"></a>two_term_model &lt;-<span class="st"> </span><span class="kw">gam</span>(Sources <span class="op">~</span><span class="st"> </span>Season <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(SampleDepth) <span class="op">+</span><span class="st"> </span>RelativeDepth,</span>
-<span id="cb30-2"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb30-2"></a>    <span class="dt">data =</span> isit, <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
-<span id="cb30-3"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb30-3"></a>two_term_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(two_term_model)</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb32-1" aria-hidden="true" tabindex="-1"></a>two_term_model <span class="ot">&lt;-</span> <span class="fu">gam</span>(Sources <span class="sc">~</span> Season <span class="sc">+</span> <span class="fu">s</span>(SampleDepth) <span class="sc">+</span> RelativeDepth,</span>
+<span id="cb32-2"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb32-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> isit, <span class="at">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
+<span id="cb32-3"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb32-3" aria-hidden="true" tabindex="-1"></a>two_term_summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(two_term_model)</span></code></pre></div>
 <p>L’estimation du coefficient de régression pour ce nouveau terme linéaire, <code>RelativeDepth</code>, sera présenté dans le tableau <code>p.table</code>. Rappelez-vous, le tableau <code>p.table</code> montre des informations sur les effets paramétriques (termes linéaires) :</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb31-1"></a>two_term_summary<span class="op">$</span>p.table</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb33-1" aria-hidden="true" tabindex="-1"></a>two_term_summary<span class="sc">$</span>p.table</span></code></pre></div>
 <pre><code>##                   Estimate   Std. Error   t value     Pr(&gt;|t|)
 ## (Intercept)    9.808305503 0.6478741951 15.139213 1.446613e-45
 ## Season2        6.041930627 0.4767977508 12.671894 1.380010e-33
 ## RelativeDepth -0.001401908 0.0002968443 -4.722705 2.761048e-06</code></pre>
 <p>Dans <code>s.table</code>, nous trouverons encore une fois le terme non-linéaire, <code>s(SampleDepth)</code>, et son paramètre de courbure (<code>edf</code>). Rappelez-vous, le tableau <code>s.table</code> montre des informations sur les effets additifs (termes non-linéaires):</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb33-1"></a>two_term_summary<span class="op">$</span>s.table</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb35-1" aria-hidden="true" tabindex="-1"></a>two_term_summary<span class="sc">$</span>s.table</span></code></pre></div>
 <pre><code>##                     edf  Ref.df        F p-value
 ## s(SampleDepth) 8.699146 8.97396 132.4801       0</code></pre>
 <p>Regardons les relations entre les prédicteurs linéaires et non-linéaires et notre variable réponse.</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb35-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
-<span id="cb35-2"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb35-2"></a><span class="kw">plot</span>(two_term_model, <span class="dt">all.terms =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb37-2"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(two_term_model, <span class="at">all.terms =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p><img src="book-fr_files/figure-html/unnamed-chunk-33-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
-<div id="gam-à-plusieurs-variables-non-linéaires" class="section level2 hasAnchor">
+<div id="gam-à-plusieurs-variables-non-linéaires" class="section level2 hasAnchor" number="6.4">
 <h2><span class="header-section-number">6.4</span> GAM à plusieurs variables non linéaires<a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables-non-linéaires" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Si nous voulons vérifier que la relation entre <code>Sources</code> et <code>RelativeDepth</code> est non-linéaire, on peut modéliser <code>RelativeDepth</code> avec une fonction non-linéaire. Dans ce modèle, nous aurions deux termes lisses:</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb36-1"></a>two_smooth_model &lt;-<span class="st"> </span><span class="kw">gam</span>(Sources <span class="op">~</span><span class="st"> </span>Season <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(SampleDepth) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(RelativeDepth),</span>
-<span id="cb36-2"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb36-2"></a>    <span class="dt">data =</span> isit, <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
-<span id="cb36-3"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb36-3"></a>two_smooth_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(two_smooth_model)</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb38-1" aria-hidden="true" tabindex="-1"></a>two_smooth_model <span class="ot">&lt;-</span> <span class="fu">gam</span>(Sources <span class="sc">~</span> Season <span class="sc">+</span> <span class="fu">s</span>(SampleDepth) <span class="sc">+</span> <span class="fu">s</span>(RelativeDepth),</span>
+<span id="cb38-2"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb38-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> isit, <span class="at">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
+<span id="cb38-3"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb38-3" aria-hidden="true" tabindex="-1"></a>two_smooth_summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(two_smooth_model)</span></code></pre></div>
 <p>L’estimation du coefficient de régression pour le seul terme linéaire, <code>Season</code>, sera présenté dans le tableau <code>p.table</code>. Rappelez-vous, le tableau <code>p.table</code> montre des informations sur les effets paramétriques (termes linéaires) :</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb37-1"></a>two_smooth_summary<span class="op">$</span>p.table</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb39-1" aria-hidden="true" tabindex="-1"></a>two_smooth_summary<span class="sc">$</span>p.table</span></code></pre></div>
 <pre><code>##             Estimate Std. Error  t value     Pr(&gt;|t|)
 ## (Intercept) 7.937755  0.3452945 22.98836 1.888513e-89
 ## Season2     4.963951  0.4782280 10.37988 1.029016e-23</code></pre>
 <p>Dans <code>s.table</code>, nous trouverons maintenant deux termes non-linéaires, <code>s(SampleDepth)</code> et <code>s(RelativeDepth)</code>, et leurs paramètres de courbure (<code>edf</code>). Rappelez-vous, le tableau <code>s.table</code> montre des informations sur les effets additifs (termes non-linéaires):</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb39-1"></a>two_smooth_summary<span class="op">$</span>s.table</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb41-1" aria-hidden="true" tabindex="-1"></a>two_smooth_summary<span class="sc">$</span>s.table</span></code></pre></div>
 <pre><code>##                       edf   Ref.df         F p-value
 ## s(SampleDepth)   8.752103 8.973459 150.37263       0
 ## s(RelativeDepth) 8.044197 8.749580  19.97476       0</code></pre>
 <p>Regardons les relations entre les prédicteurs linéaires et non-linéaires et notre variable réponse.</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb41-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
-<span id="cb41-2"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb41-2"></a><span class="kw">plot</span>(two_smooth_model, <span class="dt">all.terms =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb43-2"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(two_smooth_model, <span class="at">all.terms =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p><img src="book-fr_files/figure-html/unnamed-chunk-37-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="puzzle">
 <p>Pensez-vous que la performance de notre modèle est amélioré par l’ajout de ce nouveau terme non-linéaire, pour mieux représenter la relation entre la bioluminescence et la profondeur relative?</p>
 </div>
 <p>Comme précédemment, nous pouvons comparer nos modèles avec AIC pour tester si le terme non-linéaire améliore la performance de notre modèle:</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb42-1"></a><span class="kw">AIC</span>(basic_model, two_term_model, two_smooth_model)</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">AIC</span>(basic_model, two_term_model, two_smooth_model)</span></code></pre></div>
 <pre><code>##                        df      AIC
 ## basic_model      11.83374 5208.713
 ## two_term_model   12.82932 5188.780
 ## two_smooth_model 20.46960 5056.841</code></pre>
 <p>On peut voir que <code>two_smooth_model</code> a la plus petite valeur AIC. Le modèle le mieux ajusté comprend donc deux fonctions non-linéaires pour <code>SampleDepth</code> et <code>RelativeDepth</code>, et un terme linéaire pour <code>Season</code>.</p>
 </div>
-<div id="défi-2" class="section level2 hasAnchor">
+<div id="défi-2" class="section level2 hasAnchor" number="6.5">
 <h2><span class="header-section-number">6.5</span> Défi 2<a href="gam-avec-plusieurs-termes-non-linéaires.html#défi-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Pour notre deuxième défi, nous allons développer notre modèle en ajoutant des variables qui, selon nous, pourraient être des prédicteurs écologiquement significatifs pour expliquer la bioluminescence.</p>
 <p><strong>1.</strong> Créez deux nouveaux modèles: Ajoutez la variable <code>Latitude</code> à <code>two_smooth_model</code>, premièrement comme paramètre linéaire, et ensuite comme fonction non-linéaire.</p>
 <p><strong>2.</strong> Est-ce que <code>Latitude</code> est un terme important à inclure dans le modèle? La <code>Latitude</code> a-t-elle un effet linéaire ou non-linéaire?</p>
 <p>Utilisez des graphiques, les tables des coefficients et la fonction <code>AIC()</code> pour répondre à ces questions.</p>
-<div id="défi-2-solution" class="section level3 hasAnchor">
+<div id="défi-2-solution" class="section level3 hasAnchor" number="6.5.1">
 <h3><span class="header-section-number">6.5.1</span> Défi 2: Solution<a href="gam-avec-plusieurs-termes-non-linéaires.html#défi-2-solution" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p><strong>1.</strong> Créez deux nouveaux modèles: Ajoutez la variable <code>Latitude</code> à <code>two_smooth_model</code>, premièrement comme paramètre linéaire, et ensuite comme fonction non-linéaire.</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb44-1"></a><span class="co"># Ajouter Latitude comme terme linéaire</span></span>
-<span id="cb44-2"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb44-2"></a>three_term_model &lt;-<span class="st"> </span><span class="kw">gam</span>(Sources <span class="op">~</span><span class="st"> </span>Season <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(SampleDepth) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(RelativeDepth) <span class="op">+</span></span>
-<span id="cb44-3"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb44-3"></a><span class="st">    </span>Latitude, <span class="dt">data =</span> isit, <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
-<span id="cb44-4"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb44-4"></a>(three_term_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(three_term_model))</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajouter Latitude comme terme linéaire</span></span>
+<span id="cb46-2"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb46-2" aria-hidden="true" tabindex="-1"></a>three_term_model <span class="ot">&lt;-</span> <span class="fu">gam</span>(Sources <span class="sc">~</span> Season <span class="sc">+</span> <span class="fu">s</span>(SampleDepth) <span class="sc">+</span> <span class="fu">s</span>(RelativeDepth) <span class="sc">+</span></span>
+<span id="cb46-3"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb46-3" aria-hidden="true" tabindex="-1"></a>    Latitude, <span class="at">data =</span> isit, <span class="at">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
+<span id="cb46-4"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb46-4" aria-hidden="true" tabindex="-1"></a>(three_term_summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(three_term_model))</span></code></pre></div>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -393,10 +430,10 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 ## 
 ## R-sq.(adj) =   0.75   Deviance explained = 75.6%
 ## -REML = 2545.7  Scale est. = 34.309    n = 789</code></pre>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb46-1"></a><span class="co"># Ajouter Latitude comme terme non-linéaire</span></span>
-<span id="cb46-2"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb46-2"></a>three_smooth_model &lt;-<span class="st"> </span><span class="kw">gam</span>(Sources <span class="op">~</span><span class="st"> </span>Season <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(SampleDepth) <span class="op">+</span></span>
-<span id="cb46-3"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb46-3"></a><span class="st">    </span><span class="kw">s</span>(RelativeDepth) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(Latitude), <span class="dt">data =</span> isit, <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
-<span id="cb46-4"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb46-4"></a>(three_smooth_summary &lt;-<span class="st"> </span><span class="kw">summary</span>(three_smooth_model))</span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajouter Latitude comme terme non-linéaire</span></span>
+<span id="cb48-2"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb48-2" aria-hidden="true" tabindex="-1"></a>three_smooth_model <span class="ot">&lt;-</span> <span class="fu">gam</span>(Sources <span class="sc">~</span> Season <span class="sc">+</span> <span class="fu">s</span>(SampleDepth) <span class="sc">+</span></span>
+<span id="cb48-3"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb48-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">s</span>(RelativeDepth) <span class="sc">+</span> <span class="fu">s</span>(Latitude), <span class="at">data =</span> isit, <span class="at">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
+<span id="cb48-4"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb48-4" aria-hidden="true" tabindex="-1"></a>(three_smooth_summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(three_smooth_model))</span></code></pre></div>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -423,27 +460,27 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 ## -REML = 2524.5  Scale est. = 31.487    n = 789</code></pre>
 <p><strong>2.</strong> Est-ce que <code>Latitude</code> est un terme important à inclure dans le modèle? La <code>Latitude</code> a-t-elle un effet linéaire ou non-linéaire?</p>
 <p>Commençons par visualiser les 4 effets qui sont maintenant inclus dans chaque modèle:</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb48-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
-<span id="cb48-2"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb48-2"></a><span class="kw">plot</span>(three_term_model, <span class="dt">all.terms =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb50-2"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(three_term_model, <span class="at">all.terms =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p><img src="book-fr_files/figure-html/unnamed-chunk-41-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb49-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
-<span id="cb49-2"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb49-2"></a><span class="kw">plot</span>(three_smooth_model, <span class="dt">all.terms =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb51-2"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(three_smooth_model, <span class="at">all.terms =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p><img src="book-fr_files/figure-html/unnamed-chunk-42-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Nous devrions également examiner nos tableaux de coefficients. Qu’est-ce que les EDF nous disent à propos de <em>l’ondulation</em>, ou la non-linéarité, des effets de nos prédicteurs?</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb50-1"></a>three_smooth_summary<span class="op">$</span>s.table</span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb52-1" aria-hidden="true" tabindex="-1"></a>three_smooth_summary<span class="sc">$</span>s.table</span></code></pre></div>
 <pre><code>##                       edf   Ref.df         F p-value
 ## s(SampleDepth)   8.766891 8.975682 68.950905       0
 ## s(RelativeDepth) 8.007411 8.730625 17.639321       0
 ## s(Latitude)      7.431116 8.296838  8.954349       0</code></pre>
 <p>Les EDF sont tous élevés pour nos variables, y compris <code>Latitude</code>. Cela nous indique que <code>Latitude</code> est assez <em>ondulée</em>, et qu’elle ne devrait probablement pas être incluse comme terme linéaire.</p>
 <p>Avant de décider quel modèle est le “meilleur”, nous devrions tester si l’effet <code>Latitude</code> est plus approprié comme terme linéaire ou lisse, en utilisant <code>AIC()</code>:</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb52-1"></a><span class="kw">AIC</span>(three_smooth_model, three_term_model)</span></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">AIC</span>(three_smooth_model, three_term_model)</span></code></pre></div>
 <pre><code>##                          df      AIC
 ## three_smooth_model 28.20032 4990.546
 ## three_term_model   21.47683 5051.415</code></pre>
 <p>Notre modèle incluant la <code>Latitude</code> comme terme <em>non-linéaire</em> a un score AIC inférieur, ce qui signifie qu’il est plus performant que notre modèle incluant la <code>Latitude</code> comme terme <em>linéaire</em>.</p>
 <p>Mais, est-ce que l’ajout de <code>Latitude</code> comme prédicteur non-linéaire améliore réellement notre “meilleur” modèle (<code>two_smooth_model</code>)?</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb54-1"></a><span class="kw">AIC</span>(two_smooth_model, three_smooth_model)</span></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="gam-avec-plusieurs-termes-non-linéaires.html#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">AIC</span>(two_smooth_model, three_smooth_model)</span></code></pre></div>
 <pre><code>##                          df      AIC
 ## two_smooth_model   20.46960 5056.841
 ## three_smooth_model 28.20032 4990.546</code></pre>
@@ -525,7 +562,7 @@ gitbook.start({
     var script = document.createElement("script");
     script.type = "text/javascript";
     var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:")
       if (/^https?:/.test(src))
         src = src.replace(/^https?:/, '');

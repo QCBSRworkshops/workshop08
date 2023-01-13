@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapitre 10 Changer la fonction de base | Atelier 8 : Modèles additifs généralisés en R</title>
   <meta name="description" content="Modèles additifs généralisés en R" />
-  <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.31 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapitre 10 Changer la fonction de base | Atelier 8 : Modèles additifs généralisés en R" />
   <meta property="og:type" content="book" />
@@ -48,25 +48,24 @@
 
 
 
-<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -86,7 +85,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-le
 div.sourceCode
   {  background-color: #f8f8f8; }
 @media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ef2929; } /* Alert */
 code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
@@ -118,6 +117,28 @@ code span.vs { color: #4e9a06; } /* VerbatimString */
 code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 <link rel="stylesheet" href="assets/qcbs-style.css" type="text/css" />
 </head>
@@ -136,72 +157,88 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <link rel="icon" type="image/png" href="assets/images/favicon.ico"/>
 
 <li class="divider"></li>
-<li class="part"><span><b>Série d’ateliers R du CSBQ<span></span></b></span></li>
-<li><a href="index.html#préface">Préface<span></span></a><ul>
-<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>0.1</b> Code de conduit<span></span></a><ul>
-<li class="chapter" data-level="0.1.1" data-path="index.html"><a href="index.html#comportement-attendu"><i class="fa fa-check"></i><b>0.1.1</b> Comportement attendu<span></span></a></li>
-<li class="chapter" data-level="0.1.2" data-path="index.html"><a href="index.html#comportements-inacceptables"><i class="fa fa-check"></i><b>0.1.2</b> Comportements inacceptables<span></span></a></li>
+<li class="part"><span><b>Série d’ateliers R du CSBQ</b></span></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Préface</a>
+<ul>
+<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#code-de-conduit"><i class="fa fa-check"></i><b>0.1</b> Code de conduit</a>
+<ul>
+<li class="chapter" data-level="0.1.1" data-path="index.html"><a href="index.html#comportement-attendu"><i class="fa fa-check"></i><b>0.1.1</b> Comportement attendu</a></li>
+<li class="chapter" data-level="0.1.2" data-path="index.html"><a href="index.html#comportements-inacceptables"><i class="fa fa-check"></i><b>0.1.2</b> Comportements inacceptables</a></li>
 </ul></li>
-<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#contributeurs-et-contributrices"><i class="fa fa-check"></i><b>0.2</b> Contributeurs et contributrices<span></span></a></li>
-<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#contribuez-à-la-série"><i class="fa fa-check"></i><b>0.3</b> Contribuez à la série!<span></span></a></li>
+<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#contributeurs-et-contributrices"><i class="fa fa-check"></i><b>0.2</b> Contributeurs et contributrices</a></li>
+<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#contribuez-à-la-série"><i class="fa fa-check"></i><b>0.3</b> Contribuez à la série!</a></li>
 </ul></li>
-<li class="part"><span><b>Modèles additifs généralisés en <code>R</code><span></span></b></span></li>
-<li class="chapter" data-level="1" data-path="objectifs-dapprentissage.html"><a href="objectifs-dapprentissage.html"><i class="fa fa-check"></i><b>1</b> Objectifs d’apprentissage<span></span></a></li>
-<li class="chapter" data-level="2" data-path="préparez-vous-pour-cet-atelier.html"><a href="préparez-vous-pour-cet-atelier.html"><i class="fa fa-check"></i><b>2</b> Préparez-vous pour cet atelier<span></span></a></li>
-<li class="chapter" data-level="3" data-path="intro-linear-models.html"><a href="intro-linear-models.html"><i class="fa fa-check"></i><b>3</b> Le modèle linéaire… et où il échoue<span></span></a></li>
-<li class="chapter" data-level="4" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html"><i class="fa fa-check"></i><b>4</b> Introduction aux GAMs<span></span></a><ul>
-<li class="chapter" data-level="4.1" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#test-de-linéarité"><i class="fa fa-check"></i><b>4.1</b> Test de linéarité<span></span></a></li>
-<li class="chapter" data-level="4.2" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#défi-1"><i class="fa fa-check"></i><b>4.2</b> Défi 1<span></span></a><ul>
-<li class="chapter" data-level="4.2.1" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#défi-1-solution"><i class="fa fa-check"></i><b>4.2.1</b> Défi 1: Solution<span></span></a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="5" data-path="fonctionnement.html"><a href="fonctionnement.html"><i class="fa fa-check"></i><b>5</b> Le fonctionnement des GAMs<span></span></a><ul>
-<li class="chapter" data-level="5.1" data-path="fonctionnement.html"><a href="fonctionnement.html#exemple-une-base-polynomiale"><i class="fa fa-check"></i><b>5.1</b> Exemple: une base polynomiale<span></span></a></li>
-<li class="chapter" data-level="5.2" data-path="fonctionnement.html"><a href="fonctionnement.html#exemple-une-base-de-spline-cubique"><i class="fa fa-check"></i><b>5.2</b> Exemple: une base de spline cubique<span></span></a><ul>
-<li class="chapter" data-level="5.2.1" data-path="fonctionnement.html"><a href="fonctionnement.html#contrôler-le-degré-de-lissage-avec-des-splines-de-régression-pénalisés"><i class="fa fa-check"></i><b>5.2.1</b> Contrôler le degré de lissage avec des splines de régression pénalisés<span></span></a></li>
+<li class="part"><span><b>Modèles additifs généralisés en <code>R</code></b></span></li>
+<li class="chapter" data-level="1" data-path="objectifs-dapprentissage.html"><a href="objectifs-dapprentissage.html"><i class="fa fa-check"></i><b>1</b> Objectifs d’apprentissage</a></li>
+<li class="chapter" data-level="2" data-path="préparez-vous-pour-cet-atelier.html"><a href="préparez-vous-pour-cet-atelier.html"><i class="fa fa-check"></i><b>2</b> Préparez-vous pour cet atelier</a></li>
+<li class="chapter" data-level="3" data-path="intro-linear-models.html"><a href="intro-linear-models.html"><i class="fa fa-check"></i><b>3</b> Le modèle linéaire… et où il échoue</a></li>
+<li class="chapter" data-level="4" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html"><i class="fa fa-check"></i><b>4</b> Introduction aux GAMs</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#test-de-linéarité"><i class="fa fa-check"></i><b>4.1</b> Test de linéarité</a></li>
+<li class="chapter" data-level="4.2" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#défi-1"><i class="fa fa-check"></i><b>4.2</b> Défi 1</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="introduction-aux-gams.html"><a href="introduction-aux-gams.html#défi-1-solution"><i class="fa fa-check"></i><b>4.2.1</b> Défi 1: Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html"><i class="fa fa-check"></i><b>6</b> GAM avec plusieurs termes non linéaires<span></span></a><ul>
-<li class="chapter" data-level="6.1" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-variables-linéaires-et-non-linéaires"><i class="fa fa-check"></i><b>6.1</b> GAM à variables linéaires et non linéaires<span></span></a></li>
-<li class="chapter" data-level="6.2" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#degrés-de-liberté-effectifs-edf"><i class="fa fa-check"></i><b>6.2</b> Degrés de liberté effectifs (edf)<span></span></a></li>
-<li class="chapter" data-level="6.3" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables-linéaires-et-lisses"><i class="fa fa-check"></i><b>6.3</b> GAM à plusieurs variables linéaires et lisses<span></span></a></li>
-<li class="chapter" data-level="6.4" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables-non-linéaires"><i class="fa fa-check"></i><b>6.4</b> GAM à plusieurs variables non linéaires<span></span></a></li>
-<li class="chapter" data-level="6.5" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#défi-2"><i class="fa fa-check"></i><b>6.5</b> Défi 2<span></span></a><ul>
-<li class="chapter" data-level="6.5.1" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#défi-2-solution"><i class="fa fa-check"></i><b>6.5.1</b> Défi 2: Solution<span></span></a></li>
+<li class="chapter" data-level="5" data-path="fonctionnement.html"><a href="fonctionnement.html"><i class="fa fa-check"></i><b>5</b> Le fonctionnement des GAMs</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="fonctionnement.html"><a href="fonctionnement.html#exemple-une-base-polynomiale"><i class="fa fa-check"></i><b>5.1</b> Exemple: une base polynomiale</a></li>
+<li class="chapter" data-level="5.2" data-path="fonctionnement.html"><a href="fonctionnement.html#exemple-une-base-de-spline-cubique"><i class="fa fa-check"></i><b>5.2</b> Exemple: une base de spline cubique</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="fonctionnement.html"><a href="fonctionnement.html#contrôler-le-degré-de-lissage-avec-des-splines-de-régression-pénalisés"><i class="fa fa-check"></i><b>5.2.1</b> Contrôler le degré de lissage avec des splines de régression pénalisés</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html"><i class="fa fa-check"></i><b>7</b> GAM avec des termes d’interaction<span></span></a><ul>
-<li class="chapter" data-level="7.1" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html#interaction-entre-variables-non-linéaire-et-qualitatif"><i class="fa fa-check"></i><b>7.1</b> Interaction entre variables non-linéaire et qualitatif<span></span></a></li>
-<li class="chapter" data-level="7.2" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html#interaction-entre-variables-non-linéaires"><i class="fa fa-check"></i><b>7.2</b> Interaction entre variables non linéaires<span></span></a></li>
-</ul></li>
-<li class="part"><span><b>Généralisation du modèle additif<span></span></b></span></li>
-<li class="chapter" data-level="8" data-path="validation-gam.html"><a href="validation-gam.html"><i class="fa fa-check"></i><b>8</b> Validation d’un GAM<span></span></a><ul>
-<li class="chapter" data-level="8.1" data-path="validation-gam.html"><a href="validation-gam.html#choisir-k"><i class="fa fa-check"></i><b>8.1</b> Choisir <span class="math inline">\(k\)</span><span></span></a><ul>
-<li class="chapter" data-level="8.1.1" data-path="validation-gam.html"><a href="validation-gam.html#est-ce-que-notre-module-est-assez-flexible"><i class="fa fa-check"></i><b>8.1.1</b> Est-ce que notre module est assez flexible?<span></span></a></li>
-</ul></li>
-<li class="chapter" data-level="8.2" data-path="validation-gam.html"><a href="validation-gam.html#choisir-une-distribution"><i class="fa fa-check"></i><b>8.2</b> Choisir une distribution<span></span></a></li>
-</ul></li>
-<li class="chapter" data-level="9" data-path="autres-distributions.html"><a href="autres-distributions.html"><i class="fa fa-check"></i><b>9</b> Autres distributions<span></span></a><ul>
-<li class="chapter" data-level="9.1" data-path="autres-distributions.html"><a href="autres-distributions.html#défi-3"><i class="fa fa-check"></i><b>9.1</b> Défi 3<span></span></a><ul>
-<li class="chapter" data-level="9.1.1" data-path="autres-distributions.html"><a href="autres-distributions.html#défi-3-solution"><i class="fa fa-check"></i><b>9.1.1</b> Défi 3: Solution<span></span></a></li>
+<li class="chapter" data-level="6" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html"><i class="fa fa-check"></i><b>6</b> GAM avec plusieurs termes non linéaires</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-variables-linéaires-et-non-linéaires"><i class="fa fa-check"></i><b>6.1</b> GAM à variables linéaires et non linéaires</a></li>
+<li class="chapter" data-level="6.2" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#degrés-de-liberté-effectifs-edf"><i class="fa fa-check"></i><b>6.2</b> Degrés de liberté effectifs (edf)</a></li>
+<li class="chapter" data-level="6.3" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables-linéaires-et-lisses"><i class="fa fa-check"></i><b>6.3</b> GAM à plusieurs variables linéaires et lisses</a></li>
+<li class="chapter" data-level="6.4" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#gam-à-plusieurs-variables-non-linéaires"><i class="fa fa-check"></i><b>6.4</b> GAM à plusieurs variables non linéaires</a></li>
+<li class="chapter" data-level="6.5" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#défi-2"><i class="fa fa-check"></i><b>6.5</b> Défi 2</a>
+<ul>
+<li class="chapter" data-level="6.5.1" data-path="gam-avec-plusieurs-termes-non-linéaires.html"><a href="gam-avec-plusieurs-termes-non-linéaires.html#défi-2-solution"><i class="fa fa-check"></i><b>6.5.1</b> Défi 2: Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="changer-la-fonction-de-base.html"><a href="changer-la-fonction-de-base.html"><i class="fa fa-check"></i><b>10</b> Changer la fonction de base<span></span></a><ul>
-<li class="chapter" data-level="10.1" data-path="changer-la-fonction-de-base.html"><a href="changer-la-fonction-de-base.html#exemple-données-cycliques"><i class="fa fa-check"></i><b>10.1</b> Exemple: Données cycliques<span></span></a></li>
+<li class="chapter" data-level="7" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html"><i class="fa fa-check"></i><b>7</b> GAM avec des termes d’interaction</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html#interaction-entre-variables-non-linéaire-et-qualitatif"><i class="fa fa-check"></i><b>7.1</b> Interaction entre variables non-linéaire et qualitatif</a></li>
+<li class="chapter" data-level="7.2" data-path="gam-avec-des-termes-dinteraction.html"><a href="gam-avec-des-termes-dinteraction.html#interaction-entre-variables-non-linéaires"><i class="fa fa-check"></i><b>7.2</b> Interaction entre variables non linéaires</a></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><i class="fa fa-check"></i><b>11</b> Intro rapide aux modèles additifs généralisés à effets mixtes (GAMMs)<span></span></a><ul>
-<li class="chapter" data-level="11.1" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#lautocorrelation-des-résidus"><i class="fa fa-check"></i><b>11.1</b> L’autocorrelation des résidus<span></span></a></li>
-<li class="chapter" data-level="11.2" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#modélisation-avec-effets-mixtes"><i class="fa fa-check"></i><b>11.2</b> Modélisation avec effets mixtes<span></span></a><ul>
-<li class="chapter" data-level="11.2.1" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-un-intercepte-aléatoire"><i class="fa fa-check"></i><b>11.2.1</b> GAMM avec un intercepte aléatoire<span></span></a></li>
-<li class="chapter" data-level="11.2.2" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-une-pente-aléatoire"><i class="fa fa-check"></i><b>11.2.2</b> GAMM avec une pente aléatoire<span></span></a></li>
-<li class="chapter" data-level="11.2.3" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-un-intercept-et-une-pente-aléatoire"><i class="fa fa-check"></i><b>11.2.3</b> GAMM avec un intercept et une pente aléatoire<span></span></a></li>
-<li class="chapter" data-level="11.2.4" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-une-surface-lisse-aléatoire"><i class="fa fa-check"></i><b>11.2.4</b> GAMM avec une surface lisse aléatoire<span></span></a></li>
-<li class="chapter" data-level="11.2.5" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#comparaison-de-gamm"><i class="fa fa-check"></i><b>11.2.5</b> Comparaison de GAMM<span></span></a></li>
+<li class="part"><span><b>Généralisation du modèle additif</b></span></li>
+<li class="chapter" data-level="8" data-path="validation-gam.html"><a href="validation-gam.html"><i class="fa fa-check"></i><b>8</b> Validation d’un GAM</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="validation-gam.html"><a href="validation-gam.html#choisir-k"><i class="fa fa-check"></i><b>8.1</b> Choisir <span class="math inline">\(k\)</span></a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="validation-gam.html"><a href="validation-gam.html#est-ce-que-notre-module-est-assez-flexible"><i class="fa fa-check"></i><b>8.1.1</b> Est-ce que notre module est assez flexible?</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="validation-gam.html"><a href="validation-gam.html#choisir-une-distribution"><i class="fa fa-check"></i><b>8.2</b> Choisir une distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="autres-distributions.html"><a href="autres-distributions.html"><i class="fa fa-check"></i><b>9</b> Autres distributions</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="autres-distributions.html"><a href="autres-distributions.html#défi-3"><i class="fa fa-check"></i><b>9.1</b> Défi 3</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="autres-distributions.html"><a href="autres-distributions.html#défi-3-solution"><i class="fa fa-check"></i><b>9.1.1</b> Défi 3: Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="part"><span><b>Ressources &amp; Références<span></span></b></span></li>
-<li class="chapter" data-level="12" data-path="ressources.html"><a href="ressources.html"><i class="fa fa-check"></i><b>12</b> Ressources<span></span></a></li>
-<li class="chapter" data-level="13" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>13</b> References<span></span></a></li>
+<li class="chapter" data-level="10" data-path="changer-la-fonction-de-base.html"><a href="changer-la-fonction-de-base.html"><i class="fa fa-check"></i><b>10</b> Changer la fonction de base</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="changer-la-fonction-de-base.html"><a href="changer-la-fonction-de-base.html#exemple-données-cycliques"><i class="fa fa-check"></i><b>10.1</b> Exemple: Données cycliques</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><i class="fa fa-check"></i><b>11</b> Intro rapide aux modèles additifs généralisés à effets mixtes (GAMMs)</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#lautocorrelation-des-résidus"><i class="fa fa-check"></i><b>11.1</b> L’autocorrelation des résidus</a></li>
+<li class="chapter" data-level="11.2" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#modélisation-avec-effets-mixtes"><i class="fa fa-check"></i><b>11.2</b> Modélisation avec effets mixtes</a>
+<ul>
+<li class="chapter" data-level="11.2.1" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-un-intercepte-aléatoire"><i class="fa fa-check"></i><b>11.2.1</b> GAMM avec un intercepte aléatoire</a></li>
+<li class="chapter" data-level="11.2.2" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-une-pente-aléatoire"><i class="fa fa-check"></i><b>11.2.2</b> GAMM avec une pente aléatoire</a></li>
+<li class="chapter" data-level="11.2.3" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-un-intercept-et-une-pente-aléatoire"><i class="fa fa-check"></i><b>11.2.3</b> GAMM avec un intercept et une pente aléatoire</a></li>
+<li class="chapter" data-level="11.2.4" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#gamm-avec-une-surface-lisse-aléatoire"><i class="fa fa-check"></i><b>11.2.4</b> GAMM avec une surface lisse aléatoire</a></li>
+<li class="chapter" data-level="11.2.5" data-path="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#comparaison-de-gamm"><i class="fa fa-check"></i><b>11.2.5</b> Comparaison de GAMM</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>Ressources &amp; Références</b></span></li>
+<li class="chapter" data-level="12" data-path="ressources.html"><a href="ressources.html"><i class="fa fa-check"></i><b>12</b> Ressources</a></li>
+<li class="chapter" data-level="13" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>13</b> References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/qcbsRworkshops" target="blank">QCBS R Workshop Series</a></li>
 
@@ -237,7 +274,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
   <img class= "hero-image" src="assets/images/jean-philippe-delberghe-75xPHEQBmvA-unsplash_hero_image.jpg">
 </div>
 --!>
-<div id="changer-la-fonction-de-base" class="section level1 hasAnchor">
+<div id="changer-la-fonction-de-base" class="section level1 hasAnchor" number="10">
 <h1><span class="header-section-number">Chapitre 10</span> Changer la fonction de base<a href="changer-la-fonction-de-base.html#changer-la-fonction-de-base" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>Pour modéliser une surface lisse ou non-linéaire, nous pouvons construire des fonctions lisses de différentes manières:</p>
 <p>La fonction de lissage <code>s()</code> modélise un terme lisse 1-dimensionnelle ou une intéraction entre des variables mesurées sur la <em>même échelle</em>. Il s’agit de la fonction de lissage que nous avons utilisée tout au long de cet atelier.</p>
@@ -252,70 +289,70 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 - pour <code>s()</code> on utilise <code>tp</code> (<em>thin plate regression spline</em>) et pour <code>te()</code> et <code>ti()</code> on utilise la base <code>cr</code> (<em>cubic regression spline</em>).</p>
 <p><code>d</code>: spécifie quelles variables d’une intéraction se trouvent sur la même échelle lorsqu’on utilise <code>te()</code> and <code>ti()</code>.
 - Par exemple, <code>te(Temps, largeur, hauteur, d=c(1,2))</code>, indique que la <code>largeur</code> et la <code>hauteur</code> sont sur la même échelle, mais que <code>temps</code> ne l’est pas.</p>
-<div id="exemple-données-cycliques" class="section level2 hasAnchor">
+<div id="exemple-données-cycliques" class="section level2 hasAnchor" number="10.1">
 <h2><span class="header-section-number">10.1</span> Exemple: Données cycliques<a href="changer-la-fonction-de-base.html#exemple-données-cycliques" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Lorsque l’on modélise des données cycliques, on souhaite généralement que le prédicteur soit identique aux deux bouts des phases. Pour y parvenir, nous devons modifier la fonction de base.</p>
 <p>Utilisons une série chronologique de données climatiques, divisées en mesures mensuelles, afin de déterminer s’il y a une tendance de température annuelle. Nous utiliserons la série temporelle de la température de Nottingham
 pour cela, qui est incluse dans <code>R</code>:</p>
-<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="changer-la-fonction-de-base.html#cb92-1"></a><span class="co"># série temporelle de la température de Nottingham</span></span>
-<span id="cb92-2"><a href="changer-la-fonction-de-base.html#cb92-2"></a><span class="kw">data</span>(nottem)</span></code></pre></div>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="changer-la-fonction-de-base.html#cb94-1" aria-hidden="true" tabindex="-1"></a><span class="co"># série temporelle de la température de Nottingham</span></span>
+<span id="cb94-2"><a href="changer-la-fonction-de-base.html#cb94-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(nottem)</span></code></pre></div>
 <div class="explanation">
 <p>Voir <code>?nottem</code> pour plus de détails sur le jeu de données.</p>
 </div>
 <p>Commençons par visualiser les fluctuations mensuelles de température pour chaque année dans le jeu de données <code>nottem</code>:</p>
-<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="changer-la-fonction-de-base.html#cb93-1"></a><span class="co"># nombre d&#39;années de données (20 ans)</span></span>
-<span id="cb93-2"><a href="changer-la-fonction-de-base.html#cb93-2"></a>n_years &lt;-<span class="st"> </span><span class="kw">length</span>(nottem)<span class="op">/</span><span class="dv">12</span></span>
-<span id="cb93-3"><a href="changer-la-fonction-de-base.html#cb93-3"></a></span>
-<span id="cb93-4"><a href="changer-la-fonction-de-base.html#cb93-4"></a><span class="co"># codage qualitatif pour les 12 mois de l&#39;année, pour</span></span>
-<span id="cb93-5"><a href="changer-la-fonction-de-base.html#cb93-5"></a><span class="co"># chaque année échantillonnée (série de 1 à 12, répétée 20</span></span>
-<span id="cb93-6"><a href="changer-la-fonction-de-base.html#cb93-6"></a><span class="co"># fois)</span></span>
-<span id="cb93-7"><a href="changer-la-fonction-de-base.html#cb93-7"></a>nottem_month &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">12</span>, <span class="dt">times =</span> n_years)</span>
-<span id="cb93-8"><a href="changer-la-fonction-de-base.html#cb93-8"></a></span>
-<span id="cb93-9"><a href="changer-la-fonction-de-base.html#cb93-9"></a><span class="co"># une variable où l&#39;année correspondant à chaque mois dans</span></span>
-<span id="cb93-10"><a href="changer-la-fonction-de-base.html#cb93-10"></a><span class="co"># nottem_month</span></span>
-<span id="cb93-11"><a href="changer-la-fonction-de-base.html#cb93-11"></a>nottem_year &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1920</span><span class="op">:</span>(<span class="dv">1920</span> <span class="op">+</span><span class="st"> </span>n_years <span class="op">-</span><span class="st"> </span><span class="dv">1</span>), <span class="dt">each =</span> <span class="dv">12</span>)</span>
-<span id="cb93-12"><a href="changer-la-fonction-de-base.html#cb93-12"></a></span>
-<span id="cb93-13"><a href="changer-la-fonction-de-base.html#cb93-13"></a><span class="co"># Visualiser la série temporelle</span></span>
-<span id="cb93-14"><a href="changer-la-fonction-de-base.html#cb93-14"></a><span class="kw">qplot</span>(<span class="dt">x =</span> nottem_month, <span class="dt">y =</span> nottem, <span class="dt">colour =</span> <span class="kw">factor</span>(nottem_year),</span>
-<span id="cb93-15"><a href="changer-la-fonction-de-base.html#cb93-15"></a>    <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme_bw</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="changer-la-fonction-de-base.html#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="co"># nombre d&#39;années de données (20 ans)</span></span>
+<span id="cb95-2"><a href="changer-la-fonction-de-base.html#cb95-2" aria-hidden="true" tabindex="-1"></a>n_years <span class="ot">&lt;-</span> <span class="fu">length</span>(nottem)<span class="sc">/</span><span class="dv">12</span></span>
+<span id="cb95-3"><a href="changer-la-fonction-de-base.html#cb95-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb95-4"><a href="changer-la-fonction-de-base.html#cb95-4" aria-hidden="true" tabindex="-1"></a><span class="co"># codage qualitatif pour les 12 mois de l&#39;année, pour</span></span>
+<span id="cb95-5"><a href="changer-la-fonction-de-base.html#cb95-5" aria-hidden="true" tabindex="-1"></a><span class="co"># chaque année échantillonnée (série de 1 à 12, répétée 20</span></span>
+<span id="cb95-6"><a href="changer-la-fonction-de-base.html#cb95-6" aria-hidden="true" tabindex="-1"></a><span class="co"># fois)</span></span>
+<span id="cb95-7"><a href="changer-la-fonction-de-base.html#cb95-7" aria-hidden="true" tabindex="-1"></a>nottem_month <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="at">times =</span> n_years)</span>
+<span id="cb95-8"><a href="changer-la-fonction-de-base.html#cb95-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb95-9"><a href="changer-la-fonction-de-base.html#cb95-9" aria-hidden="true" tabindex="-1"></a><span class="co"># une variable où l&#39;année correspondant à chaque mois dans</span></span>
+<span id="cb95-10"><a href="changer-la-fonction-de-base.html#cb95-10" aria-hidden="true" tabindex="-1"></a><span class="co"># nottem_month</span></span>
+<span id="cb95-11"><a href="changer-la-fonction-de-base.html#cb95-11" aria-hidden="true" tabindex="-1"></a>nottem_year <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1920</span><span class="sc">:</span>(<span class="dv">1920</span> <span class="sc">+</span> n_years <span class="sc">-</span> <span class="dv">1</span>), <span class="at">each =</span> <span class="dv">12</span>)</span>
+<span id="cb95-12"><a href="changer-la-fonction-de-base.html#cb95-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb95-13"><a href="changer-la-fonction-de-base.html#cb95-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualiser la série temporelle</span></span>
+<span id="cb95-14"><a href="changer-la-fonction-de-base.html#cb95-14" aria-hidden="true" tabindex="-1"></a><span class="fu">qplot</span>(<span class="at">x =</span> nottem_month, <span class="at">y =</span> nottem, <span class="at">colour =</span> <span class="fu">factor</span>(nottem_year),</span>
+<span id="cb95-15"><a href="changer-la-fonction-de-base.html#cb95-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">geom =</span> <span class="st">&quot;line&quot;</span>) <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code></pre></div>
 <p><img src="book-fr_files/figure-html/unnamed-chunk-69-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Nous pouvons modéliser le changement cyclique de température à travers les mois et la tendance non-linéaire à travers les années, en utilisant une spline cubique, ou <code>cc</code> pour modéliser les effets de mois ainsi qu’un terme non-linéaire pour la variable année.</p>
-<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="changer-la-fonction-de-base.html#cb94-1"></a>year_gam &lt;-<span class="st"> </span><span class="kw">gam</span>(nottem <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(nottem_year) <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(nottem_month, <span class="dt">bs =</span> <span class="st">&quot;cc&quot;</span>),</span>
-<span id="cb94-2"><a href="changer-la-fonction-de-base.html#cb94-2"></a>    <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
-<span id="cb94-3"><a href="changer-la-fonction-de-base.html#cb94-3"></a><span class="kw">summary</span>(year_gam)<span class="op">$</span>s.table</span></code></pre></div>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="changer-la-fonction-de-base.html#cb96-1" aria-hidden="true" tabindex="-1"></a>year_gam <span class="ot">&lt;-</span> <span class="fu">gam</span>(nottem <span class="sc">~</span> <span class="fu">s</span>(nottem_year) <span class="sc">+</span> <span class="fu">s</span>(nottem_month, <span class="at">bs =</span> <span class="st">&quot;cc&quot;</span>),</span>
+<span id="cb96-2"><a href="changer-la-fonction-de-base.html#cb96-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
+<span id="cb96-3"><a href="changer-la-fonction-de-base.html#cb96-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(year_gam)<span class="sc">$</span>s.table</span></code></pre></div>
 <pre><code>##                      edf   Ref.df          F    p-value
-## s(nottem_year)  1.621375 2.011475   2.850888 0.06141004
+## s(nottem_year)  1.621375 2.011475   2.788093 0.06141004
 ## s(nottem_month) 6.855132 8.000000 393.119285 0.00000000</code></pre>
-<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="changer-la-fonction-de-base.html#cb96-1"></a><span class="kw">plot</span>(year_gam, <span class="dt">page =</span> <span class="dv">1</span>, <span class="dt">scale =</span> <span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="changer-la-fonction-de-base.html#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(year_gam, <span class="at">page =</span> <span class="dv">1</span>, <span class="at">scale =</span> <span class="dv">0</span>)</span></code></pre></div>
 <p><img src="book-fr_files/figure-html/unnamed-chunk-71-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Il y a une augmentation d’environ 1 - 1,5ºC au cours de la série, mais au cours d’une année, il y a une variation d’environ 20ºC. Les données réelles varient autour de ces valeurs prédites et ceci représente donc la variance inexpliquée.</p>
 <p>Ici, nous pouvons voir l’un des avantages très intéressants de l’utilisation des GAMs. Nous pouvons soit tracer la surface réponse (valeurs prédites) ou les termes (contribution de chaque covariable) tel qu’indiqué ci-haut. Vous pouvez imaginer ce dernier en tant qu’une illustration de la variation des coefficients de régression et comment leur contribution (ou taille de leur effet) varie au fil du temps. Dans le premier graphique, nous voyons que les contributions positives de la température sont survenues après 1930.</p>
 <div class="explanation">
 <p><strong>Visualiser les contributions de variables</strong></p>
-<p><span class="citation">Simpson and Anderson (<a href="#ref-simpson-2009" role="doc-biblioref">2009</a>)</span> ont modélisé des données paléolimnologiques avec des GAMs (voir Fig.3c), et ont visualisé la contribution (effet) de la température sur la composition des algues dans des lacs pour illustrer que les contributions significatives de la température ont seulement survenu au cours de deux périodes extrêmement froides.</p>
-<p>C’est-à-dire, la contribution est importante lorsque les intervalles de confiance n’incluent pas la valeur zéro, ce qu’on voit à environ 300 et 100 ans AVJC dans <span class="citation">Simpson and Anderson (<a href="#ref-simpson-2009" role="doc-biblioref">2009</a>)</span>.</p>
+<p><span class="citation">G. L. Simpson and Anderson (<a href="#ref-simpson-2009" role="doc-biblioref">2009</a>)</span> ont modélisé des données paléolimnologiques avec des GAMs (voir Fig.3c), et ont visualisé la contribution (effet) de la température sur la composition des algues dans des lacs pour illustrer que les contributions significatives de la température ont seulement survenu au cours de deux périodes extrêmement froides.</p>
+<p>C’est-à-dire, la contribution est importante lorsque les intervalles de confiance n’incluent pas la valeur zéro, ce qu’on voit à environ 300 et 100 ans AVJC dans <span class="citation">G. L. Simpson and Anderson (<a href="#ref-simpson-2009" role="doc-biblioref">2009</a>)</span>.</p>
 <p>Cela a permis aux auteurs de non seulement déterminer combien de variance est expliquée par la température au cours des derniers siècles, mais aussi de repérer dans le temps cet effet significatif.</p>
 <p>Si cela vous intéresse, le code pour visualiser soit la surface de réponse (<code>type = "response"</code>) ou les termes (<code>type = "terms"</code>) est disponible ci-dessous. Lorsque les termes sont sélectionnés, vous obtiendrez la même figure que celle ci-dessus.</p>
-<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="changer-la-fonction-de-base.html#cb97-1"></a>pred &lt;-<span class="st"> </span><span class="kw">predict</span>(year_gam, <span class="dt">type =</span> <span class="st">&quot;terms&quot;</span>, <span class="dt">se =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb97-2"><a href="changer-la-fonction-de-base.html#cb97-2"></a>I &lt;-<span class="st"> </span><span class="kw">order</span>(nottem_year)</span>
-<span id="cb97-3"><a href="changer-la-fonction-de-base.html#cb97-3"></a>plusCI &lt;-<span class="st"> </span><span class="kw">I</span>(pred<span class="op">$</span>fit[, <span class="dv">1</span>] <span class="op">+</span><span class="st"> </span><span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>pred<span class="op">$</span>se[, <span class="dv">1</span>])</span>
-<span id="cb97-4"><a href="changer-la-fonction-de-base.html#cb97-4"></a>minusCI &lt;-<span class="st"> </span><span class="kw">I</span>(pred<span class="op">$</span>fit[, <span class="dv">1</span>] <span class="op">-</span><span class="st"> </span><span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>pred<span class="op">$</span>se[, <span class="dv">1</span>])</span>
-<span id="cb97-5"><a href="changer-la-fonction-de-base.html#cb97-5"></a>xx &lt;-<span class="st"> </span><span class="kw">c</span>(nottem_year[I], <span class="kw">rev</span>(nottem_year[I]))</span>
-<span id="cb97-6"><a href="changer-la-fonction-de-base.html#cb97-6"></a>yy &lt;-<span class="st"> </span><span class="kw">c</span>(plusCI[I], <span class="kw">rev</span>(minusCI[I]))</span>
-<span id="cb97-7"><a href="changer-la-fonction-de-base.html#cb97-7"></a></span>
-<span id="cb97-8"><a href="changer-la-fonction-de-base.html#cb97-8"></a><span class="kw">plot</span>(xx, yy, <span class="dt">type =</span> <span class="st">&quot;n&quot;</span>, <span class="dt">cex.axis =</span> <span class="fl">1.2</span>, <span class="dt">xlab =</span> <span class="st">&quot;Year&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Temperature&quot;</span>)</span>
-<span id="cb97-9"><a href="changer-la-fonction-de-base.html#cb97-9"></a><span class="kw">polygon</span>(xx, yy, <span class="dt">col =</span> <span class="st">&quot;light blue&quot;</span>, <span class="dt">border =</span> <span class="st">&quot;light blue&quot;</span>)</span>
-<span id="cb97-10"><a href="changer-la-fonction-de-base.html#cb97-10"></a><span class="kw">lines</span>(nottem_year[I], pred<span class="op">$</span>fit[, <span class="dv">1</span>][I], <span class="dt">lty =</span> <span class="dv">1</span>, <span class="dt">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb97-11"><a href="changer-la-fonction-de-base.html#cb97-11"></a><span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">0</span>, <span class="dt">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="changer-la-fonction-de-base.html#cb99-1" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(year_gam, <span class="at">type =</span> <span class="st">&quot;terms&quot;</span>, <span class="at">se =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb99-2"><a href="changer-la-fonction-de-base.html#cb99-2" aria-hidden="true" tabindex="-1"></a>I <span class="ot">&lt;-</span> <span class="fu">order</span>(nottem_year)</span>
+<span id="cb99-3"><a href="changer-la-fonction-de-base.html#cb99-3" aria-hidden="true" tabindex="-1"></a>plusCI <span class="ot">&lt;-</span> <span class="fu">I</span>(pred<span class="sc">$</span>fit[, <span class="dv">1</span>] <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> pred<span class="sc">$</span>se[, <span class="dv">1</span>])</span>
+<span id="cb99-4"><a href="changer-la-fonction-de-base.html#cb99-4" aria-hidden="true" tabindex="-1"></a>minusCI <span class="ot">&lt;-</span> <span class="fu">I</span>(pred<span class="sc">$</span>fit[, <span class="dv">1</span>] <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> pred<span class="sc">$</span>se[, <span class="dv">1</span>])</span>
+<span id="cb99-5"><a href="changer-la-fonction-de-base.html#cb99-5" aria-hidden="true" tabindex="-1"></a>xx <span class="ot">&lt;-</span> <span class="fu">c</span>(nottem_year[I], <span class="fu">rev</span>(nottem_year[I]))</span>
+<span id="cb99-6"><a href="changer-la-fonction-de-base.html#cb99-6" aria-hidden="true" tabindex="-1"></a>yy <span class="ot">&lt;-</span> <span class="fu">c</span>(plusCI[I], <span class="fu">rev</span>(minusCI[I]))</span>
+<span id="cb99-7"><a href="changer-la-fonction-de-base.html#cb99-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb99-8"><a href="changer-la-fonction-de-base.html#cb99-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xx, yy, <span class="at">type =</span> <span class="st">&quot;n&quot;</span>, <span class="at">cex.axis =</span> <span class="fl">1.2</span>, <span class="at">xlab =</span> <span class="st">&quot;Year&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Temperature&quot;</span>)</span>
+<span id="cb99-9"><a href="changer-la-fonction-de-base.html#cb99-9" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(xx, yy, <span class="at">col =</span> <span class="st">&quot;light blue&quot;</span>, <span class="at">border =</span> <span class="st">&quot;light blue&quot;</span>)</span>
+<span id="cb99-10"><a href="changer-la-fonction-de-base.html#cb99-10" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(nottem_year[I], pred<span class="sc">$</span>fit[, <span class="dv">1</span>][I], <span class="at">lty =</span> <span class="dv">1</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb99-11"><a href="changer-la-fonction-de-base.html#cb99-11" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="book-fr_files/figure-html/unnamed-chunk-72-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 
 </div>
 </div>
 <h3> References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div id="refs" class="references">
-<div id="ref-simpson-2009">
-<p>Simpson, Gavin L., and N. J. Anderson. 2009. “Deciphering the Effect of Climate Change and Separating the Influence of Confounding Factors in Sediment Core Records Using Additive Models.” <em>Limnology and Oceanography</em> 54 (6part2): 2529–41. <a href="https://doi.org/https://doi.org/10.4319/lo.2009.54.6_part_2.2529">https://doi.org/https://doi.org/10.4319/lo.2009.54.6_part_2.2529</a>.</p>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-simpson-2009" class="csl-entry">
+Simpson, Gavin L., and N. J. Anderson. 2009. <span>“Deciphering the Effect of Climate Change and Separating the Influence of Confounding Factors in Sediment Core Records Using Additive Models.”</span> <em>Limnology and Oceanography</em> 54 (6part2): 2529–41. https://doi.org/<a href="https://doi.org/10.4319/lo.2009.54.6_part_2.2529">https://doi.org/10.4319/lo.2009.54.6_part_2.2529</a>.
 </div>
 </div>
 <hr>
@@ -390,7 +427,7 @@ gitbook.start({
     var script = document.createElement("script");
     script.type = "text/javascript";
     var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:")
       if (/^https?:/.test(src))
         src = src.replace(/^https?:/, '');

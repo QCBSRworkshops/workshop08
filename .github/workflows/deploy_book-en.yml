@@ -1,10 +1,10 @@
 on:
   push:
-     branches:
-       - main
-     paths:
-       - book-en/**
-       - .github/workflows/deploy_book-en.yml
+    branches:
+      - main
+    paths:
+      - book-en/**
+      - .github/workflows/deploy_book-en.yml
        
   repository_dispatch: 
     types: [pong_book]
@@ -37,21 +37,21 @@ jobs:
         
     steps:
       - name: 🛎️ Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: 💻 Setup R
-        uses: r-lib/actions/setup-r@v1
+        uses: r-lib/actions/setup-r@v2
         with:
-          r-version: 4.0.3
+          r-version: 4.2.2
         
       - name: 💾 Cache R packages
-        uses: actions/cache@v2 # Must be v2 so it accepts the GITHUB_REF from the repository_dispatch
+        uses: actions/cache@v3
         with:
           path: ${{ env.R_LIBS_USER }}
           key:  r-${{ hashFiles('DESCRIPTION') }}
 
       - name: 💻 Install pandoc and pandoc citeproc
-        uses: r-lib/actions/setup-pandoc@v1
+        uses: r-lib/actions/setup-pandoc@v2
     
       - name: 💻 Install R packages and dependencies if needed
         run: |
@@ -91,7 +91,7 @@ jobs:
          file.copy("workshop08-script-en.R", "_book/")'
 
       - name: 🔺 Upload artifact containing the book
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
           name: book-en
           path: book-en/
@@ -107,12 +107,12 @@ jobs:
    
    steps:
       - name: 🛎️ Checkout again
-        uses: actions/checkout@v2.3.1 # If you're using actions/checkout@v2 you must set persist-credentials to false in most cases for the deployment to work correctly.
+        uses: actions/checkout@v3
         with:
           persist-credentials: false
           
       - name: 🔻 Download artifact containing the book
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v3
         with:
          # Artifact name
          name: book-en # optional
@@ -120,11 +120,10 @@ jobs:
          path: book-en/ # optional
 
       - name: 💎 Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@4.1.4
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
           branch: gh-pages # The branch the action should deploy to.
           folder: book-en/_book/
           target-folder: book-en # The folder the action should deploy
           clean: true
-

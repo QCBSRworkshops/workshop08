@@ -4,6 +4,7 @@
     <title>Workshop 8: Generalized additive models</title>
     <meta charset="utf-8" />
     <meta name="author" content="Québec Centre for Biodiversity Science" />
+    <script src="assets/header-attrs-2.19/header-attrs.js"></script>
     <link href="assets/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css">
@@ -1576,7 +1577,7 @@ Is `k` large enough this time?
 ```r
 k.check(smooth_interact_k60)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626     0.9
+# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626  0.8825
 ```
 
 --
@@ -1709,7 +1710,7 @@ Next, we should check the basis dimension:
 ```r
 k.check(smooth_interact_tw)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062  0.8475
+# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062  0.8125
 ```
 
 The trade-off between `\(k\)` and EDF is well balanced. Great!
@@ -1742,7 +1743,7 @@ __3.__ Compare `smooth_interact_tw` with `smooth_interact`. Which one would you 
 AIC(smooth_interact, smooth_interact_tw)
 #                          df      AIC
 # smooth_interact    49.47221 4900.567
-# smooth_interact_tw 47.86913 3497.733
+# smooth_interact_tw 47.86913 3498.490
 ```
 
 .comment[AIC allows us to compare models that are based on different distributions!]
@@ -1860,7 +1861,7 @@ We can model both the cyclic change of temperature across months and the non-lin
 year_gam &lt;- gam(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"), method = "REML")
 summary(year_gam)$s.table
 #                      edf   Ref.df          F    p-value
-# s(nottem_year)  1.621375 2.011475   2.850888 0.06141004
+# s(nottem_year)  1.621375 2.011475   2.788093 0.06141004
 # s(nottem_month) 6.855132 8.000000 393.119285 0.00000000
 ```
 
@@ -2011,8 +2012,8 @@ gamm_intercept &lt;- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2, method
 # examine model output
 summary(gamm_intercept)$s.table
 #             edf   Ref.df         F     p-value
-# s(x0)  3.192597 3.972795  3.482959 0.009474268
-# s(fac) 2.969138 3.000000 95.901852 0.000000000
+# s(x0)  2.934771 3.645589  4.640016 0.001864951
+# s(fac) 2.970124 3.000000 99.724546 0.000000000
 ```
 
 ---
@@ -2076,8 +2077,8 @@ gamm_slope &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2, method
 
 summary(gamm_slope)$s.table
 #                edf   Ref.df         F     p-value
-# s(x0)     3.262355 4.059445  3.482925 0.007846408
-# s(x0,fac) 2.959193 3.000000 71.341132 0.000000000
+# s(x0)     2.880099 3.578252  3.738891 0.007187981
+# s(x0,fac) 2.949711 3.000000 59.607867 0.000000000
 ```
 
 
@@ -2123,10 +2124,10 @@ gamm_int_slope &lt;- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
                       data = gam_data2, method = "REML")
 
 summary(gamm_int_slope)$s.table
-#                edf   Ref.df          F     p-value
-# s(x0)     3.223323 4.007385   3.436842 0.008722239
-# s(fac)    2.917047 3.000000 274.219956 0.000000000
-# s(fac,x0) 1.341240 3.000000  44.078058 0.249177629
+#                    edf   Ref.df            F     p-value
+# s(x0)     2.9347687961 3.645585 4.639985e+00 0.001865048
+# s(fac)    2.9701092668 3.000000 9.977741e+01 0.000000000
+# s(fac,x0) 0.0005132753 3.000000 7.881257e-05 0.718969959
 ```
 
 ---
@@ -2185,9 +2186,9 @@ gamm_smooth &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1),
                    data = gam_data2, method = "REML")
 
 summary(gamm_smooth)$s.table
-#                edf    Ref.df        F    p-value
-# s(x0)     3.167497  3.921025 3.086607 0.01419751
-# s(x0,fac) 4.568296 35.000000 8.317354 0.00000000
+#                edf    Ref.df        F     p-value
+# s(x0)     2.934669  3.645396 4.638472 0.001869697
+# s(x0,fac) 2.976451 35.000000 8.548046 0.000000000
 ```
 
 ---
@@ -2247,11 +2248,11 @@ All of the mixed models from this section can be compared using `AIC()` to deter
 
 ```r
 AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
-#                       df      AIC
-# gamm_intercept  8.937243 2233.073
-# gamm_slope      8.925683 2278.288
-# gamm_int_slope 11.030933 2233.910
-# gamm_smooth    11.789633 2235.176
+#                      df      AIC
+# gamm_intercept 8.323247 2200.876
+# gamm_slope     8.353784 2276.933
+# gamm_int_slope 8.325252 2200.880
+# gamm_smooth    8.352053 2200.924
 ```
 
 The best model among those we have built here would be a GAMM with a random effect on the intercept.
@@ -2454,6 +2455,7 @@ abline(h = 0.5, v = diff$start, col = 'red', lty = 2)
 As in the logit plot, the proportion of successes increases above 0.5 at x1=400.
 
 &lt;!-- again, lack of explanation here...--&gt;
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

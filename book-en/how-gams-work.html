@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 5 How GAMs work | Workshop 8: Generalized additive models in R</title>
   <meta name="description" content="Generalized additive models in R" />
-  <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.31 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 5 How GAMs work | Workshop 8: Generalized additive models in R" />
   <meta property="og:type" content="book" />
@@ -48,25 +48,24 @@
 
 
 
-<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -86,7 +85,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-le
 div.sourceCode
   {  background-color: #f8f8f8; }
 @media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ef2929; } /* Alert */
 code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
@@ -118,6 +117,28 @@ code span.vs { color: #4e9a06; } /* VerbatimString */
 code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 <link rel="stylesheet" href="assets/qcbs-style.css" type="text/css" />
 </head>
@@ -136,72 +157,88 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <link rel="icon" type="image/png" href="assets/images/favicon.ico"/>
 
 <li class="divider"></li>
-<li class="part"><span><b>QCBS R Workshop Series<span></span></b></span></li>
-<li><a href="index.html#preface">Preface<span></span></a><ul>
-<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>0.1</b> Code of conduct<span></span></a><ul>
-<li class="chapter" data-level="0.1.1" data-path="index.html"><a href="index.html#expected-behaviour"><i class="fa fa-check"></i><b>0.1.1</b> Expected behaviour<span></span></a></li>
-<li class="chapter" data-level="0.1.2" data-path="index.html"><a href="index.html#unacceptable-behaviour"><i class="fa fa-check"></i><b>0.1.2</b> Unacceptable behaviour<span></span></a></li>
+<li class="part"><span><b>QCBS R Workshop Series</b></span></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
+<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#code-of-conduct"><i class="fa fa-check"></i><b>0.1</b> Code of conduct</a>
+<ul>
+<li class="chapter" data-level="0.1.1" data-path="index.html"><a href="index.html#expected-behaviour"><i class="fa fa-check"></i><b>0.1.1</b> Expected behaviour</a></li>
+<li class="chapter" data-level="0.1.2" data-path="index.html"><a href="index.html#unacceptable-behaviour"><i class="fa fa-check"></i><b>0.1.2</b> Unacceptable behaviour</a></li>
 </ul></li>
-<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#contributors"><i class="fa fa-check"></i><b>0.2</b> Contributors<span></span></a></li>
-<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#contributing"><i class="fa fa-check"></i><b>0.3</b> Contributing<span></span></a></li>
+<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#contributors"><i class="fa fa-check"></i><b>0.2</b> Contributors</a></li>
+<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#contributing"><i class="fa fa-check"></i><b>0.3</b> Contributing</a></li>
 </ul></li>
-<li class="part"><span><b>Generalized Additive Models in <code>R</code><span></span></b></span></li>
-<li class="chapter" data-level="1" data-path="learning-objectives.html"><a href="learning-objectives.html"><i class="fa fa-check"></i><b>1</b> Learning objectives<span></span></a></li>
-<li class="chapter" data-level="2" data-path="preparing-for-the-workshop.html"><a href="preparing-for-the-workshop.html"><i class="fa fa-check"></i><b>2</b> Preparing for the workshop<span></span></a></li>
-<li class="chapter" data-level="3" data-path="intro-linear-models.html"><a href="intro-linear-models.html"><i class="fa fa-check"></i><b>3</b> The linear model… and where it fails<span></span></a></li>
-<li class="chapter" data-level="4" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html"><i class="fa fa-check"></i><b>4</b> Introduction to GAMs<span></span></a><ul>
-<li class="chapter" data-level="4.1" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html#test-for-linearity"><i class="fa fa-check"></i><b>4.1</b> Test for linearity<span></span></a></li>
-<li class="chapter" data-level="4.2" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html#challenge-1"><i class="fa fa-check"></i><b>4.2</b> Challenge 1<span></span></a><ul>
-<li class="chapter" data-level="4.2.1" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html#challenge-1-solution"><i class="fa fa-check"></i><b>4.2.1</b> Challenge 1: Solution<span></span></a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="5" data-path="how-gams-work.html"><a href="how-gams-work.html"><i class="fa fa-check"></i><b>5</b> How GAMs work<span></span></a><ul>
-<li class="chapter" data-level="5.1" data-path="how-gams-work.html"><a href="how-gams-work.html#example-a-polynomial-basis"><i class="fa fa-check"></i><b>5.1</b> Example: a polynomial basis<span></span></a></li>
-<li class="chapter" data-level="5.2" data-path="how-gams-work.html"><a href="how-gams-work.html#example-a-cubic-spline-basis"><i class="fa fa-check"></i><b>5.2</b> Example: a cubic spline basis<span></span></a><ul>
-<li class="chapter" data-level="5.2.1" data-path="how-gams-work.html"><a href="how-gams-work.html#controlling-the-degree-of-smoothing-with-penalized-regression-splines"><i class="fa fa-check"></i><b>5.2.1</b> Controlling the degree of smoothing with penalized regression splines<span></span></a></li>
+<li class="part"><span><b>Generalized Additive Models in <code>R</code></b></span></li>
+<li class="chapter" data-level="1" data-path="learning-objectives.html"><a href="learning-objectives.html"><i class="fa fa-check"></i><b>1</b> Learning objectives</a></li>
+<li class="chapter" data-level="2" data-path="preparing-for-the-workshop.html"><a href="preparing-for-the-workshop.html"><i class="fa fa-check"></i><b>2</b> Preparing for the workshop</a></li>
+<li class="chapter" data-level="3" data-path="intro-linear-models.html"><a href="intro-linear-models.html"><i class="fa fa-check"></i><b>3</b> The linear model… and where it fails</a></li>
+<li class="chapter" data-level="4" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html"><i class="fa fa-check"></i><b>4</b> Introduction to GAMs</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html#test-for-linearity"><i class="fa fa-check"></i><b>4.1</b> Test for linearity</a></li>
+<li class="chapter" data-level="4.2" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html#challenge-1"><i class="fa fa-check"></i><b>4.2</b> Challenge 1</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html#challenge-1-solution"><i class="fa fa-check"></i><b>4.2.1</b> Challenge 1: Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="gam-with-multiple-smooth-terms.html"><a href="gam-with-multiple-smooth-terms.html"><i class="fa fa-check"></i><b>6</b> GAM with multiple smooth terms<span></span></a><ul>
-<li class="chapter" data-level="6.1" data-path="gam-with-multiple-smooth-terms.html"><a href="gam-with-multiple-smooth-terms.html#gam-with-linear-and-smooth-terms"><i class="fa fa-check"></i><b>6.1</b> GAM with linear and smooth terms<span></span></a></li>
-<li class="chapter" data-level="6.2" data-path="gam-with-multiple-smooth-terms.html"><a href="gam-with-multiple-smooth-terms.html#edf"><i class="fa fa-check"></i><b>6.2</b> Effective degrees of freedom (EDF)<span></span></a></li>
-<li class="chapter" data-level="6.3" data-path="gam-with-multiple-smooth-terms.html"><a href="gam-with-multiple-smooth-terms.html#gam-with-multiple-linear-and-smooth-terms"><i class="fa fa-check"></i><b>6.3</b> GAM with multiple linear and smooth terms<span></span></a></li>
-<li class="chapter" data-level="6.4" data-path="gam-with-multiple-smooth-terms.html"><a href="gam-with-multiple-smooth-terms.html#gam-with-multiple-smooth-terms-1"><i class="fa fa-check"></i><b>6.4</b> GAM with multiple smooth terms<span></span></a></li>
-<li class="chapter" data-level="6.5" data-path="gam-with-multiple-smooth-terms.html"><a href="gam-with-multiple-smooth-terms.html#challenge-2"><i class="fa fa-check"></i><b>6.5</b> Challenge 2<span></span></a><ul>
-<li class="chapter" data-level="6.5.1" data-path="gam-with-multiple-smooth-terms.html"><a href="gam-with-multiple-smooth-terms.html#challenge-2-solution"><i class="fa fa-check"></i><b>6.5.1</b> Challenge 2: Solution<span></span></a></li>
+<li class="chapter" data-level="5" data-path="how-gams-work.html"><a href="how-gams-work.html"><i class="fa fa-check"></i><b>5</b> How GAMs work</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="how-gams-work.html"><a href="how-gams-work.html#example-a-polynomial-basis"><i class="fa fa-check"></i><b>5.1</b> Example: a polynomial basis</a></li>
+<li class="chapter" data-level="5.2" data-path="how-gams-work.html"><a href="how-gams-work.html#example-a-cubic-spline-basis"><i class="fa fa-check"></i><b>5.2</b> Example: a cubic spline basis</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="how-gams-work.html"><a href="how-gams-work.html#controlling-the-degree-of-smoothing-with-penalized-regression-splines"><i class="fa fa-check"></i><b>5.2.1</b> Controlling the degree of smoothing with penalized regression splines</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="gam-with-interaction-terms.html"><a href="gam-with-interaction-terms.html"><i class="fa fa-check"></i><b>7</b> GAM with interaction terms<span></span></a><ul>
-<li class="chapter" data-level="7.1" data-path="gam-with-interaction-terms.html"><a href="gam-with-interaction-terms.html#interaction-between-smoothed-and-factor-variables"><i class="fa fa-check"></i><b>7.1</b> Interaction between smoothed and factor variables<span></span></a></li>
-<li class="chapter" data-level="7.2" data-path="gam-with-interaction-terms.html"><a href="gam-with-interaction-terms.html#interaction-between-smoothed-variables"><i class="fa fa-check"></i><b>7.2</b> Interaction between smoothed variables<span></span></a></li>
-</ul></li>
-<li class="part"><span><b>Generalization of additive models<span></span></b></span></li>
-<li class="chapter" data-level="8" data-path="gam-model-checking.html"><a href="gam-model-checking.html"><i class="fa fa-check"></i><b>8</b> GAM validation<span></span></a><ul>
-<li class="chapter" data-level="8.1" data-path="gam-model-checking.html"><a href="gam-model-checking.html#selecting-k-basis-dimensions"><i class="fa fa-check"></i><b>8.1</b> Selecting <span class="math inline">\(k\)</span> basis dimensions<span></span></a><ul>
-<li class="chapter" data-level="8.1.1" data-path="gam-model-checking.html"><a href="gam-model-checking.html#is-our-model-wiggly-enough"><i class="fa fa-check"></i><b>8.1.1</b> Is our model wiggly enough?<span></span></a></li>
-<li class="chapter" data-level="8.1.2" data-path="gam-model-checking.html"><a href="gam-model-checking.html#is-our-model-actually-normal"><i class="fa fa-check"></i><b>8.1.2</b> Is our model actually Normal?<span></span></a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="9" data-path="other-distributions.html"><a href="other-distributions.html"><i class="fa fa-check"></i><b>9</b> Other distributions<span></span></a><ul>
-<li class="chapter" data-level="9.1" data-path="other-distributions.html"><a href="other-distributions.html#challenge-3"><i class="fa fa-check"></i><b>9.1</b> Challenge 3<span></span></a><ul>
-<li class="chapter" data-level="9.1.1" data-path="other-distributions.html"><a href="other-distributions.html#challenge-3-solution"><i class="fa fa-check"></i><b>9.1.1</b> Challenge 3: Solution<span></span></a></li>
+<li class="chapter" data-level="6" data-path="gam-with-multiple-smooth-terms.html"><a href="gam-with-multiple-smooth-terms.html"><i class="fa fa-check"></i><b>6</b> GAM with multiple smooth terms</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="gam-with-multiple-smooth-terms.html"><a href="gam-with-multiple-smooth-terms.html#gam-with-linear-and-smooth-terms"><i class="fa fa-check"></i><b>6.1</b> GAM with linear and smooth terms</a></li>
+<li class="chapter" data-level="6.2" data-path="gam-with-multiple-smooth-terms.html"><a href="gam-with-multiple-smooth-terms.html#edf"><i class="fa fa-check"></i><b>6.2</b> Effective degrees of freedom (EDF)</a></li>
+<li class="chapter" data-level="6.3" data-path="gam-with-multiple-smooth-terms.html"><a href="gam-with-multiple-smooth-terms.html#gam-with-multiple-linear-and-smooth-terms"><i class="fa fa-check"></i><b>6.3</b> GAM with multiple linear and smooth terms</a></li>
+<li class="chapter" data-level="6.4" data-path="gam-with-multiple-smooth-terms.html"><a href="gam-with-multiple-smooth-terms.html#gam-with-multiple-smooth-terms-1"><i class="fa fa-check"></i><b>6.4</b> GAM with multiple smooth terms</a></li>
+<li class="chapter" data-level="6.5" data-path="gam-with-multiple-smooth-terms.html"><a href="gam-with-multiple-smooth-terms.html#challenge-2"><i class="fa fa-check"></i><b>6.5</b> Challenge 2</a>
+<ul>
+<li class="chapter" data-level="6.5.1" data-path="gam-with-multiple-smooth-terms.html"><a href="gam-with-multiple-smooth-terms.html#challenge-2-solution"><i class="fa fa-check"></i><b>6.5.1</b> Challenge 2: Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="changing-the-basis-function.html"><a href="changing-the-basis-function.html"><i class="fa fa-check"></i><b>10</b> Changing the basis function<span></span></a><ul>
-<li class="chapter" data-level="10.1" data-path="changing-the-basis-function.html"><a href="changing-the-basis-function.html#example-cyclical-data"><i class="fa fa-check"></i><b>10.1</b> Example: Cyclical data<span></span></a></li>
+<li class="chapter" data-level="7" data-path="gam-with-interaction-terms.html"><a href="gam-with-interaction-terms.html"><i class="fa fa-check"></i><b>7</b> GAM with interaction terms</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="gam-with-interaction-terms.html"><a href="gam-with-interaction-terms.html#interaction-between-smoothed-and-factor-variables"><i class="fa fa-check"></i><b>7.1</b> Interaction between smoothed and factor variables</a></li>
+<li class="chapter" data-level="7.2" data-path="gam-with-interaction-terms.html"><a href="gam-with-interaction-terms.html#interaction-between-smoothed-variables"><i class="fa fa-check"></i><b>7.2</b> Interaction between smoothed variables</a></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html"><i class="fa fa-check"></i><b>11</b> Quick intro to Generalized Additive Mixed Models (GAMMs)<span></span></a><ul>
-<li class="chapter" data-level="11.1" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#residual-autocorrelation"><i class="fa fa-check"></i><b>11.1</b> Residual autocorrelation<span></span></a></li>
-<li class="chapter" data-level="11.2" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#random-effects"><i class="fa fa-check"></i><b>11.2</b> Random effects<span></span></a><ul>
-<li class="chapter" data-level="11.2.1" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#gamm-with-a-random-intercept"><i class="fa fa-check"></i><b>11.2.1</b> GAMM with a random intercept<span></span></a></li>
-<li class="chapter" data-level="11.2.2" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#gamm-with-a-random-slope"><i class="fa fa-check"></i><b>11.2.2</b> GAMM with a random slope<span></span></a></li>
-<li class="chapter" data-level="11.2.3" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#gamm-with-a-random-intercept-and-slope"><i class="fa fa-check"></i><b>11.2.3</b> GAMM with a random intercept and slope<span></span></a></li>
-<li class="chapter" data-level="11.2.4" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#gamm-with-a-random-smooth"><i class="fa fa-check"></i><b>11.2.4</b> GAMM with a random smooth<span></span></a></li>
-<li class="chapter" data-level="11.2.5" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#gamm-model-comparison"><i class="fa fa-check"></i><b>11.2.5</b> GAMM model comparison<span></span></a></li>
+<li class="part"><span><b>Generalization of additive models</b></span></li>
+<li class="chapter" data-level="8" data-path="gam-model-checking.html"><a href="gam-model-checking.html"><i class="fa fa-check"></i><b>8</b> GAM validation</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="gam-model-checking.html"><a href="gam-model-checking.html#selecting-k-basis-dimensions"><i class="fa fa-check"></i><b>8.1</b> Selecting <span class="math inline">\(k\)</span> basis dimensions</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="gam-model-checking.html"><a href="gam-model-checking.html#is-our-model-wiggly-enough"><i class="fa fa-check"></i><b>8.1.1</b> Is our model wiggly enough?</a></li>
+<li class="chapter" data-level="8.1.2" data-path="gam-model-checking.html"><a href="gam-model-checking.html#is-our-model-actually-normal"><i class="fa fa-check"></i><b>8.1.2</b> Is our model actually Normal?</a></li>
 </ul></li>
 </ul></li>
-<li class="part"><span><b>Resources &amp; References<span></span></b></span></li>
-<li class="chapter" data-level="12" data-path="resources.html"><a href="resources.html"><i class="fa fa-check"></i><b>12</b> Resources<span></span></a></li>
-<li class="chapter" data-level="13" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>13</b> References<span></span></a></li>
+<li class="chapter" data-level="9" data-path="other-distributions.html"><a href="other-distributions.html"><i class="fa fa-check"></i><b>9</b> Other distributions</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="other-distributions.html"><a href="other-distributions.html#challenge-3"><i class="fa fa-check"></i><b>9.1</b> Challenge 3</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="other-distributions.html"><a href="other-distributions.html#challenge-3-solution"><i class="fa fa-check"></i><b>9.1.1</b> Challenge 3: Solution</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="changing-the-basis-function.html"><a href="changing-the-basis-function.html"><i class="fa fa-check"></i><b>10</b> Changing the basis function</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="changing-the-basis-function.html"><a href="changing-the-basis-function.html#example-cyclical-data"><i class="fa fa-check"></i><b>10.1</b> Example: Cyclical data</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html"><i class="fa fa-check"></i><b>11</b> Quick intro to Generalized Additive Mixed Models (GAMMs)</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#residual-autocorrelation"><i class="fa fa-check"></i><b>11.1</b> Residual autocorrelation</a></li>
+<li class="chapter" data-level="11.2" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#random-effects"><i class="fa fa-check"></i><b>11.2</b> Random effects</a>
+<ul>
+<li class="chapter" data-level="11.2.1" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#gamm-with-a-random-intercept"><i class="fa fa-check"></i><b>11.2.1</b> GAMM with a random intercept</a></li>
+<li class="chapter" data-level="11.2.2" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#gamm-with-a-random-slope"><i class="fa fa-check"></i><b>11.2.2</b> GAMM with a random slope</a></li>
+<li class="chapter" data-level="11.2.3" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#gamm-with-a-random-intercept-and-slope"><i class="fa fa-check"></i><b>11.2.3</b> GAMM with a random intercept and slope</a></li>
+<li class="chapter" data-level="11.2.4" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#gamm-with-a-random-smooth"><i class="fa fa-check"></i><b>11.2.4</b> GAMM with a random smooth</a></li>
+<li class="chapter" data-level="11.2.5" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#gamm-model-comparison"><i class="fa fa-check"></i><b>11.2.5</b> GAMM model comparison</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>Resources &amp; References</b></span></li>
+<li class="chapter" data-level="12" data-path="resources.html"><a href="resources.html"><i class="fa fa-check"></i><b>12</b> Resources</a></li>
+<li class="chapter" data-level="13" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>13</b> References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/qcbsRworkshops" target="blank">QCBS R Workshop Series</a></li>
 
@@ -237,14 +274,14 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
   <img class= "hero-image" src="assets/images/jean-philippe-delberghe-75xPHEQBmvA-unsplash_hero_image.jpg">
 </div>
 --!>
-<div id="how-gams-work" class="section level1 hasAnchor">
+<div id="how-gams-work" class="section level1 hasAnchor" number="5">
 <h1><span class="header-section-number">Chapter 5</span> How GAMs work<a href="how-gams-work.html#how-gams-work" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>We will now take a few minutes to look at what GAMs are doing behind the
 scenes. Let us first consider a simple model containing one smooth function <span class="math inline">\(f\)</span> of one covariate, <span class="math inline">\(x\)</span>:</p>
 <p><span class="math display">\[y_i = f(x_i) + \epsilon_i\]</span></p>
 <p>To estimate the smooth function <span class="math inline">\(f\)</span>, we need to represented the above equation in such a way that it becomes a linear model. This can be done by defining basis functions, <span class="math inline">\(b_j(x)\)</span>, of which <span class="math inline">\(f\)</span> is composed:</p>
 <p><span class="math display">\[f(x) = \sum_{j=1}^q b_j(x) \times \beta_j\]</span></p>
-<div id="example-a-polynomial-basis" class="section level2 hasAnchor">
+<div id="example-a-polynomial-basis" class="section level2 hasAnchor" number="5.1">
 <h2><span class="header-section-number">5.1</span> Example: a polynomial basis<a href="how-gams-work.html#example-a-polynomial-basis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Suppose that <span class="math inline">\(f\)</span> is believed to be a 4th order polynomial, so that the space of polynomials of order 4 and below contains <span class="math inline">\(f\)</span>. A basis for this space would then be:</p>
 <p><span class="math display">\[b_0(x)=1 \ , \quad b_1(x)=x \ , \quad b_2(x)=x^2 \ , \quad b_3(x)=x^3 \ , \quad b_4(x)=x^4\]</span></p>
@@ -256,7 +293,7 @@ scenes. Let us first consider a simple model containing one smooth function <spa
 <p><img src="images/polynomial_basis_example.png" width="100%" style="display: block; margin: auto;" /></p>
 <p>By varying the <span class="math inline">\(\beta_j\)</span> we can vary the form of <span class="math inline">\(f(x)\)</span> to produce any polynomial function of order 4 or lower.</p>
 </div>
-<div id="example-a-cubic-spline-basis" class="section level2 hasAnchor">
+<div id="example-a-cubic-spline-basis" class="section level2 hasAnchor" number="5.2">
 <h2><span class="header-section-number">5.2</span> Example: a cubic spline basis<a href="how-gams-work.html#example-a-cubic-spline-basis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>A cubic spline is a curve constructed from sections of a cubic
 polynomial joined together so that they are continuous in value. Each
@@ -268,7 +305,7 @@ section of cubic has different coefficients.</p>
 <div class="puzzle">
 <p>Is there a better way to select the knot locations?</p>
 </div>
-<div id="controlling-the-degree-of-smoothing-with-penalized-regression-splines" class="section level3 hasAnchor">
+<div id="controlling-the-degree-of-smoothing-with-penalized-regression-splines" class="section level3 hasAnchor" number="5.2.1">
 <h3><span class="header-section-number">5.2.1</span> Controlling the degree of smoothing with penalized regression splines<a href="how-gams-work.html#controlling-the-degree-of-smoothing-with-penalized-regression-splines" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Instead of controlling smoothness by altering the number of knots, we
 keep that fixed to size a little larger than reasonably necessary, and
@@ -281,7 +318,7 @@ control the model’s smoothness by adding a “wiggleness” penalty.</p>
 <p>The selection of the best fit smoothing parameter, <span class="math inline">\(\lambda\)</span>, makes use of a cross-validation approach. If <span class="math inline">\(\lambda\)</span>
 is too high then the data will be over smoothed, and if it is too low, the data will be under smoothed. Ideally, it is best to choose <span class="math inline">\(\lambda\)</span> so that the <span class="math inline">\(\hat{f}\)</span> is as close as possible to <span class="math inline">\(f\)</span>. A suitable criterion might be to choose <span class="math inline">\(\lambda\)</span> to minimize:</p>
 <p><span class="math display">\[M = 1/n \times \sum_{i=1}^n (\hat{f_i} - f_i)^2\]</span></p>
-<p>Since <span class="math inline">\(f\)</span> is unknown, <span class="math inline">\(M\)</span> must be estimated. The recommend methods for this are maximum likelihood (<em>ML</em>) or restricted maximum likelihood estimation (<em>REML</em>). Generalized cross validation (<em>GCV</em>) is another possibility, which is a technique that leaves out each datum from the data in turn and considers the average predictive ability of models fitted to the remaining data to predict the removed datum. For further details on these methods, see <span class="citation">(Wood <a href="#ref-wood_2006" role="doc-biblioref">2006</a>)</span>.</p>
+<p>Since <span class="math inline">\(f\)</span> is unknown, <span class="math inline">\(M\)</span> must be estimated. The recommend methods for this are maximum likelihood (<em>ML</em>) or restricted maximum likelihood estimation (<em>REML</em>). Generalized cross validation (<em>GCV</em>) is another possibility, which is a technique that leaves out each datum from the data in turn and considers the average predictive ability of models fitted to the remaining data to predict the removed datum. For further details on these methods, see <span class="citation">(<a href="#ref-wood_2006" role="doc-biblioref">S. N. Wood 2006</a>)</span>.</p>
 <div class="explanation">
 <p><strong>The principle behind cross validation</strong></p>
 <p><img src="images/illustration_of_smooth_sel.png" width="100%" style="display: block; margin: auto;" /></p>
@@ -294,9 +331,9 @@ is too high then the data will be over smoothed, and if it is too low, the data 
 </div>
 </div>
 <h3> References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div id="refs" class="references">
-<div id="ref-wood_2006">
-<p>Wood, S. N. 2006. <em>Generalized Additive Models: An Introduction with R</em>. 2nd ed. Chapman; Hall/CRC.</p>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-wood_2006" class="csl-entry">
+Wood, S. N. 2006. <em>Generalized Additive Models: An Introduction with r</em>. 2nd ed. Chapman; Hall/CRC.
 </div>
 </div>
 <hr>
@@ -371,7 +408,7 @@ gitbook.start({
     var script = document.createElement("script");
     script.type = "text/javascript";
     var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:")
       if (/^https?:/.test(src))
         src = src.replace(/^https?:/, '');

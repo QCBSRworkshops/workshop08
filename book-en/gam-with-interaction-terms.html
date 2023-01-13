@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 7 GAM with interaction terms | Workshop 8: Generalized additive models in R</title>
   <meta name="description" content="Generalized additive models in R" />
-  <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.31 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 7 GAM with interaction terms | Workshop 8: Generalized additive models in R" />
   <meta property="og:type" content="book" />
@@ -48,25 +48,24 @@
 
 
 
-<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -86,7 +85,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-le
 div.sourceCode
   {  background-color: #f8f8f8; }
 @media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ef2929; } /* Alert */
 code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
@@ -118,6 +117,28 @@ code span.vs { color: #4e9a06; } /* VerbatimString */
 code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 <link rel="stylesheet" href="assets/qcbs-style.css" type="text/css" />
 </head>
@@ -136,72 +157,88 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <link rel="icon" type="image/png" href="assets/images/favicon.ico"/>
 
 <li class="divider"></li>
-<li class="part"><span><b>QCBS R Workshop Series<span></span></b></span></li>
-<li><a href="index.html#preface">Preface<span></span></a><ul>
-<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>0.1</b> Code of conduct<span></span></a><ul>
-<li class="chapter" data-level="0.1.1" data-path="index.html"><a href="index.html#expected-behaviour"><i class="fa fa-check"></i><b>0.1.1</b> Expected behaviour<span></span></a></li>
-<li class="chapter" data-level="0.1.2" data-path="index.html"><a href="index.html#unacceptable-behaviour"><i class="fa fa-check"></i><b>0.1.2</b> Unacceptable behaviour<span></span></a></li>
+<li class="part"><span><b>QCBS R Workshop Series</b></span></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
+<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#code-of-conduct"><i class="fa fa-check"></i><b>0.1</b> Code of conduct</a>
+<ul>
+<li class="chapter" data-level="0.1.1" data-path="index.html"><a href="index.html#expected-behaviour"><i class="fa fa-check"></i><b>0.1.1</b> Expected behaviour</a></li>
+<li class="chapter" data-level="0.1.2" data-path="index.html"><a href="index.html#unacceptable-behaviour"><i class="fa fa-check"></i><b>0.1.2</b> Unacceptable behaviour</a></li>
 </ul></li>
-<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#contributors"><i class="fa fa-check"></i><b>0.2</b> Contributors<span></span></a></li>
-<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#contributing"><i class="fa fa-check"></i><b>0.3</b> Contributing<span></span></a></li>
+<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#contributors"><i class="fa fa-check"></i><b>0.2</b> Contributors</a></li>
+<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#contributing"><i class="fa fa-check"></i><b>0.3</b> Contributing</a></li>
 </ul></li>
-<li class="part"><span><b>Generalized Additive Models in <code>R</code><span></span></b></span></li>
-<li class="chapter" data-level="1" data-path="learning-objectives.html"><a href="learning-objectives.html"><i class="fa fa-check"></i><b>1</b> Learning objectives<span></span></a></li>
-<li class="chapter" data-level="2" data-path="preparing-for-the-workshop.html"><a href="preparing-for-the-workshop.html"><i class="fa fa-check"></i><b>2</b> Preparing for the workshop<span></span></a></li>
-<li class="chapter" data-level="3" data-path="intro-linear-models.html"><a href="intro-linear-models.html"><i class="fa fa-check"></i><b>3</b> The linear model… and where it fails<span></span></a></li>
-<li class="chapter" data-level="4" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html"><i class="fa fa-check"></i><b>4</b> Introduction to GAMs<span></span></a><ul>
-<li class="chapter" data-level="4.1" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html#test-for-linearity"><i class="fa fa-check"></i><b>4.1</b> Test for linearity<span></span></a></li>
-<li class="chapter" data-level="4.2" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html#challenge-1"><i class="fa fa-check"></i><b>4.2</b> Challenge 1<span></span></a><ul>
-<li class="chapter" data-level="4.2.1" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html#challenge-1-solution"><i class="fa fa-check"></i><b>4.2.1</b> Challenge 1: Solution<span></span></a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="5" data-path="how-gams-work.html"><a href="how-gams-work.html"><i class="fa fa-check"></i><b>5</b> How GAMs work<span></span></a><ul>
-<li class="chapter" data-level="5.1" data-path="how-gams-work.html"><a href="how-gams-work.html#example-a-polynomial-basis"><i class="fa fa-check"></i><b>5.1</b> Example: a polynomial basis<span></span></a></li>
-<li class="chapter" data-level="5.2" data-path="how-gams-work.html"><a href="how-gams-work.html#example-a-cubic-spline-basis"><i class="fa fa-check"></i><b>5.2</b> Example: a cubic spline basis<span></span></a><ul>
-<li class="chapter" data-level="5.2.1" data-path="how-gams-work.html"><a href="how-gams-work.html#controlling-the-degree-of-smoothing-with-penalized-regression-splines"><i class="fa fa-check"></i><b>5.2.1</b> Controlling the degree of smoothing with penalized regression splines<span></span></a></li>
+<li class="part"><span><b>Generalized Additive Models in <code>R</code></b></span></li>
+<li class="chapter" data-level="1" data-path="learning-objectives.html"><a href="learning-objectives.html"><i class="fa fa-check"></i><b>1</b> Learning objectives</a></li>
+<li class="chapter" data-level="2" data-path="preparing-for-the-workshop.html"><a href="preparing-for-the-workshop.html"><i class="fa fa-check"></i><b>2</b> Preparing for the workshop</a></li>
+<li class="chapter" data-level="3" data-path="intro-linear-models.html"><a href="intro-linear-models.html"><i class="fa fa-check"></i><b>3</b> The linear model… and where it fails</a></li>
+<li class="chapter" data-level="4" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html"><i class="fa fa-check"></i><b>4</b> Introduction to GAMs</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html#test-for-linearity"><i class="fa fa-check"></i><b>4.1</b> Test for linearity</a></li>
+<li class="chapter" data-level="4.2" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html#challenge-1"><i class="fa fa-check"></i><b>4.2</b> Challenge 1</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="introduction-to-gams.html"><a href="introduction-to-gams.html#challenge-1-solution"><i class="fa fa-check"></i><b>4.2.1</b> Challenge 1: Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="gam-with-multiple-smooth-terms.html"><a href="gam-with-multiple-smooth-terms.html"><i class="fa fa-check"></i><b>6</b> GAM with multiple smooth terms<span></span></a><ul>
-<li class="chapter" data-level="6.1" data-path="gam-with-multiple-smooth-terms.html"><a href="gam-with-multiple-smooth-terms.html#gam-with-linear-and-smooth-terms"><i class="fa fa-check"></i><b>6.1</b> GAM with linear and smooth terms<span></span></a></li>
-<li class="chapter" data-level="6.2" data-path="gam-with-multiple-smooth-terms.html"><a href="gam-with-multiple-smooth-terms.html#edf"><i class="fa fa-check"></i><b>6.2</b> Effective degrees of freedom (EDF)<span></span></a></li>
-<li class="chapter" data-level="6.3" data-path="gam-with-multiple-smooth-terms.html"><a href="gam-with-multiple-smooth-terms.html#gam-with-multiple-linear-and-smooth-terms"><i class="fa fa-check"></i><b>6.3</b> GAM with multiple linear and smooth terms<span></span></a></li>
-<li class="chapter" data-level="6.4" data-path="gam-with-multiple-smooth-terms.html"><a href="gam-with-multiple-smooth-terms.html#gam-with-multiple-smooth-terms-1"><i class="fa fa-check"></i><b>6.4</b> GAM with multiple smooth terms<span></span></a></li>
-<li class="chapter" data-level="6.5" data-path="gam-with-multiple-smooth-terms.html"><a href="gam-with-multiple-smooth-terms.html#challenge-2"><i class="fa fa-check"></i><b>6.5</b> Challenge 2<span></span></a><ul>
-<li class="chapter" data-level="6.5.1" data-path="gam-with-multiple-smooth-terms.html"><a href="gam-with-multiple-smooth-terms.html#challenge-2-solution"><i class="fa fa-check"></i><b>6.5.1</b> Challenge 2: Solution<span></span></a></li>
+<li class="chapter" data-level="5" data-path="how-gams-work.html"><a href="how-gams-work.html"><i class="fa fa-check"></i><b>5</b> How GAMs work</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="how-gams-work.html"><a href="how-gams-work.html#example-a-polynomial-basis"><i class="fa fa-check"></i><b>5.1</b> Example: a polynomial basis</a></li>
+<li class="chapter" data-level="5.2" data-path="how-gams-work.html"><a href="how-gams-work.html#example-a-cubic-spline-basis"><i class="fa fa-check"></i><b>5.2</b> Example: a cubic spline basis</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="how-gams-work.html"><a href="how-gams-work.html#controlling-the-degree-of-smoothing-with-penalized-regression-splines"><i class="fa fa-check"></i><b>5.2.1</b> Controlling the degree of smoothing with penalized regression splines</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="gam-with-interaction-terms.html"><a href="gam-with-interaction-terms.html"><i class="fa fa-check"></i><b>7</b> GAM with interaction terms<span></span></a><ul>
-<li class="chapter" data-level="7.1" data-path="gam-with-interaction-terms.html"><a href="gam-with-interaction-terms.html#interaction-between-smoothed-and-factor-variables"><i class="fa fa-check"></i><b>7.1</b> Interaction between smoothed and factor variables<span></span></a></li>
-<li class="chapter" data-level="7.2" data-path="gam-with-interaction-terms.html"><a href="gam-with-interaction-terms.html#interaction-between-smoothed-variables"><i class="fa fa-check"></i><b>7.2</b> Interaction between smoothed variables<span></span></a></li>
-</ul></li>
-<li class="part"><span><b>Generalization of additive models<span></span></b></span></li>
-<li class="chapter" data-level="8" data-path="gam-model-checking.html"><a href="gam-model-checking.html"><i class="fa fa-check"></i><b>8</b> GAM validation<span></span></a><ul>
-<li class="chapter" data-level="8.1" data-path="gam-model-checking.html"><a href="gam-model-checking.html#selecting-k-basis-dimensions"><i class="fa fa-check"></i><b>8.1</b> Selecting <span class="math inline">\(k\)</span> basis dimensions<span></span></a><ul>
-<li class="chapter" data-level="8.1.1" data-path="gam-model-checking.html"><a href="gam-model-checking.html#is-our-model-wiggly-enough"><i class="fa fa-check"></i><b>8.1.1</b> Is our model wiggly enough?<span></span></a></li>
-<li class="chapter" data-level="8.1.2" data-path="gam-model-checking.html"><a href="gam-model-checking.html#is-our-model-actually-normal"><i class="fa fa-check"></i><b>8.1.2</b> Is our model actually Normal?<span></span></a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="9" data-path="other-distributions.html"><a href="other-distributions.html"><i class="fa fa-check"></i><b>9</b> Other distributions<span></span></a><ul>
-<li class="chapter" data-level="9.1" data-path="other-distributions.html"><a href="other-distributions.html#challenge-3"><i class="fa fa-check"></i><b>9.1</b> Challenge 3<span></span></a><ul>
-<li class="chapter" data-level="9.1.1" data-path="other-distributions.html"><a href="other-distributions.html#challenge-3-solution"><i class="fa fa-check"></i><b>9.1.1</b> Challenge 3: Solution<span></span></a></li>
+<li class="chapter" data-level="6" data-path="gam-with-multiple-smooth-terms.html"><a href="gam-with-multiple-smooth-terms.html"><i class="fa fa-check"></i><b>6</b> GAM with multiple smooth terms</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="gam-with-multiple-smooth-terms.html"><a href="gam-with-multiple-smooth-terms.html#gam-with-linear-and-smooth-terms"><i class="fa fa-check"></i><b>6.1</b> GAM with linear and smooth terms</a></li>
+<li class="chapter" data-level="6.2" data-path="gam-with-multiple-smooth-terms.html"><a href="gam-with-multiple-smooth-terms.html#edf"><i class="fa fa-check"></i><b>6.2</b> Effective degrees of freedom (EDF)</a></li>
+<li class="chapter" data-level="6.3" data-path="gam-with-multiple-smooth-terms.html"><a href="gam-with-multiple-smooth-terms.html#gam-with-multiple-linear-and-smooth-terms"><i class="fa fa-check"></i><b>6.3</b> GAM with multiple linear and smooth terms</a></li>
+<li class="chapter" data-level="6.4" data-path="gam-with-multiple-smooth-terms.html"><a href="gam-with-multiple-smooth-terms.html#gam-with-multiple-smooth-terms-1"><i class="fa fa-check"></i><b>6.4</b> GAM with multiple smooth terms</a></li>
+<li class="chapter" data-level="6.5" data-path="gam-with-multiple-smooth-terms.html"><a href="gam-with-multiple-smooth-terms.html#challenge-2"><i class="fa fa-check"></i><b>6.5</b> Challenge 2</a>
+<ul>
+<li class="chapter" data-level="6.5.1" data-path="gam-with-multiple-smooth-terms.html"><a href="gam-with-multiple-smooth-terms.html#challenge-2-solution"><i class="fa fa-check"></i><b>6.5.1</b> Challenge 2: Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="changing-the-basis-function.html"><a href="changing-the-basis-function.html"><i class="fa fa-check"></i><b>10</b> Changing the basis function<span></span></a><ul>
-<li class="chapter" data-level="10.1" data-path="changing-the-basis-function.html"><a href="changing-the-basis-function.html#example-cyclical-data"><i class="fa fa-check"></i><b>10.1</b> Example: Cyclical data<span></span></a></li>
+<li class="chapter" data-level="7" data-path="gam-with-interaction-terms.html"><a href="gam-with-interaction-terms.html"><i class="fa fa-check"></i><b>7</b> GAM with interaction terms</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="gam-with-interaction-terms.html"><a href="gam-with-interaction-terms.html#interaction-between-smoothed-and-factor-variables"><i class="fa fa-check"></i><b>7.1</b> Interaction between smoothed and factor variables</a></li>
+<li class="chapter" data-level="7.2" data-path="gam-with-interaction-terms.html"><a href="gam-with-interaction-terms.html#interaction-between-smoothed-variables"><i class="fa fa-check"></i><b>7.2</b> Interaction between smoothed variables</a></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html"><i class="fa fa-check"></i><b>11</b> Quick intro to Generalized Additive Mixed Models (GAMMs)<span></span></a><ul>
-<li class="chapter" data-level="11.1" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#residual-autocorrelation"><i class="fa fa-check"></i><b>11.1</b> Residual autocorrelation<span></span></a></li>
-<li class="chapter" data-level="11.2" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#random-effects"><i class="fa fa-check"></i><b>11.2</b> Random effects<span></span></a><ul>
-<li class="chapter" data-level="11.2.1" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#gamm-with-a-random-intercept"><i class="fa fa-check"></i><b>11.2.1</b> GAMM with a random intercept<span></span></a></li>
-<li class="chapter" data-level="11.2.2" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#gamm-with-a-random-slope"><i class="fa fa-check"></i><b>11.2.2</b> GAMM with a random slope<span></span></a></li>
-<li class="chapter" data-level="11.2.3" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#gamm-with-a-random-intercept-and-slope"><i class="fa fa-check"></i><b>11.2.3</b> GAMM with a random intercept and slope<span></span></a></li>
-<li class="chapter" data-level="11.2.4" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#gamm-with-a-random-smooth"><i class="fa fa-check"></i><b>11.2.4</b> GAMM with a random smooth<span></span></a></li>
-<li class="chapter" data-level="11.2.5" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#gamm-model-comparison"><i class="fa fa-check"></i><b>11.2.5</b> GAMM model comparison<span></span></a></li>
+<li class="part"><span><b>Generalization of additive models</b></span></li>
+<li class="chapter" data-level="8" data-path="gam-model-checking.html"><a href="gam-model-checking.html"><i class="fa fa-check"></i><b>8</b> GAM validation</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="gam-model-checking.html"><a href="gam-model-checking.html#selecting-k-basis-dimensions"><i class="fa fa-check"></i><b>8.1</b> Selecting <span class="math inline">\(k\)</span> basis dimensions</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="gam-model-checking.html"><a href="gam-model-checking.html#is-our-model-wiggly-enough"><i class="fa fa-check"></i><b>8.1.1</b> Is our model wiggly enough?</a></li>
+<li class="chapter" data-level="8.1.2" data-path="gam-model-checking.html"><a href="gam-model-checking.html#is-our-model-actually-normal"><i class="fa fa-check"></i><b>8.1.2</b> Is our model actually Normal?</a></li>
 </ul></li>
 </ul></li>
-<li class="part"><span><b>Resources &amp; References<span></span></b></span></li>
-<li class="chapter" data-level="12" data-path="resources.html"><a href="resources.html"><i class="fa fa-check"></i><b>12</b> Resources<span></span></a></li>
-<li class="chapter" data-level="13" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>13</b> References<span></span></a></li>
+<li class="chapter" data-level="9" data-path="other-distributions.html"><a href="other-distributions.html"><i class="fa fa-check"></i><b>9</b> Other distributions</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="other-distributions.html"><a href="other-distributions.html#challenge-3"><i class="fa fa-check"></i><b>9.1</b> Challenge 3</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="other-distributions.html"><a href="other-distributions.html#challenge-3-solution"><i class="fa fa-check"></i><b>9.1.1</b> Challenge 3: Solution</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="changing-the-basis-function.html"><a href="changing-the-basis-function.html"><i class="fa fa-check"></i><b>10</b> Changing the basis function</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="changing-the-basis-function.html"><a href="changing-the-basis-function.html#example-cyclical-data"><i class="fa fa-check"></i><b>10.1</b> Example: Cyclical data</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html"><i class="fa fa-check"></i><b>11</b> Quick intro to Generalized Additive Mixed Models (GAMMs)</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#residual-autocorrelation"><i class="fa fa-check"></i><b>11.1</b> Residual autocorrelation</a></li>
+<li class="chapter" data-level="11.2" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#random-effects"><i class="fa fa-check"></i><b>11.2</b> Random effects</a>
+<ul>
+<li class="chapter" data-level="11.2.1" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#gamm-with-a-random-intercept"><i class="fa fa-check"></i><b>11.2.1</b> GAMM with a random intercept</a></li>
+<li class="chapter" data-level="11.2.2" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#gamm-with-a-random-slope"><i class="fa fa-check"></i><b>11.2.2</b> GAMM with a random slope</a></li>
+<li class="chapter" data-level="11.2.3" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#gamm-with-a-random-intercept-and-slope"><i class="fa fa-check"></i><b>11.2.3</b> GAMM with a random intercept and slope</a></li>
+<li class="chapter" data-level="11.2.4" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#gamm-with-a-random-smooth"><i class="fa fa-check"></i><b>11.2.4</b> GAMM with a random smooth</a></li>
+<li class="chapter" data-level="11.2.5" data-path="quick-intro-to-generalized-additive-mixed-models-gamms.html"><a href="quick-intro-to-generalized-additive-mixed-models-gamms.html#gamm-model-comparison"><i class="fa fa-check"></i><b>11.2.5</b> GAMM model comparison</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>Resources &amp; References</b></span></li>
+<li class="chapter" data-level="12" data-path="resources.html"><a href="resources.html"><i class="fa fa-check"></i><b>12</b> Resources</a></li>
+<li class="chapter" data-level="13" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>13</b> References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/qcbsRworkshops" target="blank">QCBS R Workshop Series</a></li>
 
@@ -237,7 +274,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
   <img class= "hero-image" src="assets/images/jean-philippe-delberghe-75xPHEQBmvA-unsplash_hero_image.jpg">
 </div>
 --!>
-<div id="gam-with-interaction-terms" class="section level1 hasAnchor">
+<div id="gam-with-interaction-terms" class="section level1 hasAnchor" number="7">
 <h1><span class="header-section-number">Chapter 7</span> GAM with interaction terms<a href="gam-with-interaction-terms.html#gam-with-interaction-terms" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>There are two ways to include interactions between variables:</p>
 <ul>
@@ -249,52 +286,52 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <li>When <code>x2</code> is a factor, the factor needs to be added as a main effect in the model.</li>
 </ul></li>
 </ul>
-<div id="interaction-between-smoothed-and-factor-variables" class="section level2 hasAnchor">
+<div id="interaction-between-smoothed-and-factor-variables" class="section level2 hasAnchor" number="7.1">
 <h2><span class="header-section-number">7.1</span> Interaction between smoothed and factor variables<a href="gam-with-interaction-terms.html#interaction-between-smoothed-and-factor-variables" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>We will examine interaction effects to determine whether the non-linear smoother <code>s(SampleDepth)</code> varies across different levels of <code>Season</code>.</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="gam-with-interaction-terms.html#cb56-1"></a>factor_interact &lt;-<span class="st"> </span><span class="kw">gam</span>(Sources <span class="op">~</span><span class="st"> </span>Season <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(SampleDepth, <span class="dt">by =</span> Season) <span class="op">+</span></span>
-<span id="cb56-2"><a href="gam-with-interaction-terms.html#cb56-2"></a><span class="st">    </span><span class="kw">s</span>(RelativeDepth), <span class="dt">data =</span> isit, <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
-<span id="cb56-3"><a href="gam-with-interaction-terms.html#cb56-3"></a></span>
-<span id="cb56-4"><a href="gam-with-interaction-terms.html#cb56-4"></a><span class="kw">summary</span>(factor_interact)<span class="op">$</span>s.table</span></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="gam-with-interaction-terms.html#cb58-1" aria-hidden="true" tabindex="-1"></a>factor_interact <span class="ot">&lt;-</span> <span class="fu">gam</span>(Sources <span class="sc">~</span> Season <span class="sc">+</span> <span class="fu">s</span>(SampleDepth, <span class="at">by =</span> Season) <span class="sc">+</span></span>
+<span id="cb58-2"><a href="gam-with-interaction-terms.html#cb58-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">s</span>(RelativeDepth), <span class="at">data =</span> isit, <span class="at">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
+<span id="cb58-3"><a href="gam-with-interaction-terms.html#cb58-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-4"><a href="gam-with-interaction-terms.html#cb58-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(factor_interact)<span class="sc">$</span>s.table</span></code></pre></div>
 <pre><code>##                             edf   Ref.df          F p-value
 ## s(SampleDepth):Season1 6.839386 7.552045  95.119422       0
 ## s(SampleDepth):Season2 8.744574 8.966290 154.474325       0
 ## s(RelativeDepth)       6.987223 8.055898   6.821074       0</code></pre>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="gam-with-interaction-terms.html#cb58-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
-<span id="cb58-2"><a href="gam-with-interaction-terms.html#cb58-2"></a><span class="kw">plot</span>(factor_interact)</span></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="gam-with-interaction-terms.html#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb60-2"><a href="gam-with-interaction-terms.html#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(factor_interact)</span></code></pre></div>
 <p><img src="book-en_files/figure-html/unnamed-chunk-49-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="explanation">
 <p>The first two panels show the interaction effect of the <code>SampleDepth</code> smooth and each level of our factor variable, <code>Season</code>. Do you see a difference between the two smooth curves?</p>
 </div>
 <p>The plots show some differences between the shape of the smooth terms among the two levels of <code>Season</code>. The most notable difference is the peak in the second panel, which tells us that there is an effect of <code>SampleDepth</code> between 1000 and 2000 that is important in Season 2, but does not occur in Season 1. This hints that the interaction effect could be important to include in our model.</p>
 <p>We can also plot the interaction effect in 3D on a single plot, using <code>vis.gam()</code>.</p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="gam-with-interaction-terms.html#cb59-1"></a><span class="kw">vis.gam</span>(factor_interact, <span class="dt">theta =</span> <span class="dv">120</span>, <span class="dt">n.grid =</span> <span class="dv">50</span>, <span class="dt">lwd =</span> <span class="fl">0.4</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="gam-with-interaction-terms.html#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vis.gam</span>(factor_interact, <span class="at">theta =</span> <span class="dv">120</span>, <span class="at">n.grid =</span> <span class="dv">50</span>, <span class="at">lwd =</span> <span class="fl">0.4</span>)</span></code></pre></div>
 <p><img src="book-en_files/figure-html/unnamed-chunk-50-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="explanation">
 <p>This plot can be rotated by changing the value of the <code>theta</code> argument.</p>
 </div>
 <p>To test our idea that this interaction is important, we will perform a model comparison using AIC to determine whether the interaction term improves our model’s performance.</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="gam-with-interaction-terms.html#cb60-1"></a><span class="kw">AIC</span>(two_smooth_model, factor_interact)</span></code></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="gam-with-interaction-terms.html#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">AIC</span>(two_smooth_model, factor_interact)</span></code></pre></div>
 <pre><code>##                        df      AIC
 ## two_smooth_model 20.46960 5056.841
 ## factor_interact  26.99693 4878.631</code></pre>
 <p>The AIC of our model with a factor interaction between the <code>SampleDepth</code> smooth and <code>Season</code> has a lower AIC score, which tells us this model performs better than <code>two_smooth_model</code>. Including this interaction seems to improve our model’s performance.</p>
 </div>
-<div id="interaction-between-smoothed-variables" class="section level2 hasAnchor">
+<div id="interaction-between-smoothed-variables" class="section level2 hasAnchor" number="7.2">
 <h2><span class="header-section-number">7.2</span> Interaction between smoothed variables<a href="gam-with-interaction-terms.html#interaction-between-smoothed-variables" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Next, we’ll look at the interactions between two smoothed terms, <code>SampleDepth</code> and <code>RelativeDepth</code>.</p>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="gam-with-interaction-terms.html#cb62-1"></a>smooth_interact &lt;-<span class="st"> </span><span class="kw">gam</span>(Sources <span class="op">~</span><span class="st"> </span>Season <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(SampleDepth, RelativeDepth),</span>
-<span id="cb62-2"><a href="gam-with-interaction-terms.html#cb62-2"></a>    <span class="dt">data =</span> isit, <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
-<span id="cb62-3"><a href="gam-with-interaction-terms.html#cb62-3"></a><span class="kw">summary</span>(smooth_interact)<span class="op">$</span>s.table</span></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="gam-with-interaction-terms.html#cb64-1" aria-hidden="true" tabindex="-1"></a>smooth_interact <span class="ot">&lt;-</span> <span class="fu">gam</span>(Sources <span class="sc">~</span> Season <span class="sc">+</span> <span class="fu">s</span>(SampleDepth, RelativeDepth),</span>
+<span id="cb64-2"><a href="gam-with-interaction-terms.html#cb64-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> isit, <span class="at">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
+<span id="cb64-3"><a href="gam-with-interaction-terms.html#cb64-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(smooth_interact)<span class="sc">$</span>s.table</span></code></pre></div>
 <pre><code>##                                   edf Ref.df        F p-value
 ## s(SampleDepth,RelativeDepth) 27.12521  28.77 93.91722       0</code></pre>
 <p>In the previous section, we were able to visualise an interaction effect between a smooth and a factor term by plotting a different smooth function of <code>SampleDepth</code> for each level of <code>Season</code>.</p>
 <p>In this model, we have two smoothed terms, which means that the effect of <code>SampleDepth</code> varies smoothly with <code>RelativeDepth</code>, and vice-versa. When we visualise this interaction, we instead get a gradient between two continuous smooth functions:</p>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="gam-with-interaction-terms.html#cb64-1"></a><span class="kw">plot</span>(smooth_interact, <span class="dt">page =</span> <span class="dv">1</span>, <span class="dt">scheme =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="gam-with-interaction-terms.html#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(smooth_interact, <span class="at">page =</span> <span class="dv">1</span>, <span class="at">scheme =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="book-en_files/figure-html/unnamed-chunk-53-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>We can also plot this interaction on a 3D surface:</p>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="gam-with-interaction-terms.html#cb65-1"></a><span class="kw">vis.gam</span>(smooth_interact, <span class="dt">view =</span> <span class="kw">c</span>(<span class="st">&quot;SampleDepth&quot;</span>, <span class="st">&quot;RelativeDepth&quot;</span>),</span>
-<span id="cb65-2"><a href="gam-with-interaction-terms.html#cb65-2"></a>    <span class="dt">theta =</span> <span class="dv">50</span>, <span class="dt">n.grid =</span> <span class="dv">50</span>, <span class="dt">lwd =</span> <span class="fl">0.4</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="gam-with-interaction-terms.html#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vis.gam</span>(smooth_interact, <span class="at">view =</span> <span class="fu">c</span>(<span class="st">&quot;SampleDepth&quot;</span>, <span class="st">&quot;RelativeDepth&quot;</span>),</span>
+<span id="cb67-2"><a href="gam-with-interaction-terms.html#cb67-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">theta =</span> <span class="dv">50</span>, <span class="at">n.grid =</span> <span class="dv">50</span>, <span class="at">lwd =</span> <span class="fl">0.4</span>)</span></code></pre></div>
 <p><img src="book-en_files/figure-html/unnamed-chunk-54-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="explanation">
 <p>Remember, this plot can be rotated by changing the value of the <code>theta</code> argument.</p>
@@ -302,7 +339,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>The plots do illustrate a non-linear interaction effect, where <code>Sources</code> is lowest at high values of <code>SampleDepth</code> and <code>RelativeDepth</code>, but increases with <code>RelativeDepth</code> while <code>SampleDepth</code> is low.</p>
 <p>So, there does seem to be an interaction effect between these smooth terms. Does including the interaction between <code>s(SampleDepth)</code> and <code>s(RelativeDepth)</code> improve our <code>two_smooth_model</code> model?</p>
-<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="gam-with-interaction-terms.html#cb66-1"></a><span class="kw">AIC</span>(two_smooth_model, smooth_interact)</span></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="gam-with-interaction-terms.html#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu">AIC</span>(two_smooth_model, smooth_interact)</span></code></pre></div>
 <pre><code>##                        df      AIC
 ## two_smooth_model 20.46960 5056.841
 ## smooth_interact  30.33625 4943.890</code></pre>
@@ -392,7 +429,7 @@ gitbook.start({
     var script = document.createElement("script");
     script.type = "text/javascript";
     var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:")
       if (/^https?:/.test(src))
         src = src.replace(/^https?:/, '');

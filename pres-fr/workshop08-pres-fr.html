@@ -4,6 +4,7 @@
     <title>Atelier 8: Modèles additifs généralisés</title>
     <meta charset="utf-8" />
     <meta name="author" content="Centre de la Science de la Biodiversité du Québec" />
+    <script src="assets/header-attrs-2.19/header-attrs.js"></script>
     <link href="assets/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css">
@@ -1467,7 +1468,7 @@ En d'autres mots, est-ce que le `k` est assez grand?
 ```r
 k.check(smooth_interact)
 #                              k'      edf   k-index p-value
-# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883  0.0625
+# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883   0.065
 ```
 
 --
@@ -1508,7 +1509,7 @@ Est-ce que `k` est assez grand maintenant?
 ```r
 k.check(smooth_interact_k60)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626     0.9
+# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626  0.8875
 ```
 
 --
@@ -1639,7 +1640,7 @@ Ensuite, on devrait vérifier le choix des dimensions de bases `k`:
 ```r
 k.check(smooth_interact_tw)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062  0.8325
+# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062   0.825
 ```
 
 On a un équilibre entre `\(k\)` et les EDF. Super!
@@ -1672,7 +1673,7 @@ __3.__ Comparer `smooth_interact_tw` avec `smooth_interact`. Lequel est meilleur
 AIC(smooth_interact, smooth_interact_tw)
 #                          df      AIC
 # smooth_interact    49.47221 4900.567
-# smooth_interact_tw 47.86913 3497.733
+# smooth_interact_tw 47.86913 3498.490
 ```
 
 .comment[L'AIC nous permet de comparer des modèles qui sont basés sur des distributions différentes!]
@@ -1774,7 +1775,7 @@ Nous pouvons modéliser le changement cyclique de température à travers les mo
 year_gam &lt;- gam(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"), method = "REML")
 summary(year_gam)$s.table
 #                      edf   Ref.df          F    p-value
-# s(nottem_year)  1.621375 2.011475   2.850888 0.06141004
+# s(nottem_year)  1.621375 2.011475   2.788093 0.06141004
 # s(nottem_month) 6.855132 8.000000 393.119285 0.00000000
 ```
 
@@ -1922,9 +1923,9 @@ gamm_intercept &lt;- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2, method
 
 # Voir la sortie du modèle
 summary(gamm_intercept)$s.table
-#             edf   Ref.df          F     p-value
-# s(x0)  2.838419 3.524261   4.850861 0.001570022
-# s(fac) 2.973244 3.000000 111.405766 0.000000000
+#             edf   Ref.df         F    p-value
+# s(x0)  2.338244 2.903963  2.133549 0.08915041
+# s(fac) 2.968990 3.000000 95.759917 0.00000000
 ```
 
 ---
@@ -1987,9 +1988,9 @@ Ensuite, spécifions un modèle avec une pente aléatoire:
 gamm_slope &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2, method = "REML")
 
 summary(gamm_slope)$s.table
-#                edf   Ref.df         F    p-value
-# s(x0)     2.687134 3.338558  3.524054 0.01218623
-# s(x0,fac) 2.961610 3.000000 73.471240 0.00000000
+#                edf   Ref.df          F   p-value
+# s(x0)     1.892521 2.353077  0.9507556 0.3783374
+# s(x0,fac) 2.945751 3.000000 54.7832032 0.0000000
 ```
 
 ---
@@ -2036,10 +2037,10 @@ gamm_int_slope &lt;- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
                       data = gam_data2, method = "REML")
 
 summary(gamm_int_slope)$s.table
-#                edf   Ref.df          F     p-value
-# s(x0)     2.840825 3.526325   4.564027 0.002407426
-# s(fac)    2.943985 3.000000 241.534209 0.000000000
-# s(fac,x0) 1.017578 3.000000  45.732301 0.145394427
+#                    edf   Ref.df            F    p-value
+# s(x0)     2.3382400727 2.903957 2.133527e+00 0.08915313
+# s(fac)    2.9689701552 3.000000 9.582501e+01 0.00000000
+# s(fac,x0) 0.0006397934 3.000000 1.294878e-04 0.62781980
 ```
 
 ---
@@ -2102,9 +2103,9 @@ gamm_smooth &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1),
                    data = gam_data2, method = "REML")
 
 summary(gamm_smooth)$s.table
-#                edf    Ref.df        F     p-value
-# s(x0)     2.795875  3.452825 4.236642 0.004202589
-# s(x0,fac) 4.568029 35.000000 9.655101 0.000000000
+#                edf    Ref.df        F    p-value
+# s(x0)     2.338014  2.903527 2.131850 0.08934644
+# s(x0,fac) 2.981739 35.000000 8.208575 0.00000000
 ```
 
 ---
@@ -2165,11 +2166,11 @@ Tous les GAMMs de cette section peuvent être comparé avec `AIC()` pour trouver
 
 ```r
 AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
-#                       df      AIC
-# gamm_intercept  8.283989 2200.545
-# gamm_slope      8.105535 2268.143
-# gamm_int_slope 10.178125 2201.980
-# gamm_smooth    11.303990 2202.998
+#                      df      AIC
+# gamm_intercept 7.890981 2243.867
+# gamm_slope     7.352026 2323.383
+# gamm_int_slope 7.893700 2243.871
+# gamm_smooth    7.928412 2243.917
 ```
 
 Le meilleur modèle de ces trois modèles serait donc le GAMM avec un intercept aléatoire.

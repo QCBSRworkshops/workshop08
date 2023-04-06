@@ -35,24 +35,24 @@ options(repos = structure(c(CRAN="http://cran.r-project.org")))
 library(knitr)
 hook_output <- knit_hooks$get("output")
 knit_hooks$set(output = function(x, options) {
-   lines <- options$output.lines
-   if (is.null(lines)) {
-     return(hook_output(x, options))  # pass to default hook
-   }
-   x <- unlist(strsplit(x, "\n"))
-   more <- "..."
-   if (length(lines)==1) {        # first n lines
-     if (length(x) > lines) {
-       # truncate the output, but add ....
-       x <- c(head(x, lines), more)
-     }
-   } else {
-     x <- c(more, x[lines], more)
-   }
-   # paste these lines together
-   x <- paste(c(x, ""), collapse = "\n")
-   hook_output(x, options)
- })
+  lines <- options$output.lines
+  if (is.null(lines)) {
+    return(hook_output(x, options))  # pass to default hook
+  }
+  x <- unlist(strsplit(x, "\n"))
+  more <- "..."
+  if (length(lines)==1) {        # first n lines
+    if (length(x) > lines) {
+      # truncate the output, but add ....
+      x <- c(head(x, lines), more)
+    }
+  } else {
+    x <- c(more, x[lines], more)
+  }
+  # paste these lines together
+  x <- paste(c(x, ""), collapse = "\n")
+  hook_output(x, options)
+})
 ```
 
 class: inverse, center, middle
@@ -60,7 +60,7 @@ class: inverse, center, middle
 ```{r install_pkgs, message=FALSE, warning=FALSE, include=FALSE, results=0}
 # Standard procedure to check and install packages and their dependencies, if needed.
 
-list.of.packages <- c("ggplot2", "itsadug", "mgcv")
+list.of.packages <- c("ggplot2", "itsadug", "mgcv", "patchwork")
 
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 
@@ -68,7 +68,7 @@ if(length(new.packages) > 0) {
   install.packages(new.packages, dependencies = TRUE) 
   print(paste0("The following package was installed:", new.packages)) 
 } else if(length(new.packages) == 0) {
-    print("All packages were already installed previously")
+  print("All packages were already installed previously")
 }
 
 # Load all required libraries at once
@@ -250,7 +250,7 @@ linear_model <- gam(Sources ~ SampleDepth, data = isit2)
 summary(linear_model)
 ```
 
-The linear model is explaining quite a bit of variance in our dataset ($R_{adj}$ = 0.588), which means it's a pretty good model, right?
+The linear model is explaining quite a bit of variance in our dataset ( $R_{adj}$ = 0.588), which means it's a pretty good model, right?
 
 ---
 # Generalized Additive Models (GAM)
@@ -322,7 +322,7 @@ library(mgcv)
 linear_model <- gam(y_obs ~ x)
 model_summary <- summary(linear_model)
 data_plot <- data_plot +
-             geom_line(colour = "red", size = 1.2, aes(y = fitted(linear_model)))
+  geom_line(colour = "red", size = 1.2, aes(y = fitted(linear_model)))
 data_plot
 ```
 
@@ -377,8 +377,8 @@ The variance explained by our model has increased by more than 20% ($R_{adj}$ = 
 
 ```{r, eval=TRUE,echo = FALSE}
 data_plot <- data_plot +
-     geom_line(colour = "blue", size = 1.2, 
-               aes(y = fitted(gam_model)))
+  geom_line(colour = "blue", size = 1.2, 
+            aes(y = fitted(gam_model)))
 data_plot
 ```
 
@@ -401,8 +401,8 @@ gam_model <- gam(y_obs ~ s(x))
 summary(gam_model)
 
 data_plot <- data_plot +
-     geom_line(colour = "blue", size = 1.2, 
-               aes(y = fitted(gam_model)))
+  geom_line(colour = "blue", size = 1.2, 
+            aes(y = fitted(gam_model)))
 data_plot
 ```
 
@@ -421,8 +421,8 @@ exclude:true
 
 ```{r, eval=FALSE,echo = FALSE}
 data_plot <- data_plot +
-     geom_line(colour = "blue", size = 1.2, 
-               aes(y = fitted(gam_model)))
+  geom_line(colour = "blue", size = 1.2, 
+            aes(y = fitted(gam_model)))
 data_plot
 ```
 
@@ -509,23 +509,27 @@ __2.__ Determine whether a linear model is appropriate for this data.
 
 As before, visualizing the model fit on our dataset is an excellent first step to determine whether our model is performing well.
 
+.pull-left[
 ```{r, eval = FALSE}
-ggplot(isit1, aes(x = SampleDepth, y = Sources)) +
+ggplot(isit1, 
+       aes(x = SampleDepth, 
+           y = Sources)) +
   geom_point() +
-  geom_line(colour = "red", size = 1.2,
-            aes(y = fitted(linear_model_s1))) +
-  geom_line(colour = "blue", size = 1.2,
-            aes(y = fitted(smooth_model_s1))) +
+  geom_line(
+    colour = "red", 
+    size = 1.2,
+    aes(y = fitted(linear_model_s1))
+  ) +
+  geom_line(
+    colour = "blue", 
+    size = 1.2,
+    aes(y = fitted(smooth_model_s1))
+  ) +
   theme_bw()
 ```
+]
 
----
-# Challenge 1 - Solution ![:cube]()
-
-__2.__ Determine whether a linear model is appropriate for this data.
-
-As before, visualizing the model fit on our dataset is an excellent first step to determine whether our model is performing well.
-
+.pull-right[
 ```{r, eval = TRUE, echo = FALSE}
 ggplot(isit1, aes(x = SampleDepth, y = Sources)) +
   geom_point() +
@@ -535,6 +539,7 @@ ggplot(isit1, aes(x = SampleDepth, y = Sources)) +
             aes(y = fitted(smooth_model_s1))) +
   theme_bw()
 ```
+]
 
 ---
 # Challenge 1 - Solution ![:cube]()
@@ -561,7 +566,9 @@ smooth_model_s1
 
 The effective degrees of freedom (EDF) are >> 1. 
 
-> Keep this in mind, because we will be coming back to EDF soon!
+<br>
+
+.center[Keep this in mind, because we will be coming back to EDF soon!]
 
 
 ---
@@ -704,7 +711,9 @@ Ideally, it is best to choose $\lambda$ so that the predicted $\hat{f}$ is as cl
 
 $$M = 1/n \times \sum_{i=1}^n (\hat{f_i} - f_i)^2$$
 
-Since $f$ is unknown, $M$ must be estimated. The recommend methods for this are maximum likelihood (*ML*) or restricted maximum likelihood estimation (*REML*). Generalized cross validation (*GCV*) is another possibility.
+Since $f$ is unknown, $M$ must be estimated.
+
+The recommend methods for this are maximum likelihood (*ML*) or restricted maximum likelihood estimation (*REML*). Generalized cross validation (*GCV*) is another possibility.
 
 ---
 exclude:true
@@ -770,11 +779,15 @@ basic_model <- gam(Sources ~ Season + s(SampleDepth), data = isit, method = "REM
 basic_summary <- summary(basic_model)
 ```
 
+--
+
 The `p.table` provides information on the linear terms:
 
 ```{r}
 basic_summary$p.table
 ```
+
+--
 
 The `s.table` provides information on the smooth term:
 
@@ -841,13 +854,21 @@ There is also a pronounced difference in bioluminescence between the seasons, wi
 basic_summary$s.table
 ```
 
-The `edf` shown in the `s.table` are the **effective degrees of freedom** (EDF) of the the smooth term `s(SampleDepth)`. Essentially, more EDF imply more complex, wiggly splines.
+The `edf` shown in the `s.table` are the **effective degrees of freedom** (EDF) of the the smooth term `s(SampleDepth)`.
+
+Essentially, more EDF imply more complex, wiggly splines:
 
 - A value close to 1 tends to be close to a linear term.
 
 - A higher value means that the spline is more wiggly (non-linear).
 
-> In our basic model the EDF of the smooth function `s(SampleDepth)` are ~9, which suggests a highly non-linear curve.
+--
+
+<br>
+
+<br>
+
+.center[In our basic model the EDF of the smooth function `s(SampleDepth)` are ~9, which suggests a highly non-linear curve.]
 
 ---
 # Effective degrees of freedom (EDF)
@@ -856,7 +877,13 @@ Let us come back to the concept of effective degrees of freedom (EDF).
 
 Effective degrees of freedom give us a lot of information about the relationship between model predictors and response variables. 
 
-> You might recognize the term "degrees of freedom" from previous workshops about linear models, but be careful! The effective degrees of freedom of a GAM are estimated differently from the degrees of freedom in a linear regression, and are interpreted differently.
+--
+
+> You might recognize the term "degrees of freedom" from previous workshops about linear models, but be careful!
+
+> The effective degrees of freedom of a GAM are estimated differently from the degrees of freedom in a linear regression, and are interpreted differently.
+
+--
 
 In linear regression, the *model* degrees of freedom are equivalent to the number of non-redundant free parameters $p$ in the model, and the *residual* degrees of freedom are given by $n-p$.
 
@@ -867,7 +894,7 @@ Because the number of free parameters in GAMs is difficult to define, the **EDF*
 Let us come back to the concept of effective degrees of freedom (EDF).
 
 ---
-# Effective degrees of freedom (EDF) and k 
+# Effective degrees of freedom (EDF) and $k$ 
 
 An upper bound on the **EDF** is determined by the basis dimension $k$ for each smooth function (the **EDF** cannot exceed $k-1$)
 
@@ -886,11 +913,15 @@ two_term_model <- gam(Sources ~ Season + s(SampleDepth) + RelativeDepth,
 two_term_summary <- summary(two_term_model)
 ```
 
+--
+
 Information on parametric effects (linear terms):
 
 ```{r}
 two_term_summary$p.table
 ```
+
+--
 
 Information on additive effects (non-linear terms):
 
@@ -923,6 +954,8 @@ two_smooth_model <- gam(Sources ~ Season + s(SampleDepth) + s(RelativeDepth),
                         data = isit, method = "REML")
 two_smooth_summary <- summary(two_smooth_model)
 ```
+
+--
 
 Information on parametric effects (linear terms):
 
@@ -1032,7 +1065,6 @@ anova(basic_model, two_term_model, two_smooth_model,test='Chisq')
 ---
 # Challenge 2 ![:cube]()
 
-<br>
 
 For our second challenge, we will be building onto our model by adding variables which we think might be ecologically significant predictors to explain bioluminescence. 
 
@@ -1052,7 +1084,6 @@ exclude:true
 ---
 # Challenge 2 - Solution ![:cube]()
 
-<br>
 ```{r,eval=TRUE}
 # Add Latitude as a linear term
 three_term_model <- gam(Sources ~ 
@@ -1127,6 +1158,7 @@ AIC(three_smooth_model, three_term_model)
 Our model including Latitude as a _smooth_ term has a lower AIC score, meaning it performs better than our model including Latitude as a _linear_ term. 
 
 --
+
 But, does adding `Latitude` as a smooth predictor actually improve on our last "best" model (`two_smooth_model`)?
 
 ---
@@ -1139,6 +1171,8 @@ AIC(two_smooth_model, three_smooth_model)
 Our `three_smooth_model` has a lower AIC score than our previous best model (`two_smooth_model`), which did not include `Latitude`. 
 
 --
+
+<br>
 
 This implies that `Latitude` is indeed an informative non-linear predictor of bioluminescence.
 
@@ -1199,7 +1233,6 @@ class: inverse, center, middle
 
 ---
 # GAM with interaction terms
-<br>
 
 There are two ways to include interactions between variables:
 <br><br>
@@ -1208,9 +1241,9 @@ There are two ways to include interactions between variables:
 <br><br>
 
 - for __one smoothed variable and one linear variable__ (either factor or continuous): use the `by` argument `s(x1, by = x2)`
-  - When `x2` is a factor, you have a smooth term that vary between different levels of `x2`
-  - When `x2` is continuous, the linear effect of `x2` varies smoothly with `x1`
-  - When `x2` is a factor, the factor needs to be added as a main effect in the model
+- When `x2` is a factor, you have a smooth term that vary between different levels of `x2`
+- When `x2` is continuous, the linear effect of `x2` varies smoothly with `x1`
+- When `x2` is a factor, the factor needs to be added as a main effect in the model
 
 ---
 # Interaction: smoothed and factor variables
@@ -1353,6 +1386,8 @@ Does including the interaction between `s(SampleDepth)` and `s(RelativeDepth)` i
 AIC(two_smooth_model, smooth_interact)
 ```
 
+--
+
 The model with the interaction between `s(SampleDepth)` and `s(RelativeDepth)` has a lower AIC.
 
 > This means that the non-linear interaction improves our model's performance, and our ability to understand the drivers of bioluminescence!
@@ -1439,22 +1474,23 @@ The more basis functions used to build a smooth function, the more _wiggly_ the 
 
 ```{r, echo = FALSE, fig.height = 4, fig.width = 10, results='hide', message=FALSE}
 par(mfrow=c(1,3))
-install.packages("patchwork", quiet = TRUE)
+# install.packages("patchwork", quiet = TRUE)
+
 library(patchwork)
 
 k_plot <- function(k_value){
-    data("eeg")
-    m <- mgcv::gam(Ampl ~ s(Time, k = k_value), data = eeg)
-     p <- ggplot(eeg, aes(x = Time, y = Ampl)) +
-     geom_point(alpha = .1, size = 1) +
-     geom_line(aes(y = predict(m)),
-               lwd = 2, col = "black") +
-         labs(title = paste("k =", k_value), x = "", y = "") +
-         theme_classic() +
-         theme(text = element_text(size = 15),
-               axis.text = element_blank(),
-               plot.title = element_text(face = "bold", hjust = 0.5))
-    return(p)
+  data("eeg")
+  m <- mgcv::gam(Ampl ~ s(Time, k = k_value), data = eeg)
+  p <- ggplot(eeg, aes(x = Time, y = Ampl)) +
+    geom_point(alpha = .1, size = 1) +
+    geom_line(aes(y = predict(m)),
+              lwd = 2, col = "black") +
+    labs(title = paste("k =", k_value), x = "", y = "") +
+    theme_classic() +
+    theme(text = element_text(size = 15),
+          axis.text = element_blank(),
+          plot.title = element_text(face = "bold", hjust = 0.5))
+  return(p)
 }
 
 k_plot(3) + k_plot(6) + k_plot(10)
@@ -1700,10 +1736,10 @@ To model a non-linear smooth variable or surface, smooth functions can be built 
 The smooth functions have several parameters that can be set to change their behaviour. The most common parameters are :
 
 `k` ![:faic](arrow-right) basis dimension
-  - determines the upper bound of the number of base functions used to build the curve.
-  - constrains the wigglyness of a smooth.
-  - k should be < the number of unique data points.
-  - the complexity (i.e. non-linearity) of a smooth function in a fitted model is reflected by its effective degrees of freedom (**EDF**).
+- determines the upper bound of the number of base functions used to build the curve.
+- constrains the wigglyness of a smooth.
+- k should be < the number of unique data points.
+- the complexity (i.e. non-linearity) of a smooth function in a fitted model is reflected by its effective degrees of freedom (**EDF**).
 
 ---
 # Parameters of smooth functions
@@ -1711,10 +1747,10 @@ The smooth functions have several parameters that can be set to change their beh
 The smooth functions have several parameters that can be set to change their behaviour. The most often-used parameters are:
 
 `d` ![:faic](arrow-right) specifies that predictors in the interaction are on the same scale or dimension (only used in `te()` and `ti()`).
-  - For example, in `te(Time, width, height, d=c(1,2))`, indicates that `width` and `height` are one the same scale, but not `Time`.
-  
+- For example, in `te(Time, width, height, d=c(1,2))`, indicates that `width` and `height` are one the same scale, but not `Time`.
+
 `bs` ![:faic](arrow-right) specifies the type of basis functions.
-  - the default for `s()` is `tp` (thin plate regression spline) and for `te()` and `ti()` is `cr` (cubic regression spline).
+- the default for `s()` is `tp` (thin plate regression spline) and for `te()` and `ti()` is `cr` (cubic regression spline).
 
 ---
 # Example: Cyclical data
@@ -1831,7 +1867,7 @@ pacf(resid(year_gam), lag.max = 36, main = "pACF")
 ```
 
 .comment[ __ACF__ evaluates the cross correlation and __pACF__ the partial correlation of a time series with itself at different time lags (i.e. similarity between observations at increasingly large time lags).]
- 
+
 The ACF and pACF plots are thus used to identify the time steps are needed before observations are no longer autocorrelated.
 
 --
@@ -1912,12 +1948,13 @@ str(gam_data2)
 gam_data2 <- gamSim(eg = 6)
 ```
 
----
-# GAMM with a random intercept
+--
 
 ```{r}
 # run random intercept model
-gamm_intercept <- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2, method = "REML")
+gamm_intercept <- gam(y ~ s(x0) + s(fac, bs = "re"),
+                      data = gam_data2,
+                      method = "REML")
 
 # examine model output
 summary(gamm_intercept)$s.table
@@ -1995,8 +2032,12 @@ plot_smooth(gamm_intercept, view="x0", rm.ranef = FALSE,
 Next, we will run and plot a model with a random slope:
 
 ```{r}
-gamm_slope <- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2, method = "REML")
+gamm_slope <- gam(y ~ s(x0) + s(x0, fac, bs = "re"), 
+                  data = gam_data2,
+                  method = "REML")
+```
 
+```{r}
 summary(gamm_slope)$s.table
 ```
 
@@ -2059,7 +2100,9 @@ plot_smooth(gamm_slope, view="x0", rm.ranef = FALSE,
 ```{r}
 gamm_int_slope <- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
                       data = gam_data2, method = "REML")
+```
 
+```{r}
 summary(gamm_int_slope)$s.table
 ```
 
@@ -2207,7 +2250,10 @@ plot_smooth(gamm_smooth, view="x0", rm.ranef = FALSE,
 All of the mixed models from this section can be compared using `AIC()` to determine the best fit model
 
 ```{r}
-AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
+AIC(gamm_intercept, 
+    gamm_slope, 
+    gamm_int_slope, 
+    gamm_smooth)
 ```
 
 The best model among those we have built here would be a GAMM with a random effect on the intercept.

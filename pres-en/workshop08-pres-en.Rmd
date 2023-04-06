@@ -1084,19 +1084,24 @@ exclude:true
 ---
 # Challenge 2 - Solution ![:cube]()
 
-```{r,eval=TRUE}
+**1.** Create 2 new models, with `x3` as a linear and smoothed term.
+
+```{r, eval=TRUE}
 # Add Latitude as a linear term
 three_term_model <- gam(Sources ~ 
                           Season + s(SampleDepth) + s(RelativeDepth) + 
-                          Latitude, 
+                          Latitude,  #<<
                         data = isit, method = "REML")
 three_term_summary <- summary(three_term_model)
 
 # Add Latitude as a smooth term
 three_smooth_model <- gam(Sources ~ 
                             Season + s(SampleDepth) + s(RelativeDepth) + 
-                            s(Latitude),
+                            s(Latitude), #<<
                           data = isit, method = "REML")
+``` 
+
+```{r, eval=TRUE}
 three_smooth_summary <- summary(three_smooth_model)
 ```
 
@@ -1118,17 +1123,23 @@ __2.__ Is `Latitude` an important term to include? Does `Latitude` have a linear
 
 Let us begin by plotting the the 4 effects that are now included in each model.
 
----
-# Challenge 2 - Solution ![:cube]()
+.pull-left4[
 
 ```{r, eval = FALSE}
 par(mfrow = c(2,2))
-plot(three_smooth_model, all.terms = TRUE)
+plot(three_smooth_model, 
+     all.terms = TRUE)
 ```
+]
 
-```{r, fig.width = 8, fig.height = 7, echo = FALSE}
+
+.pull-right4[
+
+```{r, fig.width = 7, fig.height = 6.5, echo = FALSE}
 plot(three_smooth_model, page = 1, all.terms = TRUE)
 ```
+
+]
 
 ---
 # Challenge 2 - Solution ![:cube]()

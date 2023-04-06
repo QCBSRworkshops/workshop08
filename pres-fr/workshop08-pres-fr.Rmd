@@ -154,7 +154,7 @@ class: inverse, center, middle
 ---
 # La régression linéaire
 
-La régression linéaire est ce que la plupart des gens apprennent avant tout en statistiques et est parmi les méthodes les plus performantes. Elle nous permet de modéliser une variable réponse en fonction de facteurs prédictifs et d'une erreur résiduelle.
+La régression linéaire est parmi les méthodes les plus performantes et plus utilisées. Elle nous permet de modéliser une variable réponse en fonction de facteurs prédictifs et d'une erreur résiduelle.
 
 --
 
@@ -164,8 +164,6 @@ Comme on a vu dans l'[Atelier 4: Modèles linéaires](https://r.qcbs.ca/fr/works
 2. L'erreur est distribuée normalement: $$\epsilon_i \sim \mathcal{N}(0,\,\sigma^2)$$
 3. La variance des erreurs est constante
 4. Chaque erreur est indépendante des autres (homoscédasticité)
-
-<br>
 
 --
 
@@ -693,7 +691,7 @@ Dans cet exemple, les nœuds sont espacés uniformément à travers la gamme des
 .comment[Y a-t-il une meilleure façon de sélectionner les emplacements des nœuds?]
 
 ---
-# Contrôler le degré de lissage avec des splines de régression pénalisés
+#### Contrôler le degré de lissage avec des splines de régression pénalisés
 
 Au lieu de contrôler le lissage (non linéarité) en modifiant le nombre de nœuds, nous gardons celui-ci fixé à une taille un peu plus grande que raisonnablement nécessaire et on contrôle le lissage du modèle en ajoutant une pénalité sur le niveau de courbure. Donc, plutôt que d'ajuster le modèle en minimisant (comme avec la méthode des moindres carrés) :
 
@@ -706,13 +704,19 @@ $$||y - XB||^{2} + \lambda \int_0^1[f^{''}(x)]^2dx$$
 Quand $\lambda$ tend vers $∞$, le modèle devient linéaire.
 
 ---
-# Contrôler le degré de lissage avec des splines de régression pénalisés
+#### Contrôler le degré de lissage avec des splines de régression pénalisés
 
-Si $\lambda$ est trop élevé, les données seront trop lissées et si elle est trop faible, les données ne seront pas assez lissées. Idéalement, il serait bon de choisir une valeur $\lambda$ de sorte que le $\hat{f}$ prédit est aussi proche que possible du $f$ observé. Un critère approprié pourrait être de choisir $\lambda$ pour minimiser :
+Si $\lambda$ est trop élevé, les données seront trop lissées et si elle est trop faible, les données ne seront pas assez lissées. Idéalement, il serait bon de choisir une valeur $\lambda$ de sorte que le $\hat{f}$ prédit est aussi proche que possible du $f$ observé. 
+
+Un critère approprié pourrait être de choisir $\lambda$ pour minimiser :
 
 $$M = 1/n \times \sum_{i=1}^n (\hat{f_i} - f_i)^2$$
 
-Étant donné que $f$ est inconnue, $M$ doit être estimé. Les méthodes recommandées pour ce faire sont le maximum de vraisemblance (maximum likelihood, *ML*) ou l'estimation par maximum de vraisemblance restreint (restricted maximum likelihood, *REML*). La validation croisée généralisée (*GCV*) est une autre possibilité.
+Étant donné que $f$ est inconnue, $M$ doit être estimé.
+
+Les méthodes recommandées pour ce faire sont le maximum de vraisemblance (maximum likelihood, *ML*) ou l'estimation par maximum de vraisemblance restreint (restricted maximum likelihood, *REML*).
+
+La validation croisée généralisée (*GCV*) est une autre possibilité.
 
 ---
 exclude:true
@@ -753,9 +757,11 @@ class: inverse, center, middle
 
 Avec les GAMs, il est facile d'ajouter des termes non linéaires et linéaires dans un seul modèle, plusieurs termes non linéaires ou même des interactions non linéaires.
 
-Dans cette section, nous allons utiliser les données de `ISIT` de nouveau. Nous allons essayer de modéliser la réponse `Sources` avec les prédicteurs `Season` and `SampleDepth` simultanément.
+Dans cette section, nous allons utiliser les données de `ISIT` de nouveau. 
 
-Tout d'abord, nous devons convertir notre prédicteur qualitatif (`Season`) en facteur.
+Nous allons essayer de modéliser la réponse `Sources` avec les prédicteurs `Season` and `SampleDepth` simultanément.
+
+Tout d'abord, nous devons convertir notre prédicteur qualitatif (`Season`) en facteur:
 
 ```{r, eval = TRUE, results='hide'}
 head(isit)
@@ -776,11 +782,15 @@ basic_model <- gam(Sources ~ Season + s(SampleDepth), data = isit, method = "REM
 basic_summary <- summary(basic_model)
 ```
 
+--
+
 Le tableau `p.table` donne des informations sur les termes linéaires:
 
 ```{r}
 basic_summary$p.table
 ```
+
+--
 
 Le tableau `s.table` nous donne donne des informations sur le terme non linéaire:
 
@@ -845,22 +855,32 @@ Il y a également une différence prononcée dans la bioluminescence entre les s
 basic_summary$s.table
 ```
 
-Les `edf` indiqués dans le `s.table` sont les **degrés effectifs de liberté** (EDF) du terme lisse `s(SampleDepth)`.Plus le nombre de degrés de liberté est élevé, plus la courbe est complexe et ondulée.
+Les `edf` indiqués dans le `s.table` sont les **degrés effectifs de liberté** (EDF, en anglais "_effective degrees of freedom_") du terme lisse `s(SampleDepth)`.
+
+Plus le nombre de degrés de liberté est élevé, plus la courbe est complexe et ondulée.
 
 - Une valeur proche de 1 se rapproche d'un terme linéaire.
 
 - Une valeur elevée signifie que la courbe est plus ondulé, ou en d'autres termes, plus non-linéaire.
+
+--
 
 > Dans notre modèle de base, les **EDF** du terme non-linéaire `s(SampleDepth)` sont ~9, ce qui suggère une courbe fortement non-linéaire.
 
 ---
 # Degrés de liberté effectifs (EDF)
 
-Les degrés de liberté effectifs nous donnent beaucoup d'informations sur la relation entre les prédicteurs du modèle et les variables de réponse. 
+Les degrés de liberté effectifs nous donnent beaucoup d'informations sur la relation entre les prédicteurs du modèle et les variables de réponse.
 
-> Vous reconnaissez peut-être le terme "degrés de liberté" suite à des ateliers précédents sur les modèles linéaires, mais attention! Les degrés de liberté effectifs d'un GAM sont estimés différemment des degrés de liberté d'une régression linéaire, et sont interprétés différemment.
+> Vous reconnaissez peut-être le terme "degrés de liberté" suite à des ateliers précédents sur les modèles linéaires, **mais attention**! 
 
-Dans la régression linéaire, les degrés de liberté du *modèle* sont équivalents au nombre de paramètres libres non redondants, $p$, dans le modèle (et les degrés de liberté *résiduels* sont égaux à $n-p$).
+> Les degrés de liberté effectifs d'un GAM sont estimés différemment des degrés de liberté d'une régression linéaire, et sont interprétés différemment.
+
+--
+
+Dans la régression linéaire, les degrés de liberté du *modèle* sont équivalents au nombre de paramètres libres non redondants, $p$, dans le modèle (et les degrés de liberté *résiduels* sont égaux à $n-p$; où $n$ est le nombre d'observations).
+
+--
 
 Parce que le nombre de paramètres libres des fonctions de lissage est souvent difficile à définir, les **EDF** sont liés à $\lambda$, où l'effet de la pénalité est de réduire les degrés de liberté.
 
@@ -870,9 +890,9 @@ Revenons sur le concept de degrés de liberté effectifs (EDF). (Rappel: Défi 1
 
 ---
 
-# Degrés de liberté effectifs (EDF) et k
+# Degrés de liberté effectifs (EDF) et $k$
 
-La limite supérieure d'**EDF** est déterminée par les dimensions de base $k$ de la fonction lisse (les **EDF** ne peut pas dépasser $k-1$)
+La limite supérieure d'**EDF** est déterminée par les dimensions de base $k$ de la fonction lisse (les **EDF** ne peuvent pas dépasser $k-1$)
 
 En pratique, le choix exact de $k$ est arbitraire, mais il devrait être **suffisamment grand** pour permettre une fonction lisse suffisamment complexe.
 
@@ -882,11 +902,15 @@ Nous discuterons du choix de $k$ dans les sections qui suivent.
 
 # GAM à plusieurs variables linéaires et lisses
 
+Nous pouvons ajouter un second terme, `RelativeDepth`, mais en spécifiant une relation linéaire avec `Sources`:
+
 ```{r}
 two_term_model <- gam(Sources ~ Season + s(SampleDepth) + RelativeDepth,
                       data = isit, method = "REML")
 two_term_summary <- summary(two_term_model)
 ```
+
+--
 
 Informations sur les effets paramétriques (termes linéaires):
 
@@ -962,13 +986,28 @@ Pensez-vous que la performance de notre modèle est amélioré par l'ajout de ce
 
 Comme précédemment, nous pouvons comparer nos modèles avec AIC pour tester si le terme non-linéaire améliore la performance de notre modèle:
 
+.pull-left[
+
 ```{r}
-AIC(basic_model, two_term_model, two_smooth_model)
+AIC(basic_model, 
+    two_term_model, 
+    two_smooth_model)
 ```
 
-> On peut voir que `two_smooth_model` a la plus petite valeur AIC. 
+On peut voir que `two_smooth_model` a la plus petite valeur de AIC.
+
+]
+
+--
+
+.pull-right[
+```{r}
+two_smooth_model
+```
 
 Le modèle le mieux ajusté comprend donc deux fonctions non-linéaires pour `SampleDepth` et `RelativeDepth`, et un terme linéaire pour `Season`.
+
+]
 
 ---
 exclude:true
@@ -1022,8 +1061,6 @@ plot(two_smooth_model, page = 1, all.terms = TRUE)
 ---
 # Défi 2 ![:cube]()
 
-<br>
-
 Pour notre deuxième défi, nous allons développer notre modèle en ajoutant des variables qui, selon nous, pourraient être des prédicteurs écologiquement significatifs pour expliquer la bioluminescence. 
 
 1. Créez deux nouveaux modèles: Ajoutez la variable `Latitude` à `two_smooth_model`, premièrement comme paramètre linéaire, et ensuite comme fonction non-linéaire.
@@ -1031,7 +1068,6 @@ Pour notre deuxième défi, nous allons développer notre modèle en ajoutant de
 2. Est-ce que `Latitude` est un terme important à inclure dans le modèle? La `Latitude` a-t-elle un effet linéaire ou non-linéaire? 
 
 > Utilisez des graphiques, les tables des coefficients et la fonction `AIC()` pour répondre à ces questions.
-
 
 ---
 exclude:true
@@ -1143,7 +1179,6 @@ class: inverse, center, middle
 
 ---
 # GAM avec des termes d'interaction
-<br>
 
 Il y a deux façons de modéliser une interaction entre deux variables :
 <br><br>
@@ -1160,14 +1195,16 @@ Il y a deux façons de modéliser une interaction entre deux variables :
 # Interaction: variables non-linéaire et qualitatif
 
 Nous allons examiner l'effet de l'interaction en utilisant notre variable qualitative `Season` et examiner si la non-linéarité de `s(SampleDepth)` varie selon les différents niveaux de `Season`.
-<br><br>
+<br>
 
 ```{r}
 factor_interact <- gam(Sources ~ Season +
                          s(SampleDepth,by=Season) +
                          s(RelativeDepth),
                        data = isit, method = "REML")
+```
 
+```{r}
 summary(factor_interact)$s.table
 ```
 
@@ -1210,9 +1247,26 @@ Ceci suggère que l'effet d'interaction pourrait être important à inclure dans
 
 Nous pouvons également représenter l'effet d'interaction en 3D sur un seul graphique, en utilisant `vis.gam()`.
 
+.pull-left[
+
 ```{r, fig.width = 6, fig.height = 6}
-vis.gam(factor_interact, theta = 120, n.grid = 50, lwd = .4)
+vis.gam(factor_interact, theta = 120, 
+        n.grid = 50, lwd = .4)
 ```
+
+]
+
+--
+
+.pull-right[
+
+```{r, fig.width = 6, fig.height = 6}
+vis.gam(factor_interact, theta = 60, 
+        n.grid = 50, lwd = .4)
+```
+
+
+]
 
 ???
 
@@ -1277,6 +1331,8 @@ On peut changer la couleur du graphique 3D en utilisant l'argument `color`. Essa
 Ainsi, il semble y avoir un effet d'interaction entre ces termes non linéaires. 
 
 Est-ce que l'inclusion de l'interaction entre `s(SampleDepth)` et `s(RelativeDepth)` améliore notre modèle `two_smooth_model`?
+
+--
 
 ```{r}
 AIC(two_smooth_model, smooth_interact)
@@ -1371,7 +1427,8 @@ Plus le nombre de fonctions de base utilisées pour construire une fonction liss
 
 ```{r, echo = FALSE, fig.height = 4, fig.width = 10, results='hide', message=FALSE}
 par(mfrow=c(1,3))
-install.packages("patchwork", quiet = TRUE)
+# install.packages("patchwork", quiet = TRUE)
+
 library(patchwork)
 
 k_plot <- function(k_value){
@@ -1403,7 +1460,7 @@ Chaque fonction lisse dans un GAM est essentiellement la somme pondérée de nom
 
 La clé pour obtenir un bon ajustement du modèle consiste à __équilibrer__ le compromis entre deux éléments:
 
-+ Le paramètre de lissage $\lambda$, qui _pénalise les _ondulations_ ;
++ Le paramètre de lissage $\lambda$, qui _pénalise les ondulations_ ;
 + La dimension de base $k$, qui permet plus de _flexibilité_ au modèle (plus d'ondulations) en fonction de nos données.
 
 Avons-nous optimisé le compromis entre le lissage ( $\lambda$ ) et la flexibilité ( $k$ ) dans notre modèle?
@@ -1416,7 +1473,9 @@ k.check(smooth_interact)
 
 --
 
-Les **EDF se rapprochent beaucoup de** `k`, donc la _flexibilité_ du modèle est trop restreinte par le `k` utilisé par défaut. En d'autres mots, .alert[nous n'avons pas un compromis équilibré entre le lissage et l'ondulation du modèle].
+Les **EDF se rapprochent beaucoup de** `k`, donc la _flexibilité_ du modèle est trop restreinte par le `k` utilisé par défaut. 
+
+En d'autres mots, .alert[nous n'avons pas un compromis équilibré entre le lissage et l'ondulation du modèle].
 
 ???
 
@@ -1427,13 +1486,16 @@ On n'a pas encore spécifié de valeur $k$ dans notre modèle, mais `gam()` déf
 Les **EDF se rapprochent beaucoup de** `k`. Ceci signifie que la _flexibilité_ du modèle est restreint par le `k` utilisé par défaut, et que notre modèle pourrait mieux s'ajuster aux données si on permettait plus d'ondulations. En d'autres mots, nousn n'avons pas un compromis équilibré entre le lissage et l'ondulation du modèle.
 
 ---
-# Validation GAM: choisir $k$ dimensions de base
+### Validation GAM: choisir $k$ dimensions de base
 
 Recommençons le modèle avec un `k` plus élevé:
 
 ```{r}
 smooth_interact_k60 <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60),
                            data = isit, method = "REML")
+```
+
+```{r}
 summary(smooth_interact_k60)$p.table
 summary(smooth_interact_k60)$s.table
 ```
@@ -1461,8 +1523,9 @@ Les EDF sont beaucoup plus petits que `k`, donc notre modèle s'adjuste mieux au
 ---
 # Validation GAM: Choisir une autre distribution
 
-Comme pour tout modèle Normal, nous devons vérifier certaines conditions avant de continuer. 
+Comme pour tout modèle normal, nous devons vérifier certaines conditions avant de continuer. 
 
+.pull-left[
 On peut visualiser les résidus du modèle avec `gam.check()`:
 
 ```{r, eval = FALSE}
@@ -1471,6 +1534,18 @@ gam.check(smooth_interact)
 ```
 
 .comment[En plus des graphiques, `gam.check()` fournit également la sortie de `k.check()`].
+
+]
+
+.pull-right[
+
+```{r, echo=FALSE, results = FALSE, fig.height = 5, fig.width = 4.5}
+par(mfrow=c(2,2), mar = c(4,4,2,1.1), oma =c(0,0,0,0))
+gam.check(smooth_interact)
+```
+
+]
+
 
 ???
 
@@ -1669,6 +1744,8 @@ nottem_month <- rep(1:12, times = n_years)
 nottem_year <- rep(1920:(1920 + n_years - 1), each = 12)
 ```
 
+--
+
 ```{r, eval = FALSE}
 # Visualiser la série temporelle
 qplot(x = nottem_month, y = nottem, colour = factor(nottem_year), geom = "line") +
@@ -1694,7 +1771,11 @@ qplot(x = nottem_month, y = nottem, colour = factor(nottem_year), geom = "line")
 Nous pouvons modéliser le changement cyclique de température à travers les mois et la tendance non-linéaire à travers les années, en utilisant une spline cubique, ou `cc` pour modéliser les effets de mois ainsi qu'un terme non-linéaire pour la variable année.
 
 ```{r, fig.height=4, fig.width=8}
-year_gam <- gam(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"), method = "REML")
+year_gam <- gam(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"), 
+                method = "REML")
+```
+
+```{r}
 summary(year_gam)$s.table
 ```
 
@@ -1705,7 +1786,7 @@ summary(year_gam)$s.table
 plot(year_gam, page = 1, scale = 0)
 ```
 
-Il y a une augmentation d'environ 1-1.5 degrés au cours de la série, mais au cours d'une année, il y a une variation d'environ 20 degrés. Les données réelles varient autour de ces valeurs prédites et ceci représente donc la variance inexpliquée.
+Il y a une augmentation de 1 à 1.5 degrés au cours de la série, mais au cours d'une année, il y a une variation d'environ 20 degrés. Les données réelles varient autour de ces valeurs prédites et ceci représente donc la variance inexpliquée.
 
 ???
 
@@ -1723,7 +1804,10 @@ class: inverse, center, middle
 Lorsque les observations ne sont pas indépendantes, les GAMs peuvent
 être utilisés soit pour incorporer:
 
--   une structure de corrélation pour modéliser les résidus autocorrélés (autorégressif (AR), moyenne mobile (MA), ou une combinaison des deux (ARMA))
+-   une structure de corrélation pour modéliser les résidus autocorrélés, comme:
+  - autorégressif (AR, en anglais _auto-regressive_); 
+  - moyenne mobile (MA, en anglais _moving average_); ou,
+  - une combinaison des deux (ARMA, en anglais, _auto regressive moving averages_).
 -   des effets aléatoires qui modélisent l'indépendance entre les observations d'un même site.
 
 ---
@@ -1739,6 +1823,8 @@ acf(resid(year_gam), lag.max = 36, main = "ACF")
 pacf(resid(year_gam), lag.max = 36, main = "pACF")
 ```
 
+`acf` signifie _auto correlation function_, et `pacf` signifie _partial auto correlation function_. 
+
 ---
 # L'autocorrelation des résidus
 
@@ -1753,6 +1839,7 @@ pacf(resid(year_gam), lag.max = 36, main = "pACF")
 Les graphiques ACF et pACF sont donc utilisés pour identifier le temps nécessaire avant que les observations __ne sont plus autocorrélées__.
 
 --
+
 Un modèle AR de faible ordre semble nécessaire (donc, avec un ou deux intervalles de temps décalés).
 
 ???

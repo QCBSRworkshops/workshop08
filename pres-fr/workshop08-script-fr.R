@@ -3,24 +3,24 @@
 library(knitr)
 hook_output <- knit_hooks$get("output")
 knit_hooks$set(output = function(x, options) {
-   lines <- options$output.lines
-   if (is.null(lines)) {
-     return(hook_output(x, options))  # pass to default hook
-   }
-   x <- unlist(strsplit(x, "\n"))
-   more <- "..."
-   if (length(lines)==1) {        # first n lines
-     if (length(x) > lines) {
-       # truncate the output, but add ....
-       x <- c(head(x, lines), more)
-     }
-   } else {
-     x <- c(more, x[lines], more)
-   }
-   # paste these lines together
-   x <- paste(c(x, ""), collapse = "\n")
-   hook_output(x, options)
- })
+  lines <- options$output.lines
+  if (is.null(lines)) {
+    return(hook_output(x, options))  # pass to default hook
+  }
+  x <- unlist(strsplit(x, "\n"))
+  more <- "..."
+  if (length(lines)==1) {        # first n lines
+    if (length(x) > lines) {
+      # truncate the output, but add ....
+      x <- c(head(x, lines), more)
+    }
+  } else {
+    x <- c(more, x[lines], more)
+  }
+  # paste these lines together
+  x <- paste(c(x, ""), collapse = "\n")
+  hook_output(x, options)
+})
 
 # Standard procedure to check and install packages and their dependencies, if needed.
 
@@ -32,7 +32,7 @@ if(length(new.packages) > 0) {
   install.packages(new.packages, dependencies = TRUE)
   print(paste0("The following package was installed:", new.packages))
 } else if(length(new.packages) == 0) {
-    print("All packages were already installed previously")
+  print("All packages were already installed previously")
 }
 
 # Load all required libraries at once
@@ -86,7 +86,7 @@ library(mgcv)
 linear_model <- gam(y_obs ~ x)
 model_summary <- summary(linear_model)
 data_plot <- data_plot +
-             geom_line(colour = "red", size = 1.2, aes(y = fitted(linear_model)))
+  geom_line(colour = "red", size = 1.2, aes(y = fitted(linear_model)))
 data_plot
 
 gam_model <- gam(Sources ~ s(SampleDepth), data = isit2)
@@ -95,7 +95,7 @@ gam_model <- gam(Sources ~ s(SampleDepth), data = isit2)
 summary(gam_model)
 
 data_plot <- data_plot +
-     geom_line(colour = "blue", size = 1.2, aes(y = fitted(gam_model)))
+  geom_line(colour = "blue", size = 1.2, aes(y = fitted(gam_model)))
 data_plot
 
 library(mgcv)
@@ -103,14 +103,14 @@ gam_model <- gam(y_obs ~ s(x))
 summary(gam_model)
 
 data_plot <- data_plot +
-     geom_line(colour = "blue", size = 1.2, aes(y = fitted(gam_model)))
+  geom_line(colour = "blue", size = 1.2, aes(y = fitted(gam_model)))
 data_plot
 
 gam_model <- gam(y_obs ~ s(x))
 summary(gam_model)
 
 data_plot <- data_plot +
-     geom_line(colour = "blue", size = 1.2, aes(y = fitted(gam_model)))
+  geom_line(colour = "blue", size = 1.2, aes(y = fitted(gam_model)))
 data_plot
 
 plot(gam_model)
@@ -215,7 +215,11 @@ two_smooth_summary$s.table
 par(mfrow = c(2,2))
 plot(two_smooth_model, all.terms = TRUE)
 
-AIC(basic_model, two_term_model, two_smooth_model)
+AIC(basic_model, 
+    two_term_model, 
+    two_smooth_model)
+
+two_smooth_model
 
 two_term_model <- gam(y ~ x0 + s(x1) + x2, data = gam_data)
 two_term_summary <- summary(two_term_model)
@@ -278,7 +282,11 @@ plot(factor_interact)
 
 plot(factor_interact, page = 1, all.terms = TRUE)
 
-vis.gam(factor_interact, theta = 120, n.grid = 50, lwd = .4)
+vis.gam(factor_interact, theta = 120, 
+        n.grid = 50, lwd = .4)
+
+vis.gam(factor_interact, theta = 60, 
+        n.grid = 50, lwd = .4)
 
 AIC(two_smooth_model, factor_interact)
 
@@ -301,22 +309,23 @@ summary(smooth_interact)$p.table
 summary(smooth_interact)$s.table
 
 par(mfrow=c(1,3))
-install.packages("patchwork", quiet = TRUE)
+# install.packages("patchwork", quiet = TRUE)
+
 library(patchwork)
 
 k_plot <- function(k_value){
-    data("eeg")
-    m <- mgcv::gam(Ampl ~ s(Time, k = k_value), data = eeg)
-     p <- ggplot(eeg, aes(x = Time, y = Ampl)) +
-     geom_point(alpha = .1, size = 1) +
-     geom_line(aes(y = predict(m)),
-               lwd = 2, col = "black") +
-         labs(title = paste("k =", k_value), x = "", y = "") +
-         theme_classic() +
-         theme(text = element_text(size = 15),
-               axis.text = element_blank(),
-               plot.title = element_text(face = "bold", hjust = 0.5))
-    return(p)
+  data("eeg")
+  m <- mgcv::gam(Ampl ~ s(Time, k = k_value), data = eeg)
+  p <- ggplot(eeg, aes(x = Time, y = Ampl)) +
+    geom_point(alpha = .1, size = 1) +
+    geom_line(aes(y = predict(m)),
+              lwd = 2, col = "black") +
+    labs(title = paste("k =", k_value), x = "", y = "") +
+    theme_classic() +
+    theme(text = element_text(size = 15),
+          axis.text = element_blank(),
+          plot.title = element_text(face = "bold", hjust = 0.5))
+  return(p)
 }
 
 k_plot(3) + k_plot(6) + k_plot(10)
@@ -325,6 +334,7 @@ k.check(smooth_interact)
 
 smooth_interact_k60 <- gam(Sources ~ Season + s(SampleDepth, RelativeDepth, k = 60),
                            data = isit, method = "REML")
+
 summary(smooth_interact_k60)$p.table
 summary(smooth_interact_k60)$s.table
 
@@ -333,6 +343,9 @@ k.check(smooth_interact_k60)
 smooth_interact <- smooth_interact_k60
 
 par(mfrow = c(2,2))
+gam.check(smooth_interact)
+
+par(mfrow=c(2,2), mar = c(4,4,2,1.1), oma =c(0,0,0,0))
 gam.check(smooth_interact)
 
 par(mfrow=c(2,2), mar = c(4,4,2,1.1), oma =c(0,0,0,0))
@@ -381,13 +394,17 @@ qplot(x = nottem_month, y = nottem, colour = factor(nottem_year), geom = "line")
 qplot(x = nottem_month, y = nottem, colour = factor(nottem_year), geom = "line") +
   theme_bw() + theme(text = element_text(size = 20))
 
-year_gam <- gam(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"), method = "REML")
+year_gam <- gam(nottem ~ s(nottem_year) + s(nottem_month, bs = "cc"), 
+                method = "REML")
+
 summary(year_gam)$s.table
 
 plot(year_gam, page = 1, scale = 0)
 
 par(mfrow = c(1,2))
+
 acf(resid(year_gam), lag.max = 36, main = "ACF")
+
 pacf(resid(year_gam), lag.max = 36, main = "pACF")
 
 par(mfrow = c(1,2))
@@ -410,12 +427,14 @@ AIC(year_gam$lme, year_gam_AR1$lme, year_gam_AR2$lme)
 
 # Simuler des données
 gam_data2 <- gamSim(eg = 6)
+
 head(gam_data2)
 
 gam_data2 <- gamSim(eg = 6)
 
 # Rouler un modèle avec intercepte aléatoire
-gamm_intercept <- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2, method = "REML")
+gamm_intercept <- gam(y ~ s(x0) + s(fac, bs = "re"), 
+                      data = gam_data2, method = "REML")
 
 # Voir la sortie du modèle
 summary(gamm_intercept)$s.table
@@ -462,7 +481,8 @@ plot_smooth(gamm_intercept, view="x0", rm.ranef = FALSE,
             cond = list(fac = "4"),
             add = TRUE, col = 'turquoise')
 
-gamm_slope <- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2, method = "REML")
+gamm_slope <- gam(y ~ s(x0) + s(x0, fac, bs = "re"), 
+                  data = gam_data2, method = "REML")
 
 summary(gamm_slope)$s.table
 
@@ -553,8 +573,12 @@ plot_smooth(gamm_int_slope, view="x0", rm.ranef = FALSE,
 
 plot(gamm_int_slope, select = 3)
 
-gamm_smooth <- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1),
-                   data = gam_data2, method = "REML")
+gamm_smooth <- gam(y ~ s(x0) + s(x0, 
+                                 fac, 
+                                 bs = "fs",
+                                 m = 1),
+                   data = gam_data2, 
+                   method = "REML")
 
 summary(gamm_smooth)$s.table
 
@@ -567,16 +591,21 @@ plot_smooth(gamm_smooth, view = "x0", rm.ranef = TRUE,
             main = "intercept + s(x1)")
 
 # Visualiser chaque niveau de l'effet aléatoire
-plot_smooth(gamm_smooth, view = "x0", rm.ranef = FALSE,
+plot_smooth(gamm_smooth, view = "x0",
+            rm.ranef = FALSE,
             cond = list(fac="1"),
-            main = "... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(0,25))
-plot_smooth(gamm_smooth, view = "x0", rm.ranef = FALSE,
+            main = "... + s(fac) + s(fac, x0)",
+            col = 'orange', ylim = c(0,25))
+plot_smooth(gamm_smooth, view = "x0",
+            rm.ranef = FALSE,
             cond = list(fac = "2"),
             add = TRUE, col = 'red')
-plot_smooth(gamm_smooth, view="x0", rm.ranef = FALSE,
+plot_smooth(gamm_smooth, view="x0",
+            rm.ranef = FALSE,
             cond = list(fac = "3"),
             add = TRUE, col = 'purple')
-plot_smooth(gamm_smooth, view="x0", rm.ranef = FALSE,
+plot_smooth(gamm_smooth, view="x0",
+            rm.ranef = FALSE,
             cond = list(fac = "4"),
             add = TRUE, col = 'turquoise')
 

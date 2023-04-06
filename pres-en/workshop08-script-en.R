@@ -3,28 +3,28 @@
 library(knitr)
 hook_output <- knit_hooks$get("output")
 knit_hooks$set(output = function(x, options) {
-   lines <- options$output.lines
-   if (is.null(lines)) {
-     return(hook_output(x, options))  # pass to default hook
-   }
-   x <- unlist(strsplit(x, "\n"))
-   more <- "..."
-   if (length(lines)==1) {        # first n lines
-     if (length(x) > lines) {
-       # truncate the output, but add ....
-       x <- c(head(x, lines), more)
-     }
-   } else {
-     x <- c(more, x[lines], more)
-   }
-   # paste these lines together
-   x <- paste(c(x, ""), collapse = "\n")
-   hook_output(x, options)
- })
+  lines <- options$output.lines
+  if (is.null(lines)) {
+    return(hook_output(x, options))  # pass to default hook
+  }
+  x <- unlist(strsplit(x, "\n"))
+  more <- "..."
+  if (length(lines)==1) {        # first n lines
+    if (length(x) > lines) {
+      # truncate the output, but add ....
+      x <- c(head(x, lines), more)
+    }
+  } else {
+    x <- c(more, x[lines], more)
+  }
+  # paste these lines together
+  x <- paste(c(x, ""), collapse = "\n")
+  hook_output(x, options)
+})
 
 # Standard procedure to check and install packages and their dependencies, if needed.
 
-list.of.packages <- c("ggplot2", "itsadug", "mgcv")
+list.of.packages <- c("ggplot2", "itsadug", "mgcv", "patchwork")
 
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 
@@ -32,7 +32,7 @@ if(length(new.packages) > 0) {
   install.packages(new.packages, dependencies = TRUE) 
   print(paste0("The following package was installed:", new.packages)) 
 } else if(length(new.packages) == 0) {
-    print("All packages were already installed previously")
+  print("All packages were already installed previously")
 }
 
 # Load all required libraries at once
@@ -84,7 +84,7 @@ library(mgcv)
 linear_model <- gam(y_obs ~ x)
 model_summary <- summary(linear_model)
 data_plot <- data_plot +
-             geom_line(colour = "red", size = 1.2, aes(y = fitted(linear_model)))
+  geom_line(colour = "red", size = 1.2, aes(y = fitted(linear_model)))
 data_plot
 
 gam_model <- gam(Sources ~ s(SampleDepth), data = isit2)
@@ -93,8 +93,8 @@ gam_model <- gam(Sources ~ s(SampleDepth), data = isit2)
 summary(gam_model)
 
 data_plot <- data_plot +
-     geom_line(colour = "blue", size = 1.2, 
-               aes(y = fitted(gam_model)))
+  geom_line(colour = "blue", size = 1.2, 
+            aes(y = fitted(gam_model)))
 data_plot
 
 library(mgcv)
@@ -102,16 +102,16 @@ gam_model <- gam(y_obs ~ s(x))
 summary(gam_model)
 
 data_plot <- data_plot +
-     geom_line(colour = "blue", size = 1.2,
-               aes(y = fitted(gam_model)))
+  geom_line(colour = "blue", size = 1.2,
+            aes(y = fitted(gam_model)))
 data_plot
 
 gam_model <- gam(y_obs ~ s(x))
 summary(gam_model)
 
 data_plot <- data_plot +
-     geom_line(colour = "blue", size = 1.2,
-               aes(y = fitted(gam_model)))
+  geom_line(colour = "blue", size = 1.2,
+            aes(y = fitted(gam_model)))
 data_plot
 
 plot(gam_model)
@@ -129,12 +129,20 @@ isit1 <- subset(isit, Season == 1)
 linear_model_s1 <- gam(Sources ~ SampleDepth, data = isit1)
 smooth_model_s1 <- gam(Sources ~ s(SampleDepth), data = isit1)
 
-ggplot(isit1, aes(x = SampleDepth, y = Sources)) +
+ggplot(isit1,
+       aes(x = SampleDepth,
+           y = Sources)) +
   geom_point() +
-  geom_line(colour = "red", size = 1.2,
-            aes(y = fitted(linear_model_s1))) +
-  geom_line(colour = "blue", size = 1.2,
-            aes(y = fitted(smooth_model_s1))) +
+  geom_line(
+    colour = "red",
+    size = 1.2,
+    aes(y = fitted(linear_model_s1))
+  ) +
+  geom_line(
+    colour = "blue",
+    size = 1.2,
+    aes(y = fitted(smooth_model_s1))
+  ) +
   theme_bw()
 
 ggplot(isit1, aes(x = SampleDepth, y = Sources)) +
@@ -322,22 +330,23 @@ summary(smooth_interact)$p.table
 summary(smooth_interact)$s.table
 
 par(mfrow=c(1,3))
-install.packages("patchwork", quiet = TRUE)
+# install.packages("patchwork", quiet = TRUE)
+
 library(patchwork)
 
 k_plot <- function(k_value){
-    data("eeg")
-    m <- mgcv::gam(Ampl ~ s(Time, k = k_value), data = eeg)
-     p <- ggplot(eeg, aes(x = Time, y = Ampl)) +
-     geom_point(alpha = .1, size = 1) +
-     geom_line(aes(y = predict(m)),
-               lwd = 2, col = "black") +
-         labs(title = paste("k =", k_value), x = "", y = "") +
-         theme_classic() +
-         theme(text = element_text(size = 15),
-               axis.text = element_blank(),
-               plot.title = element_text(face = "bold", hjust = 0.5))
-    return(p)
+  data("eeg")
+  m <- mgcv::gam(Ampl ~ s(Time, k = k_value), data = eeg)
+  p <- ggplot(eeg, aes(x = Time, y = Ampl)) +
+    geom_point(alpha = .1, size = 1) +
+    geom_line(aes(y = predict(m)),
+              lwd = 2, col = "black") +
+    labs(title = paste("k =", k_value), x = "", y = "") +
+    theme_classic() +
+    theme(text = element_text(size = 15),
+          axis.text = element_blank(),
+          plot.title = element_text(face = "bold", hjust = 0.5))
+  return(p)
 }
 
 k_plot(3) + k_plot(6) + k_plot(10)
@@ -435,7 +444,9 @@ str(gam_data2)
 gam_data2 <- gamSim(eg = 6)
 
 # run random intercept model
-gamm_intercept <- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2, method = "REML")
+gamm_intercept <- gam(y ~ s(x0) + s(fac, bs = "re"),
+                      data = gam_data2,
+                      method = "REML")
 
 # examine model output
 summary(gamm_intercept)$s.table
@@ -482,7 +493,9 @@ plot_smooth(gamm_intercept, view="x0", rm.ranef = FALSE,
             cond = list(fac = "4"), 
             add = TRUE, col = 'turquoise')
 
-gamm_slope <- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2, method = "REML")
+gamm_slope <- gam(y ~ s(x0) + s(x0, fac, bs = "re"), 
+                  data = gam_data2,
+                  method = "REML")
 
 summary(gamm_slope)$s.table
 
@@ -620,7 +633,10 @@ plot_smooth(gamm_smooth, view="x0", rm.ranef = FALSE,
             cond = list(fac = "4"), 
             add = TRUE, col = 'turquoise')
 
-AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
+AIC(gamm_intercept, 
+    gamm_slope, 
+    gamm_int_slope, 
+    gamm_smooth)
 
 gam_data3 <- read.csv("data/other_dist.csv")
 str(gam_data3)

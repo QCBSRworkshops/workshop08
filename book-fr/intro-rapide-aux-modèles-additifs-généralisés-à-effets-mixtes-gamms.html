@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapitre 11 Intro rapide aux modèles additifs généralisés à effets mixtes (GAMMs) | Atelier 8 : Modèles additifs généralisés en R</title>
   <meta name="description" content="Modèles additifs généralisés en R" />
-  <meta name="generator" content="bookdown 0.31 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.33 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapitre 11 Intro rapide aux modèles additifs généralisés à effets mixtes (GAMMs) | Atelier 8 : Modèles additifs généralisés en R" />
   <meta property="og:type" content="book" />
@@ -279,22 +279,44 @@ div.csl-indent {
 <p>Lorsque les observations ne sont pas indépendantes, les GAMs peuvent
 être utilisés soit pour incorporer:</p>
 <ul>
-<li>une structure de corrélation pour modéliser les résidus autocorrélés
-(autorégressif (AR), moyenne mobile (MA), ou une combinaison des
-deux (ARMA))</li>
-<li>des effets aléatoires qui modélisent l’indépendance entre les
-observations d’un même site.</li>
+<li>une structure de corrélation pour modéliser les résidus autocorrélés, comme:</li>
+<li>le modèle autorégressif (AR, en anglais <em>autoregressive</em>);</li>
+<li>le modèle avec moyenne mobile (MA, en anglais <em>moving average</em>); ou,</li>
+<li>une combinaison des deux modèles (ARMA, en anglais, <em>autoregressive moving average</em>).</li>
+<li>des effets aléatoires qui modélisent l’indépendance entre les observations d’un même site.</li>
 </ul>
 <p>En plus de changer la fonction de base, nous pouvons aussi complexifier
 le modèle en intégrant une structure d’auto-corrélation (ou même des
 effets mixtes) en utilisant les fonctions <code>gamm()</code> dans la librairie <code>mgcv</code>. Bien que nous ne l’utilisions pas ici, la librairie <a href="https://cran.r-project.org/web/packages/gamm4/gamm4.pdf"><code>gamm4</code></a> peut également être utilisé pour estimer des modèles GAMMs dans R.</p>
 <div id="lautocorrelation-des-résidus" class="section level2 hasAnchor" number="11.1">
 <h2><span class="header-section-number">11.1</span> L’autocorrelation des résidus<a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#lautocorrelation-des-résidus" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>L’autocorrélation des résidus</strong> désigne le degré de corrélation entre les résidus (les différences entre les valeurs réelles et les valeurs prédites) d’un modèle de série temporelle.</p>
+<p>En d’autres termes, s’il y a autocorrélation des résidus dans un modèle de série temporelle, cela signifie qu’il existe un modèle ou une relation entre les résidus à un moment donné et les résidus à d’autres moments.</p>
+<p>L’autocorrélation des résidus est généralement mesurée à l’aide des graphiques <strong>ACF (fonction d’autocorrélation)</strong> et <strong>pACF (fonction d’autocorrélation partielle)</strong>, qui montrent la corrélation entre les résidus à différents retards.</p>
+<div id="la-fonction-dautocorrélation" class="section level4 hasAnchor" number="11.1.0.1">
+<h4><span class="header-section-number">11.1.0.1</span> La fonction d’autocorrélation<a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#la-fonction-dautocorrélation" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>La fonction d’autocorrélation (ACF) d’une série temporelle stationnaire peut être définie à l’aide de l’équation suivante :</p>
+<p><span class="math display">\[ACF(k) = Corr(Y_t, Y_{t-k})\]</span>
+où <span class="math inline">\(Y_t\)</span> est la valeur de la série temporelle au temps <span class="math inline">\(t\)</span>, <span class="math inline">\(Y_{t-k}\)</span> est la valeur de la série temporelle au temps <span class="math inline">\(t-k\)</span>, et <span class="math inline">\(Corr()\)</span> est le coefficient de corrélation entre deux variables aléatoires.</p>
+<p>En d’autres termes, l’ACF(<span class="math inline">\(k\)</span>) est la corrélation entre les valeurs de la série temporelle <span class="math inline">\(Y_t\)</span> et <span class="math inline">\(Y_{t-k}\)</span>, où <span class="math inline">\(k\)</span> est le décalage entre les deux points dans le temps. L’ACF est une mesure de l’intensité de la corrélation entre chaque valeur de la série temporelle et ses valeurs décalées à différents moments.</p>
+</div>
+<div id="la-fonction-dautocorrélation-partielle" class="section level4 hasAnchor" number="11.1.0.2">
+<h4><span class="header-section-number">11.1.0.2</span> La fonction d’autocorrélation partielle<a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#la-fonction-dautocorrélation-partielle" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>La fonction d’autocorrélation partielle (pACF) d’une série temporelle stationnaire peut être définie à l’aide de la formule récursive suivante :</p>
+<p><span class="math display">\[pACF(1) = Corr(Y_1, Y_2)\]</span></p>
+<p><span class="math display">\[pACF(k) = [ Corr(Y_k, Y_{k+1} - \hat{\phi}{k,1}Y{k}) ] / [ Corr(Y_1, Y_2 - \hat{\phi}_{1,1}Y_1) ]\]</span></p>
+<p>pour <span class="math inline">\(k &gt; 1\)</span></p>
+<p>où <span class="math inline">\(Y_t\)</span> est la valeur de la série temporelle au temps <span class="math inline">\(t\)</span>, <span class="math inline">\(\hat{\phi}{k,1}\)</span>, <span class="math inline">\(\hat{\phi}{1,1}\)</span>, <span class="math inline">\(...\)</span> <span class="math inline">\(\hat{\phi}{k-1,k-1}\)</span> sont les coefficients du modèle autorégressif d’ordre <span class="math inline">\(k-1\)</span> ajusté à la série temporelle, et <span class="math inline">\(Corr()\)</span> est le coefficient de corrélation entre deux variables aléatoires.</p>
+<p>En d’autres termes, le pACF(<span class="math inline">\(k\)</span>) est la corrélation entre les valeurs des séries temporelles <span class="math inline">\(Y_k\)</span> et <span class="math inline">\(Y_{k+j}\)</span> après suppression de l’influence des décalages intermédiaires <span class="math inline">\(Y_{k+1}, Y_{k+2}, ..., Y_{k+j-1}\)</span> à l’aide d’un modèle autorégressif d’ordre <span class="math inline">\(k-1\)</span>.
+Le pACF mesure la corrélation entre <span class="math inline">\(Y_k\)</span> et <span class="math inline">\(Y_{k+j}\)</span> après avoir éliminé l’effet de tout délai intermédiaire plus court.</p>
+<p>Si les graphiques <strong>ACF</strong> ou <strong>pACF</strong> montrent des corrélations significatives à des retards non nuls, il y a des preuves d’autocorrélation des résidus et le modèle peut devoir être modifié ou amélioré pour mieux capturer les modèles sous-jacents dans les données.</p>
+<p>Voyons comment cela fonctionne avec notre modèle <code>year_gam</code>!</p>
 <p>Pour commencer, nous allons jeter un coup d’œil à un modèle avec de l’autocorrélation temporelle dans les résidus. Revenons au modèle
 de la température de Nottingham pour vérifier si les résidus sont corrélés en faisant appel à la fonction (partielle) d’autocorrélation.</p>
 <div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
 <span id="cb100-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb100-2" aria-hidden="true" tabindex="-1"></a><span class="fu">acf</span>(<span class="fu">resid</span>(year_gam), <span class="at">lag.max =</span> <span class="dv">36</span>, <span class="at">main =</span> <span class="st">&quot;ACF&quot;</span>)</span>
 <span id="cb100-3"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb100-3" aria-hidden="true" tabindex="-1"></a><span class="fu">pacf</span>(<span class="fu">resid</span>(year_gam), <span class="at">lag.max =</span> <span class="dv">36</span>, <span class="at">main =</span> <span class="st">&quot;pACF&quot;</span>)</span></code></pre></div>
+<p>Dans le graphique ACF, la région ombrée en bleu représente l’intervalle de confiance et les lignes rouges en pointillé représentent les limites de la signification statistique.</p>
 <p>La <strong>fonction d’autocorrelaton</strong> (ACF; première figure) évalue la corrélation croisée d’une série temporelle entre points à différents décalages (donc, la similarité entre observations progressivement décalés).</p>
 <p>En contraste, la <strong>fonction partielle d’autocorrelation</strong> (PACF: deuxième figure) évalue la corrélation croisée d’une série temporelle entre points à différents décalages, après avoir contrôlé les valeurs de la série temporelle à tous les décalages plus courts.</p>
 <p>Les graphiques ACF et pACF sont donc utilisés pour identifier le temps nécessaire avant que les observations ne sont plus autocorrélées.</p>
@@ -319,6 +341,7 @@ de la température de Nottingham pour vérifier si les résidus sont corrélés 
 ## year_gam_AR1$lme  6 1101.218
 ## year_gam_AR2$lme  7 1101.598</code></pre>
 <p>Le modèle avec la structure AR(1) donne un meilleur ajustement comparé au premier modèle (<code>year_gam</code>), il y a très peu d’amélioration en passant au <code>AR(2)</code>. Il est donc préférable d’inclure uniquement la structure <code>AR(1)</code> dans notre modèle.</p>
+</div>
 </div>
 <div id="modélisation-avec-effets-mixtes" class="section level2 hasAnchor" number="11.2">
 <h2><span class="header-section-number">11.2</span> Modélisation avec effets mixtes<a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#modélisation-avec-effets-mixtes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -352,29 +375,29 @@ s’éloigne de 0, ce qui entraîne un retrait vers la moyenne.</li>
 <span id="cb104-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb104-2" aria-hidden="true" tabindex="-1"></a>gam_data2 <span class="ot">&lt;-</span> <span class="fu">gamSim</span>(<span class="at">eg =</span> <span class="dv">6</span>)</span></code></pre></div>
 <pre><code>## 4 term additive + random effectGu &amp; Wahba 4 term additive model</code></pre>
 <div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(gam_data2)</span></code></pre></div>
-<pre><code>##           y         x0        x1        x2         x3         f         f0
-## 1  7.447214 0.01187972 0.2035120 0.4945059 0.73141941  7.337059 0.07462514
-## 2 22.628251 0.68667889 0.9666880 0.2213280 0.67339805 23.466335 1.66579998
-## 3 23.781802 0.58399076 0.2748391 0.1986483 0.45359493 21.224725 1.93077842
-## 4 19.418014 0.92468357 0.4035589 0.3976822 0.06634208 19.038438 0.46882376
-## 5 15.768860 0.86561852 0.8469147 0.2192735 0.33276781 18.132802 0.81948517
-## 6 11.283497 0.21012765 0.3788559 0.4912578 0.21573884 12.131255 1.22644773
-##         f1       f2 f3 fac
-## 1 1.502340 2.760094  0   1
-## 2 6.912808 8.887727  0   2
-## 3 1.732695 8.561251  0   3
-## 4 2.241438 4.328176  0   4
-## 5 5.440274 8.873043  0   1
-## 6 2.133389 2.771418  0   2</code></pre>
+<pre><code>##           y        x0        x1        x2        x3        f        f0       f1
+## 1  9.653648 0.4228919 0.4720236 0.5935688 0.9864155 10.67409 1.9416051 2.570363
+## 2 12.017070 0.1469641 0.8265123 0.5007448 0.7909696 14.85898 0.8909439 5.222753
+## 3 17.622397 0.8890717 0.3992365 0.5214727 0.2178373 14.66008 0.6829608 2.222145
+## 4 23.361031 0.5961541 0.2806559 0.2110378 0.5324001 24.44719 1.9094412 1.752971
+## 5 24.105302 0.6570808 0.9946285 0.2428768 0.7116160 20.94597 1.7613757 7.310101
+## 6 12.470432 0.5911001 0.5285916 0.9613596 0.1548269 10.79733 1.9186475 2.878252
+##             f2 f3 fac
+## 1 3.1621260094  0   1
+## 2 2.7452803871  0   2
+## 3 2.7549787221  0   3
+## 4 8.7847804433  0   4
+## 5 8.8744934751  0   1
+## 6 0.0004315444  0   2</code></pre>
 <div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb108-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Rouler un modèle avec intercepte aléatoire</span></span>
 <span id="cb108-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb108-2" aria-hidden="true" tabindex="-1"></a>gamm_intercept <span class="ot">&lt;-</span> <span class="fu">gam</span>(y <span class="sc">~</span> <span class="fu">s</span>(x0) <span class="sc">+</span> <span class="fu">s</span>(fac, <span class="at">bs =</span> <span class="st">&quot;re&quot;</span>), <span class="at">data =</span> gam_data2,</span>
 <span id="cb108-3"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb108-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
 <span id="cb108-4"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb108-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb108-5"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb108-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Voir la sortie du modèle</span></span>
 <span id="cb108-6"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb108-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gamm_intercept)<span class="sc">$</span>s.table</span></code></pre></div>
-<pre><code>##             edf   Ref.df         F     p-value
-## s(x0)  2.638784 3.277115  3.800617 0.008627317
-## s(fac) 2.969756 3.000000 98.050964 0.000000000</code></pre>
+<pre><code>##             edf   Ref.df          F      p-value
+## s(x0)  2.995095 3.720899   5.264566 0.0006649137
+## s(fac) 2.977219 3.000000 130.550146 0.0000000000</code></pre>
 <p>Notez qu’il y a maintenant un terme aléatoire dans le sommaire du modèle. Vous pouvez visualiser les intercepts aléatoires pour chaque niveau de <code>fac</code> comme ceci:</p>
 <div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb110-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(gamm_intercept, <span class="at">select =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="book-fr_files/figure-html/unnamed-chunk-78-1.png" width="672" style="display: block; margin: auto;" /></p>
@@ -407,9 +430,9 @@ effets sommés d’un GAM (basé sur les prédictions). Cette fonction permet é
 <span id="cb113-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb113-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
 <span id="cb113-3"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb113-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb113-4"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb113-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gamm_slope)<span class="sc">$</span>s.table</span></code></pre></div>
-<pre><code>##                edf   Ref.df         F    p-value
-## s(x0)     2.450294 3.043891  2.207364 0.08440636
-## s(x0,fac) 2.962920 3.000000 83.852918 0.00000000</code></pre>
+<pre><code>##                edf   Ref.df         F     p-value
+## s(x0)     2.798646 3.479493  4.504636 0.002721668
+## s(x0,fac) 2.967589 3.000000 83.839275 0.000000000</code></pre>
 <p>On peut encore une fois visualiser l’effet combiné de <code>x0</code> sans les niveaux de l’effet aléatoire, et ensuite une courbe pour chacun de quatre niveaux de l’effet aléatoire <code>fac</code>:</p>
 <div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb115-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="at">cex =</span> <span class="fl">1.1</span>)</span>
 <span id="cb115-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb115-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -435,10 +458,10 @@ effets sommés d’un GAM (basé sur les prédictions). Cette fonction permet é
 <span id="cb116-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb116-2" aria-hidden="true" tabindex="-1"></a>    x0, <span class="at">bs =</span> <span class="st">&quot;re&quot;</span>), <span class="at">data =</span> gam_data2, <span class="at">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
 <span id="cb116-3"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb116-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb116-4"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb116-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gamm_int_slope)<span class="sc">$</span>s.table</span></code></pre></div>
-<pre><code>##                edf  Ref.df          F     p-value
-## s(x0)     2.579562 3.20239   3.145117 0.022324891
-## s(fac)    2.839378 3.00000 508.130983 0.000000000
-## s(fac,x0) 2.303797 3.00000 296.365269 0.004959271</code></pre>
+<pre><code>##                edf   Ref.df          F      p-value
+## s(x0)     2.977269 3.696819   5.145603 0.0008139075
+## s(fac)    2.944349 3.000000 328.649373 0.0000000000
+## s(fac,x0) 1.227189 3.000000  38.927026 0.2392683531</code></pre>
 <p>On peut encore une fois visualiser l’effet combiné de <code>x0</code> sans les niveaux de l’effet aléatoire, et ensuite une courbe pour chacun de quatre niveaux de l’effet aléatoire <code>fac</code>:</p>
 <div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb118-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="at">cex =</span> <span class="fl">1.1</span>)</span>
 <span id="cb118-2"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb118-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -471,9 +494,9 @@ effets sommés d’un GAM (basé sur les prédictions). Cette fonction permet é
 <pre><code>## Warning in gam.side(sm, X, tol = .Machine$double.eps^0.5): model has repeated
 ## 1-d smooths of same variable.</code></pre>
 <div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb123-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb123-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gamm_smooth)<span class="sc">$</span>s.table</span></code></pre></div>
-<pre><code>##                edf    Ref.df       F   p-value
-## s(x0)     2.423260  2.942415 2.43033 0.0764996
-## s(x0,fac) 7.292933 35.000000 8.85519 0.0000000</code></pre>
+<pre><code>##                edf    Ref.df         F     p-value
+## s(x0)     2.968818  3.670827  4.867167 0.001297361
+## s(x0,fac) 4.390848 35.000000 11.290278 0.000000000</code></pre>
 <p>Si la pente aléatoire variait selon <code>x0</code>, on verrait différentes courbes pour chaque niveau:</p>
 <div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb125-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb125-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(gamm_smooth, <span class="at">select =</span> <span class="dv">1</span>)</span></code></pre></div>
 <p><img src="book-fr_files/figure-html/unnamed-chunk-86-1.png" width="672" style="display: block; margin: auto;" /></p>
@@ -503,10 +526,10 @@ effets sommés d’un GAM (basé sur les prédictions). Cette fonction permet é
 <p>Tous les GAMMs de cette section peuvent être comparé avec <code>AIC()</code> pour trouver le modèle le mieux ajusté:</p>
 <div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms.html#cb128-1" aria-hidden="true" tabindex="-1"></a><span class="fu">AIC</span>(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)</span></code></pre></div>
 <pre><code>##                       df      AIC
-## gamm_intercept  8.064772 2241.613
-## gamm_slope      8.043350 2267.827
-## gamm_int_slope 10.876422 2237.523
-## gamm_smooth    13.408792 2239.421</code></pre>
+## gamm_intercept  8.368825 2171.385
+## gamm_slope      8.135030 2249.783
+## gamm_int_slope 10.608209 2172.928
+## gamm_smooth    11.225835 2173.908</code></pre>
 <p>Le meilleur modèle de ces trois modèles serait donc le GAMM avec un intercept aléatoire.</p>
 
 </div>

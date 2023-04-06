@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapitre 4 Introduction aux GAMs | Atelier 8 : Modèles additifs généralisés en R</title>
   <meta name="description" content="Modèles additifs généralisés en R" />
-  <meta name="generator" content="bookdown 0.31 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.33 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapitre 4 Introduction aux GAMs | Atelier 8 : Modèles additifs généralisés en R" />
   <meta property="og:type" content="book" />
@@ -321,7 +321,10 @@ div.csl-indent {
 <span id="cb7-2"><a href="introduction-aux-gams.html#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">fitted</span>(linear_model)), <span class="at">colour =</span> <span class="st">&quot;red&quot;</span>,</span>
 <span id="cb7-3"><a href="introduction-aux-gams.html#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="fl">1.2</span>) <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code></pre></div>
 <pre><code>## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-## ℹ Please use `linewidth` instead.</code></pre>
+## ℹ Please use `linewidth` instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.</code></pre>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="introduction-aux-gams.html#cb9-1" aria-hidden="true" tabindex="-1"></a>data_plot</span></code></pre></div>
 <p><img src="book-fr_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Les suppositions de la régression linéaire énumérées dans le <a href="intro-linear-models.html#intro-linear-models">Chapitre 4</a> sont-elles satisfaites dans ce cas? Comme vous l’avez peut-être remarqué, nous ne respectons pas les conditions du modèle linéaire:</p>

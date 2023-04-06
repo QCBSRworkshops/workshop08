@@ -35,6 +35,8 @@ changer-la-fonction-de-base
 exemple-données-cycliques
 intro-rapide-aux-modèles-additifs-généralisés-à-effets-mixtes-gamms
 lautocorrelation-des-résidus
+la-fonction-dautocorrélation
+la-fonction-dautocorrélation-partielle
 modélisation-avec-effets-mixtes
 gamm-avec-un-intercepte-aléatoire
 gamm-avec-une-pente-aléatoire

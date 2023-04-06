@@ -36,24 +36,24 @@ options(repos=structure(c(CRAN="http://cran.r-project.org")))
 library(knitr)
 hook_output <- knit_hooks$get("output")
 knit_hooks$set(output = function(x, options) {
-   lines <- options$output.lines
-   if (is.null(lines)) {
-     return(hook_output(x, options))  # pass to default hook
-   }
-   x <- unlist(strsplit(x, "\n"))
-   more <- "..."
-   if (length(lines)==1) {        # first n lines
-     if (length(x) > lines) {
-       # truncate the output, but add ....
-       x <- c(head(x, lines), more)
-     }
-   } else {
-     x <- c(more, x[lines], more)
-   }
-   # paste these lines together
-   x <- paste(c(x, ""), collapse = "\n")
-   hook_output(x, options)
- })
+  lines <- options$output.lines
+  if (is.null(lines)) {
+    return(hook_output(x, options))  # pass to default hook
+  }
+  x <- unlist(strsplit(x, "\n"))
+  more <- "..."
+  if (length(lines)==1) {        # first n lines
+    if (length(x) > lines) {
+      # truncate the output, but add ....
+      x <- c(head(x, lines), more)
+    }
+  } else {
+    x <- c(more, x[lines], more)
+  }
+  # paste these lines together
+  x <- paste(c(x, ""), collapse = "\n")
+  hook_output(x, options)
+})
 ```
 
 class: inverse, center, middle
@@ -69,7 +69,7 @@ if(length(new.packages) > 0) {
   install.packages(new.packages, dependencies = TRUE)
   print(paste0("The following package was installed:", new.packages))
 } else if(length(new.packages) == 0) {
-    print("All packages were already installed previously")
+  print("All packages were already installed previously")
 }
 
 # Load all required libraries at once
@@ -323,7 +323,7 @@ library(mgcv)
 linear_model <- gam(y_obs ~ x)
 model_summary <- summary(linear_model)
 data_plot <- data_plot +
-             geom_line(colour = "red", size = 1.2, aes(y = fitted(linear_model)))
+  geom_line(colour = "red", size = 1.2, aes(y = fitted(linear_model)))
 data_plot
 ```
 
@@ -382,7 +382,7 @@ La variance expliquée par notre modèle a augmenté de plus de 20% ($R_{adj}$ =
 
 ```{r, eval=TRUE,echo = FALSE,fig.height=5.5}
 data_plot <- data_plot +
-     geom_line(colour = "blue", size = 1.2, aes(y = fitted(gam_model)))
+  geom_line(colour = "blue", size = 1.2, aes(y = fitted(gam_model)))
 data_plot
 ```
 
@@ -404,7 +404,7 @@ gam_model <- gam(y_obs ~ s(x))
 summary(gam_model)
 
 data_plot <- data_plot +
-     geom_line(colour = "blue", size = 1.2, aes(y = fitted(gam_model)))
+  geom_line(colour = "blue", size = 1.2, aes(y = fitted(gam_model)))
 data_plot
 ```
 
@@ -423,7 +423,7 @@ exclude:true
 
 ```{r, echo = FALSE,eval=FALSE}
 data_plot <- data_plot +
-     geom_line(colour = "blue", size = 1.2, aes(y = fitted(gam_model)))
+  geom_line(colour = "blue", size = 1.2, aes(y = fitted(gam_model)))
 data_plot
 ```
 
@@ -1187,9 +1187,9 @@ Il y a deux façons de modéliser une interaction entre deux variables :
 <br><br>
 
 - pour __une variable non-linéaire et une variable linéaire__ (quantitative ou qualitative) : utiliser l'argument `by`, `s(x1, by = x2)`
-  - Quand `x2` est qualitative, vous avez un terme non linéaire qui varie entre les différents niveaux de `x2`
-  - Quand `x2` est quantitative, l'effet linéaire de `x2` varie avec `x1`
-  - Quand `x2` est qualitative, le facteur doit être ajouté comme effet principal dans le modèle
+- Quand `x2` est qualitative, vous avez un terme non linéaire qui varie entre les différents niveaux de `x2`
+- Quand `x2` est quantitative, l'effet linéaire de `x2` varie avec `x1`
+- Quand `x2` est qualitative, le facteur doit être ajouté comme effet principal dans le modèle
 
 ---
 # Interaction: variables non-linéaire et qualitatif
@@ -1432,18 +1432,18 @@ par(mfrow=c(1,3))
 library(patchwork)
 
 k_plot <- function(k_value){
-    data("eeg")
-    m <- mgcv::gam(Ampl ~ s(Time, k = k_value), data = eeg)
-     p <- ggplot(eeg, aes(x = Time, y = Ampl)) +
-     geom_point(alpha = .1, size = 1) +
-     geom_line(aes(y = predict(m)),
-               lwd = 2, col = "black") +
-         labs(title = paste("k =", k_value), x = "", y = "") +
-         theme_classic() +
-         theme(text = element_text(size = 15),
-               axis.text = element_blank(),
-               plot.title = element_text(face = "bold", hjust = 0.5))
-    return(p)
+  data("eeg")
+  m <- mgcv::gam(Ampl ~ s(Time, k = k_value), data = eeg)
+  p <- ggplot(eeg, aes(x = Time, y = Ampl)) +
+    geom_point(alpha = .1, size = 1) +
+    geom_line(aes(y = predict(m)),
+              lwd = 2, col = "black") +
+    labs(title = paste("k =", k_value), x = "", y = "") +
+    theme_classic() +
+    theme(text = element_text(size = 15),
+          axis.text = element_blank(),
+          plot.title = element_text(face = "bold", hjust = 0.5))
+  return(p)
 }
 
 k_plot(3) + k_plot(6) + k_plot(10)
@@ -1705,10 +1705,10 @@ Pour modéliser une surface lisse ou non-linéaire, nous pouvons construire des 
 Les fonctions lisses ont beaucoup de paramètres qui pourraient changer leur comportement. Les paramètres les plus souvent utilisés sont les suivants :
 
 `k` ![:faic](arrow-right) dimensions de base
-  - détermine la limite supérieure du nombre de fonctions de base utilisées pour construire la courbe.
-  - contraint l'ondulation d'une fonction lisse.
-  - k devrait être < au nombre de données uniques.
-  - la complexité (ou la non-linéarité) d'une fonction lisse dans un modèle ajusté est reflétée par ses degrés de liberté effectifs (**EDF**)
+- détermine la limite supérieure du nombre de fonctions de base utilisées pour construire la courbe.
+- contraint l'ondulation d'une fonction lisse.
+- k devrait être < au nombre de données uniques.
+- la complexité (ou la non-linéarité) d'une fonction lisse dans un modèle ajusté est reflétée par ses degrés de liberté effectifs (**EDF**)
 
 ---
 # Paramètres des fonctions lisses
@@ -1716,10 +1716,10 @@ Les fonctions lisses ont beaucoup de paramètres qui pourraient changer leur com
 Les fonctions lisses ont beaucoup de paramètres qui pourraient changer leur comportement. Les paramètres les plus souvent utilisés sont les suivants :
 
 `bs` ![:faic](arrow-right) spécifie la fonction de base sous-jacente.
-  - pour `s()` on utilise `tp` (*thin plate regression spline*) et pour `te()` et `ti()` on utilise la base `cr` (*cubic regression spline*).
-  
+- pour `s()` on utilise `tp` (*thin plate regression spline*) et pour `te()` et `ti()` on utilise la base `cr` (*cubic regression spline*).
+
 `d` ![:faic](arrow-right) spécifie quelles variables d'une intéraction se trouvent sur la même échelle lorsqu'on utilise `te()` and `ti()`.
-  - Par exemple, `te(Temps, largeur, hauteur, d=c(1,2))`, indique que la `largeur` et la `hauteur` sont sur la même échelle, mais que `temps` ne l'est pas.
+- Par exemple, `te(Temps, largeur, hauteur, d=c(1,2))`, indique que la `largeur` et la `hauteur` sont sur la même échelle, mais que `temps` ne l'est pas.
 
 ---
 # Exemple: Données cycliques
@@ -1805,9 +1805,9 @@ Lorsque les observations ne sont pas indépendantes, les GAMs peuvent
 être utilisés soit pour incorporer:
 
 -   une structure de corrélation pour modéliser les résidus autocorrélés, comme:
-  - autorégressif (AR, en anglais _auto-regressive_); 
-  - moyenne mobile (MA, en anglais _moving average_); ou,
-  - une combinaison des deux (ARMA, en anglais, _auto regressive moving averages_).
+- autorégressif (AR, en anglais _auto-regressive_); 
+- moyenne mobile (MA, en anglais _moving average_); ou,
+- une combinaison des deux (ARMA, en anglais, _auto regressive moving averages_).
 -   des effets aléatoires qui modélisent l'indépendance entre les observations d'un même site.
 
 ---
@@ -1854,7 +1854,7 @@ En contraste, la __fonction partielle d'autocorrelation__ (PACF: deuxième figur
 Ajoutons des structures d'autocorrelation au modèle de température de Nottingham:
 
 - **AR(1)** : corrélation avec un intervalle de temps décalé, ou
-- **AR(2)** : corrélation à 2 intervalles de temps décalés
+- **AR(2)** : corrélation à deux intervalles de temps décalés.
 
 --
 ```{r}
@@ -1890,13 +1890,19 @@ Il est donc préférable d'inclure uniquement la structure `AR(1)` dans notre mo
 
 Comme nous l'avons vu dans la section précédente, `bs` spécifie la fonction de base sous-jacente. Pour les facteurs aléatoires (origine et pente linéaire), nous utilisons `bs = "re"` et pour les pentes aléatoires non linéaires, nous utilisons `bs = "fs"`.
 
----
-# Effets aléatoires
+--
+<br>
 
-**3 types d'effets aléatoires différents** sont possibles lors de l'utilisation des GAMMs (où `fac` ![:faic](arrow-right) variable qualitative utilisée pour l'effet aléatoire; `x0` ![:faic](arrow-right) effet quantitatif fixe) :
+**Trois types d'effets aléatoires différents** sont possibles lors de l'utilisation des GAMMs (où `fac` ![:faic](arrow-right) variable qualitative utilisée pour l'effet aléatoire; `x0` ![:faic](arrow-right) effet quantitatif fixe) :
 
 - **interceptes aléatoires** ajustent la hauteur des termes du modèle avec une valeur constante de pente : `s(fac, bs = "re")`
+
+--
+
 - **pentes aléatoires** ajustent la pente d'une variable explicative numérique : `s(fac, x0, bs = "re")`
+
+--
+
 - **surfaces lisses aléatoires** ajustent la tendance d'une prédiction numérique de façon non linéaire: `s(x0, fac, bs = "fs", m = 1)`, où l'argument $m = 1$ met une plus grande pénalité au lissage qui s'éloigne de 0, ce qui entraîne un retrait vers la moyenne.
 
 ---
@@ -1907,6 +1913,7 @@ Nous allons utiliser `gamSim()` pour simuler un ensemble de données, cette fois
 ```{r, eval = FALSE}
 # Simuler des données
 gam_data2 <- gamSim(eg = 6)
+
 head(gam_data2)
 ```
 
@@ -1914,10 +1921,15 @@ head(gam_data2)
 gam_data2 <- gamSim(eg = 6)
 ```
 
+--
+
 ```{r}
 # Rouler un modèle avec intercepte aléatoire
-gamm_intercept <- gam(y ~ s(x0) + s(fac, bs = "re"), data = gam_data2, method = "REML")
+gamm_intercept <- gam(y ~ s(x0) + s(fac, bs = "re"), 
+                      data = gam_data2, method = "REML")
+``` 
 
+```{r}
 # Voir la sortie du modèle
 summary(gamm_intercept)$s.table
 ```
@@ -1933,6 +1945,7 @@ plot(gamm_intercept, select = 2)
 # GAMM avec un intercepte aléatoire
 
 Nous allons premièrement tracer l'effet combiné de `x0` (sans les niveaux de l'effet aléatoire) et ensuite une courbe pour les 4 niveaux de `fac` :
+
 
 ```{r, eval = FALSE, results='hide'}
 par(mfrow = c(1,2), cex = 1.1)
@@ -1994,8 +2007,11 @@ plot_smooth(gamm_intercept, view="x0", rm.ranef = FALSE,
 Ensuite, spécifions un modèle avec une pente aléatoire:
 
 ```{r}
-gamm_slope <- gam(y ~ s(x0) + s(x0, fac, bs = "re"), data = gam_data2, method = "REML")
+gamm_slope <- gam(y ~ s(x0) + s(x0, fac, bs = "re"), 
+                  data = gam_data2, method = "REML")
+```
 
+```{r}
 summary(gamm_slope)$s.table
 ```
 
@@ -2133,19 +2149,30 @@ select = 3 parce que la pente aléatoire est sur la troisième ligne de notre ta
 
 Finalement, spécifions un modèle avec une surface lisse aléatoire.
 
-```{r}
-gamm_smooth <- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1),
-                   data = gam_data2, method = "REML")
+.pull-left[
 
+```{r}
+gamm_smooth <- gam(y ~ s(x0) + s(x0, 
+                                 fac, 
+                                 bs = "fs",
+                                 m = 1),
+                   data = gam_data2, 
+                   method = "REML")
+```
+
+```{r}
 summary(gamm_smooth)$s.table
 ```
 
----
-# GAMM avec une surface lisse aléatoire
+]
+
+.pull-right[
 
 ```{r, echo = TRUE}
 plot(gamm_smooth, select=1)
 ```
+
+]
 
 ???
 select = 1 parce que la surface lisse aléatoire est sur la première ligne de notre tableau sommaire.
@@ -2161,16 +2188,21 @@ plot_smooth(gamm_smooth, view = "x0", rm.ranef = TRUE,
             main = "intercept + s(x1)")
 
 # Visualiser chaque niveau de l'effet aléatoire
-plot_smooth(gamm_smooth, view = "x0", rm.ranef = FALSE,
+plot_smooth(gamm_smooth, view = "x0", 
+            rm.ranef = FALSE,
             cond = list(fac="1"),
-            main = "... + s(fac) + s(fac, x0)", col = 'orange', ylim = c(0,25))
-plot_smooth(gamm_smooth, view = "x0", rm.ranef = FALSE,
+            main = "... + s(fac) + s(fac, x0)", 
+            col = 'orange', ylim = c(0,25))
+plot_smooth(gamm_smooth, view = "x0",
+            rm.ranef = FALSE,
             cond = list(fac = "2"),
             add = TRUE, col = 'red')
-plot_smooth(gamm_smooth, view="x0", rm.ranef = FALSE,
+plot_smooth(gamm_smooth, view="x0", 
+            rm.ranef = FALSE,
             cond = list(fac = "3"),
             add = TRUE, col = 'purple')
-plot_smooth(gamm_smooth, view="x0", rm.ranef = FALSE,
+plot_smooth(gamm_smooth, view="x0", 
+            rm.ranef = FALSE,
             cond = list(fac = "4"),
             add = TRUE, col = 'turquoise')
 ```

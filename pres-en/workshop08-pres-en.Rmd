@@ -1843,17 +1843,45 @@ class: inverse, center, middle
 
 When observations are not independent, GAMs can be used to either incorporate:
 
-- a serial correlation structure to model residual autocorrelation (autoregressive AR, moving average MA, or a combination of the two ARMA),
-- random effects that model independence among observations from the same site.
+- a correlation structure to model autocorrelated residuals, such as:
+ - the autoregressive (AR) model 
+ - the moving average model (MA); or,
+ - a combination of both models (ARMA).
+- random effects that model independence between observations at the same site.- random effects that model independence among observations from the same site.
 
 ---
+
+# Autocorrelation of residuals
+
+**Autocorrelation of residuals** refers to the degree of correlation between the residuals (the differences between actual and predicted values) in a time series model.
+
+In other words, if there is autocorrelation of residuals in a time series model, it means that there is a pattern or relationship between the residuals at one time and the residuals at other times.
+
+--
+
+<br>
+
+Autocorrelation of residuals is usually measured using the **ACF (autocorrelation function)** and **pACF (partial autocorrelation function)** graphs, which show the correlation between residuals at different lags. 
+
+If the **ACF** or **pACF** graphs show significant correlations at non-zero lags, there is evidence of autocorrelation in the residuals and the model may need to be modified or improved to better capture the underlying patterns in the data.
+
+--
+
+<br>
+
+Let's see how this works with our `year_gam` model!
+
+---
+
 # Model with correlated errors
 
 Let's have a look at a model with temporal autocorrelation in the residuals. We will revisit the Nottingham temperature model and test for correlated errors using the (partial) autocorrelation function.
 
 ```{r, eval = FALSE, fig.width=9, fig.height=4.5}
 par(mfrow = c(1,2))
+
 acf(resid(year_gam), lag.max = 36, main = "ACF")
+
 pacf(resid(year_gam), lag.max = 36, main = "pACF")
 ```
 
@@ -1862,7 +1890,9 @@ pacf(resid(year_gam), lag.max = 36, main = "pACF")
 
 ```{r, echo = F, fig.width=9, fig.height=4.5}
 par(mfrow = c(1,2))
+
 acf(resid(year_gam), lag.max = 36, main = "ACF")
+
 pacf(resid(year_gam), lag.max = 36, main = "pACF")
 ```
 
@@ -1881,6 +1911,8 @@ The __autocorrelation function__ (ACF; first panel above) evaluates the cross co
 In contrast, the __partial autocorrelation function__ (PACF: second panel above)
 gives the partial correlation of a time series with its own lagged values,
 after controlling for the values of the time series at all shorter lags.
+
+In the ACF graph, the blue shaded region represents the confidence interval and the red dashed lines represent the limits of statistical significance.
 
 ---
 # Model with correlated errors

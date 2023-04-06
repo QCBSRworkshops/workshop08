@@ -1804,11 +1804,26 @@ class: inverse, center, middle
 Lorsque les observations ne sont pas indépendantes, les GAMs peuvent
 être utilisés soit pour incorporer:
 
--   une structure de corrélation pour modéliser les résidus autocorrélés, comme:
-- autorégressif (AR, en anglais _auto-regressive_); 
-- moyenne mobile (MA, en anglais _moving average_); ou,
-- une combinaison des deux (ARMA, en anglais, _auto regressive moving averages_).
--   des effets aléatoires qui modélisent l'indépendance entre les observations d'un même site.
+- une structure de corrélation pour modéliser les résidus autocorrélés, comme:
+ - le modèle autorégressif (AR, en anglais _autoregressive_); 
+ - le modèle avec moyenne mobile (MA, en anglais _moving average_); ou,
+ - une combinaison des deux modèles (ARMA, en anglais, _autoregressive moving average_).
+- des effets aléatoires qui modélisent l'indépendance entre les observations d'un même site.
+
+---
+# L'autocorrelation des résidus
+
+**L'autocorrélation des résidus** désigne le degré de corrélation entre les résidus (les différences entre les valeurs réelles et les valeurs prédites) d'un modèle de série temporelle.
+
+En d'autres termes, s'il y a autocorrélation des résidus dans un modèle de série temporelle, cela signifie qu'il existe un modèle ou une relation entre les résidus à un moment donné et les résidus à d'autres moments.
+
+--
+
+L'autocorrélation des résidus est généralement mesurée à l'aide des graphiques **ACF (fonction d'autocorrélation)** et **pACF (fonction d'autocorrélation partielle)**, qui montrent la corrélation entre les résidus à différents retards. 
+
+Si les graphiques **ACF** ou **pACF** montrent des corrélations significatives à des retards non nuls, il y a des preuves d'autocorrélation des résidus et le modèle peut devoir être modifié ou amélioré pour mieux capturer les modèles sous-jacents dans les données.
+
+Voyons comment cela fonctionne avec notre modèle `year_gam`!
 
 ---
 # L'autocorrelation des résidus
@@ -1819,11 +1834,13 @@ Revenons au modèle de la température de Nottingham pour vérifier si les rési
 
 ```{r, eval = F, fig.width=9, fig.height=4.5}
 par(mfrow = c(1,2))
+
 acf(resid(year_gam), lag.max = 36, main = "ACF")
+
 pacf(resid(year_gam), lag.max = 36, main = "pACF")
 ```
 
-`acf` signifie _auto correlation function_, et `pacf` signifie _partial auto correlation function_. 
+Souvenez vous que: `acf` signifie _autocorrelation function_, et `pacf` signifie _partial autocorrelation function_. 
 
 ---
 # L'autocorrelation des résidus
@@ -1847,6 +1864,8 @@ Un modèle AR de faible ordre semble nécessaire (donc, avec un ou deux interval
 La __fonction d'autocorrelaton__ (ACF; première figure) évalue la corrélation croisée d'une série temporelle entre points à différents décalages (donc, la similarité entre observations progressivement décalés).
 
 En contraste, la __fonction partielle d'autocorrelation__ (PACF: deuxième figure) évalue la corrélation croisée d'une série temporelle entre points à différents décalages, après avoir contrôlé les valeurs de la série temporelle à tous les décalages plus courts.
+
+Dans le graphique ACF, la région ombrée en bleu représente l'intervalle de confiance et les lignes rouges en pointillé représentent les limites de la signification statistique.
 
 ---
 # L'autocorrelation des résidus

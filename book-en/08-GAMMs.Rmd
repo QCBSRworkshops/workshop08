@@ -2,15 +2,50 @@
 
 When observations are not independent, GAMs can be used to either incorporate:
 
--   a serial correlation structure to model residual autocorrelation
-    (autoregressive: AR; moving average: MA; or a combination of the two:
-    ARMA),
+- a correlation structure to model autocorrelated residuals, such as:
+ - the autoregressive (AR) model 
+ - the moving average model (MA); or,
+ - a combination of both models (ARMA).
 -   random effects that model independence among observations from the
     same site.
 
 That is, in addition to changing the basis as with the `nottem` example, we can also add complexity to the model by incorporating an autocorrelation structure or mixed effects using the `gamm()` function in the `mgcv` package. Although we will not be using it here, the [`gamm4`](https://cran.r-project.org/web/packages/gamm4/gamm4.pdf) package can also be used to estimate GAMMs in R.
 
 ## Residual autocorrelation
+
+**Autocorrelation of residuals** refers to the degree of correlation between the residuals (the differences between the actual and predicted values) in a time series model.
+
+In other words, if there is an autocorrelation of residuals in a time series model, it means that there is a pattern or relationship between the residuals at one point in time and the residuals at other points in time.
+
+Autocorrelation of residuals is usually measured using the **ACF (autocorrelation function)** and **pACF (partial autocorrelation function)** graphs, which show the correlation between residuals at different lags. 
+
+#### The autocorrelation function 
+
+The autocorrelation function (ACF) of a stationary time series can be defined using the following equation:
+
+$$ACF(k) = Corr(Y_t, Y_{t-k})$$
+where $Y_t$ is the value of the time series at time $t$, $Y_{t-k}$ is the value of the time series at time $t-k$, and $Corr()$ is the correlation coefficient between two random variables.
+
+In other words, the ACF($k$) is the correlation between the values of the time series $Y_t$ and $Y_{t-k}$, where $k$ is the lag between the two points in time. The ACF is a measure of the strength of the correlation between each value in the time series and its lagged values at different times.
+
+#### The partial autocorrelation function
+
+The partial autocorrelation function (pACF) of a stationary time series can be defined using the following recursive formula:
+
+$$pACF(1) = Corr(Y_1, Y_2)$$
+
+$$pACF(k) = [ Corr(Y_k, Y_{k+1} - \hat{\phi}{k,1}Y{k}) ] / [ Corr(Y_1, Y_2 - \hat{\phi}_{1,1}Y_1) ]$$
+
+for $k > 1$
+
+where $Y_t$ is the value of the time series at time $t$, $\hat{\phi}{k,1}$, $\hat{\phi}{1,1}$, $...$ $\hat{\phi}{k-1,k-1}$ are the coefficients of the autoregressive model of order $k-1$ fitted to the time series, and $Corr()$ is the coefficient of correlation between two random variables
+
+In other words, the pACF($k$) is the correlation between the values of the time series $Y_k$ and $Y_{k+j}$ after removing the influence of intermediate lags $Y_{k+1}, Y_{k+2}, ..., Y_{k+j-1}$ using an autoregressive model of order $k-1$. 
+The pACF measures the correlation between $Y_k$ and $Y_{k+j}$ after removing the effect of any shorter intermediate lags.
+
+If the **ACF** or **pACF** graphs show significant correlations at non-zero lags, there is evidence of autocorrelation in the residuals and the model may need to be modified or improved to better capture the underlying patterns in the data.
+
+Let's see how this works with our `year_gam` model!
 
 To start, let's have a look at a model with temporal autocorrelation in the residuals. We will revisit the Nottingham temperature model and test for correlated errors using the (partial) autocorrelation function.
 

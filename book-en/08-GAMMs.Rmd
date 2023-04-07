@@ -1,4 +1,4 @@
-# Quick intro to Generalized Additive Mixed Models (GAMMs)
+# Introduction to Generalized Additive Mixed Models (GAMMs)
 
 When observations are not independent, GAMs can be used to either incorporate:
 
@@ -6,8 +6,8 @@ When observations are not independent, GAMs can be used to either incorporate:
  - the autoregressive (AR) model 
  - the moving average model (MA); or,
  - a combination of both models (ARMA).
--   random effects that model independence among observations from the
-    same site.
+- random effects that model independence among observations from the
+    same site using GAMMs.
 
 That is, in addition to changing the basis as with the `nottem` example, we can also add complexity to the model by incorporating an autocorrelation structure or mixed effects using the `gamm()` function in the `mgcv` package. Although we will not be using it here, the [`gamm4`](https://cran.r-project.org/web/packages/gamm4/gamm4.pdf) package can also be used to estimate GAMMs in R.
 
@@ -62,6 +62,24 @@ gives the partial correlation of a time series with its own lagged values,
 after controlling for the values of the time series at all shorter lags.
 
 The ACF and pACF plots are thus used to identify the time steps are needed before observations are no longer autocorrelated.
+
+## Generalized additive mixed effect models (GAMMs) in a nutshell
+
+Generalized additive mixed effect models (GAMMs) are a type of statistical model that combines the flexibility of generalized additive models (GAMs) with the ability to account for random effects in mixed-effect models.
+
+Like GAMs, GAMMs allow for non-linear relationships between predictors and the response variable by fitting smooth functions to each predictor. However, GAMMs also allow for the inclusion of random effects, which capture the variability of observations within groups or clusters.
+
+A generalized additive mixed effects model (GAMM) can be written as:
+
+$$Y_i = f_1(X_{1,i}) + f_2(X_{2,i}) + \ldots + f_p(X_{p,i}) + Z_i b + \epsilon_i$$
+
+In this formula, $Y_i$ represents the response variable for the $i$th observation, and $X_{1,i}$ to $X_{p,i}$ represent the values of the $p$ predictor variables for that observation. The functions $f_1$ to $f_p$ represent the relationships between each predictor variable and the response variable.
+
+The term $Z_i b$ represents the random effects in the model. $Z_i$ is a matrix that specifies the random effects design for the $i$th observation, and $b$ is a vector of random effects coefficients.
+
+Finally, $\epsilon_i$ represents the error term for the $i$th observation.
+
+### Application
 
 The ACF plot of our model residuals suggests a significant lag of 1, and perhaps
 a lag of 2. Therefore, a low-order AR model is likely needed.
@@ -161,7 +179,6 @@ plot_smooth(gamm_intercept, view="x0", rm.ranef = FALSE,
             cond = list(fac = "4"),
             add = TRUE, col = 'turquoise')
 ```
-
 
 ### GAMM with a random slope
 

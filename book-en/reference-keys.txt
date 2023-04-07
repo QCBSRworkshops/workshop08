@@ -33,8 +33,12 @@ challenge-3
 challenge-3-solution
 changing-the-basis-function
 example-cyclical-data
-quick-intro-to-generalized-additive-mixed-models-gamms
+introduction-to-generalized-additive-mixed-models-gamms
 residual-autocorrelation
+the-autocorrelation-function
+the-partial-autocorrelation-function
+generalized-additive-mixed-effect-models-gamms-in-a-nutshell
+application
 random-effects
 gamm-with-a-random-intercept
 gamm-with-a-random-slope

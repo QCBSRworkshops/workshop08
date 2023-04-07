@@ -27,6 +27,13 @@ knitr::opts_chunk$set(
   fig.retina = 3,
   fig.align = 'center'
 )
+
+hook_source <- knitr::knit_hooks$get('source')
+knitr::knit_hooks$set(source = function(x, options) {
+  x <- stringr::str_replace(x, "^[[:blank:]]?([^*].+?)[[:blank:]]*#<<[[:blank:]]*$", "*\\1")
+  hook_source(x, options)
+})
+
 options(repos=structure(c(CRAN="http://cran.r-project.org")))
 ```
 
@@ -1081,19 +1088,25 @@ exclude:true
 ---
 # Défi 2 - Solution ![:cube]()
 
+**1.** Créez deux nouveaux modèles: Ajoutez la variable `Latitude` à `two_smooth_model`, premièrement comme paramètre linéaire, et ensuite comme fonction non-linéaire.
+
 ```{r, eval=TRUE}
 # Ajouter Latitude comme terme linéaire
 three_term_model <- gam(Sources ~ 
                           Season + s(SampleDepth) + s(RelativeDepth) + 
-                          Latitude, 
+                          Latitude,    #<<
                         data = isit, method = "REML")
-three_term_summary <- summary(three_term_model)
 
+three_term_summary <- summary(three_term_model)
+```
+
+```{r, eval=TRUE}
 # Ajouter Latitude comme terme non-linéaire
 three_smooth_model <- gam(Sources ~ 
                             Season + s(SampleDepth) + s(RelativeDepth) + 
-                            s(Latitude),
+                            s(Latitude),   #<<
                           data = isit, method = "REML")
+
 three_smooth_summary <- summary(three_smooth_model)
 ```
 
@@ -1103,6 +1116,25 @@ three_smooth_summary <- summary(three_smooth_model)
 __2.__ Est-ce que `Latitude` est un terme important à inclure dans le modèle? 
 
 Commençons par visualiser les 4 effets qui sont maintenant inclus dans chaque modèle. 
+
+.pull-left4[
+
+```{r, eval = FALSE}
+par(mfrow = c(2,2))
+
+plot(three_smooth_model, 
+     all.terms = TRUE)
+```
+]
+
+
+.pull-right4[
+
+```{r, fig.width = 7, fig.height = 6.5, echo = FALSE}
+plot(three_smooth_model, page = 1, all.terms = TRUE)
+```
+
+]
 
 ---
 exclude:true

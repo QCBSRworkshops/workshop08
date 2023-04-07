@@ -1,3 +1,10 @@
+knitr::knit_hooks$set(source = function(x, options) {
+  x <- stringr::str_replace(x, "^[[:blank:]]?([^*].+?)[[:blank:]]*#<<[[:blank:]]*$", "*\\1")
+  hook_source(x, options)
+})
+
+options(repos=structure(c(CRAN="http://cran.r-project.org")))
+
 # Function to control the lines shown in code chunk outputs, to avoid overflow
 # note: sometimes cache needs to be set to true in the knitr setup chunk for this to take effect in xaringan::infinite_moon_reader()
 library(knitr)
@@ -240,16 +247,25 @@ plot(two_smooth_model, page = 1, all.terms = TRUE)
 # Ajouter Latitude comme terme linéaire
 three_term_model <- gam(Sources ~ 
                           Season + s(SampleDepth) + s(RelativeDepth) + 
-                          Latitude, 
+                          Latitude,    #<<
                         data = isit, method = "REML")
+
 three_term_summary <- summary(three_term_model)
 
 # Ajouter Latitude comme terme non-linéaire
 three_smooth_model <- gam(Sources ~ 
                             Season + s(SampleDepth) + s(RelativeDepth) + 
-                            s(Latitude),
+                            s(Latitude),   #<<
                           data = isit, method = "REML")
+
 three_smooth_summary <- summary(three_smooth_model)
+
+par(mfrow = c(2,2))
+
+plot(three_smooth_model,
+     all.terms = TRUE)
+
+plot(three_smooth_model, page = 1, all.terms = TRUE)
 
 three_term_model <- gam(y ~ x0 + s(x1) + s(x2) + x3, data = gam_data)
 three_smooth_model <- gam(y~x0 + s(x1) + s(x2) + s(x3), data = gam_data)

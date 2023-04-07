@@ -1128,20 +1128,27 @@ exclude:true
 ---
 # Défi 2 - Solution ![:cube]()
 
+**1.** Créez deux nouveaux modèles: Ajoutez la variable `Latitude` à `two_smooth_model`, premièrement comme paramètre linéaire, et ensuite comme fonction non-linéaire.
+
 
 ```r
 # Ajouter Latitude comme terme linéaire
 three_term_model &lt;- gam(Sources ~ 
                           Season + s(SampleDepth) + s(RelativeDepth) + 
-                          Latitude, 
+*                         Latitude,
                         data = isit, method = "REML")
-three_term_summary &lt;- summary(three_term_model)
 
+three_term_summary &lt;- summary(three_term_model)
+```
+
+
+```r
 # Ajouter Latitude comme terme non-linéaire
 three_smooth_model &lt;- gam(Sources ~ 
                             Season + s(SampleDepth) + s(RelativeDepth) + 
-                            s(Latitude),
+*                           s(Latitude),
                           data = isit, method = "REML")
+
 three_smooth_summary &lt;- summary(three_smooth_model)
 ```
 
@@ -1151,6 +1158,24 @@ three_smooth_summary &lt;- summary(three_smooth_model)
 __2.__ Est-ce que `Latitude` est un terme important à inclure dans le modèle? 
 
 Commençons par visualiser les 4 effets qui sont maintenant inclus dans chaque modèle. 
+
+.pull-left4[
+
+
+```r
+par(mfrow = c(2,2))
+
+plot(three_smooth_model, 
+     all.terms = TRUE)
+```
+]
+
+
+.pull-right4[
+
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-55-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+]
 
 ---
 exclude:true
@@ -1173,7 +1198,7 @@ par(mfrow = c(2,2))
 plot(three_smooth_model, all.terms = TRUE)
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-55-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-58-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 ---
 # Défi 2 - Solution ![:cube]()
@@ -1297,7 +1322,7 @@ par(mfrow = c(2),2))
 plot(factor_interact)
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-63-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-66-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 ???
 
@@ -1322,7 +1347,7 @@ vis.gam(factor_interact, theta = 120,
         n.grid = 50, lwd = .4)
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-64-1.png" width="432" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-67-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 ]
 
@@ -1336,7 +1361,7 @@ vis.gam(factor_interact, theta = 60,
         n.grid = 50, lwd = .4)
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-65-1.png" width="432" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-68-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 
 ]
@@ -1384,7 +1409,7 @@ summary(smooth_interact)$s.table
 
 --
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-68-1.png" width="504" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-71-1.png" width="504" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -1397,7 +1422,7 @@ vis.gam(smooth_interact,  view = c("SampleDepth", "RelativeDepth"),
         theta = 50, n.grid = 50, lwd = .4)
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-69-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-72-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 ???
 
@@ -1516,7 +1541,7 @@ Cette _ondulation_ est également contrôlé par la dimension de base `\(k\)`, q
 
 Plus le nombre de fonctions de base utilisées pour construire une fonction lisse est élevé, plus la fonction lisse est "ondulée":
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-72-1.png" width="720" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-75-1.png" width="720" style="display: block; margin: auto;" /&gt;
 
 ???
 
@@ -1540,7 +1565,7 @@ En d'autres mots, est-ce que le `k` est assez grand?
 ```r
 k.check(smooth_interact)
 #                              k'      edf   k-index p-value
-# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883  0.0675
+# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883    0.08
 ```
 
 --
@@ -1587,7 +1612,7 @@ Est-ce que `k` est assez grand maintenant?
 ```r
 k.check(smooth_interact_k60)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626  0.8975
+# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626  0.8775
 ```
 
 --
@@ -1623,7 +1648,7 @@ gam.check(smooth_interact)
 
 .pull-right[
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-79-1.png" width="324" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-82-1.png" width="324" style="display: block; margin: auto;" /&gt;
 
 ]
 
@@ -1635,7 +1660,7 @@ Rappel: Nous pouvons évaluer la distribution des résidus du modèle pour véri
 ---
 # Validation GAM: Choisir une autre distribution
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-80-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-83-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 --
 &lt;br&gt;
@@ -1728,7 +1753,7 @@ Ensuite, on devrait vérifier le choix des dimensions de bases `k`:
 ```r
 k.check(smooth_interact_tw)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062    0.82
+# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062   0.825
 ```
 
 On a un équilibre entre `\(k\)` et les EDF. Super!
@@ -1744,7 +1769,7 @@ par(mfrow=c(2,2))
 gam.check(smooth_interact_tw)
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-86-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-89-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 
 ???
@@ -1853,7 +1878,7 @@ Voir `?nottem` pour plus de détails sur le jeu de données.
 ---
 # Exemple: Données cycliques
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-91-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-94-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 ---
 # Exemple: Données cycliques
@@ -1882,7 +1907,7 @@ summary(year_gam)$s.table
 plot(year_gam, page = 1, scale = 0)
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-94-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-97-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 Il y a une augmentation de 1 à 1.5 degrés au cours de la série, mais au cours d'une année, il y a une variation d'environ 20 degrés. Les données réelles varient autour de ces valeurs prédites et ceci représente donc la variance inexpliquée.
 
@@ -1944,7 +1969,7 @@ Souvenez vous que: `acf` signifie _autocorrelation function_, et `pacf` signifie
 ---
 # L'autocorrelation des résidus
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-96-1.png" width="612" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-99-1.png" width="612" style="display: block; margin: auto;" /&gt;
 
 .comment[__ACF__ évalue la corrélation croisée et __pACF__ la corrélation partielle d'une série temporelle entre points à différents décalages (donc, la similarité entre observations progressivement décalés).]
 
@@ -2057,8 +2082,8 @@ gamm_intercept &lt;- gam(y ~ s(x0) + s(fac, bs = "re"),
 # Voir la sortie du modèle
 summary(gamm_intercept)$s.table
 #             edf   Ref.df          F    p-value
-# s(x0)  2.581653 3.222349   3.202387 0.02142358
-# s(fac) 2.971708 3.000000 105.571521 0.00000000
+# s(x0)  2.674248 3.320757   3.637546 0.01172576
+# s(fac) 2.974068 3.000000 114.721659 0.00000000
 ```
 
 ---
@@ -2069,7 +2094,7 @@ summary(gamm_intercept)$s.table
 plot(gamm_intercept, select = 2)
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-103-1.png" width="432" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-106-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM avec un intercepte aléatoire
@@ -2105,7 +2130,7 @@ plot_smooth(gamm_intercept, view="x0", rm.ranef = FALSE,
 
 &lt;br&gt;
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-105-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-108-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 .pull-right3[
 &amp;nbsp; &lt;font color="orange"&gt;fac1&lt;/font&gt; &amp;nbsp; &lt;font color="red"&gt;fac2&lt;/font&gt; &amp;nbsp; &lt;font color="purple"&gt;fac3&lt;/font&gt; &amp;nbsp; &lt;font color="turquoise"&gt;fac4&lt;/font&gt;
@@ -2126,9 +2151,9 @@ gamm_slope &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "re"),
 
 ```r
 summary(gamm_slope)$s.table
-#                edf  Ref.df        F    p-value
-# s(x0)     2.434918 3.04106  2.27316 0.07965005
-# s(x0,fac) 2.951347 3.00000 63.49317 0.00000000
+#                edf   Ref.df         F   p-value
+# s(x0)     2.232318 2.774644  1.820275 0.1735086
+# s(x0,fac) 2.951657 3.000000 59.868062 0.0000000
 ```
 
 ---
@@ -2162,7 +2187,7 @@ plot_smooth(gamm_slope, view="x0", rm.ranef = FALSE,
 
 &lt;br&gt;
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-109-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-112-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM avec un intercepte et une pente aléatoire
@@ -2175,10 +2200,10 @@ gamm_int_slope &lt;- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
                       data = gam_data2, method = "REML")
 
 summary(gamm_int_slope)$s.table
-#                    edf   Ref.df            F    p-value
-# s(x0)     2.5816511296 3.222345 3.202320e+00 0.02142561
-# s(fac)    2.9716925488 3.000000 1.056312e+02 0.00000000
-# s(fac,x0) 0.0005085494 3.000000 3.873931e-05 0.88168136
+#                   edf  Ref.df            F    p-value
+# s(x0)     2.674244941 3.32075 3.637390e+00 0.01172837
+# s(fac)    2.974040169 3.00000 1.148515e+02 0.00000000
+# s(fac,x0) 0.001223808 3.00000 1.977507e-04 0.71623163
 ```
 
 ---
@@ -2212,7 +2237,7 @@ plot_smooth(gamm_int_slope, view="x0", rm.ranef = FALSE,
 
 &lt;br&gt;
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-112-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-115-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM avec un intercepte et une pente aléatoire
@@ -2224,7 +2249,7 @@ Notez que la pente aléatoire est statique dans ce cas :
 plot(gamm_int_slope, select = 3)
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-113-1.png" width="360" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-116-1.png" width="360" style="display: block; margin: auto;" /&gt;
 
 ???
 
@@ -2250,9 +2275,9 @@ gamm_smooth &lt;- gam(y ~ s(x0) + s(x0,
 
 ```r
 summary(gamm_smooth)$s.table
-#                edf   Ref.df        F    p-value
-# s(x0)     2.581623  3.22229 3.202072 0.02143363
-# s(x0,fac) 2.973424 35.00000 9.049030 0.00000000
+#                edf    Ref.df        F    p-value
+# s(x0)     2.674196  3.320656 3.636808 0.01173848
+# s(x0,fac) 2.977208 35.000000 9.833382 0.00000000
 ```
 
 ]
@@ -2264,7 +2289,7 @@ summary(gamm_smooth)$s.table
 plot(gamm_smooth, select=1)
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-116-1.png" width="432" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-119-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 ]
 
@@ -2307,7 +2332,7 @@ plot_smooth(gamm_smooth, view="x0",
 
 &lt;br&gt;
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-118-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-121-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 ???
 
@@ -2322,10 +2347,10 @@ Tous les GAMMs de cette section peuvent être comparé avec `AIC()` pour trouver
 ```r
 AIC(gamm_intercept, gamm_slope, gamm_int_slope, gamm_smooth)
 #                      df      AIC
-# gamm_intercept 8.042411 2214.106
-# gamm_slope     7.964311 2292.081
-# gamm_int_slope 8.044221 2214.109
-# gamm_smooth    8.048854 2214.116
+# gamm_intercept 8.189100 2179.900
+# gamm_slope     7.773699 2280.480
+# gamm_int_slope 8.193874 2179.908
+# gamm_smooth    8.201957 2179.921
 ```
 
 Le meilleur modèle de ces trois modèles serait donc le GAMM avec un intercept aléatoire.
@@ -2395,7 +2420,7 @@ avg &lt;- aggregate(prop ~ x1, data=gam_data3, mean)
 lines(avg$x1, avg$prop, col = "orange", lwd = 2)
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-121-1.png" width="288" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-124-1.png" width="288" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAM avec d'autres distributions
@@ -2479,7 +2504,7 @@ Cela représente comment le ratio de succès vs échecs change sur l'échelle de
 plot(prop_model)
 ```
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-128-1.png" width="309.6" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-131-1.png" width="309.6" style="display: block; margin: auto;" /&gt;
 
 ---
 # Visualiser la tendance au fil du temps
@@ -2495,7 +2520,7 @@ Il y a différente façon de représenter cette relation graphiquement :
 
 Que nous disent ces graphes sur les succès et échecs?
 
-&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-129-1.png" width="648" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-fr_files/figure-html/unnamed-chunk-132-1.png" width="648" style="display: block; margin: auto;" /&gt;
 
 
 

@@ -1572,7 +1572,7 @@ In other words, have we chosen a `k` that is large enough?
 ```r
 k.check(smooth_interact)
 #                              k'      edf   k-index p-value
-# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883    0.07
+# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883   0.055
 ```
 
 --
@@ -1612,7 +1612,7 @@ Is `k` large enough this time?
 ```r
 k.check(smooth_interact_k60)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626    0.91
+# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626  0.9025
 ```
 
 --
@@ -1745,7 +1745,7 @@ Next, we should check the basis dimension:
 ```r
 k.check(smooth_interact_tw)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062  0.8275
+# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062   0.815
 ```
 
 The trade-off between `\(k\)` and EDF is well balanced. Great!
@@ -1926,10 +1926,36 @@ class: inverse, center, middle
 
 When observations are not independent, GAMs can be used to either incorporate:
 
-- a serial correlation structure to model residual autocorrelation (autoregressive AR, moving average MA, or a combination of the two ARMA),
-- random effects that model independence among observations from the same site.
+- a correlation structure to model autocorrelated residuals, such as:
+ - the autoregressive (AR) model 
+ - the moving average model (MA); or,
+ - a combination of both models (ARMA).
+- random effects that model independence between observations at the same site.- random effects that model independence among observations from the same site.
 
 ---
+
+# Autocorrelation of residuals
+
+**Autocorrelation of residuals** refers to the degree of correlation between the residuals (the differences between actual and predicted values) in a time series model.
+
+In other words, if there is autocorrelation of residuals in a time series model, it means that there is a pattern or relationship between the residuals at one time and the residuals at other times.
+
+--
+
+&lt;br&gt;
+
+Autocorrelation of residuals is usually measured using the **ACF (autocorrelation function)** and **pACF (partial autocorrelation function)** graphs, which show the correlation between residuals at different lags. 
+
+If the **ACF** or **pACF** graphs show significant correlations at non-zero lags, there is evidence of autocorrelation in the residuals and the model may need to be modified or improved to better capture the underlying patterns in the data.
+
+--
+
+&lt;br&gt;
+
+Let's see how this works with our `year_gam` model!
+
+---
+
 # Model with correlated errors
 
 Let's have a look at a model with temporal autocorrelation in the residuals. We will revisit the Nottingham temperature model and test for correlated errors using the (partial) autocorrelation function.
@@ -1937,7 +1963,9 @@ Let's have a look at a model with temporal autocorrelation in the residuals. We 
 
 ```r
 par(mfrow = c(1,2))
+
 acf(resid(year_gam), lag.max = 36, main = "ACF")
+
 pacf(resid(year_gam), lag.max = 36, main = "pACF")
 ```
 
@@ -1961,6 +1989,8 @@ The __autocorrelation function__ (ACF; first panel above) evaluates the cross co
 In contrast, the __partial autocorrelation function__ (PACF: second panel above)
 gives the partial correlation of a time series with its own lagged values,
 after controlling for the values of the time series at all shorter lags.
+
+In the ACF graph, the blue shaded region represents the confidence interval and the red dashed lines represent the limits of statistical significance.
 
 ---
 # Model with correlated errors
@@ -2047,9 +2077,9 @@ gamm_intercept &lt;- gam(y ~ s(x0) + s(fac, bs = "re"),
 
 # examine model output
 summary(gamm_intercept)$s.table
-#             edf   Ref.df         F   p-value
-# s(x0)  2.296436 2.856796   1.69882 0.1734127
-# s(fac) 2.974085 3.000000 113.96471 0.0000000
+#             edf   Ref.df          F    p-value
+# s(x0)  2.479396 3.077309   2.453851 0.06126053
+# s(fac) 2.975341 3.000000 120.628318 0.00000000
 ```
 
 ---
@@ -2117,9 +2147,9 @@ gamm_slope &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "re"),
 
 ```r
 summary(gamm_slope)$s.table
-#                edf   Ref.df           F   p-value
-# s(x0)     1.006804 1.013575  0.04164569 0.8584608
-# s(x0,fac) 2.951061 3.000000 62.55678091 0.0000000
+#                edf   Ref.df         F   p-value
+# s(x0)     2.438749 3.028519  1.426452 0.2381746
+# s(x0,fac) 2.961087 3.000000 75.776469 0.0000000
 ```
 
 
@@ -2168,10 +2198,10 @@ gamm_int_slope &lt;- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
 
 ```r
 summary(gamm_int_slope)$s.table
-#                   edf   Ref.df            F   p-value
-# s(x0)     2.296433297 2.856791 1.698790e+00 0.1734183
-# s(fac)    2.974059738 3.000000 1.140796e+02 0.0000000
-# s(fac,x0) 0.001166415 3.000000 1.652105e-04 0.7531975
+#                   edf   Ref.df            F    p-value
+# s(x0)     2.479394271 3.077305 2.453775e+00 0.06126686
+# s(fac)    2.975312883 3.000000 1.207524e+02 0.00000000
+# s(fac,x0) 0.001213487 3.000000 1.789393e-04 0.74544050
 ```
 
 ---
@@ -2230,9 +2260,9 @@ gamm_smooth &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1),
                    data = gam_data2, method = "REML")
 
 summary(gamm_smooth)$s.table
-#                edf    Ref.df        F   p-value
-# s(x0)     2.296276  2.856486 1.698018 0.1735916
-# s(x0,fac) 2.983563 35.000000 9.768828 0.0000000
+#                edf    Ref.df         F    p-value
+# s(x0)     2.479385  3.077287  2.453753 0.06126892
+# s(x0,fac) 2.976055 35.000000 10.339570 0.00000000
 ```
 
 ---
@@ -2296,10 +2326,10 @@ AIC(gamm_intercept,
     gamm_int_slope, 
     gamm_smooth)
 #                      df      AIC
-# gamm_intercept 7.856529 2199.600
-# gamm_slope     6.012772 2291.215
-# gamm_int_slope 7.858805 2199.604
-# gamm_smooth    7.875003 2199.620
+# gamm_intercept 8.018719 2202.880
+# gamm_slope     8.027948 2281.059
+# gamm_int_slope 8.023434 2202.889
+# gamm_smooth    8.021229 2202.885
 ```
 
 The best model among those we have built here would be a GAMM with a random effect on the intercept.

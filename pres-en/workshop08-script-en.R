@@ -417,11 +417,15 @@ summary(year_gam)$s.table
 plot(year_gam, page = 1, scale = 0)
 
 par(mfrow = c(1,2))
+
 acf(resid(year_gam), lag.max = 36, main = "ACF")
+
 pacf(resid(year_gam), lag.max = 36, main = "pACF")
 
 par(mfrow = c(1,2))
+
 acf(resid(year_gam), lag.max = 36, main = "ACF")
+
 pacf(resid(year_gam), lag.max = 36, main = "pACF")
 
 df <- data.frame(nottem, nottem_year, nottem_month)

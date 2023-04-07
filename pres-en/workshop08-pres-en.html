@@ -1120,20 +1120,26 @@ exclude:true
 ---
 # Challenge 2 - Solution ![:cube]()
 
+**1.** Create 2 new models, with `x3` as a linear and smoothed term.
+
 
 ```r
 # Add Latitude as a linear term
 three_term_model &lt;- gam(Sources ~ 
                           Season + s(SampleDepth) + s(RelativeDepth) + 
-                          Latitude, 
+*                         Latitude,
                         data = isit, method = "REML")
 three_term_summary &lt;- summary(three_term_model)
 
 # Add Latitude as a smooth term
 three_smooth_model &lt;- gam(Sources ~ 
                             Season + s(SampleDepth) + s(RelativeDepth) + 
-                            s(Latitude),
+*                           s(Latitude),
                           data = isit, method = "REML")
+```
+
+
+```r
 three_smooth_summary &lt;- summary(three_smooth_model)
 ```
 
@@ -1156,16 +1162,22 @@ __2.__ Is `Latitude` an important term to include? Does `Latitude` have a linear
 
 Let us begin by plotting the the 4 effects that are now included in each model.
 
----
-# Challenge 2 - Solution ![:cube]()
+.pull-left4[
 
 
 ```r
 par(mfrow = c(2,2))
-plot(three_smooth_model, all.terms = TRUE)
+plot(three_smooth_model, 
+     all.terms = TRUE)
 ```
+]
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-54-1.png" width="576" style="display: block; margin: auto;" /&gt;
+
+.pull-right4[
+
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-55-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+]
 
 ---
 # Challenge 2 - Solution ![:cube]()
@@ -1257,7 +1269,7 @@ exclude:true
 plot(three_smooth_model, page = 1)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-60-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-61-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 ---
 exclude:true
@@ -1337,7 +1349,7 @@ par(mfrow = c(2,2))
 plot(factor_interact)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-65-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-66-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 ???
 The first two panels show the interaction effect of the `SampleDepth` smooth and each level of our factor variable, `Season`. 
@@ -1358,7 +1370,7 @@ We can also visualise our model in 3D using `vis.gam()`.
 vis.gam(factor_interact, theta = 120, n.grid = 50, lwd = .4)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-66-1.png" width="432" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-67-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 ???
 We can change the rotation of this plot using the `theta` argument.
@@ -1403,7 +1415,7 @@ summary(smooth_interact)$s.table
 
 --
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-69-1.png" width="504" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-70-1.png" width="504" style="display: block; margin: auto;" /&gt;
 
 ---
 exclude:true
@@ -1417,7 +1429,7 @@ smooth_interact &lt;- gam(y~x0 + s(x1, x2), data = gam_data)
 summary(smooth_interact)$s.table
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-71-1.png" width="504" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-72-1.png" width="504" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -1431,7 +1443,7 @@ vis.gam(smooth_interact, view = c("SampleDepth", "RelativeDepth"),
         theta = 50, n.grid = 50, lwd = .4)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-72-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-73-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 ???
 
@@ -1547,7 +1559,7 @@ This _wiggliness_ is further controlled by the basis dimension `\(k\)`, which se
 
 The more basis functions used to build a smooth function, the more _wiggly_ the smooth:
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-75-1.png" width="720" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-76-1.png" width="720" style="display: block; margin: auto;" /&gt;
 
 
 ???
@@ -1572,7 +1584,7 @@ In other words, have we chosen a `k` that is large enough?
 ```r
 k.check(smooth_interact)
 #                              k'      edf   k-index p-value
-# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883   0.055
+# s(SampleDepth,RelativeDepth) 29 27.12521 0.9448883  0.0625
 ```
 
 --
@@ -1612,7 +1624,7 @@ Is `k` large enough this time?
 ```r
 k.check(smooth_interact_k60)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626  0.9025
+# s(SampleDepth,RelativeDepth) 59 46.03868 1.048626   0.875
 ```
 
 --
@@ -1650,7 +1662,7 @@ Recall: We can evaluate the distribution of the model residuals to verify these 
 ---
 # GAM validation: choosing a distribution
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-81-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-82-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 --
 &lt;br&gt;
@@ -1745,7 +1757,7 @@ Next, we should check the basis dimension:
 ```r
 k.check(smooth_interact_tw)
 #                              k'      edf  k-index p-value
-# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062   0.815
+# s(SampleDepth,RelativeDepth) 59 43.23949 1.015062    0.82
 ```
 
 The trade-off between `\(k\)` and EDF is well balanced. Great!
@@ -1761,7 +1773,7 @@ par(mfrow=c(2,2))
 gam.check(smooth_interact_tw)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-87-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-88-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 
 ???
@@ -1876,7 +1888,7 @@ year sampled (so, a sequence 1 to 12 repeated for 20 years).
 ---
 # Example: Cyclical data
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-92-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-93-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 ???
 
@@ -1908,7 +1920,7 @@ summary(year_gam)$s.table
 plot(year_gam, page = 1, scale = 0)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-94-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-95-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 There is about 1-1.5 degree rise in temperature over the period, but within a given year there is about 20 degrees variation in temperature, on average. The actual data vary around these values and that is the unexplained variance.
 
@@ -1972,7 +1984,7 @@ pacf(resid(year_gam), lag.max = 36, main = "pACF")
 ---
 # Model with correlated errors
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-96-1.png" width="648" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-97-1.png" width="648" style="display: block; margin: auto;" /&gt;
 
 .comment[ __ACF__ evaluates the cross correlation and __pACF__ the partial correlation of a time series with itself at different time lags (i.e. similarity between observations at increasingly large time lags).]
 
@@ -2077,9 +2089,9 @@ gamm_intercept &lt;- gam(y ~ s(x0) + s(fac, bs = "re"),
 
 # examine model output
 summary(gamm_intercept)$s.table
-#             edf   Ref.df          F    p-value
-# s(x0)  2.479396 3.077309   2.453851 0.06126053
-# s(fac) 2.975341 3.000000 120.628318 0.00000000
+#             edf   Ref.df         F   p-value
+# s(x0)  2.005701 2.511844  1.659998 0.1523919
+# s(fac) 2.965316 3.000000 85.443950 0.0000000
 ```
 
 ---
@@ -2090,7 +2102,7 @@ summary(gamm_intercept)$s.table
 plot(gamm_intercept, select = 2) 
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-102-1.png" width="432" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-103-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM with a random intercept
@@ -2125,7 +2137,7 @@ plot_smooth(gamm_intercept, view="x0", rm.ranef = FALSE,
 
 &lt;br&gt;
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-104-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-105-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 .pull-right3[
 &amp;nbsp; &lt;font color="orange"&gt;fac1&lt;/font&gt; &amp;nbsp; &lt;font color="red"&gt;fac2&lt;/font&gt; &amp;nbsp; &lt;font color="purple"&gt;fac3&lt;/font&gt; &amp;nbsp; &lt;font color="turquoise"&gt;fac4&lt;/font&gt;
@@ -2147,9 +2159,9 @@ gamm_slope &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "re"),
 
 ```r
 summary(gamm_slope)$s.table
-#                edf   Ref.df         F   p-value
-# s(x0)     2.438749 3.028519  1.426452 0.2381746
-# s(x0,fac) 2.961087 3.000000 75.776469 0.0000000
+#                edf   Ref.df          F  p-value
+# s(x0)     1.855377 2.323397  0.6352076 0.471329
+# s(x0,fac) 2.944990 3.000000 53.0245214 0.000000
 ```
 
 
@@ -2184,7 +2196,7 @@ plot_smooth(gamm_slope, view="x0", rm.ranef = FALSE,
 
 &lt;br&gt;
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-108-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-109-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM with a random intercept and slope
@@ -2198,10 +2210,10 @@ gamm_int_slope &lt;- gam(y ~ s(x0) + s(fac, bs = "re") + s(fac, x0, bs = "re"),
 
 ```r
 summary(gamm_int_slope)$s.table
-#                   edf   Ref.df            F    p-value
-# s(x0)     2.479394271 3.077305 2.453775e+00 0.06126686
-# s(fac)    2.975312883 3.000000 1.207524e+02 0.00000000
-# s(fac,x0) 0.001213487 3.000000 1.789393e-04 0.74544050
+#                  edf   Ref.df          F   p-value
+# s(x0)     2.00850920 2.515247  1.6474713 0.1544462
+# s(fac)    2.96225771 3.000000 93.5189891 0.0000000
+# s(fac,x0) 0.08364388 3.000000  0.2107775 0.3952858
 ```
 
 ---
@@ -2235,7 +2247,7 @@ plot_smooth(gamm_int_slope, view="x0", rm.ranef = FALSE,
 
 &lt;br&gt;
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-112-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-113-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM with a random intercept and slope
@@ -2247,7 +2259,7 @@ Note that the random slope is static in this case:
 plot(gamm_int_slope, select = 3)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-113-1.png" width="432" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-114-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAMM with a random smooth
@@ -2260,9 +2272,9 @@ gamm_smooth &lt;- gam(y ~ s(x0) + s(x0, fac, bs = "fs", m = 1),
                    data = gam_data2, method = "REML")
 
 summary(gamm_smooth)$s.table
-#                edf    Ref.df         F    p-value
-# s(x0)     2.479385  3.077287  2.453753 0.06126892
-# s(x0,fac) 2.976055 35.000000 10.339570 0.00000000
+#                edf    Ref.df         F   p-value
+# s(x0)     1.824783  2.183681 0.9886061 0.3516474
+# s(x0,fac) 8.412459 35.000000 7.7513819 0.0000000
 ```
 
 ---
@@ -2273,7 +2285,7 @@ summary(gamm_smooth)$s.table
 plot(gamm_smooth, select = 1)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-115-1.png" width="432" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-116-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 ???
 
@@ -2310,7 +2322,7 @@ plot_smooth(gamm_smooth, view="x0", rm.ranef = FALSE,
 
 &lt;br&gt;
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-117-1.png" width="864" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-118-1.png" width="864" style="display: block; margin: auto;" /&gt;
 
 .comment[Here, if the random slope varied along `x0`, we would see different curves for each level.]
 
@@ -2325,11 +2337,11 @@ AIC(gamm_intercept,
     gamm_slope, 
     gamm_int_slope, 
     gamm_smooth)
-#                      df      AIC
-# gamm_intercept 8.018719 2202.880
-# gamm_slope     8.027948 2281.059
-# gamm_int_slope 8.023434 2202.889
-# gamm_smooth    8.021229 2202.885
+#                       df      AIC
+# gamm_intercept  7.511401 2266.845
+# gamm_slope      7.322349 2331.089
+# gamm_int_slope  7.673416 2266.983
+# gamm_smooth    15.322256 2268.053
 ```
 
 The best model among those we have built here would be a GAMM with a random effect on the intercept.
@@ -2397,7 +2409,7 @@ avg &lt;- aggregate(prop ~ x1, data = gam_data3, mean)
 lines(avg$x1, avg$prop, col = "orange", lwd = 2)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-120-1.png" width="360" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-121-1.png" width="360" style="display: block; margin: auto;" /&gt;
 
 ---
 # GAM using other distributions
@@ -2482,7 +2494,7 @@ This represents how the log odds of successes vs failures change over time (x1).
 plot(prop_model)
 ```
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-127-1.png" width="309.6" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-128-1.png" width="309.6" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -2499,7 +2511,7 @@ There are different ways this relationship can be represented graphically:
 
 What do these plots tell us about successes vs failures?
 
-&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-128-1.png" width="648" style="display: block; margin: auto;" /&gt;
+&lt;img src="workshop08-pres-en_files/figure-html/unnamed-chunk-129-1.png" width="648" style="display: block; margin: auto;" /&gt;
 
 
 

@@ -336,7 +336,7 @@ div.csl-indent {
 ## indicate that k is too low, especially if edf is close to k&#39;.
 ## 
 ##                                k&#39;  edf k-index p-value
-## s(SampleDepth,RelativeDepth) 59.0 43.2    1.02    0.83</code></pre>
+## s(SampleDepth,RelativeDepth) 59.0 43.2    1.02    0.88</code></pre>
 <p>The residual plots do look much better, but it is clear that something is missing from the model. This could be a spatial affect (longtitude and latitude), or a random effect (e.g. based on <code>Station</code>).</p>
 <p><strong>3.</strong> Compare <code>smooth_interact_tw</code> with <code>smooth_interact</code>. Which one would you choose?</p>
 <div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="other-distributions.html#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="fu">AIC</span>(smooth_interact, smooth_interact_tw)</span></code></pre></div>

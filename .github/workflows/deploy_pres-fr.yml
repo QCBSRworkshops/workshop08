@@ -97,7 +97,7 @@ jobs:
           persist-credentials: false
           
       - name: 🔻 Download artifact containing the presentation
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.1.7
         with:
          # Artifact name
          name: pres-fr # optional
